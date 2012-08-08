@@ -1,0 +1,47 @@
+% Definitions to produce threecolumn output in TeX from
+% the TeXbook.
+%
+        % this is threecolumn for a newsletter. All of the pages have
+        % an 8 inch form size, the first page is offset 1.5 inches from
+        % the top, the rest are offset one inch from the top. The first
+        % page has an extra-high, two line headline.
+ 
+\hoffset=-1.56cm
+\voffset=-1.54cm
+\parindent=0pt
+\tolerance=10000
+\vsize=19cm
+\nopagenumbers
+ 
+\newbox\midcolumn
+% \leftskip=0pt plus 1fil
+% \rightskip=0pt plus 2em 
+\newbox\leftcolumn
+\newdimen\fullhsize 
+\newdimen\partialhsize
+\fullhsize=27.9cm 	% paper hsize
+\hsize=8.7cm 		% column hsize
+\def\fullline{\hbox to\fullhsize}
+\def\columnbox{\line{\pagebody}}
+ 
+\let\lr=L 
+\let\nextvskip=N 
+ 
+\def\tripleformat
+ {\shipout\vbox
+ {\fullline{\box\leftcolumn\hfil\box\midcolumn\hfil\columnbox}
+ }           
+ \advancepageno
+ }
+ 
+\output={\if L\lr
+ \global\setbox\leftcolumn=\columnbox \global\let\lr=M 
+ \else\if M\lr
+ \global\setbox\midcolumn=\columnbox \global\let\lr=R 
+ \else \tripleformat \global\let\lr=L\fi\fi
+ 
+ \ifnum\outputpenalty>-20000 \else\dosupereject\fi}
+
+\obeylines
+\def\label#1{\vbox to .98in{\vfill #1}}
+\def\zip#1{\line{\hfill #1\hfill}}

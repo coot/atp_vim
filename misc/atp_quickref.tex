@@ -1,0 +1,466 @@
+% Title:    Vimwiki 1.1.1 Quick Reference
+% Todo: >e, >E (<e, <E) are not explained.
+% Todo: add gw and atp-editing
+% Author:   Marcin Szamotulski
+% Licence:  Creative Commons Attribution--ShareAlike 3.0 Unported Licence
+%           CC BY-SA http://creativecommons.org/licenses/by-sa/3.0/
+\def\version{1.1}
+% Format:   plain TeX
+% =============================================================
+% Instructions: use
+%   pdftex atp_quickref.tex
+% to generate PDF.
+% Won't work with normal TeX -> dvi workflow due to a number of PDF hacks
+% that help to reduce the size of the embedded font sets.
+% =============================================================
+% based on Vimwiki Reference Card format:
+% Tomas Pospichal 
+% J.A.J. Pater (original version)
+% Gager Jacob (update)
+%
+% several used macros based on:
+% \output by Laurent Gregoire http://tnerual.eriogerg.free.fr/vim.html
+% \boxit from http://ctan.binkerton.com/ctan.readme.php?filename=macros/plain/contrib/misc/boxit.tex
+% \elink from hyperref package by Sebastian Rahtz and Heiko Oberdiek http://tug.ctan.org/cgi-bin/ctanPackageInformation.py?id=hyperref
+% =============================================================
+%----------------------------------------------------------
+\input color.tex
+\definecolor{blue2} 		{rgb} 	{0, 0, 0.933}
+\definecolor{blue4} 		{rgb} 	{0, 0, 0.545}
+
+% Preamble: PDF setup, fonts and macros ===============[[[1
+% PDF metadata and links ==============================[[[2
+\pdfoutput=1         % blocks the execution of the normal tex command 
+\pdfpageheight=21cm  % A4 paper in landscape
+\pdfpagewidth=29.7cm
+% the following brings the size down from 141 KiB to 134 KiB (with TeX cm fonts)
+% with PostScript fonts: from 93 KiB to 86 KiB
+%\pdfminorversion=5
+%\pdfobjcompresslevel=3 
+%\pdfcompresslevel=9
+\pdfinfo % PDF dictionary with metadata
+{/Title (ATP Quick Reference)
+ /Author (Marcin Szamotulski)
+ /Subject (AutomaticLaTeXPlugin)
+ /Keywords (Vim, LaTeX, reference)}
+% from hyperref package: \elink macro
+% http://tug.ctan.org/cgi-bin/ctanPackageInformation.py?id=hyperref
+% with the added blue color for link border /C [0 0 1]
+\def\bluelink#1#2{%\bluelink{URL}{text}
+\leavevmode%
+\textcolor{blue2}{\tenbf\begingroup\pdfstartlink%
+attr{/BS<</Type/Border/S/S/W 1>>/C [1 1 1]}%
+user{/Subtype/Link/A<</Type/Action/S/URI/URI(#1)>>}%
+\ignorespaces#2%
+\pdfendlink\endgroup}%
+}
+%-------------------------------------
+
+% Adobe Fonts =========================================[[[2
+% Font definitions
+%%\font\secbf=cmbx10
+%\font\secbf=cmssbx10
+%\font\smallss=cmss8
+% Helvetica -----------------
+% b8tn, bc7tn, bi8r not working,bo8c all black, bc8t small caps
+% bo8r, bo8t bold oblique,bo8rn, bo8tn NW, 
+% b8r bold (upright)!
+%\font\secbf=uhvb8r
+\font\secbf=phvb8r
+\font\titlebf=phvb8r scaled 1600
+%\font\smallss=uhvr8t %too big!
+%\font\smallss=uhvr8r scaled 833 %rn,tn not working c all black rc8t small caps
+\font\smallss=phvr8r scaled 833 
+%----------------------------
+% Times -----------------
+%\font\smallrm=cmr8
+%%\font\tenrm=cmr10 %not needed
+%%% URW
+% \font\tenrm=utmr8r
+% \font\tenbf=utmb8r
+% \font\tenit=utmri8r
+%%% Adobe
+\font\tenrm=ptmr8r
+\font\tenbf=ptmb8r
+\font\tenit=ptmri8r scaled 1100
+%\font\smallrm=cmr8
+%\font\smallrm=utmr8r scaled 833
+\font\smallrm=ptmr8r scaled 833
+\font\smallbf=cmbx8
+% \font\smallbf=utmb8r scaled 833
+% \font\smallbf=ptmb8r scaled 833
+% \font\smallit=cmti8
+% \font\smallit=utmri8r scaled 833
+\font\smallit=ptmri8r scaled 833
+\font\tinyrm=ptmr8r scaled 500
+\font\tinyit=ptmri8r scaled 500
+%-------------------
+% Courier -----------------
+%\font\tentt=ucrr8r
+\font\tentt=pcrr8r
+%\font\smalltt=cmtt8
+%\font\smalltt=ucrr8r scaled 833
+\font\smalltt=pcrr8r scaled 833
+\font\tinytt=pcrr8r scaled 500
+%-------------------------------------
+%-------------------
+%\font\tinyrm=cmr5
+%\font\tinyit=cmmi5
+%%%\font\bigbf=cmbx12
+% Macros ==============================================[[[2
+% LaTeX macro: [[[3
+% The \LaTeX macro is a simplified version of the original macro, in which 'A'
+% is smaller.
+\def\LaTeX{L\kern -.36em\lower -.3ex\hbox{A}\kern -.15em\TeX}
+% Macros: special characters in Adobe text encoding [[[3
+%TODO TODO FIXME
+% http://www.adobe.com/type/browser/info/charsets.html
+% works in Adobe fonts in \tt (probably won't work in standard TeX fonts!)
+% Defines \_ to be the character in position "5F (ASCII for the underscore character).
+\chardef\_=`\_
+\chardef\`=`\`
+\chardef\copyright=169
+\chardef\iacute=237
+%\copyright should be xE3=233 (or D3) in Adobe Symbol enc. and xA9=169 in western enc.
+% accents in AdobeWestern2: acute xB4, caron x2C7, ring x2DA, diaresis xA8
+% aacute \'a xE1, iacute \'{\i} xED=237, scaron \v{s} x161
+%-----------------------------------------------------------
+% Macros: special characters ===============================[[[3
+% Characters definitions (work with TeX fonts as well)
+\def\bs{\char92}       % \ 
+\def\lbrace{\char123}  % {
+\def\rbrace{\char125}  % }
+\def\vertbar{\char124} % |
+\def\vispace{\char"20} %TODO visible space not in Adobe text encoding?
+%-------------------------------------
+% Three columns macro [[[3
+% From: http://ctan.org/pkg/threecol
+\input threecol.tex
+% }}
+%-------------------------------------
+% Framing macro [[[3
+% \boxit from http://ctan.binkerton.com/ctan.readme.php?filename=macros/plain/contrib/misc/boxit.tex
+\def\boxit#1{\leavevmode\hbox{\vrule\vtop{\vbox{\kern.33333pt\hrule
+    \kern1pt\hbox{\kern1pt\vbox{#1}\kern1pt}}\kern1pt\hrule}\vrule}}
+%-------------------------------------
+% Macros: sections, slash and (framed) commands [[[3
+\def\\{\hfil\break}
+\def\title#1{\hfil{\titlebf #1}\hfil\par}
+\def\ver{\hfill {\smallrm ver. \version}\par}
+\def\sect#1{\vskip 0.5cm {\secbf#1}\hfill\par\smallskip} %\sect{title}
+\def\ttt#1 {{\tinytt #1}, }   % for long lists of options, each followed by a space
+% Spaced slashes used for alternatives
+\def\nsl{\ }
+\def\ssl{\thinspace{\smallrm/}\thinspace}
+%\def\ssl{\ {\smallrm/}\ }
+% Framed macros for normal mode commands
+% this line is just to have a matching fold marker for the next line {{{
+\def\ffrmbx#1{\boxit{\hbox{\strut\tt#1}}} %the argument of must \boxit must be a box 
+\def\fms#1#2#3#4{\hskip 0.3cm {\tt#1}{\textcolor{red}{#2}}\ {\smalltt[#3]} \dotfill {#4}}
+\def\split#1#2{\hbox{\hbox to 0.48\hsize{#1}\hbox to 0.04\hsize{}\hbox to 0.48\hsize{#2}}}
+\def\fmfms#1#2#3#4{\hskip 0.3cm {\textcolor{red}{#1}}\nsl\textcolor{red}{#2}\ {\smalltt[#3]} \dotfill {#4}}
+\def\fmfmfms#1#2#3#4#5{\hskip 0.3cm {\textcolor{red}{#1}}\nsl\textcolor{red}{#2}\nsl\ffrmbx{#3}\ {\smalltt[#4]}  \dotfill {#5}}
+\def\fm#1#2#3#4{{\tt#1}{\textcolor{red}{#2}}\ {\smalltt[#3]} \dotfill {#4}}
+\def\fmfm#1#2#3#4{{\textcolor{red}{#1}\ \textcolor{red}{#2}}\ {\smalltt[#3]} \dotfill {#4}}
+%\def\fm#1#2{\boxit{\hbox{#1}} \dotfill {#2}\par}
+% Macros for cmdline and insert mode commands
+\def\cm#1#2#3{\textcolor{blue4}{{\tt:}}{\tt#1}\textcolor{blue4}{{\tt#2}} \dotfill {#3}}
+\def\cmcm#1#2#3{{\tt#1}\nsl{\tt#2} \dotfill {#3}}
+\def\cms#1#2#3{\hskip 0.3cm\textcolor{blue4}{{\tt:}}{\tt#1}\textcolor{blue4}{{\tt#2}} \dotfill {#3}}
+\def\cmscms#1#2#3{{\smalltt#1}\ssl{\smalltt#2} \dotfill {\smallrm#3}}
+\def\cmsalt#1#2{\quad{\smalltt#1} \hfill {#2}}
+\def\cmscmsalt#1#2{\quad{\smalltt#1}\ssl{\smalltt#2}}
+%-------------------------------------
+% Licence and tags [[[3
+\def\tagstyle#1{{\smallss[#1]}}
+\def\taginl{\tagstyle{inline}}
+\def\tagmll{\tagstyle{multiline}}
+\def\tagcmd{\tagstyle{normal and cmdline mode}}
+%\def\tagcmdrc{\tagstyle{cmdline mode and .vimrc}}
+\def\tagcmdweb{\tagstyle{cmdline mode and web}}
+\def\tagvimrc{\tagstyle{.vimrc}}
+\def\tagnor{\tagstyle{normal mode}}
+%\def\tagvim{\tagstyle{standard Vim feature}}
+%\def\taglic{\tagstyle{\copyright 2011~T.~Pospichal}}
+\def\taglic{\textcolor{blue4}{\tinyrm\copyright\ 2012~M.~Szamotulski}}
+% \baselineskip=7pt \qquad 
+% \bluelink{http://vimwiki.googlecode.com/hg/misc/Vimwiki1.1.1QR.pdf}{\tinyit Vimwiki 1.1.1 Quick Reference} is licensed under the 
+% {\tinyit Creative Commons Attribution--ShareAlike 3.0 Unported Licence}
+% \bluelink{http://creativecommons.org/licenses/by-sa/3.0/}{(CC BY-SA)}.
+% \TeX\ source is available at
+% \bluelink{http://vimwiki.googlecode.com/hg/misc/Vimwiki1.1.1QR.tex}{http://vimwiki.googlecode.com/hg/misc/Vimwiki1.1.1QR.tex}}
+%----------------------------------------------------------
+%----------------------------------------------------------
+% Document start ======================================[[[1
+\tenrm
+\title{Automatic {\LaTeX} Plugin for Vim}
+\ver
+%--------------------------------------
+
+\sect{Compile} %[[[2
+
+\cm{[N]}{TEX[!]\hskip 1mm [mode]}{compile {\tt [N]} times in debug [mode]}\par
+\hfill current debug mode: {\tenit t:atp\_DebugMode}\par
+\fms{[N]}{\bs l}{n}{compile {\tt [N]} times in {\tenit silent} mode}\par
+\fms{[N]}{\bs d}{n}{compile {\tt [N]} times in {\tenit debug} mode}\par
+\fms{[N]}{\bs D}{n}{compile {\tt [N]} times in {\tenit Debug} mode}\par
+\fms{}{<F5>}{n}{compile in {\tenit verbose} mode}\par
+\cm{[N]}{TEXL[!]}{compile the current file (using subfiles package)}\par
+\cm{}{MakeLaTeX[!]}{make the project}\par
+\cm{}{Kill[!]}{kill compiler}\par
+\cm{}{Bibtex[!]}{make bibliography using {\tenit b:atp\_BibCompiler}}\par
+\fms{}{\bs b}{n}{}\par
+%-------------------------------------
+
+\sect{View} %[[[2
+\cm{}{View[!]}{view using {\tenit b:atp\_Viewer}}\par
+\cm{}{SyncTex[!]}{forward search}\par
+\cm{}{SetXpdf}{set Xpdf viewer}\par
+\cm{}{SetOkuar}{set Okular viewer}\par
+\cm{}{SetXdvi}{set Xdvi viewer}\par
+%-------------------------------------
+
+\sect{Debug} %[[[2
+\cm{}{ShowErrors [efm]}{show errors using [efm]}\par
+\cm{}{ErrorFormat [efm]}{set/show error format to [efm]}\par
+\hfill Error format is stored in {\tenit b:atp\_ErrorFormat} variable.\par
+\cm{}{DebugMode [mode]}{set/show debug mode}\par
+\hfill {\tenbf debug modes:} {\tenit silent}, {\tenit autosilent}, {\tenit debug}, {\tenit autodebug}, {\tenit Debug}, {\tenit autodebug},
+{\tenit verbose}.
+%-------------------------------------
+
+\sect{Navigate} %[[[2
+\fm{}{<C-j>}{n}{go forward in brackets}\par
+\fm{}{<C-k>}{n}{go backward in brackets}\par
+\cm{}{TOC[!]}{show table of contents}\par
+\fms{}{\bs t}{n}{}\par
+\cm{}{Labels[!]}{show labels}\par
+\fms{}{\bs L}{n}{}\par
+\cm{}{Tags[!]}{make tag file}\par
+\cms{}{LatexTags[!]}{}\par
+\cm{}{Edit}{go to project file}\par
+\fms{}{gf}{n}{go to file under the cursor}\par
+\cm{}{GotoLabel $\{$label$\}$}{go to $\{$label$\}$}\par
+\cm{}{GotoNamedDest$\{$dest$\}$}{go to $\{$dest$\}$}\par
+\cm{[N]}{F $\{$env\_name$\}$}{go to {\tt N}-th next $\{$env\_name$\}$}\par
+\fms{[N]}{>e}{n}{}\par
+\fms{[N]}{>E}{n}{}\par
+\cm{[N]}{B $\{$env\_name$\}$}{go to {\tt N}-th previous $\{$env\_name$\}$}\par
+\fms{[N]}{<e}{n}{}\par
+\fms{[N]}{<E}{n}{}\par
+\fm{[N]}{>m}{n}{go to {\tt N}-th next inline math} \par
+\fm{[N]}{>M}{n}{go to {\tt N}-th next displayed math} \par
+\fm{[N]}{<m}{n}{go to {\tt N}-th previous inline math} \par
+\fm{[N]}{<M}{n}{go to {\tt N}-th previous displayed math} \par
+\cm{[N]}{NPart}{go to {\tt N}-th part ahead}\par
+\fms{[N]}{>p}{n}{}\par
+\cm{[N]}{PPart}{go to {\tt N}-th part part backward}\par
+\fms{[N]}{<p}{n}{}\par
+\cm{[N]}{NChap}{go to next chapter}\par
+\fms{[N]}{>c}{n}{}\par
+\cm{[N]}{PChap}{go to previous chapter}\par
+\fms{[N]}{<c}{n}{}\par
+\cm{[N]}{NSec}{go to next section}\par
+\fms{[N]}{>s}{n}{}\par
+\cm{[N]}{PSec}{go to previous section}\par
+\fms{[N]}{<s}{n}{}\par
+\cm{[N]}{NSSec}{go to next subsection}\par
+\fms{[N]}{>S}{n}{}\par
+\cm{[N]}{PSSec}{go to previous subsection}\par
+\fms{[N]}{<S}{n}{}\par
+\cm{[N]}{NSSSec}{go to next subsubsection}\par
+\cm{[N]}{PSSSec}{go to previous subsubsection}\par
+\smallskip
+\fm{[N]}{>f}{n}{go to {\tt N}-th frame forward ({\tenbf beamer} only)}\par
+\fm{[N]}{<f}{n}{go to {\tt N}-th frame backward ({\tenbf beamer} only)}\par
+
+%----------------------------------------------------------
+\sect{Search} % [[[2
+\cm{}{Dsearch[!]\hskip 1mm $\{$pat$\}$}{search for definition matching $\{$pat$\}$}\par
+\cm{}{S[!]\hskip 0.1cm/$\{$pat$\}$/}{search for $\{$pat$\}$ in project}\par
+\fmfms{n}{N}{n}{if {\tenit g:atp\_mapNn}$=1$ are useing {\tt :S}}\par
+\cm{}{BibSearch[!]\hskip 0.1cm/$\{$pat$\}$/}{search for $\{$pat$\}$ in bib files}\par
+
+%----------------------------------------------------------
+\sect{Toggle Commands} % [[[2
+\cm{}{ToggleAuTeX}{toggle automatic compilation}\par
+    \fms{}{<S-F5>}{n}{}\par
+    \cm{}{ToggleNn}{toggle ATP n/N search normal commands}\par
+    \cm{}{ToggleEnv}{circle through environments}\par
+    \hfil{\tenit g:atp\_toggle\_environment\_{d}} ($d=1,2,...$) are lists of
+    environments to go through.\par
+    \cm{}{ChangeEnv [env]}{change current environment to [env]}\par
+    \cm{}{ToggleIMaps}{toggle insert maps}\par
+    \fms{}{'<Tab>}{ni}{}\par
+    \cm{}{ToggleSpace}{toggle <Space> cmap}\par
+    \cm{}{ToggleCallBack}{toggle call back}\par
+
+%----------------------------------------------------------
+\sect{Completion} % [[[2
+\fm{}{<C-X><C-O>}{i}{complete (expert mode)}\par
+\fms{}{<Tab>}{i}{if {\tenit g:atp\_tab\_map$=1$}}\par
+\fm{}{<C-X><C-o>}{i}{complete (non expert mode)}\par
+\fms{}{<S-Tab>}{i}{if {\tenit g:atp\_tab\_map$=1$}}\par
+
+%----------------------------------------------------------
+\sect{Printing} % [[[2
+\cm{}{SshPrint [lpr options]}{print output using lpr on the server {\tenit g:atp\_ssh}}\par
+
+
+%----------------------------------------------------------
+\sect{Insert Maps} % [[[2
+{\tenbf<LocalLeader>}$=${\tenit g:atp\_imap\_leader\_1}="\#":\par
+\split{\fm{}{\#a}{i}{\bs alpha}}{\fm{}{\#s}{i}{\bs sigma}}\par
+\split{\fm{}{\#b}{i}{\bs beta}}{\fm{}{\#vs}{i}{\bs varsigma}}\par
+\split{\fm{}{\#c}{i}{\bs chi}}{\fm{}{\#t}{i}{\bs tau}}\par
+\split{\fm{}{\#d}{i}{\bs delta}}{\fm{}{\#u}{i}{\bs upsilon}}\par
+\split{\fm{}{\#e}{i}{\bs epsilon}}{\fm{}{\#w}{i}{\bs omega}}\par
+\split{\fm{}{\#ve}{i}{\bs varepsilon}}{\fm{}{\#x}{i}{\bs xi}}\par
+\split{\fm{}{\#f}{i}{\bs phi}}{\fm{}{\#z}{i}{\bs zeta}}\par
+\split{\fm{}{\#vf}{i}{\bs varphi}}{\fm{}{\#D}{i}{\bs Delta}}\par
+\split{\fm{}{\#y}{i}{\bs psi}}{\fm{}{\#Y}{i}{\bs Psi}}\par
+\split{\fm{}{\#h}{i}{\bs eta}}{\fm{}{\#F}{i}{\bs Phi}}\par
+\split{\fm{}{\#k}{i}{\bs kappa}}{\fm{}{\#G}{i}{\bs Gamma}}\par
+\split{\fm{}{\#l}{i}{\bs lambda}}{\fm{}{\#L}{i}{\bs Lambda}}\par
+\split{\fm{}{\#i}{i}{\bs iota}}{\fm{}{\#M}{i}{\bs Mu}}\par
+\split{\fm{}{\#m}{i}{\bs mu}}{\fm{}{\#P}{i}{\bs Pi}}\par
+\split{\fm{}{\#n}{i}{\bs nu}}{\fm{}{\#O}{i}{\bs Theta}}\par
+\split{\fm{}{\#p}{i}{\bs pi}}{\fm{}{\#S}{i}{\bs Sigma}}\par
+\split{\fm{}{\#vp}{i}{\bs varpi}}{\fm{}{\#T}{i}{\bs Tau}}\par
+\split{\fm{}{\#o}{i}{\bs theta}}{\fm{}{\#U}{i}{\bs Upsilon}}\par
+\split{\fm{}{\#vo}{i}{\bs vartheta}}{\fm{}{\#W}{i}{\bs Omega}}\par
+\split{\fm{}{\#r}{i}{\bs rho}}{}\par
+
+% \medskip
+\vfill\eject
+{\tenbf <LocalLeader>}$=${\tenit g:atp\_imap\_leader\_2}$=$"\#\#", in visual
+and operator mode {\tenit g:atp\_vmap\_text\_font\_leader}$=$"\_"\par
+\fm{}{\#\#rm}{ivo}{\bs textrm$\{\}$ or \bs mathrm$\{\}$}\par
+\fm{}{\#\#te}{ivo}{\bs textte$\{\}$ or \bs text$\{\}$}\par
+\fm{}{\#\#up}{ivo}{\bs textup$\{\}$}\par
+\fm{}{\#\#md}{ivo}{\bs textmd$\{\}$}\par
+\fm{}{\#\#sl}{ivo}{\bs textsl$\{\}$}\par
+\fm{}{\#\#sc}{ivo}{\bs textsc$\{\}$}\par
+\fm{}{\#\#em}{ivo}{\bs emph$\{\}$}\par
+\fm{}{\#\#it}{ivo}{\bs textit$\{\}$ or \bs mathit$\{\}$}\par
+\fm{}{\#\#sf}{ivo}{\bs textsf$\{\}$ or \bs mathsf$\{\}$}\par
+\fm{}{\#\#bf}{ivo}{\bs textbf$\{\}$ or \bs mathbf$\{\}$}\par
+\fm{}{\#\#tt}{ivo}{\bs texttt$\{\}$ or \bs mathtt$\{\}$}\par
+\fm{}{\#\#normal}{ivo}{\bs textnormal$\{\}$ or \bs mathnormal$\{\}$}\par
+\fm{}{\#\#bb}{ivo}{\bs(\bs mathbb$\{\}$ or \bs mathbb$\{\}$}\par
+\fm{}{\#\#cal}{ivo}{\bs(\bs mathcal$\{\}$ or \bs mathcal$\{\}$}\par
+\fm{}{\#\#cr}{ivo}{\bs(\bs mathscr$\{\}$ or \bs mathscr$\{\}$}\par
+\fm{}{\#\#frak}{ivo}{\bs(\bs mathfrak$\{\}$ or \bs mathfrak$\{\}$}\par
+\medskip
+\cm{'<,>'}{Wrap\hskip 1mm$\{$beg$\}$\hskip 1mm [end]}{wrap visual area between beg:end}\par
+\fm{}{\#\#w}{vo}{redo the last wrapping command}\par
+\medskip
+{\tenbf <LocalLeader>}$=${\tenit g:atp\_imap\_leader\_3}$=$"]"\par
+Long maps are defined if {\tenit g:atp\_imap\_ShortEnvIMaps}$=0$.\par
+\split{\fmfm{]b}{]beg}{i}{\bs begin$\{\}$}}{\fmfm{]e}{]end}{i}{\bs end$\{\}$}}\par
+\split{\fmfm{]d}{]def}{i}{definition}}{\fmfm{]t}{]the}{i}{theorem}}\par
+\split{\fmfm{]P}{]Pro}{i}{proposition}}{\fmfm{]l}{]lem}{i}{lemma}}\par
+\split{\fmfm{]r}{]rem}{i}{remakr}}{\fmfm{]c}{]cor}{i}{corollary}}\par
+\split{\fmfm{]p}{]pro}{i}{proof}}{\fmfm{]x}{]exa}{i}{example}}\par
+\split{\fmfm{]n}{]not}{i}{note}}{\fmfm{]E}{]enu}{i}{enumareta}}\par
+\split{\fmfm{]I}{]ite}{i}{itemize}}{\fm{}{]i}{i}{\bs item}}\par
+\split{\fmfm{]a}{]ali}{i}{align}}{\fmfm{]q}{]equ}{i}{equation}}\par
+\split{\fmfm{]L}{]lef}{i}{flushleft}}{\fmfm{]R}{]rig}{i}{flushright}}\par
+\split{\fmfm{]T}{]tik}{i}{tikz}}{\fmfm{]f}{]fra}{i}{frame}}\par
+\split{\fmfm{\phantom{]l}}{]let}{i}{letter}}{}\par
+
+\sect{Wrapping maps} %[[[2
+\split{\fm{}{\bs A}{v}{wrap align}}{\fm{}{\bs C}{v}{wrap center}}\par
+\split{\fm{}{\bs E}{v}{wrap equation}}{\fm{}{\bs L}{v}{wrap flushleft}}\par
+\split{}{\fm{}{\bs R}{v}{wrap flushright}}\par
+\medskip
+\split{\fm{}{m}{v}{\bs(\ \bs)}}{\fm{}{M}{v}{\bs[\ \bs]}}\par
+\split{\fm{}{\bs (}{vo}{:Wrap ( ) begin}}{\fm{}{\bs [}{vo}{:Wrap [ ] begin}}\par
+\split{\fm{}{\bs )}{vo}{:Wrap ( ) end\hbox to 0.7em{}}}{\fm{}{\bs ]}{vo}{:Wrap [ ] end\hbox to 0.7em{}}}\par
+\split{\fm{}{\bs $\{$}{vo}{:Wrap $\{$ $\}$ begin}}{\fm{}{\bs $\}$}{vo}{:Wrap $\{$ $\}$ end\hbox to 0.7em{}}}\par
+{\fm{}{\bs b(}{vo}{:Wrap \bs left( \bs right) begin}}\par
+{\fm{}{\bs b[}{vo}{:Wrap \bs left[ \bs right] begin}}\par
+{\fm{}{\bs b)}{vo}{:Wrap \bs left( \bs right) end\hbox to 0.7em{}}}\par
+{\fm{}{\bs b]}{vo}{:Wrap \bs left[ \bs right] end\hbox to 0.7em{}}}\par
+{\fm{}{\bs b$\{$}{vo}{:Wrap \bs left$\{$ \bs right$\}$ begin}}\par
+{\fm{}{\bs b$\}$}{vo}{:Wrap \bs left $\{$ \bs right$\}$ end\hbox to 0.7em{}}}\par
+
+\sect{Mathematical Insert Maps} % [[[2
+\split{\fm{}{\_\_}{i}{\_$\{\ \}$}}{\fm{}{\#/}{i}{\bs frac$\{\}\{\}$}}\par
+\split{\fm{}{\^{}\^{}}{i}{\^{}$\{\ \}$}}{\fm{}{\#\&}{i}{$\wedge$ \bs wedge}}\par
+\split{\fm{}{]m}{i}{\bs(\ \bs)}}{\fm{}{\#N}{i}{\bs Nabla}}\par
+\split{\fm{}{]M}{i}{\bs[\ \bs]}}{\fm{}{\#=}{i}{$\equiv$ \bs equiv}}\par
+\split{\fm{}{\#\bs}{i}{$\setminus$ \bs setminus}}{\fm{}{{\tt`}8}{i}{$\infty$ \bs infty}}\par
+\split{}{\fm{}{{\tt`}6}{i}{$\partial$ \bs partial}}\par
+\fm{}{{\tt`}D}{i}{\bs frac$\{$\bs partial$\}\{$\bs partial \^{}R"$\}$}\par
+{\tenbf Example:}  {\tt x`D} {\tenit expands to} ${\partial\over{\partial x}}$.\par
+\split{\fm{}{\#@}{i}{$\circ$ \bs circ}}{\fm{}{o.}{i}{$\odot$ \bs odot}}\par
+\split{\fm{}{\#*}{i}{$\bigcap$ \bs bigcap}}{\fm{}{o*}{i}{$\otimes$ \bs otimes}}\par
+\split{\fm{}{\#+}{i}{$\bigcup$ \bs bigcup}}{\fm{}{O*}{i}{$\bigotimes$ \bs bigotimes}}\par
+\split{\fm{}{\#\bs}{i}{$\backslash$ \bs backslash}}{\fm{}{t*}{i}{$\times$ \bs times}}\par
+\split{\fm{}{\#.}{i}{\bs dot}}{\fm{}{S+}{i}{$\bigcup$ \bs bigcup}}\par
+\split{\fm{}{\#.s}{i}{$\dots$ \bs dots}}{\fm{}{S*}{i}{$\bigcap$ \bs bigcap}}\par
+\split{\fm{}{{\tt``}}{iv}{$\grave{x}$ \bs grave$\{\}$}}{\fm{}{c*}{i}{$\prod$ \bs prod}}\par
+\split{\fm{}{{\tt`'}}{iv}{$\acute{x}$ \bs acute$\{\}$}}{\fm{}{c+}{i}{$\coprod$ \bs coprod}}\par
+\split{\fm{}{{\tt`}>}{iv}{$\vec{x}$ \bs vec$\{\}$}}{\fm{}{l+}{i}{$\vee$ \bs vee}}\par
+\split{\fm{}{{\tt`}.}{iv}{$\dot{x}$ \bs dot$\{\}$}}{\fm{}{L+}{i}{$\bigvee$ \bs bigvee}}\par
+\split{\fm{}{{\tt`}v}{iv}{$\check{x}$ \bs check$\{\}$}}{\fm{}{l*}{i}{$\wedge$ \bs wedge}}\par
+\split{\fm{}{{\tt`}\_}{iv}{$\bar{x}$ \bs bar$\{\}$}}{\fm{}{L*}{i}{$\bigwedge$ \bs bigwedge}}\par
+\split{\fm{}{{\tt`}~}{iv}{$\tilde{x}$ \bs tilde$\{\}$}}{\fm{}{<=}{i}{$\leq$ \bs leq}}\par
+\split{\fm{}{{\tt`}\^{}}{iv}{$\hat{x}$ \bs hat$\{\}$}}{\fm{}{>=}{i}{$\geq$ \bs geq}}\par
+\split{\fm{}{{\tt`}u}{ivo}{$\underline{x}$ \bs underline$\{\}$}}{\fm{}{->}{i}{$\rightarrow$ \bs rightarrow}}\par
+\split{\fm{}{{\tt`}o}{ivo}{$\overline{x}$ \bs overline$\{\}$}}{\fm{}{<-}{i}{$\leftarrow$ \bs leftarrow}}\par
+\split{\fm{}{==}{i}{\tt \&=}}{\fm{}{\_>}{i}{$\Rightarrow$ \bs Rightarrow}}\par
+\split{\fm{}{=\~{}}{i}{$\cong$ \bs cong}}{\fm{}{<\_}{i}{$\Leftarrow$ \bs Leftarrow}}\par
+\split{\fm{}{\~{}\~{}}{i}{$\approx$ \bs approx}}{\fm{}{\tt|-}{i}{$\vdash$ \bs vdash}}\par
+\split{\fm{}{++}{i}{$\sum$ \bs sum}}{\fm{}{\tt-|}{i}{$\dashv$ \bs dashv}}\par
+\split{\fm{}{o+}{i}{$\oplus$ \bs oplus}}{\fm{}{t>}{i}{$\triangleleft$ \bs triangleleft}}\par
+\split{\fm{}{O+}{i}{$\bigoplus$ \bs bigoplus}}{\fm{}{<t}{i}{$\triangleright$ \bs triangleright}}\par
+\split{\fm{}{o-}{i}{$\ominus$ \bs ominus}}{\fm{}{s<}{i}{$\subseteq$ \bs subseteq}}\par
+\split{\fm{}{\#<}{i}{$\langle$ \bs langle}}{\fm{}{s>}{i}{$\supseteq$ \bs supseteq}}\par
+\split{\fm{}{\#>}{i}{$\rangle$ \bs rangle}}{}\par
+
+\vfill\eject
+\sect{Diacritics} % [[[2
+If {\tenit g:atp\_imap\_diacritics\_inteligent}$=1$ then type {$\tt a$''} to get $\acute{\tt a}$.\par
+\split{\fm{}{{\tt`'}}{iv}{\bs '$\{\}$}}{\fm{}{{\tt``}}{iv}{\bs `$\{\}$}}\par
+\split{\fm{}{{\tt`"}}{iv}{\bs "$\{\}$}}{\fm{}{{\tt`}H}{iv}{\bs H$\{\}$}}\par
+\split{\fm{}{{\tt`}\^{}}{iv}{\bs \^{}$\{\}$}}{\fm{}{{\tt`}\~{}}{iv}{\bs \~{}$\{\}$}}\par
+\split{\fm{}{{\tt`}v}{iv}{\bs v$\{\}$}}{\fm{}{{\tt`.}}{iv}{\bs .$\{\}$}}\par
+\split{\fm{}{{\tt`}b}{iv}{\bs b$\{\}$}}{\fm{}{{\tt`}c}{iv}{\bs c$\{\}$}}\par
+\split{\fm{}{{\tt`}d}{iv}{\bs d$\{\}$}}{\fm{}{{\tt`}t}{iv}{\bs t$\{\}$}}\par
+\split{\fm{}{{\tt`}2}{iv}{{\bs}2$\{\}$}}{}\par
+
+% \sect{Log file normal maps} % [[[2
+
+\sect{Help and information} %[[[2
+\cm{}{help atp}{ATP help}\par
+\cm{}{help atp-news}{ATP news}\par
+\bluelink{http://atp-vim.sf.net}{http://atp-vim.sf.net}\dotfill{ATP web page}\par
+\cm{}{HelpEnvIMaps}{show environment imaps}\par
+\cm{}{HelpMathIMaps}{show math imaps}\par
+\cm{}{HelpVMaps}{show vmaps}\par
+\cm{}{Map[!]\hskip 1mm $\{$pat$\}$}{show maps with rhs matching $\{$pat$\}$}\par
+\cm{}{Nmap[!]\hskip 1mm $\{$pat$\}$}{show nmaps with rhs matching $\{$pat$\}$}\par
+\cm{}{Imap[!]\hskip 1mm $\{$pat$\}$}{show imaps with rhs matching $\{$pat$\}$}\par
+\cm{}{Vmap[!]\hskip 1mm $\{$pat$\}$}{show vmaps with rhs matching $\{$pat$\}$}\par
+\cm{}{Smap[!]\hskip 1mm $\{$pat$\}$}{show smaps with rhs matching $\{$pat$\}$}\par
+\cm{}{Omap[!]\hskip 1mm $\{$pat$\}$}{show omaps with rhs matching $\{$pat$\}$}\par
+\cm{}{Lmap[!]\hskip 1mm $\{$pat$\}$}{show lmaps with rhs matching $\{$pat$\}$}\par
+%\cms{http://www.vim.org/scripts/script.php?script\_id=2226}{script}
+\bigskip
+\sect{Legend}
+Maps are written in the form:\par
+\fm{[count]}{LHS}{mode}{{\smalltt mode} denotes the mode of the map, \textcolor{red}{LHS} is the left side of the map, {\tt [count]} if present is the count.}\par
+\vfill
+\taglic % Licence goes here
+%----------------------------------------------------------
+%----------------------------------------------------------
+% Document End [[[3
+%\vfill
+\supereject
+% \if L\lr \else\null\vfill\eject\fi
+% \if L\lr \else\null\vfill\eject\fi
+\bye
+% EOF
+% vim:foldmethod=marker
