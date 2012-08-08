@@ -467,6 +467,7 @@ if vim.eval("v:version") < 703 or vim.eval("v:version") == 703 and not vim.eval(
 END
 if v:version == 703 && has('patch569') || v:version > 703
     let bibresults = atplib#pyeval("bibresults")
+endif
 return bibresults
 endfunction
 "}}}
