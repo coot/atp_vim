@@ -3311,6 +3311,16 @@ COMPLETION MODES		                       	*atp-completion-modes*
 <		These are just list of options/commands. math_commands will be
 		added to completion only in math mode.
 >
+	    g:atp_{p_name}_command_values_dict
+<		This is a dictionary. It is used to find completion for values
+		of options of a given command: for example
+		    \command{option=value}
+		Each key is a pattern which will match against the command
+		name. The value is a dictionary which keys matchs for an
+		option name and the corresponding entry is a list of possible
+		values of the option. 
+		(see ftplugin/ATP_files/packages/listings.vim)
+>
 	    g:atp_{p_name}_options_values
 <		This variable is a vim dictionary: keys are vim patterns which
 		should match a package option, values are lists of the option
@@ -3335,6 +3345,16 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		vim patterns. See xcolor for an example. Loading through
 		document class is not yet supported, but might be added on
 		request.
+>
+	    g:atp_{p_name}_environment_option_values
+<		This is a dictionary. It is used to find completion for values
+		of options of a given environment: for example
+		    \begin{environment}[option=value]
+		Each key is a pattern which will match against the environment
+		name. The value is a dictionary which keys matches for
+		an option name and the corresponding entry is a list of
+		possible values of the option.
+		(see ftplugin/ATP_files/packages/listings.vim)
 
 
 							*atp-completion-new-packages*

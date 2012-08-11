@@ -1814,7 +1814,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    " DEBUG:
 	    let b:comp_method='command'
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
-    "{{{3 --------- environment options
+    "{{{3 --------- environment options & environment options values
     elseif (l =~ '\\begin\s*{[^}]*}\s*\[[^\]]*$' && !normal_mode) &&
 		\ index(g:atp_completion_active_modes, 'environment options') != -1 
 	if (l =~ '\\begin\s*{[^}]*}\s*\[[^\]]*=[^\],]*$')
@@ -2008,9 +2008,14 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     "{{{3 --------- font encoding
     elseif l =~ '\%(\\usefont{\|\\DeclareFixedFont{[^}]*}{\|\\fontencoding{\)[^}]*$' && !normal_mode  &&
 		\ index(g:atp_completion_active_modes, 'font encoding') != -1
-	    let completion_method='font encoding'
-	    let b:comp_method='font encoding'
-	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
+	let completion_method='font encoding'
+	let b:comp_method='font encoding'
+	call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
+    "{{{3 --------- command values of values
+    elseif l =~ '\\\w\+{\%([^}]*,\)\?[^,}=]*=[^,}]*$' && !normal_mode
+	let completion_method='command values of values'
+	let b:comp_method=completion_method
+	call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
     "{{{3 --------- command values
     " this is at the end because there are many command completions done
     " before - they would not work if this would be on the top.
@@ -2217,9 +2222,14 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	endif
 	for package in g:atp_packages
 	    if exists("g:atp_".package."_environment_option_values")
-		for key in keys(g:atp_{package}_environment_option_values)
-		    if opt_name =~ key
-			call extend(completion_list, filter(g:atp_{package}_environment_option_values[key], filter_cond))
+		for env_key in keys(g:atp_{package}_environment_option_values)
+		    if env_name =~ env_key
+			for opt_key in keys(g:atp_{package}_environment_option_values[env_key])
+			    if opt_name =~ opt_key
+				call extend(completion_list, filter(copy(g:atp_{package}_environment_option_values[env_key][opt_key]), filter_cond))
+				break " we can assume there is only one entry 
+			    endif
+			endfor
 		    endif
 		endfor
 	    endif
@@ -2615,6 +2625,36 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		endfor
 	    endif
 	endfor
+    " {{{3 ------------ COMMAND VALUES OF VALUES
+    elseif completion_method == 'command values of values'
+	let [ cmd_name, opt_name, opt_value ] = matchlist(l, '\(\\\w*\)\s*{\%([^}]*,\)\?\([^,}=]*\)=\([^,}]*\)$')[1:3]
+	let g:opt_name = opt_name
+	let g:opt_value = opt_value
+	let completion_list=[]
+	if a:expert_mode
+	    let filter_cond = 'v:val =~? "^".opt_value'
+	else
+	    let filter_cond = 'v:val =~? opt_value'
+	endif
+	for package in g:atp_packages
+	    if exists("g:atp_".package."_command_values_dict")
+		echomsg package
+		for cmd_key in keys(g:atp_{package}_command_values_dict)
+		    echomsg cmd_name
+		    if cmd_name =~ cmd_key
+			echomsg cmd_key
+			for opt_key in keys(g:atp_{package}_command_values_dict[cmd_key])
+			    if opt_name =~ opt_key
+				echomsg opt_name
+				call extend(completion_list, filter(copy(g:atp_{package}_command_values_dict[cmd_key][opt_key]), filter_cond))
+				break " we can assume there is only one entry 
+			    endif
+			endfor
+		    endif
+		endfor
+	    endif
+	endfor
+
     " {{{3 ------------ ABBREVIATIONS
     elseif completion_method == 'abbreviations'
 	let completion_list  = sort(copy(b:atp_LocalEnvironments), "atplib#CompareStarAfter")+[ "document","description","letter","picture","list","minipage","titlepage","thebibliography","bibliography","center","flushright","flushleft","tikzpicture","frame","itemize","enumerate","quote","quotation","verse","abstract","verbatim","figure","array","table","tabular","equation","equation*","align","align*","alignat","alignat*","gather","gather*","multline","multline*","split","flalign","flalign*","corollary","theorem","proposition","lemma","definition","proof","remark","example","exercise","note","question","notation"]
@@ -2971,8 +3011,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		else
 		    let completions	= filter(copy(completion_list),' v:val =~? begin') 
 		endif
-	    " {{{4 --------- environment options values
-	    elseif completion_method == 'environment values of options'
+	    " {{{4 --------- environment options values, command values of values
+	    elseif completion_method == 'environment values of options' || completion_method == 'command values of values'
 		" This is essentialy done in previous step already
 		let completions = completion_list
 	    " {{{4 --------- command values
@@ -3203,8 +3243,12 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let column = col+1
     "{{{3 environment options values
     elseif !normal_mode && (completion_method == 'environment values of options')
-	let col=len(matchstr(l,'\\begin\s*{[^}]*}\[.*=\%({[^}]*,\|{\)\?\ze'))
-	let column = col+2
+	let col=len(matchstr(l, '.*\\begin\s*{[^}]*}\[.*=\%({[^}]*,\|{\)\?\ze'))
+	let column = col+1
+	call complete(column, completions)
+    elseif !normal_mode && (completion_method == 'command values of values')
+	let col=len(matchstr(l, '.*\\\w\+{\%([^}]*,\)\?[^,}=]*=\ze'))
+	let column = col+1
 	call complete(column, completions)
     else
 	let column = col(".")

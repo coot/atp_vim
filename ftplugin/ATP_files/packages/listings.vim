@@ -13,5 +13,8 @@ let g:atp_listings_command_values = {
 let g:atp_listigns_environments = [ 'lstlisting' ]
 let g:atp_listings_environment_options = { 'lstlisting' : s:keys+['caption=', 'title=', 'label=', 'nolol=' ] }
 let g:atp_listings_environment_option_values = {
-	    \ '\%(also\)\?language' : s:languages
+	    \ 'listing' : { '\%(also\)\?language' : s:languages } 
+	    \ }
+let g:atp_listings_command_values_dict = {
+	    \ '\\lstset' : { '\%(also\)\?language' : s:languages }
 	    \ }
