@@ -1817,10 +1817,15 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     "{{{3 --------- environment options
     elseif (l =~ '\\begin\s*{[^}]*}\s*\[[^\]]*$' && !normal_mode) &&
 		\ index(g:atp_completion_active_modes, 'environment options') != -1 
-	    let completion_method='environment options'
-	    " DEBUG:
-	    let b:comp_method='environment options'
+	if (l =~ '\\begin\s*{[^}]*}\s*\[[^\]]*=[^\],]*$')
+	    let completion_method='environment values of options'
+	    let b:comp_method=completion_method
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
+	else
+	    let completion_method='environment options'
+	    let b:comp_method=completion_method
+	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
+	endif
     "{{{3 --------- environment names
     elseif (pline =~ '\%(\\begin\|\\end\)\s*$' && begin !~ '}.*$' && !normal_mode) &&
 		\ index(g:atp_completion_active_modes, 'environment names') != -1 
@@ -2200,10 +2205,28 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		endif
 	    endif
 	endfor
+    " {{{3 ------------ ENVIRONMENT VALUES OF OPTIONS
+    elseif completion_method == 'environment values of options'
+	let env_name = matchstr(l, '.*\\begin{\s*\zs\w\+\ze\s*}')
+	let [opt_name, opt_value] = matchlist(l,  '\\begin\s*{[^}]*}\s*\[\%([^\]]*,\)\?\([^,\]]*\)=\([^\],]*\)$')[1:2]
+	let completion_list=[]
+	if a:expert_mode
+	    let filter_cond = 'v:val =~? "^".opt_value'
+	else
+	    let filter_cond = 'v:val =~? opt_value'
+	endif
+	for package in g:atp_packages
+	    if exists("g:atp_".package."_environment_option_values")
+		for key in keys(g:atp_{package}_environment_option_values)
+		    if opt_name =~ key
+			call extend(completion_list, filter(g:atp_{package}_environment_option_values[key], filter_cond))
+		    endif
+		endfor
+	    endif
+	endfor
     " {{{3 ------------ ENVIRONMENT OPTIONS
     elseif completion_method == 'environment options'
 	let env_name = matchstr(l, '.*\\begin{\s*\zs\w\+\ze\s*}')
-	let g:env_name = env_name
 	let completion_list=[]
 	for package in g:atp_packages
 	    if exists("g:atp_".package."_environment_options") && 
@@ -2929,7 +2952,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     "{{{3 --------- completion_method = !close environments !env_close
     if completion_method != 'close environments' && completion_method != 'env_close'
 	let completions=[]
-	    " {{{4 --------- packages, package options, bibstyles, font (family, series, shapre, encoding), document class, documentclass options
+	    " {{{4 --------- packages, package options, bibstyles, font (family, series, shapre, encoding), document class, documentclass options, environment options
 	    if (completion_method == 'package' 		||
 		    \ completion_method == 'package options'||
 		    \ completion_method == 'environment options'||
@@ -2948,6 +2971,10 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		else
 		    let completions	= filter(copy(completion_list),' v:val =~? begin') 
 		endif
+	    " {{{4 --------- environment options values
+	    elseif completion_method == 'environment values of options'
+		" This is essentialy done in previous step already
+		let completions = completion_list
 	    " {{{4 --------- command values
 	    elseif completion_method == 'command values' 
 		if a:expert_mode
@@ -3174,6 +3201,11 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	endif
 	call complete(col+1, completions)
 	let column = col+1
+    "{{{3 environment options values
+    elseif !normal_mode && (completion_method == 'environment values of options')
+	let col=len(matchstr(l,'\\begin\s*{[^}]*}\[.*=\%({[^}]*,\|{\)\?\ze'))
+	let column = col+2
+	call complete(column, completions)
     else
 	let column = col(".")
     endif
@@ -3182,9 +3214,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 Final call of CloseLastEnvrionment / CloseLastBracket
     let len=len(completions)
     let matched_word = strpart(getline(line(".")), column-1, pos_saved[2]-column)
-    let g:matched_word = matched_word
-    let g:column = column
-    let g:pos_saved = copy(pos_saved)
     if len == 0 && (!count(['package', 'bibfiles', 'bibstyles', 'inputfiles'], completion_method) || a:expert_mode == 1 ) || len == 1
 	let b:comp_method .= " final"
 	if count(['command', 'tikzpicture commands', 'tikzpicture keywords', 'command values'], completion_method) && 
