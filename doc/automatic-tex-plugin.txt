@@ -175,6 +175,8 @@ NEWS							*atp-news*
 
  If subfiles packge is used, the local aux file is searched for labels
  (completion).
+
+ Read this note: |atp-completion-new-packages|.
 >
  ======================
  Changes in version 11.1
@@ -3293,9 +3295,9 @@ COMPLETION MODES		                       	*atp-completion-modes*
 	documentclass options ~
 	package options ~
 		You can write your own scrip which will add support for
-		documentclass or a package. Put it under
-		'ftplugin/ATP_files/packages/' directory in your vim path.
-		Supported variables:
+		documentclass or a package (see |atp-copmletion-new-package|).
+		Put it under 'ftplugin/ATP_files/packages/' directory in your
+		vim path. Supported variables:
 >
 	    g:atp_{dc_name}_options
 	    g:atp_{p_name}_options
@@ -3333,6 +3335,19 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		vim patterns. See xcolor for an example. Loading through
 		document class is not yet supported, but might be added on
 		request.
+
+
+							*atp-completion-new-packages*
+    ATP is scanning packages on the fly, i.e. there is a python script which
+    scans package file for its options, commands and evironments that it
+    defines. This happens for packages that have a file under
+    ftplugin/ATP_files/packages directory. So if you want ATP to scan
+    a package that you use it is enough to make an empty file under this
+    directory with a name package.vim (e.g. listings.vim for listings.sty
+    package). You can (see other files in that directories) define list of
+    options, commands, environments, etc and ATP is will add only the entries
+    that you have missed (the reason for this is that when the package is
+    updated in might have a new option/command/environment).
 
 ------------------------------------------------------------------
 ATP COMPLETION VARIABLES				*atp-completion-variables*

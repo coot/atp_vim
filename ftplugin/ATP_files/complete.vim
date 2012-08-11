@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Jun 26, 2012 at 19:10:50  +0100
+" Last Change: Sat Aug 11, 2012 at 09:47:41  +0100
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -536,7 +536,6 @@ endif
 python << EOF
 import vim, re, subprocess, os.path
 package = vim.eval("a:package_name")
-
 
 # Pattern to find declared options:
 option_pat = re.compile('\\\\(?:KOMA@|X)?Declare(?:Void|Local|(?:Bi)?Bool(?:ean)?|String|Standard|Switch|Type|Unicode|Entry|Bibliography|Caption|Complementary|Quote)?Option(?:Beamer)?X?\*?(?:<\w+>)?\s*(?:%\s*\n\s)?{((?:\w|\d|-|_|\*)+)}|\\\\Declare(?:Exclusive|Local|Void)?Options\*?\s*{((?:\n|[^}])+)}')
