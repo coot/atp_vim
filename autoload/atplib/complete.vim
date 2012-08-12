@@ -2221,12 +2221,12 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    let filter_cond = 'v:val =~? opt_value'
 	endif
 	for package in g:atp_packages
-	    if exists("g:atp_".package."_environment_option_values")
-		for env_key in keys(g:atp_{package}_environment_option_values)
+	    if exists("g:atp_".package."_environment_options_values")
+		for env_key in keys(g:atp_{package}_environment_options_values)
 		    if env_name =~ env_key
-			for opt_key in keys(g:atp_{package}_environment_option_values[env_key])
+			for opt_key in keys(g:atp_{package}_environment_options_values[env_key])
 			    if opt_name =~ opt_key
-				call extend(completion_list, filter(copy(g:atp_{package}_environment_option_values[env_key][opt_key]), filter_cond))
+				call extend(completion_list, filter(copy(g:atp_{package}_environment_options_values[env_key][opt_key]), filter_cond))
 				break " we can assume there is only one entry 
 			    endif
 			endfor
@@ -2278,7 +2278,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let package = matchstr(line, '\\usepackage.*{\zs[^}]*\ze}')
 	let options = split(matchstr(line, '\\usepackage\[\s*\zs[^\]{]*\ze\s*[\]{]'), '\s*,\s*')
 	if has("python") || has("python3")
-	    let completion_list = get( get( g:atp_package_dict.ScanPackage(package.'.sty', ['options!']) ,package.'.sty',{}) , 'options', [])
+	    let completion_list = get(get(g:atp_package_dict.ScanPackage(package.'.sty', ['options!']) ,package.'.sty',{}) , 'options', [])
 	else
 	    let completion_list = []
 	endif
@@ -2490,7 +2490,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		    " Add commands whcih are not already present:
 		    let add_completion_list = {"g:atp_".package."_commands"}
 		elseif has("python") || has("python3")
-		    let add_completion_list = get(get(g:atp_package_dict.ScanPackage(package.'.sty', ['commands']) ,package.'.sty',{}) , 'options', [])
+		    let add_completion_list = get(get(g:atp_package_dict.ScanPackage(package.'.sty',['commands']),package.'.sty',{}), 'commands', [])
 		else
 		    let add_completion_list = []
 		endif
@@ -2513,7 +2513,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    call setloclist(0, loclist)
 	    if !empty(documentclass)
 		if has("python") || has("python3")
-		    let add_completion_list = get( get( g:atp_package_dict.ScanPackage(documentclass.'.cls', ['commands']) ,package.'.sty',{}) , 'options', [])
+		    let add_completion_list = get(get(g:atp_package_dict.ScanPackage(documentclass.'.cls', ['commands']) ,package.'.sty',{}) , 'commands', [])
 		else
 		    let add_completion_list = []
 		endif
@@ -2714,7 +2714,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let documentclass = matchstr(line, '\\documentclass\[[^{]*{\zs[^}]*\ze}')
 	let g:documentclass = documentclass
 	if has("python") || has("python3")
-	    let completion_list = get( get( g:atp_package_dict.ScanPackage(documentclass.'.cls', ['options!']) ,documentclass.'.cls',{}) , 'options', [])
+	    let completion_list = get(get(g:atp_package_dict.ScanPackage(documentclass.'.cls', ['options!']) ,documentclass.'.cls',{}) , 'options', [])
 	else
 	    let completion_list = []
 	endif

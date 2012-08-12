@@ -3346,7 +3346,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		document class is not yet supported, but might be added on
 		request.
 >
-	    g:atp_{p_name}_environment_option_values
+	    g:atp_{p_name}_environment_options_values
 <		This is a dictionary. It is used to find completion for values
 		of options of a given environment: for example
 		    \begin{environment}[option=value]
