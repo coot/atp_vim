@@ -165,7 +165,7 @@ for all the defined functions :help atp*()CTRL-d, mappings: :help atp-mapCTRL-d
 NEWS							*atp-news*
 >
  ======================
- Changes in version 11.1
+ Changes in version 11.2
 <
  |atp-:TEXL| and the \\l map supports count.
  There are two maps to |atp-:SyncTexL|: \\f (like \\l) and \F.
@@ -175,6 +175,10 @@ NEWS							*atp-news*
 
  If subfiles packge is used, the local aux file is searched for labels
  (completion).
+
+ If you don't like the maps associated to a given leader (g:atp_imap_leader_1,
+ ...) put define the variable to be an empty string in your |vimrc| or |atprc|
+ file.
 
  Read this note: |atp-completion-new-packages|.
 >
