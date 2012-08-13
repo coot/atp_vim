@@ -180,6 +180,10 @@ NEWS							*atp-news*
  ...) put define the variable to be an empty string in your |vimrc| or |atprc|
  file.
 
+ The motions { and } are adding entries to the jump list, by setting the
+ ` mark. This is the default behaviour in vim (see |jump-motions|) The same
+ aplies to the |atp-:S| command.
+
  Read this note: |atp-completion-new-packages|.
 >
  ======================
@@ -4193,7 +4197,9 @@ PROJECT SCRIPT						*atp-ProjectScript*
 
 	This is command does the same job as |/| but is recursive in the tree
 	of files (so it is useful only in project files). The syntax of this
-	command is similar to |:vimgrep|. 
+	command is similar to |:vimgrep|. It also sets the ` mark and thus it
+	adds a position in the jump list (i.e. |atp-:S| as |/| belongs to the
+	|jump-motions|)
 
 	This works similarly to |:ijump|. But also goes back to the root file
 	(b:atp_MainFile).

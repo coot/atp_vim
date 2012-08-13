@@ -2173,6 +2173,7 @@ endfunction
 " }}}1
 " atplib#motion#ParagraphNormalMotion {{{1
 function! atplib#motion#ParagraphNormalMotion(backward,count)
+    normal! m`
     if a:backward != "b"
 	for i in range(1,a:count)
 	    call search('\(^\(\n\|\s\)*\n\s*\zs\S\|\zs\\par\>\|\%'.line("$").'l$\)', 'W')
@@ -2185,6 +2186,7 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 endfunction
 nmap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
 nmap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
+
 " atplib#motion#StartVisualMode {{{1
 function! atplib#motion#StartVisualMode(mode)
     let g:atp_visualstartpos = getpos(".")
@@ -2201,6 +2203,7 @@ function! atplib#motion#ParagraphVisualMotion(backward,count)
     let cond = !atplib#CompareCoordinates(g:atp_visualstartpos[1:2],getpos("'>")[1:2])
 "     let g:pos = string(g:atp_visualstartpos)." ".string(getpos("'<"))." ".string(getpos("'>"))." ".cond
     let bpos = g:atp_visualstartpos
+    normal! m`
     if a:backward != "b"
 	if cond
 	    call cursor(getpos("'<")[1:2])

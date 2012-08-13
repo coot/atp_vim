@@ -1390,9 +1390,12 @@ function! atplib#search#GetSearchArgs(Arg,flags)
     return [ pattern, flag ]
 endfunction
 "}}}
-" {{{ Search()
+" {{{ atplib#search#Search()
 try
 function! atplib#search#Search(Bang, Arg)
+
+    "Like :s, :S should be a jump-motion (see :help jump-motions)
+    normal! m`
 
     let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
     let [ pattern, flag ] = atplib#search#GetSearchArgs(a:Arg, 'bceswWx')
