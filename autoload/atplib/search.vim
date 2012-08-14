@@ -2376,6 +2376,8 @@ if v:version == 703 && has('patch569') || v:version > 703
     let b:LevelDict   = atplib#pyeval("level_dict")
 endif
 let g:time_TreeOfFiles_py=reltimestr(reltime(time))
+
+return [ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ]
 endfunction
 "}}}
 
