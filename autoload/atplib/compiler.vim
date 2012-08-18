@@ -2271,7 +2271,6 @@ function! atplib#compiler#SetErrorFormat(cgetfile,...)
     let carg_raw = ( a:0 >= 1 ? a:1 : g:atp_DefaultErrorFormat )
     let carg_lists = split(carg_raw, '\ze[+-]')
 
-    let g:carg_lists = carg_lists
     for carg_r in carg_lists
 	let carg_list= split(carg_r, '\zs')
 	if carg_list[0] =~ '^[+-]$'
@@ -2589,6 +2588,7 @@ function! atplib#compiler#ShowErrors(...)
     
     " set errorformat 
 
+    let g:arg = l:arg
     if l:arg =~# 'o'
 	OpenLog
 	return

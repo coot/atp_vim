@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Jul 31, 2012 at 08:57:51  +0100
+" Last Change: Sat Aug 18, 2012 at 13:46:21  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2248,7 +2248,7 @@ endfunction
 	    let s:leaving_buffer=expand("%:p")
 	endif
     endfunction
-if (v:version < 703 || v:version == 703 && !has("patch648")) && (!exists("g:patched_vim") || exists("g:patched_vim") && !g:patched_vim)
+if (v:version < 703 || v:version == 703 && !has("patch468"))
     augroup ATP_QuickFix_cgetfile
 "     When using cgetfile the position in quickfix-window is lost, which is
 "     annoying when changing windows. 
@@ -2579,7 +2579,6 @@ function! CompilerComp(A,L,P)
 endfunction
 
 function! <SID>SetDebugMode(bang,...)
-    let g:efm_b = &efm
     if a:0 == 0
 	echo t:atp_DebugMode
 	return
@@ -2599,8 +2598,6 @@ function! <SID>SetDebugMode(bang,...)
 	    let t:atp_DebugMode= auto.g:atp_DefaultDebugMode
 	endif
     endif
-
-    let g:efm_a = &efm
 
     if t:atp_DebugMode =~# 'Debug$' && a:1 =~# 'debug$' || t:atp_DebugMode =~# 'debug$' && a:1 =~# 'Debug$'
 	let change_menu 	= 0
@@ -2649,15 +2646,14 @@ function! <SID>SetDebugMode(bang,...)
 
     if a:1 =~# '\%(auto\)\?s\%[ilent]'
 	let winnr=winnr()
-" 	let quickfix_open = 0
-" 	windo let quickfix_open += ( &buftype == 'quickfix' ? 1 : 0 )
-" 	wincmd w
 	if t:atp_QuickFixOpen
 	    cclose
 	else
 	    try
 		cgetfile
-		call atplib#compiler#FilterQuickFix()
+		if v:version < 703 || v:version == 703 && !has("path468")
+		    call atplib#compiler#FilterQuickFix()
+		endif
 	    catch /E40/
 		echohl WarningMsg 
 		echo "[ATP:] log file missing."
@@ -2670,16 +2666,15 @@ function! <SID>SetDebugMode(bang,...)
 	endif
     elseif a:1 =~# '\%(auto\)\?d\%[ebug]'
 	let winnr=winnr()
-	let g:efm_0 = &efm
 	exe "copen " . (!exists("w:quickfix_title") 
 		    \ ? (max([1, min([atplib#qflength(), g:atp_DebugModeQuickFixHeight])]))
 		    \ : "" )
-	let g:efm = &efm
 	exe winnr . "wincmd w"
-	let g:efm_1 = &efm
 	try
 	    cgetfile
-" 	    call atplib#compiler#FilterQuickFix()
+	    if v:version < 703 || v:version == 703 && !has("path468")
+		call atplib#compiler#FilterQuickFix()
+	    endif
 	catch /E40/
 	    echohl WarningMsg 
 	    echo "[ATP:] log file missing."
@@ -2694,7 +2689,9 @@ function! <SID>SetDebugMode(bang,...)
 	exe winnr . "wincmd w"
 	try
 	    cgetfile
-" 	    call atplib#compiler#FilterQuickFix()
+	    if v:version < 703 || v:version == 703 && !has("path468")
+		call atplib#compiler#FilterQuickFix()
+	    endif
 	catch /E40/
 	    echohl WarningMsg 
 	    echo "[ATP:] log file missing."
