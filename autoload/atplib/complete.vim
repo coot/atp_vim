@@ -1986,7 +1986,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
     "{{{3 --------- font family
-    elseif l =~ '\%(\\renewcommand\s*{\s*\\\%(rm\|sf\|bf\|tt\|md\|it\|sl\|sc\|up\)default\s*}\s*{\|\\usefont{[^}]*}{\|\\DeclareFixedFont{[^}]*}{[^}]*}{\|\\fontfamily{\)[^}]*$' && !normal_mode  &&
+    elseif l =~ '\%(\\renewcommand\s*{\s*\\\%(rm\|sf\|bf\|tt\|md\|it\|sl\|sc\|up\)default\s*}\s*{\|\\usefont\s*{[^}]*}{\|\\DeclareFixedFont\s*{[^}]*}{[^}]*}{\|\\fontfamily\s*{\)[^}]*$' && !normal_mode  &&
 		\ index(g:atp_completion_active_modes, 'font family') != -1
 	    let completion_method='font family'
 	    let b:comp_method='font family'
@@ -2296,7 +2296,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	if exists("g:atp_LatexPackages")
 	    let completion_list	= copy(g:atp_LatexPackages)
 	else
-	    echo "[ATP:] makeing list of packages (it might take a while) ... "
+	    echo "[ATP:] generating a list of packages (it might take a while) ... "
 	    if g:atp_debugTabCompletion
 		let debugTabCompletion_LatexPackages_TimeStart=reltime()
 	    endif
@@ -2636,17 +2636,32 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	else
 	    let filter_cond = 'v:val =~? opt_value'
 	endif
+	let cvov_ignore_pattern = ''
 	for package in g:atp_packages
 	    if exists("g:atp_".package."_command_values_dict")
 		echomsg package
 		for cmd_key in keys(g:atp_{package}_command_values_dict)
-		    echomsg cmd_name
 		    if cmd_name =~ cmd_key
-			echomsg cmd_key
 			for opt_key in keys(g:atp_{package}_command_values_dict[cmd_key])
 			    if opt_name =~ opt_key
-				echomsg opt_name
-				call extend(completion_list, filter(copy(g:atp_{package}_command_values_dict[cmd_key][opt_key]), filter_cond))
+				if type(g:atp_{package}_command_values_dict[cmd_key]) == 3
+				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]
+				else
+				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]['matches']
+				    let cvov_ignore_pattern = get(g:atp_{package}_command_values_dict[cmd_key][opt_key], 'ignore_pattern', '')
+				    let opt_value = matchlist(l, '\%(\\\w*\)\s*{\%([^}]*,\)\?\%([^,}=]*\)='.cvov_ignore_pattern.'\([^,}]*\)$')[1]
+				    if a:expert_mode
+					let filter_cond = 'v:val =~? "^".opt_value'
+				    else
+					let filter_cond = 'v:val =~? cvov_ignore_pattern_.opt_value'
+				    endif
+				endif
+				let g:matches = copy(matches)
+				let g:cvov_ignore_pattern = cvov_ignore_pattern
+				let g:opt_value = opt_value
+				call extend(completion_list, filter(matches, filter_cond))
+				let g:filter_cond = filter_cond
+				let g:list = completion_list
 				break " we can assume there is only one entry 
 			    endif
 			endfor
@@ -2709,25 +2724,30 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ BIBSTYLES
     elseif completion_method == 'bibstyles'
 	let completion_list=atplib#search#KpsewhichGlobPath("bst", "", "*.bst")
-    "{{{3 ------------ DOCUMENTCLASS OPTIONS
-    elseif completion_method == 'documentclass options'
-	let documentclass = matchstr(line, '\\documentclass\[[^{]*{\zs[^}]*\ze}')
-	let g:documentclass = documentclass
-	if has("python") || has("python3")
+    "{{{3 ------------ DOCUMENTCLASS OPTIONS 
+    elseif completion_method == 'documentclass options' 
+	let documentclass = matchstr(line, '\\documentclass\[[^{]*{\zs[^}]*\ze}') 
+	if has("python") || has("python3") 
 	    let completion_list = get(get(g:atp_package_dict.ScanPackage(documentclass.'.cls', ['options!']) ,documentclass.'.cls',{}) , 'options', [])
 	else
 	    let completion_list = []
 	endif
 	if exists("g:atp_".documentclass."_options")
-	    " Add options whcih are not already present:
-	    call extend(completion_list, filter(copy({"g:atp_".documentclass."_options"}), 'index(completion_list, v:val) == -1'))
+	    if type({"g:atp_".documentclass."_options"}) == 3
+		" Add options whcih are not already present:
+		call extend(completion_list, filter(copy({"g:atp_".documentclass."_options"}), 'index(completion_list, v:val) == -1'))
+	    else " it is a funcref.
+		let c_list =  {"g:atp_".documentclass."_options"}.GetOptions(begin)
+		let g:c_list = c_list
+		call extend(completion_list, filter(c_list, 'index(completion_list, v:val) == -1'))
+	    endif
 	endif
     "{{{3 ------------ DOCUMENTCLASS
     elseif completion_method == 'documentclass'
 	if exists("g:atp_LatexClasses")
 	    let completion_list	= copy(g:atp_LatexClasses)
 	else
-	    echo "[ATP:] makeing list of document classes (it might take a while) ... "
+	    echo "[ATP:] generating a list of document classes (it might take a while) ... "
 	    if g:atp_debugTabCompletion
 		let debugTabCompletion_LatexClasses_TimeStart=reltime()
 	    endif
@@ -3247,7 +3267,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let column = col+1
 	call complete(column, completions)
     elseif !normal_mode && (completion_method == 'command values of values')
-	let col=len(matchstr(l, '.*\\\w\+{\%([^}]*,\)\?[^,}=]*=\ze'))
+	let col=len(matchstr(l, '.*\\\w\+{\%([^}]*,\)\?[^,}=]*='.cvov_ignore_pattern.'\ze'))
 	let column = col+1
 	call complete(column, completions)
     else
