@@ -121,7 +121,7 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
     " defined later, and g:atp_ProjectScript might already be defined, so not always
     " global variables override local ones).
 
-    " Global variable overrides local one
+    " Global variable overrides local one:
     let cond = ( exists("g:atp_ProjectScript") && !g:atp_ProjectScript || exists("b:atp_ProjectScript") && ( !b:atp_ProjectScript && (!exists("g:atp_ProjectScript") || exists("g:atp_ProjectScript") && !g:atp_ProjectScript )) )
     let g:cond_LPS = cond
     if !ignore && cond
