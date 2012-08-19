@@ -10,7 +10,7 @@
 "    \
 
 " Do not source ATP if g:no_atp is set
-if exists("g:no_atp") && g:no_atp || exists("b:did_ftplugin")
+if exists("g:no_atp") && g:no_atp
     finish
 endif
 
