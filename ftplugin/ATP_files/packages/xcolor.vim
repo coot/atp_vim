@@ -18,8 +18,9 @@ let g:atp_xcolor_options=[
 	    \ 'x11names', 'x11names*',
 	    \ 'table', 'fixpdftex', 'hyperref',
 	    \ 'prologue', 'kernelfbox', 'xcdraw', 'noxcdraw', 'fixinclude',
-	    \ 'showerrors', 'hideerrors'
+	    \ 'showerrors', 'hideerrors', 'debugshow'
 	    \ ]
+
 " These are obsolete options:
 " 	    \ 'pst', 'override', 'usenames', 'nodvipsnames'
 let g:atp_xcolor_commands=[
