@@ -10,16 +10,18 @@ let g:atp_listings_command_values = {
 	    \ '\\lstloadlanguages{' : s:languages
 	    \ }
 function! ATP_listings_environments()
-    let preamble = atplib#various#Preamble(1)
     let env_list = ['lstlisting']
-    for line in preamble
-	for sub_line in split(line, '\ze\\lstnewenvironment')
-	    let env = matchstr(sub_line, '\\lstnewenvironment\s*{\s*\zs[^}]*\ze\s*}')
-	    if !empty(env)
-		call add(env_list, env)
-	    endif
-	endfor
-    endfor
+" TURN OFF -> leads to problems when opening a second tex file. Probably
+" because of call to lvimgreee inside atplib#various#Preamble() function.
+"     let preamble = atplib#various#Preamble(1)
+"     for line in preamble
+" 	for sub_line in split(line, '\ze\\lstnewenvironment')
+" 	    let env = matchstr(sub_line, '\\lstnewenvironment\s*{\s*\zs[^}]*\ze\s*}')
+" 	    if !empty(env)
+" 		call add(env_list, env)
+" 	    endif
+" 	endfor
+"     endfor
     return env_list
 endfunction
 let g:atp_listings_environments = ATP_listings_environments() " Scan the preamble for \lstnewenvironment command.
