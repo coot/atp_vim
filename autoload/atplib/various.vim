@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Thu May 31, 2012 at 21:39:56  +0100
+" Last Change: Sun Aug 19, 2012 at 20:17:18  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -830,6 +830,9 @@ function! atplib#various#TeXdoc_complete(ArgLead, CmdLine, CursorPos)
     for file in texdoc_alias_files
 	call extend(aliases, readfile(file))
     endfor
+    if !exists("g:texmf")
+	let g:texmf = substitute(system("kpsewhich -expand-var='$TEXMFHOME'"), '\n', '', 'g')
+    endif
     let local_list = map(split(globpath(g:texmf.'/doc', '*'), "\n"), 'fnamemodify(v:val, ":t:r")')
 
     call filter(aliases, "v:val =~ 'alias'")
@@ -1464,10 +1467,15 @@ catch /E127:/
 endtry
 " }}}
 " {{{ atplib#various#Preambule
-function! atplib#various#Preamble()
+function! atplib#various#Preamble(...)
+    let return_preamble =  ( a:0 >= 1 && a:1 ? 1 : 0 ) 
     let loclist = getloclist(0)
     let winview = winsaveview()
-    exe '1lvimgrep /^[^%]*\\begin\s*{\s*document\s*}/j ' . fnameescape(b:atp_MainFile)
+    try
+	exe '1lvimgrep /^[^%]*\\begin\s*{\s*document\s*}/j ' . fnameescape(b:atp_MainFile)
+    catch /E480:/
+	return ""
+    endtry
     let linenr = get(get(getloclist(0), 0, {}), 'lnum', 'nomatch')
     if linenr != 'nomatch'
 	if expand("%:p") != atplib#FullPath(b:atp_MainFile)
@@ -1475,11 +1483,18 @@ function! atplib#various#Preamble()
 
 	    exe "keepalt edit " . b:atp_MainFile 
 	endif
-	exe "1," . (linenr-1) . "print"
+	if !return_preamble
+	    exe "1," . (linenr-1) . "print"
+	else
+	    let preamble = getbufline(bufnr("%"), 1, linenr-1)
+	endif
 	if exists("cfile")
 	    exe "keepalt edit " . cfile
 	endif
 	call winrestview(winview)
+	if return_preamble
+	    return preamble
+	endif
     else	
 	echomsg "[ATP:] not found \begin{document}."
     endif

@@ -18,6 +18,9 @@ execute "menu 550.5 &Latex.&".Compiler."<Tab>:TEX				:<C-U>TEX<CR>"
 execute "cmenu 550.5 &Latex.&".Compiler."<Tab>:TEX				<C-U>TEX<CR>"
 execute "imenu 550.5 &Latex.&".Compiler."<Tab>:TEX				<Esc>:TEX<CR>a"
 function! <SID>TEXL_menuentry()
+    if !exists("b:atp_TexCompiler")
+	return
+    endif
     let Compiler = get(g:CompilerMsg_Dict, matchstr(b:atp_TexCompiler, '^\s*\zs\S*'), 'Compile')
     if expand("%:p") != atplib#FullPath(b:atp_MainFile)
 	execute "menu 550.6 Latex.".Compiler."\\ (subfile)<Tab>:TEXL			:<C-U>TEXL<CR>"

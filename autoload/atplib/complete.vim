@@ -2649,7 +2649,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 				else
 				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]['matches']
 				    let cvov_ignore_pattern = get(g:atp_{package}_command_values_dict[cmd_key][opt_key], 'ignore_pattern', '')
-				    let opt_value = matchlist(l, '\%(\\\w*\)\s*{\%([^}]*,\)\?\%([^,}=]*\)='.cvov_ignore_pattern.'\([^,}]*\)$')[1]
+				    let match_l= matchlist(l, '\%(\\\w*\)\s*{\%([^}]*,\)\?\%([^,}=]*\)='.cvov_ignore_pattern.'\([^,}]*\)$')
+				    let opt_value = match_l[1]
 				    if a:expert_mode
 					let filter_cond = 'v:val =~? "^".opt_value'
 				    else
