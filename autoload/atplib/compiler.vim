@@ -2540,10 +2540,11 @@ endfunction
 " word 'whole') + two other flags: all (include all errors) and ALL (include
 " all errors and don't ignore any line - this overrides the variables
 " g:atp_ignore_unmatched and g:atp_show_all_lines.
-function! atplib#compiler#ShowErrors(...)
+function! atplib#compiler#ShowErrors(bang,...)
     " It is not atplib#compiler# because it is run from atplib#callback#CallBack()
 
     let local_errorfile = ( a:0 >= 1 ? a:1 : 0 )
+    let error_format = b:atp_ErrorFormat " remember the old error format to set it back, unless bang is present.
     let l:arg = ( a:0 >= 2 ? a:2 : b:atp_ErrorFormat )
     let show_message = ( a:0 >= 3 ? a:3 : 1 )
 
@@ -2588,7 +2589,6 @@ function! atplib#compiler#ShowErrors(...)
     
     " set errorformat 
 
-    let g:arg = l:arg
     if l:arg =~# 'o'
 	OpenLog
 	return
@@ -2612,10 +2612,12 @@ function! atplib#compiler#ShowErrors(...)
 	if show_message
 	    echo "[ATP:] no errors :)" . (local_errorfile ? " in ".fnamemodify(&l:errorfile, ":.") : "")
 	endif
-	return ":)"
     else
-	cl
-	return 1
+	clist
+    endif
+    if empty(a:bang) && l:args != error_format
+	call atplib#compiler#SetErrorFormat(0, error_format)
+	cgetfile
     endif
 endfunction
 "}}}

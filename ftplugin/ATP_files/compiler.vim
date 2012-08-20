@@ -93,7 +93,7 @@ augroup END
 
 command! -buffer -nargs=? -complete=custom,atplib#compiler#ListErrorsFlags_A 	ErrorFormat 	:call atplib#compiler#SetErrorFormat(1,<q-args>)
 let load_ef=(exists("t:atp_QuickFixOpen") ? !t:atp_QuickFixOpen : 1)
-command! -buffer -nargs=? -complete=custom,atplib#compiler#ListErrorsFlags 	ShowErrors 	:call atplib#compiler#ShowErrors(0,<f-args>)
-command! -buffer -nargs=? -complete=custom,atplib#compiler#ListErrorsFlags 	ShowErrorsL 	:call atplib#compiler#ShowErrors(1,<f-args>)
+command! -buffer -bang -nargs=? -complete=custom,atplib#compiler#ListErrorsFlags 	ShowErrors 	:call atplib#compiler#ShowErrors(<q-bang>,0,<f-args>)
+command! -buffer -bang -nargs=? -complete=custom,atplib#compiler#ListErrorsFlags 	ShowErrorsL 	:call atplib#compiler#ShowErrors(<q-bang>,1,<f-args>)
 " }}}
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
