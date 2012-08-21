@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Aug 12, 2012 at 21:00:15  +0100
+" Last Change: Tue Aug 21, 2012 at 16:38:33  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -44,18 +44,18 @@ function! <SID>Replace(sid,...) "{{{2
     else
 	let char = a:1
     endif
-    let g:char = char
     let f_char = getline(line("."))[col(".")-1]
-    let g:f_char = f_char
-    if f_char =~ '^[(){}\[\]]$'
-	if f_char =~ '^[({\[]$'
+    if index([ '(', ')', '{', '}', '[', ']' ], f_char ) != -1
+	if index([ '(', '{', '[' ], f_char) != -1
 	    let bracket_dict = { '{' : '}',
 			\  '(' : ')',
-			\  '[' : ']',}
+			\  '[' : ']',
+			\  '|' : '|' }
 	else
 	    let bracket_dict = { '}' : '{',
 			\  ')' : '(',
-			\  ']' : '[',}
+			\  ']' : '[',
+			\  '|' : '|' }
 	endif
 	let c_bracket = get(bracket_dict,char, "")
 	if c_bracket == ""
