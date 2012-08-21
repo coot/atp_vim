@@ -23,6 +23,7 @@ import re, optparse, subprocess, os, traceback, sys
 from optparse import OptionParser
 from time import strftime, localtime
 import locale
+( lang, encoding ) = locale.getdefaultlocale()
 
 # Usage:
 # latextags.py --files main_file.tex;input_file1.tex;input_file2.tex --auxfile main_file.aux --bibfiles bibfile.bib --dir ./
@@ -167,12 +168,13 @@ try:
 # { 'file_name' : list_of_lines }
     for file in file_list:
         try:
-            if sys.version_info < (3, 0):
-                file_object=open(file, "r")
+            if sys.version_info.major < 3:
+                with open(file, "r") as file_obj:
+                    file_data=file_obj.read().decode(encoding, errors="replace")
             else:
-                file_object=open(file, "r", errors="replace")
-            file_dict[file]=file_object.read().split("\n")
-            file_object.close()
+                with open(file, "r", encoding=enconding, errors="replace") as file_obj:
+                    file_data=file_obj.read()
+            file_dict[file]=file_data.split("\n")
         except IOError:
             if options.servername != "":
                 vim_remote_expr(options.servername, "atplib#callback#Echo(\"[LatexTags:] file %s not found.\",'echomsg','WarningMsg')" % file)
@@ -184,12 +186,13 @@ try:
         bib_dict=Dict({})
         # { 'bib_name' : list_of_lines } 
         for bibfile in bib_list:
-            if sys.version_info < (3, 0):
-                bibobject=open(bibfile, "r")
+            if sys.version_info.major < 3 :
+                with open(bibfile, "r") as file_obj:
+                    bib_data=file_obj.read().decode(encoding, errors="replace")
             else:
-                bibobject=open(bibfile, "r", errors="replace")
-            bib_dict[bibfile]=bibobject.read().split("\n")
-            bibobject.close()
+                with open(bibfile, "r", encoding=encoding, errors="replace") as file_obj:
+                    bib_data=file_obj.read()
+            bib_dict[bibfile]=bib_data.split("\n")
 
 # GENERATE TAGS:
 # From \label{} and \hypertarget{}{} commands:
@@ -257,11 +260,13 @@ try:
 # From aux file:
     ioerror=False
     try:
-        if sys.version_info < (3, 0):
-            auxfile=open(options.auxfile, "r")
+        if sys.version_info.major < 3:
+            with open(options.auxfile, "r") as file_obj:
+                aux_data=file_obj.read().decode(encoding, errors="replace").split("\n")
         else:
-            auxfile=open(options.auxfile, "r", errors="replace")
-        for line in auxfile:
+            with open(options.auxfile, "r", encoding=encoding, errors="replace") as file_obj:
+                aux_data=file_obj.readlines()
+        for line in aux_data:
             if re.match('\\\\newlabel{[^}]*}{{[^}]*}', line):
                 [label, counter]=re.match('\\\\newlabel{([^}]*)}{{([^}]*)}', line).group(1,2)
                 counter=re.sub('{', '', counter)
@@ -281,19 +286,18 @@ try:
                     [linenr, file, tag_type, kind]=["no_label", "no_label", "", ""]
                 if linenr != "no_label" and counter != "":
                     tags.extend(["%s\t%s\t%s;\"\tinfo:%s\tkind:%s" % (counter, file, linenr, tag_type, kind)])
-        auxfile.close()
     except IOError:
         ioerror=True
         pass
 
 # SORT (vim works faster when tag file is sorted) AND WRITE TAGS
     time=strftime("%a, %d %b %Y %H:%M:%S +0000", localtime())
+    tags = map(lambda u: u.encode(encoding, errors="replace"), tags)
     tags_sorted=sorted(tags, key=str.lower)
     tags_sorted=['!_TAG_FILE_SORTED\t1\t/'+time]+tags_sorted
     os.chdir(options.directory)
-    tag_file = open("tags", 'w')
-    tag_file.write("\n".join(tags_sorted))
-    tag_file.close()
+    with open("tags", 'w') as file_obj:
+        file_obj.write("\n".join(tags_sorted))
 
 # Communicate to Vim:
     if not options.silent:

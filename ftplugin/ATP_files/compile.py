@@ -7,11 +7,13 @@ import sys, errno, os.path, shutil, subprocess, psutil, re, tempfile, optparse, 
 import traceback, atexit
 
 from os import chdir, mkdir, putenv, devnull
+
 from optparse import OptionParser
 from collections import deque
 
 import latex_log
-
+import locale
+( lang, encoding ) = locale.getdefaultlocale()
 
 # readlink is not available on Windows.
 readlink=True
@@ -169,19 +171,17 @@ def write_pbf(string):
 
     cond = False
     try:
-        if sys.version_info < (3, 0):
-            pb_fobject  = open(pb_fname, 'r')
+        if sys.version_info.major < 3:
+            with open(pb_fname, 'r') as fobj:
+                pb_file = fobj.read().decode(encoding, errors="replace")
         else:
-            pb_fobject  = open(pb_fname, 'r', errors='replace')
+            with open(pb_fname, 'r', encoding=encoding, errors='replace') as fobj:
+                pb_file = fobj.read()
     except IOError:
         debug_file.write("write_pbf at line %d: %s" % (sys.exc_info()[2].tb_lineno, str(ioerror)))
         cond = True
-    else:
-        pb_file     = pb_fobject.read()
-        pb_fobject.close()
     if not cond:
-        pb          = re.match('(\d*)', pb_file)
-        pb_fobject.close()
+        pb = re.match('(\d*)', pb_file)
         if pb:
             try:
                 nr = int(pb.group(1))
@@ -191,21 +191,17 @@ def write_pbf(string):
             nr = 0
         try:
             if nr >= 0:
-                cond = int(string) > nr
+                cond = (int(string) > nr)
             else:
                 cond = True
         except ValueError:
             cond = False
-            pass
     if cond:
         try:
-            pb_fobject=open(pb_fname, 'w')
+            with open(pb_fname, 'w') as fobj:
+                fobj.write((string+"\n").encode(encoding, errors="replace"))
         except IOError as ioerror:
             debug_file.write("write_pbf at line %d: %s" % (sys.exc_info()[2].tb_lineno, str(ioerror)))
-            pass
-        else:
-            pb_fobject.write(string+"\n")
-            pb_fobject.close()
 
 def latex_progress_bar(cmd):
     # Run latex and send data for progress bar,
@@ -249,13 +245,11 @@ def latex_progress_bar(cmd):
     vim_remote_expr(servername, "atplib#callback#PIDsRunning(\"b:atp_LatexPIDs\")")
     if not options.callback:
         try:
-            pb_fobject = open(pb_fname, 'w')
+            with open(pb_fname, 'w') as fobj:
+                pass
         except IOError as ioerror:
             debug_file.write("latex_progress_bar at line %d : %s" % (sys.exc_info()[2].tb_lineno, str(ioerror)))
             pass
-        else:
-            pb_fobject.write('')
-            pb_fobject.close()
     return child
 
 def xpdf_server_file_dict():

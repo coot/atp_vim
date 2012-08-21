@@ -57,13 +57,6 @@
 import sys, re, os, os.path, fnmatch
 from optparse import OptionParser
 
-usage = "%prog [options] {log_file}"
-parser  = OptionParser(usage=usage)
-encoding = sys.getfilesystemencoding()
-parser.add_option("-e", "--encoding", dest="encoding", default=encoding, help="encoding to use (default=%s)" % encoding)
-(options, args) = parser.parse_args()
-
-
 class Dict(dict):
     """ 2to3 Python transition. """
     def iterkeys(self):
@@ -515,9 +508,17 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         output_fo.write(('\n'.join(output_data)+'\n').encode(encoding, 'ignore'))
         output_fo.close()
 
-
 # Main call
 if __name__ == '__main__':
+
+    usage = "%prog [options] {log_file}"
+    parser  = OptionParser(usage=usage)
+
+    import locale
+    ( lang, encoding ) = locale.getdefaultlocale()
+
+    parser.add_option("-e", "--encoding", dest="encoding", default=encoding, help="encoding to use (default=%s)" % encoding)
+    (options, args) = parser.parse_args()
 
     try:
         rewrite_log(args[0], encoding=options.encoding)
