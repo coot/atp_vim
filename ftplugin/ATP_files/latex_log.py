@@ -55,6 +55,14 @@
 # will be substituted with '?'.
 
 import sys, re, os, os.path, fnmatch
+from optparse import OptionParser
+
+usage = "%prog [options] {log_file}"
+parser  = OptionParser(usage=usage)
+encoding = sys.getfilesystemencoding()
+parser.add_option("-e", "--encoding", dest="encoding", default=encoding, help="encoding to use (default=%s)" % encoding)
+(options, args) = parser.parse_args()
+
 
 class Dict(dict):
     """ 2to3 Python transition. """
@@ -89,7 +97,7 @@ if sys.platform.startswith('linux'):
 else:
     log_to_path = None
 
-def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir="", project_tmpdir=""):
+def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir="", project_tmpdir="", encoding="utf8"):
     # this function rewrites LaTeX log file (input_fname) to output_fname,
     # changeing its format to something readable by Vim.
     # check_path -- ATP process files in a temporary directory, with this
@@ -109,7 +117,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         print("IOError: cannot open %s file for reading" % input_fname)
         sys.exit(1)
     else:
-        log_stream = log_file.read()
+        log_stream = log_file.read().decode(encoding, 'ignore')
         log_file.close()
     # Todo: In python3 there is UnicodeDecodeError. I should remove all the
     # bytes where python cannot decode the character.
@@ -130,7 +138,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     runawayarg = False
     for line in log_lines:
         idx+=1
-        match_overfull   = re.match('(Over|Under)full \\\\hbox ',line)
+        match_overfull   = re.match(r'(Over|Under)full \\hbox ',line)
         match_runawayarg = re.match('Runaway argument\?',prev_line)
         if match_overfull or match_runawayarg:
             if match_overfull:
@@ -158,7 +166,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         except IOError:
             print("IOError: cannot open %s file for writting" % log_to_path)
         else:
-            log_fo.write(log_stream)
+            log_fo.write(log_stream.encode(encoding, 'ignore'))
             log_fo.close()
 
     # File stack
@@ -323,9 +331,9 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
                     msg = " "
                 msg = re.sub(' on input line \d+', '', msg)
                 if input_line:
-                    output_data.append([package_warning, last_file, input_line.group(1), "0", msg+" ("+package+")"])
+                    output_data.append([package_warning, last_file, input_line.group(1), "0", "%s (%s package)" % (msg, package)])
                 else:
-                    output_data.append([package_warning, last_file, "0", "0", msg+" ("+package+")"])
+                    output_data.append([package_warning, last_file, "0", "0",  "%s (%s package)" % (msg, package)])
             elif re.match(package_info_pat, line):
                 # Log Message: 'Package (\w+) Info: '
                 package = re.match(package_info_pat, line).group(1)
@@ -334,8 +342,8 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
                 if line_nr < len(log_lines):
                     nline = log_lines[line_nr]
                     i=0
-                    while re.match('\('+package+'\)',nline):
-                        msg+=re.sub('\('+package+'\)\s*', ' ', nline)
+                    while re.match(('\(%s\)' % package), nline):
+                        msg+=re.sub(('\(%s\)\s*' % package), ' ', nline)
                         if not input_line:
                             input_line = re.search('on input line (\d+)', nline)
                         i+=1
@@ -504,7 +512,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         print("IOError: cannot open %s file for writting" % output_fname)
         sys.exit(1)
     else:
-        output_fo.write('\n'.join(output_data)+'\n')
+        output_fo.write(('\n'.join(output_data)+'\n').encode(encoding, 'ignore'))
         output_fo.close()
 
 
@@ -512,6 +520,6 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
 if __name__ == '__main__':
 
     try:
-        rewrite_log(sys.argv[1])
+        rewrite_log(args[0], encoding=options.encoding)
     except IOError:
         pass
