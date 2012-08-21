@@ -32,7 +32,8 @@ let s:options_values = {
 		\ 'columns' : { 'matches' : [ 'fixed', 'flexible', 'spaceflexible', 'fullflexible' ], 'ignore_pattern' : '\%(\[[clr]\]\)\='},
 		\ 'frame' : [ 'none', 'leftline', 'topline', 'bottomline', 'lines', 'single', 'shadowbox' ],
 		\ 'numbers' : [ 'none', 'left', 'right' ],
+		\ 'captionpos' : [ 'b', 't' ],
 		\ }
 " The dictionary of values of command values:
-let g:atp_listings_command_values_dict = { 'lstset' : s:options_values }
+let g:atp_listings_command_values_dict = { '\\lstset' : s:options_values }
 let g:atp_listings_environment_options_values = { join(g:atp_listings_environments, '\|') : s:options_values }
