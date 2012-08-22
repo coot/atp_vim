@@ -27,6 +27,8 @@ import subprocess, sys, re, optparse, os
 from optparse import OptionParser
 from os import devnull
 
+import signal
+
 usage   = "usage: %prog [options]"
 parser  = OptionParser(usage=usage)
 parser.add_option("--gvim", dest="progname", action="store_const", const="gvim", default="gvim")
@@ -43,9 +45,8 @@ def vim_remote_expr(servername, expr):
 # expr must be well quoted:
 #       vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
     cmd=[progname, '--servername', servername, '--remote-expr', expr]
-    devnull=open(os.devnull, "w+")
-    subprocess.Popen(cmd, stdout=devnull, stderr=f).wait()
-    devnull.close()
+    with open(os.devnull, "w+") as devnull:
+        subprocess.Popen(cmd, stdout=devnull, stderr=f).wait()
 
 # Get list of vim servers.
 output  = subprocess.Popen([progname, "--serverlist"], stdout=subprocess.PIPE)
@@ -112,17 +113,31 @@ f.write(">>> args: %s:%s:%s\n" % (file, line, column))
 if len(server_list):
     server = server_list[0]
 
+    class TimeOutException(Exception):
+        pass
+
+    def timeout_handler(signum, frame):
+        raise TimeOutException()
+
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(1) # send a SIGALRM after 1 second,           
+                    # this function is only available on Unix, 
+                    # signal.alarm() works only with seconds.  
+
     f.write(">>> server: %s\n" % server)
     # Call atplib#FindAndOpen()     
     cmd="%s --servername %s --remote-expr \"atplib#FindAndOpen('%s','%s','%s','%s')\"" % (progname, server, file, output_file, line, column)
-    # f.write(">>> cmd: %s\n" % cmd)
     findandopen=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-    f.write(finaandopen.stdout.read())
-    vim_server=re.split("\n",findandopen.stdout.read())[0]
-    # XXX: If one of vim processes is suspended, the script hangs here trying to read the message.
-    # I should add a max wait time for the respond (1s) and echo a message if didn't got one.
+    try:
+        f.write(finaandopen.stdout.read())
+    except TimeOutException:
+        vim_server=None
+        # Echo a message (this can also be done in the Exception. 
+        # How to do that?
+    else:
+        vim_server=re.split("\n",findandopen.stdout.read())[0]
     f.write(">>> vim server: %s\n" % vim_server)
-    if synctex_returncode != 0 and vim_server != "":
+    if synctex_returncode and vim_server:
         cmd=""
         if error != "":
             vim_remote_expr(vim_server,
