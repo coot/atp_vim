@@ -2226,7 +2226,13 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		    if env_name =~ env_key
 			for opt_key in keys(g:atp_{package}_environment_options_values[env_key])
 			    if opt_name =~ opt_key
-				call extend(completion_list, filter(copy(g:atp_{package}_environment_options_values[env_key][opt_key]), filter_cond))
+				let obj = copy(g:atp_{package}_environment_options_values[env_key][opt_key])
+				if type(obj) == 3
+				    let list = obj
+				else
+				    let list = obj['matches']
+				endif
+				call extend(completion_list, filter(list, filter_cond))
 				break " we can assume there is only one entry 
 			    endif
 			endfor
@@ -2628,8 +2634,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ COMMAND VALUES OF VALUES
     elseif completion_method == 'command values of values'
 	let [ cmd_name, opt_name, opt_value ] = matchlist(l, '\(\\\w*\)\s*{\%([^}]*,\)\?\([^,}=]*\)=\([^,}]*\)$')[1:3]
-	let g:opt_name = opt_name
-	let g:opt_value = opt_value
+" 	let g:opt_name = opt_name
+" 	let g:opt_value = opt_value
 	let completion_list=[]
 	if a:expert_mode
 	    let filter_cond = 'v:val =~? "^".opt_value'
@@ -2639,30 +2645,25 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let cvov_ignore_pattern = ''
 	for package in g:atp_packages
 	    if exists("g:atp_".package."_command_values_dict")
-		echomsg package
 		for cmd_key in keys(g:atp_{package}_command_values_dict)
 		    if cmd_name =~ cmd_key
 			for opt_key in keys(g:atp_{package}_command_values_dict[cmd_key])
 			    if opt_name =~ opt_key
-				if type(g:atp_{package}_command_values_dict[cmd_key]) == 3
+				if type(g:atp_{package}_command_values_dict[cmd_key][opt_key]) == 3
 				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]
 				else
 				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]['matches']
 				    let cvov_ignore_pattern = get(g:atp_{package}_command_values_dict[cmd_key][opt_key], 'ignore_pattern', '')
 				    let match_l= matchlist(l, '\%(\\\w*\)\s*{\%([^}]*,\)\?\%([^,}=]*\)='.cvov_ignore_pattern.'\([^,}]*\)$')
 				    let opt_value = match_l[1]
+" 				    let g:opt_value = opt_value
 				    if a:expert_mode
 					let filter_cond = 'v:val =~? "^".opt_value'
 				    else
 					let filter_cond = 'v:val =~? cvov_ignore_pattern_.opt_value'
 				    endif
 				endif
-				let g:matches = copy(matches)
-				let g:cvov_ignore_pattern = cvov_ignore_pattern
-				let g:opt_value = opt_value
 				call extend(completion_list, filter(matches, filter_cond))
-				let g:filter_cond = filter_cond
-				let g:list = completion_list
 				break " we can assume there is only one entry 
 			    endif
 			endfor
@@ -3139,7 +3140,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		\ 'font shape', 'font encoding', 'inputfiles', 'includefiles', 
 		\ 'labels', 'package options', 'package options values',
 		\ 'documentclass options', 'documentclass options values', 
-		\ 'tikz libraries' ],completion_method) == -1
+		\ 'tikz libraries', 'command values', 'command values of values', 
+		\ 'environment values' ], completion_method) == -1
 	call filter(completions, 'len(substitute(v:val,"^\\","","")) >= g:atp_completion_truncate')
     endif
 "     THINK: about this ...
