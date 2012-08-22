@@ -1198,11 +1198,12 @@ map <LocalLeader>b
 	With bang "!": show the running status of latexmk for all buffers with
 	process group ID's.
 
-:ShowErrors [flag]					*atp-:ShowErrors*
+:ShowErrors[!] [flag]					*atp-:ShowErrors*
 nmap <LocalLeader>e					/for other maps see |atp-:ShowErrors-maps|/
 	This command shows error/warning messages. It sets the |'errorformat'|
-	variable accordingly to the optional [flag] argument, which is a word
-	made of letters:
+	variable accordingly to the optional [flag] argument (if bang is used
+	the change is permanent, if not |errorformat| will be restored at the
+	end), which is a word made of letters:
 >
 		e		- include errors
 		w		- include all warning messages
@@ -1231,8 +1232,8 @@ nmap <LocalLeader>e					/for other maps see |atp-:ShowErrors-maps|/
 <	will show all reference and citation warnings.
 
 	Note: this command works in quickfix window. It will change
-	errorformat but will not reload quickfix list. Better use
-	|atp-:ErrorFormat| instead.
+	errorformat but will not reload quickfix list. Use |atp-:ErrorFormat|
+	instead.
 
 							*atp-:Cgetfile*
 :Cgetfile	

@@ -2615,7 +2615,7 @@ function! atplib#compiler#ShowErrors(bang,...)
     else
 	clist
     endif
-    if empty(a:bang) && l:args != error_format
+    if empty(a:bang) && l:arg != error_format
 	call atplib#compiler#SetErrorFormat(0, error_format)
 	cgetfile
     endif
@@ -2623,22 +2623,21 @@ endfunction
 "}}}
 if !exists("*ListErrorsFlags")
 function! atplib#compiler#ListErrorsFlags(A,L,P)
-    if g:atp_ParseLog
-	let flags = "e\nw\nr\nc\nf\nfi\nF\nh\np\nP\no\nall\nAll"
-	return flags
-    else
-	let flags = "e\nw\nr\nc\nf\nfi\nF\no\nP\nall\nAll"
+    let flags=['e', 'w', 'r', 'c', 'f', 'F', 'h', 'p', 'P', 'o', 'all', 'All']
+    if !g:atp_ParseLog
+	call remove(flags, index(flags, 'p'))
     endif
+    return join(flags, "\n")
 endfunction
 endif
 if !exists("*ListErrorsFlags_A")
 function! atplib#compiler#ListErrorsFlags_A(A,L,P)
     " This has no o flag.
-    if g:atp_ParseLog
-	return "e\nw\nr\nc\nf\nfi\nF\nh\np\nP\nall\nAll"
-    else
-	return "e\nw\nr\nc\nf\nfi\nF\nP\nall\nAll"
+    let flags=['e', 'w', 'r', 'c', 'f', 'fi', 'F', 'h', 'p', 'P', 'all', 'All']
+    if !g:atp_ParseLog
+	call remove(flags, index(flags, 'p'))
     endif
+    return join(flags, "\n")
 endfunction
 endif
 "}}}
