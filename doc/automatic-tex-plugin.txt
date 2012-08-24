@@ -167,6 +167,9 @@ NEWS							*atp-news*
  ======================
  Changes in version 11.2
 <
+ If you don't want the ruler in the ATP status set the vim option |'noruler'|
+ and use the command |atp-:Status| (or |atp-:ATPStatus|).
+
  |atp-:TEXL| and the \\l map supports count.
  There are two maps to |atp-:SyncTexL|: \\f (like \\l) and \F.
 
@@ -2276,6 +2279,8 @@ vmap <F4>
 	    au BufWinEnter,BufWinEnter,TabEnter *.tex :call ATPStatus()
 <	In this way every opened window with a '*.tex' file will get the correct
 	status line.
+
+	The command respects the |'ruler'| vim option.
 
 	If there was a command with name 'Status', atp is not overwriting it,
 	it uses ATPStatus name.
