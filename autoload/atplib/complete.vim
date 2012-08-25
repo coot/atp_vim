@@ -2225,7 +2225,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		for env_key in keys(g:atp_{package}_environment_options_values)
 		    if env_name =~ env_key
 			for opt_key in keys(g:atp_{package}_environment_options_values[env_key])
-			    if opt_name =~ opt_key
+			    if opt_name =~ '^'.opt_key
 				let obj = copy(g:atp_{package}_environment_options_values[env_key][opt_key])
 				if type(obj) == 3
 				    let list = obj
@@ -2257,11 +2257,11 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     "{{{3 ------------ PACKAGE OPTIONS VALUES
     elseif completion_method == 'package options values'
 	let package = matchstr(line, '\\usepackage\[.*{\zs[^}]*\ze}')
-	let option  = matchstr(l,'\zs\<\w\+=\ze[^=]*$')
+	let option  = matchstr(l,'\zs\<\w\+\ze=[^=]*$')
 	let completion_list=[]
 	if exists("g:atp_".package."_options_values")
 	   for pat in keys({"g:atp_".package."_options_values"})
-	       if (option =~ pat)
+	       if (option =~ '^'.pat)
 		   let val={"g:atp_".package."_options_values"}[pat]
 		   if type(val) == 3
 		       let completion_list={"g:atp_".package."_options_values"}[pat]
@@ -2634,6 +2634,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ COMMAND VALUES OF VALUES
     elseif completion_method == 'command values of values'
 	let [ cmd_name, opt_name, opt_value ] = matchlist(l, '\(\\\w*\)\s*{\%([^}]*,\)\?\([^,}=]*\)=\([^,}]*\)$')[1:3]
+" 	let g:cmd_name = cmd_name
 " 	let g:opt_name = opt_name
 " 	let g:opt_value = opt_value
 	let completion_list=[]
@@ -2647,8 +2648,11 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    if exists("g:atp_".package."_command_values_dict")
 		for cmd_key in keys(g:atp_{package}_command_values_dict)
 		    if cmd_name =~ cmd_key
+			echomsg cmd_name
 			for opt_key in keys(g:atp_{package}_command_values_dict[cmd_key])
-			    if opt_name =~ opt_key
+			    echomsg opt_key
+			    if opt_name =~ '^'.opt_key
+				echomsg opt_name
 				if type(g:atp_{package}_command_values_dict[cmd_key][opt_key]) == 3
 				    let matches = copy(g:atp_{package}_command_values_dict)[cmd_key][opt_key]
 				else

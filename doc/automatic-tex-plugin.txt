@@ -167,6 +167,9 @@ NEWS							*atp-news*
  ======================
  Changes in version 11.2
 <
+ |g:atp_diacritics| variable: switched the values, now 2 (for diacritics: a''
+ -> accented a) and 1 (normal imaps).
+
  If you don't want the ruler in the ATP status set the vim option |'noruler'|
  and use the command |atp-:Status| (or |atp-:ATPStatus|).
 
@@ -4756,6 +4759,11 @@ a`', i.e. the map acts on the character just before the cursor. See below
 normal imaps, i.e. typing `' resolves to \'{} with cursor placed between the
 brackets. If you set |g:atp_diacritics|=0 no diacritics imaps will be set.
 Here is a list of all provided imaps to diacritics:
+
+Note: if you are trying to set diavritics off for some specific files you can
+do that in this way: >
+    au BufEnter {path} let g:atp_diacritics = 0 | let g:atp_imap_diacritics = []
+<
 							*g:atp_diacritics_letters*
 Inteligent diacritics works only after certain letters defined in the
 dictionary |g:atp_diacritics_letters|, for example \'{} will work only after

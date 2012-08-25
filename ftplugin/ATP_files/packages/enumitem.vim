@@ -19,9 +19,9 @@ let g:atp_enumitem_environment_options={
 	\ '\<\%(enumerate\|itemize\|description\)\>' : s:env_options
 	\ }
 let s:options_values = { 
-	    \ 'align' : [ 'left', 'right', 'parleft' ], 
-	    \ 'style' : ['standard', 'unboxed', 'nextline', 'sameline', 'multiline' ], 
-	    \ 'mode' : [ 'boxed', 'unboxed' ] 
+	    \ 'align\>' : [ 'left', 'right', 'parleft' ], 
+	    \ 'style\>' : ['standard', 'unboxed', 'nextline', 'sameline', 'multiline' ], 
+	    \ 'mode\>' : [ 'boxed', 'unboxed' ] 
 	    \ }
 let g:atp_enumitem_environment_options_values={
 	    \ '\<\%(enumerate\|itemize\|description\)\>' : s:options_values

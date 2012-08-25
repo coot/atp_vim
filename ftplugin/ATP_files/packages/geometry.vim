@@ -26,14 +26,14 @@ let g:atp_geometry_options=[
     \ 'assymetric', 'bindingoffset', 'pass'
     \ ]
 let g:atp_geometry_options_values = {
-    \ '\%(layout\|paper\|papername\)=$' : [ 
+    \ '\%(layout\|paper\|papername\)\>' : [ 
 	\ 'a0paper', 'a1paper', 'a2paper', 'a3paper', 'a4paper', 'a5paper', 'a6paper',
 	\ 'b0paper', 'b1paper', 'b2paper', 'b3paper', 'b4paper', 'b5paper', 'b6paper', 
 	\ 'c0paper', 'c1paper', 'c2paper', 'c3paper', 'c4paper', 'c5paper', 'c6paper', 
 	\ 'b0j', 'b1j', 'b2j', 'b3j', 'b4j', 'b5j', 'b6j',
 	\ 'ansiapaper', 'ansibpaper', 'ansibpaper', 'ansicpaper', 'ansidpaper', 'ansiepaper',
 	\ 'letterpaper', 'executivepaper', 'legalpaper'],
-    \ 'driver=$' : [ 'dvips', 'dvipdfm', 'pdftex', 'vtex', 'xetex', 'auto', 'none' ] 
+    \ 'driver\>' : [ 'dvips', 'dvipdfm', 'pdftex', 'vtex', 'xetex', 'auto', 'none' ] 
     \ } 
 let g:atp_geometry_commands=[
     \ '\geometry{', '\newgeometry{', '\savegeometry{', '\restoregeometry', '\loadgeometry{',

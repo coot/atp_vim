@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Aug 21, 2012 at 16:38:33  +0100
+" Last Change: Sat Aug 25, 2012 at 11:05:29  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -1220,7 +1220,7 @@ endif
 	au InsertEnter	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_math_misc, 'InsertEnter', g:atp_imap_diacritics) 
     augroup END
 " DIACRITICSC IMAPS: {{{1
-    if g:atp_diacritics == 2 && !empty(g:atp_imap_over_leader)
+    if g:atp_diacritics == 1
 	let g:atp_imap_diacritics = [
 	    \ [ 'inoremap', '<silent> <buffer>', g:atp_imap_over_leader,  '''', s:backslash.'''{}<Left>',
 		    \ "g:atp_imap_define_diacritics", '\''{}' ],
@@ -1249,8 +1249,7 @@ endif
 	    \ [ 'inoremap', '<silent> <buffer>', g:atp_imap_over_leader,  't', s:backslash.'t{}<Left>',
 		    \ "g:atp_imap_define_diacritics", '\t{}' ]
 	    \ ]
-
-    elseif g:atp_diacritics
+    elseif g:atp_diacritics == 2
 	let g:atp_imap_diacritics = [
 	    \ [ 'inoremap', '<silent> <buffer> <expr>', g:atp_imap_over_leader,  '''', '(index(split(g:atp_diacritics_letters["''"], ''\zs''), tolower(getline(line("."))[col(".")-2])) != -1  ? "<ESC>vx".(col(".")<=len(getline(line(".")))? "i" : "a" )."'.s:bbackslash.'''{\"}" : "'.escape(g:atp_imap_over_leader, '\"').'''")', 
 		    \ "g:atp_imap_define_diacritics", '\''{}' ],
