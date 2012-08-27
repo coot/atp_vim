@@ -185,7 +185,7 @@ for file in files:
             lnr         += 1
         else:
             lnr+=1
-if vim.eval("v:version") < 703 or vim.eval("v:version") == 703 and not vim.eval("has('patch569')"):
+if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not vim.eval("has('patch569')"):
     vim.command("let s:defi_dict_py=%s" % defi_dict)
 ENDPYTHON
 if v:version == 703 && has('patch569') || v:version > 703
@@ -372,7 +372,7 @@ for file in files:
                         localcolors.append(m.group('arg'))
         except IOError:
             pass
-if vim.eval("v:version") < 703 or vim.eval("v:version") == 703 and not vim.eval("has('patch569')"):
+if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not vim.eval("has('patch569')"):
     vim.command("let atp_LocalCommands=%s"	% localcommands)
     vim.command("let atp_LocalEnvironments=%s"	% localenvs)
     vim.command("let atp_LocalColors=%s"	% localcolors)
@@ -2363,7 +2363,7 @@ else:
     [ tree_of_files, list_of_files, type_dict, level_dict]= tree(filename, 1, pattern, bibpattern)
 
 
-if vim.eval("v:version") < 703 or vim.eval("v:version") == 703 and not vim.eval("has('patch569')"):
+if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not int(vim.eval("has('patch569')")):
     vim.command("let b:TreeOfFiles=%s" % tree_of_files)
     vim.command("let b:ListOfFiles=%s" % list_of_files)
     vim.command("let b:TypeDict=%s" % type_dict)
