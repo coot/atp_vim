@@ -462,7 +462,7 @@ for file in files:
                 lnr=e_lnr
             else:
                 lnr+=1
-if vim.eval("v:version") < 703 or vim.eval("v:version") == 703 and not vim.eval("has('patch569')"):
+if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not vim.eval("has('patch569')"):
     vim.command("let bibresults=%s" % bibresults)
 END
 if v:version == 703 && has('patch569') || v:version > 703
