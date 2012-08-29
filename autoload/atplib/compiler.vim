@@ -2117,7 +2117,6 @@ function! atplib#compiler#TeX(runs, bang, ...)
 	let mode = t:atp_DebugMode
     endif
     let mode = auto . mode
-    let g:mode_0 = mode
 
     for cmd in keys(g:CompilerMsg_Dict) 
 	if b:atp_TexCompiler =~ '^\s*' . cmd . '\s*$'

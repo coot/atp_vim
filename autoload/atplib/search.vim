@@ -2342,7 +2342,7 @@ def tree(file, level, pattern, bibpattern):
 
 try:
     with open(filename, 'r') as mainfile_ob:
-	mainfile    = mainfile_ob.read().split("\n")
+	mainfile = mainfile_ob.read().split("\n")
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:

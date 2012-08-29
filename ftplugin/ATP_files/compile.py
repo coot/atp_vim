@@ -177,7 +177,7 @@ def write_pbf(string):
         else:
             with open(pb_fname, 'r', encoding=encoding, errors='replace') as fobj:
                 pb_file = fobj.read()
-    except IOError:
+    except IOError as ioerror:
         debug_file.write("write_pbf at line %d: %s" % (sys.exc_info()[2].tb_lineno, str(ioerror)))
         cond = True
     if not cond:
