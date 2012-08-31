@@ -13,7 +13,7 @@ from collections import deque
 
 import latex_log
 import locale
-( lang, encoding ) = locale.getdefaultlocale()
+encoding = locale.getpreferredencoding()
 
 # readlink is not available on Windows.
 readlink=True

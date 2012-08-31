@@ -17,7 +17,7 @@
 import shutil, os.path, re, optparse, subprocess, traceback, psutil
 import tempfile, os, atexit, sys
 import locale
-( lang, encoding ) = locale.getdefaultlocale()
+encoding = locale.getpreferredencoding()
 
 import latex_log
 

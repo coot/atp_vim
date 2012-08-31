@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sun Aug 19, 2012 at 20:17:18  +0100
+" Last Change: Fri Aug 31, 2012 at 17:32:43  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -69,10 +69,6 @@ function! atplib#various#WrapSelection(...)
     if l:begin[1] != l:end[1]
 	let l:bbegin_line=strpart(l:begin_line,0,l:begin[2]-1)
 	let l:ebegin_line=strpart(l:begin_line,l:begin[2]-1)
-
-	" DEBUG
-	let b:bbegin_line=l:bbegin_line
-	let b:ebegin_line=l:ebegin_line
 
 	let l:bend_line=strpart(l:end_line,0,l:end[2])
 	let l:eend_line=strpart(l:end_line,l:end[2])

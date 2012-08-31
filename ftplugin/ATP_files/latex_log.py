@@ -515,7 +515,7 @@ if __name__ == '__main__':
     parser  = OptionParser(usage=usage)
 
     import locale
-    ( lang, encoding ) = locale.getdefaultlocale()
+    encoding = locale.getpreferredencoding()
 
     parser.add_option("-e", "--encoding", dest="encoding", default=encoding, help="encoding to use (default=%s)" % encoding)
     (options, args) = parser.parse_args()

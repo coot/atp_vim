@@ -23,7 +23,7 @@ import re, optparse, subprocess, os, traceback, sys
 from optparse import OptionParser
 from time import strftime, localtime
 import locale
-( lang, encoding ) = locale.getdefaultlocale()
+encoding = locale.getpreferredencoding()
 
 # Usage:
 # latextags.py --files main_file.tex;input_file1.tex;input_file2.tex --auxfile main_file.aux --bibfiles bibfile.bib --dir ./
