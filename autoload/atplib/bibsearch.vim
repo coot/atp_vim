@@ -457,7 +457,7 @@ for file in files:
             bib_entry=file_l[b_lnr-1:e_lnr]
             if bib_entry != [] and not re.search('@string', bib_entry[0]):
                 entry_dict=parse_bibentry(bib_entry)
-                bibresults[file][b_lnr]=entry_dict
+                bibresults[file][str(b_lnr)]=entry_dict
             if lnr < e_lnr:
                 lnr=e_lnr
             else:
@@ -466,7 +466,7 @@ if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not
     vim.command("let bibresults=%s" % bibresults)
 END
 if v:version == 703 && has('patch569') || v:version > 703
-    let bibresults = atplib#pyeval("bibresults")
+    let bibresults = pyeval("bibresults")
 endif
 return bibresults
 endfunction
