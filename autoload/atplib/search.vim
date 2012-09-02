@@ -101,16 +101,24 @@ function! atplib#search#make_defi_dict_py(bang,...)
     let pattern	= a:0 >= 2 ? a:2 : '\\def\|\\newcommand'
     " Not implemeted
     let preambule_only= a:bang == "!" ? 0 : 1
-    let only_begining	= a:0 >= 3 ? a:3 : 0
+    let only_begining	= a:0 >= 3 ? a:3 : "0"
 
     if a:bang == "!" || !exists("b:TreeOfFiles")
 	 " Update the cached values:
 	 let [ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ] = TreeOfFiles(atp_MainFile)
     endif
     let [ Tree, List, Type_Dict, Level_Dict ] = deepcopy([ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ])
+
+    let defi_dict = {}
  
 python << ENDPYTHON
-import re, subprocess, os, glob
+import re
+import subprocess
+import os
+import glob
+import locale
+
+encoding = locale.getpreferredencoding()
 
 def preambule_end(file):
 # find linenr where preambule ends,
@@ -118,12 +126,11 @@ def preambule_end(file):
 # file is list of lines
     nr=1
     for line in file:
-        if re.search('\\\\begin\s*{\s*document\s*}', line):
+        if re.search(r'\\begin\s*{\s*document\s*}', line):
             return nr
         nr+=1
     return 0
 
-pattern=vim.eval("pattern")
 type_dict=vim.eval("b:TypeDict")
 main_file=vim.eval("atp_MainFile")
 if int(vim.eval("preambule_only")) != 0:
@@ -132,67 +139,58 @@ if int(vim.eval("preambule_only")) != 0:
     for f in type_dict.keys():
         if type_dict[f] == "preambule":
             files.append(f)
-    main_file_ob=open(main_file, 'r')
-    main_file_l=main_file_ob.read().split("\n")
-    main_file_ob.close()
+    with open(main_file) as sock:
+	main_file_l=map(lambda l: (l[:-1]).decode(encoding, 'replace'), sock.readlines())
     preambule_end=preambule_end(main_file_l)
 else:
     preambule_only=False
     files=[main_file]
     files.extend(vim.eval("b:ListOfFiles"))
-if vim.eval("only_begining") != "0":
-    only_begining=True
-else:
-    only_begining=False
-def isnonempty(string):
-    if str(string) == "":
-        return False
-    else:
-        return True
 
-if pattern == "":
-    pat=".*"
-else:
-    pat=pattern
+only_begining = (vim.eval("only_begining") != "0")
 
 # Does the no comment work?
 pattern=re.compile('^(?:[^%]|\\\\%)*(?:\\\\def|\\\\(?:re)?newcommand\s*{|\\\\providecommand\s*{|\\\\(?:re)?newenvironment\s*{|\\\\(?:re)?newtheorem\s*{|\\\\definecolor\s*{)')
 
-defi_dict={}
+if hasattr(vim, 'bindeval'):
+    defi_dict = vim.bindeval("defi_dict")
+else:
+    defi_dict = {}
+
 for file in files:
     defi_dict[file]=[]
     lnr=1
-    file_ob=open(file, 'r')
-    file_l=file_ob.read().split("\n")
-    file_ob.close()
+    with open(file) as sock:
+	file_l =map(lambda l: (l[:-1]).decode(encoding, 'replace'), sock.readlines())
+
     while lnr <= len(file_l) and ( preambule_only and ( file == main_file and lnr <= preambule_end or file != main_file ) or not preambule_only):
         line=file_l[lnr-1]
         if re.search(pattern, line):
             # add: no search in comments.
-            b_lnr       = lnr
+            b_lnr = lnr
             if not only_begining:
-                _open       = len(re.findall("({)", line))
-                _close      = len(re.findall("(})", line))
+                _open  = len(re.findall("({)", line))
+                _close = len(re.findall("(})", line))
                 while _open != _close:
                     lnr+=1
-                    line     = file_l[lnr-1]
-                    _open   += len(re.findall("({)", line))
-                    _close  += len(re.findall("(})", line))
-                e_lnr        = lnr
-                defi_dict[file].append([ b_lnr, e_lnr ])
+                    line    = file_l[lnr-1]
+                    _open  += len(re.findall("({)", line))
+                    _close += len(re.findall("(})", line))
+                e_lnr = lnr
+                defi_dict[file].extend([[b_lnr, e_lnr ]])
             else:
-                defi_dict[file].append([ b_lnr, b_lnr ])
-            lnr         += 1
+                defi_dict[file].extend([[b_lnr, b_lnr ]])
+            lnr += 1
         else:
-            lnr+=1
-if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
-    import json
-    vim.command("let s:defi_dict_py=%s" % json.dumps(defi_dict))
+            lnr += 1
+
+if not hasattr(vim, 'bindeval'):
+    # There is no need of using json.dumps() here since the defi_dict has str
+    # type keys and list of intergers inside.
+    vim.command("let defi_dict_py=%s" % defi_dict)
 ENDPYTHON
-if v:version == 703 && has('patch569') || v:version > 703
-    let s:defi_dict_py = atplib#pyeval("defi_dict")
-endif
-return s:defi_dict_py
+let g:defi_dict = defi_dict
+return defi_dict
 endfunction
 "}}}
 
@@ -2163,13 +2161,28 @@ function! atplib#search#TreeOfFiles_vim(main_file,...)
 endfunction "}}}
 " atplib#search#TreeOfFiles_py "{{{
 function! atplib#search#TreeOfFiles_py(main_file)
+
+let b:TreeOfFiles = {}
+let b:ListOfFiles = []
+let b:TypeDict = {}
+let b:LevelDict = {}
+
 let time=reltime()
 python << END_PYTHON
-import vim, re, subprocess, os, glob
+import vim
+import re
+import subprocess
+import os
+import glob
+import json
+import locale
 
-filename=vim.eval('a:main_file')
-relative_path=vim.eval('g:atp_RelativePath')
-project_dir=vim.eval('b:atp_ProjectDir')
+encoding = vim.eval("&encoding")
+sys_encoding = locale.getpreferredencoding()
+
+filename = vim.eval('a:main_file').decode(encoding)
+relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
+project_dir = vim.eval('b:atp_ProjectDir').decode(encoding)
 
 def vim_remote_expr(servername, expr):
 # Send <expr> to vim server,
@@ -2193,7 +2206,7 @@ def scan_preambule(file, pattern):
         ret=re.search(pattern, line)
         if ret:
             return True
-        elif re.search('\\\\begin\s*{\s*document\s*}', line):
+        elif re.search(ur'\\begin\s*{\s*document\s*}', line):
             return False
     return False
 
@@ -2203,14 +2216,15 @@ def preambule_end(file):
 # file is list of lines
     nr=1
     for line in file:
-        if re.search('\\\\begin\s*{\s*document\s*}', line):
+        if re.search(ur'\\begin\s*{\s*document\s*}', line):
             return nr
         nr+=1
     return 0
 
 def addext(string, ext):
 # the pattern is not matching .tex extension read from file.
-    if not re.search("\."+ext+"$", string):
+    assert type(string) == unicode
+    if not re.search(u"\.%s$" % ext, string):
         return string+"."+ext
     else:
         return string
@@ -2220,7 +2234,7 @@ def kpsewhich_path(format):
 
     kpsewhich=subprocess.Popen(['kpsewhich', '-show-path', format], stdout=subprocess.PIPE)
     kpsewhich.wait()
-    path=kpsewhich.stdout.read()
+    path=kpsewhich.stdout.read().decode(encoding)
     path=re.sub("!!", "",path)
     path=re.sub("\/\/+", "/", path)
     path=re.sub("\n", "",path)
@@ -2241,19 +2255,13 @@ def bufnumber(file):
     os.chdir(project_dir)
     for buffer in vim.buffers:
         # This requires that we are in the directory of the main tex file:
-        try:
-            if buffer.name == os.path.abspath(file):
-                os.chdir(cdir)
-                return buffer.number
-        except:
-            pass
+	if buffer.name.decode(encoding) == os.path.abspath(file):
+            os.chdir(cdir)
+            return buffer.number
     for buffer in vim.buffers:
-        try:
-            if os.path.basename(buffer.name) == file:
-                os.chdir(cdir)
-                return buffer.number
-        except:
-            pass
+	if os.path.basename(buffer.name) == file:
+            os.chdir(cdir)
+            return buffer.number
     os.chdir(cdir)
     return 0
 
@@ -2305,7 +2313,7 @@ def tree(file, level, pattern, bibpattern):
         file_l = vim.buffers[bufnr]
     else:
         try:
-            file_ob = open(file, 'r')
+            file_ob = open(file)
         except IOError:
             if re.search('\.bib$', file):
                 path=bib_path
@@ -2319,7 +2327,7 @@ def tree(file, level, pattern, bibpattern):
                 file_ob = open(file, 'r')
             except IOError:
                 return [ {}, [], {}, {} ]
-        file_l  = file_ob.read().split("\n")
+        file_l  = [ l[:-1].decode(sys_encoding, 'replace') for l in file_ob.readlines() ]
         file_ob.close()
     [found, found_l] =scan_file(file_l, file, pattern, bibpattern)
     t_list=[]
@@ -2327,58 +2335,61 @@ def tree(file, level, pattern, bibpattern):
     t_type={}
     t_tree={}
     for item in found_l:
-        t_list.append(item)
-        t_level[item]=level
-        t_type[item]=found[item][3]
+        t_list.append(item.encode(encoding))
+        t_level[item.encode(encoding)]=level
+        t_type[item.encode(encoding)]=(found[item][3]).encode(encoding) # t_type values are ASCII
     i_list=[]
     for file in t_list:
-        if found[file][3]=="input":
+        if found[file][3] == u"input":
             i_list.append(file)
     for file in i_list:
         [ n_tree, n_list, n_type, n_level ] = tree(file, level+1, pattern, bibpattern)
         for f in n_list:
-            t_list.append(f)
-            t_type[f]   =n_type[f]
-            t_level[f]  =n_level[f]
-        t_tree[file]    = [ n_tree, found[file][2] ]
+            t_list.append(f.encode(encoding))
+            t_type[f.encode(encoding)] = (n_type[f]).encode(encoding)
+            t_level[f.encode(encoding)] = n_level[f]
+        t_tree[file] = [ n_tree, found[file][2] ]
     return [ t_tree, t_list, t_type, t_level ]
 
 try:
     with open(filename, 'r') as mainfile_ob:
-	mainfile = mainfile_ob.read().split("\n")
+	mainfile = [ line[:-1].decode(sys_encoding) for line in mainfile_ob.readlines() ]
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:
-    if scan_preambule(mainfile, re.compile(r'\\usepackage{[^}]*\bsubfiles\b')):
-	pat_str='^[^%]*(?:\\\\input\s+([\w_\-\.]*)|\\\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
-	pattern=re.compile(pat_str)
+    if scan_preambule(mainfile, re.compile(ur'\\usepackage{[^}]*\bsubfiles\b')):
+	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
+	pattern = re.compile(pat_str)
     else:
-	pat_str='^[^%]*(?:\\\\input\s+([\w_\-\.]*)|\\\\(?:input|include(?:only)?)\s*{([^}]*)})'
-	pattern=re.compile(pat_str)
+	pat_str = ur'^[^%]*(?:\\\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+	pattern = re.compile(pat_str)
 
-    bibpattern=re.compile('^[^%]*\\\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
+    bibpattern=re.compile(ur'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
 
     bib_path=kpsewhich_path('bib')
     tex_path=kpsewhich_path('tex')
     preambule_end=preambule_end(mainfile)
 
-# Make TreeOfFiles:
-    [ tree_of_files, list_of_files, type_dict, level_dict]= tree(filename, 1, pattern, bibpattern)
+    [ tree_of_files, list_of_files, type_dict, level_dict] = tree(filename, 1, pattern, bibpattern)
 
-
-if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
-    import json
+if hasattr(vim, 'bindeval'):
+    def copy_dict(from_dict, to_dict):
+        for key in from_dict.iterkeys():
+            to_dict[str(key)] = from_dict[key]
+    TreeOfFiles = vim.bindeval('b:TreeOfFiles')
+    copy_dict(tree_of_files, TreeOfFiles)
+    ListOfFiles = vim.bindeval('b:ListOfFiles')
+    ListOfFiles.extend(list_of_files)
+    TypeDict = vim.bindeval('b:TypeDict')
+    copy_dict(type_dict, TypeDict)
+    LevelDict = vim.bindeval('b:LevelDict')
+    copy_dict(level_dict, LevelDict)
+else:
     vim.command("let b:TreeOfFiles=%s"  % json.dumps(tree_of_files))
     vim.command("let b:ListOfFiles=%s"  % json.dumps(list_of_files))
     vim.command("let b:TypeDict=%s"     % json.dumps(type_dict))
     vim.command("let b:LevelDict=%s"    % json.dumps(level_dict))
 END_PYTHON
-if v:version == 703 && has('patch569') || v:version > 703
-    let b:TreeOfFiles = atplib#pyeval("tree_of_files")
-    let b:ListOfFiles = atplib#pyeval("list_of_files")
-    let b:TypeDict    = atplib#pyeval("type_dict")
-    let b:LevelDict   = atplib#pyeval("level_dict")
-endif
 let g:time_TreeOfFiles_py=reltimestr(reltime(time))
 
 return [ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ]
