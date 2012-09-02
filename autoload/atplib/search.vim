@@ -186,7 +186,8 @@ for file in files:
         else:
             lnr+=1
 if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
-    vim.command("let s:defi_dict_py=%s" % defi_dict)
+    import json
+    vim.command("let s:defi_dict_py=%s" % json.dumps(defi_dict))
 ENDPYTHON
 if v:version == 703 && has('patch569') || v:version > 703
     let s:defi_dict_py = atplib#pyeval("defi_dict")
@@ -373,9 +374,10 @@ for file in files:
         except IOError:
             pass
 if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
-    vim.command("let atp_LocalCommands=%s"	% localcommands)
-    vim.command("let atp_LocalEnvironments=%s"	% localenvs)
-    vim.command("let atp_LocalColors=%s"	% localcolors)
+    import json
+    vim.command("let atp_LocalCommands=%s"      % json.dumps(localcommands))
+    vim.command("let atp_LocalEnvironments=%s"  % json.dumps(localenvs))
+    vim.command("let atp_LocalColors=%s"	% json.dumps(localcolors))
 END
 if v:version == 703 && has('patch569') || v:version > 703
     let atp_LocalCommands	= atplib#pyeval("localcommands")
@@ -1693,7 +1695,7 @@ let time = reltime()
 let path = ( a:0 >= 1 ? a:1 : &l:path )
 let l:count = ( a:0 >= 2 ? a:2 : 1 )
 python << EOF
-import vim, os.path, glob
+import vim, os.path, glob, json
 path=vim.eval("path")
 fname=vim.eval("a:fname")
 file_list = []
@@ -1701,7 +1703,8 @@ for p in path.split(","):
     if len(p) >= 2 and p[-2:] == "**":
 	file_list.extend(glob.glob(os.path.join( p[:-2], fname )))
     file_list.extend(glob.glob(os.path.join( p, fname )))
-vim.command("let file_list=%s" % file_list)
+
+vim.command("let file_list=%s" % json.dumps(file_list))
 EOF
 if l:count == -1
     return file_list
@@ -2364,10 +2367,11 @@ else:
 
 
 if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
-    vim.command("let b:TreeOfFiles=%s" % tree_of_files)
-    vim.command("let b:ListOfFiles=%s" % list_of_files)
-    vim.command("let b:TypeDict=%s" % type_dict)
-    vim.command("let b:LevelDict=%s" % level_dict)
+    import json
+    vim.command("let b:TreeOfFiles=%s"  % json.dumps(tree_of_files))
+    vim.command("let b:ListOfFiles=%s"  % json.dumps(list_of_files))
+    vim.command("let b:TypeDict=%s"     % json.dumps(type_dict))
+    vim.command("let b:LevelDict=%s"    % json.dumps(level_dict))
 END_PYTHON
 if v:version == 703 && has('patch569') || v:version > 703
     let b:TreeOfFiles = atplib#pyeval("tree_of_files")

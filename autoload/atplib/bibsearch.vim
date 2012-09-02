@@ -351,23 +351,27 @@ function! atplib#bibsearch#searchbib_py(pattern, bibfiles, ...)
 
     let b:atp_BibFiles=a:bibfiles
 python << END
-import vim, re
+import vim
+import re
+import locale
+
+encoding = locale.getpreferredencoding()
 
 files=vim.eval("b:atp_BibFiles")
 
 def remove_ligatures(string):
-    line_without_ligatures = re.sub( "\\\\'\s*", '', re.sub('{|}|\\\\(?:"|`|\^|=|\.|c|~|v|u|d|b|H|t)\s*', '', string))
-    line_without_ligatures = re.sub('\\\\oe', 'oe', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\OE', 'OE', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\ae', 'ae', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\AE', 'AE', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\o', 'o', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\O', 'O', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\i', 'i', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\j', 'j', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\l', 'l', line_without_ligatures)
-    line_without_ligatures = re.sub('\\\\L', 'L', line_without_ligatures)
-    return line_without_ligatures
+    string = re.sub("\\\\'\s*", '', re.sub('{|}|\\\\(?:"|`|\^|=|\.|c|~|v|u|d|b|H|t)\s*', '', string))
+    string = re.sub('\\\\oe', 'oe', string)
+    string = re.sub('\\\\OE', 'OE', string)
+    string = re.sub('\\\\ae', 'ae', string)
+    string = re.sub('\\\\AE', 'AE', string)
+    string = re.sub('\\\\o', 'o', string)
+    string = re.sub('\\\\O', 'O', string)
+    string = re.sub('\\\\i', 'i', string)
+    string = re.sub('\\\\j', 'j', string)
+    string = re.sub('\\\\l', 'l', string)
+    string = re.sub('\\\\L', 'L', string)
+    return string
 
 def remove_quotes(string):
     line=re.sub("'", "\"", string)
@@ -381,7 +385,7 @@ types=['author', 'bookauthor', 'booktitle', 'date', 'editor', 'eprint', 'eprintc
 
 def parse_bibentry(bib_entry):
     bib={}
-    bib['bibfield_key']=re.sub('\\r$', '', bib_entry[0])
+    bib['bibfield_key']=(re.sub('\\r$', '', bib_entry[0])).encode(encoding=encoding, errors="replace")
     nr=1
     while nr < len(bib_entry)-1:
         line=bib_entry[nr]
@@ -390,16 +394,16 @@ def parse_bibentry(bib_entry):
                 while not re.search('=', line) and nr < len(bib_entry)-1:
                     val=re.sub('\s*$', '', bib[p_e_type])+" "+re.sub('^\s*', '', re.sub('\t', ' ', line))
                     val=re.sub('%.*', '', val)
-                    bib[p_e_type]=remove_quotes(re.sub('\\r$', '', val))
+                    bib[p_e_type]=(remove_quotes(re.sub('\\r$', '', val))).encode(encoding=encoding, errors="replace")
                     nr+=1
                     line=bib_entry[nr]
             else:
                 v_break=False
                 for e_type in types:
-                    if re.match('\s*'+e_type+'\s*=', line, re.I):
-                        # TODO: this is not working when title is two lines!
+                    if re.match('\s*%s\s*=' % e_type, line, re.I):
+                        # TODO: this is not working when title is two lines long!
                         line=re.sub('%.*', '', line)
-                        bib[e_type]=remove_quotes(re.sub('\\r$', '', re.sub('\t', ' ', line)))
+                        bib[e_type]=remove_quotes(re.sub('\\r$', '', re.sub('\t', ' ', line))).encode(encoding=encoding, errors="replace")
                         p_e_type=e_type
                         nr+=1
                         v_break=True
@@ -419,9 +423,8 @@ pattern_b=re.compile('\s*@\w+\s*{.+', re.I)
 
 bibresults={}
 for file in files:
-    file_ob=open(file, 'r')
-    file_l=file_ob.read().split("\n")
-    file_ob.close()
+    with open(file) as file_ob:
+	file_l=map(lambda l: (l[:-1]).decode(encoding=encoding, errors="replace"), file_ob.readlines())
     file_len=len(file_l)
     lnr=0
     bibresults[file]={}
@@ -463,7 +466,8 @@ for file in files:
             else:
                 lnr+=1
 if int(vim.eval("v:version")) < 703 or int(vim.eval("v:version")) == 703 and not int(vim.eval("has('patch569')")):
-    vim.command("let bibresults=%s" % bibresults)
+    import json
+    vim.command("let bibresults=%s" % json.dumps(bibresults))
 END
 if v:version == 703 && has('patch569') || v:version > 703
     let bibresults = pyeval("bibresults")

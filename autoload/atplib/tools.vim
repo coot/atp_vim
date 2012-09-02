@@ -337,7 +337,7 @@ function! atplib#tools#generatelabels(filename, ...)
 " We should save all files before.
 " Using this python grep makes twice as fast.
 python << EOF
-import vim, re
+import vim, re, json
 files = vim.eval("InputFileList")
 loc_list = []
 for file in files:
@@ -350,7 +350,7 @@ for file in files:
 	matches = re.findall('^(?:[^%]*|\\\\%)\\\\label\s*{\s*([^}]*)\s*}', line)
 	for m in matches:
             loc_list.append([ lnr, m, file])
-vim.command("let loc_list="+str(loc_list))
+vim.command("let loc_list=%s" % json.dumps(loc_list))
 EOF
 	endif
 

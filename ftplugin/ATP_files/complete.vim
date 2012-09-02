@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Fri Aug 17, 2012 at 09:22:43  +0100
+" Last Change: Sun Sep 02, 2012 at 08:52:27  +0100
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -609,12 +609,10 @@ def ScanPackage(package, o=True, c=True):
     package_file = Kpsewhich(package)
     # check the variable: @classoptionslist
     if package_file != '':
-        vim.command("let path='"+str(package_file)+"'")
+        vim.command("let path='%s'" % str(package_file))
         package_fo = open(package_file, 'r')
         package_f  = package_fo.read()
-        # vim.command("let self['file']="+decode(package_fo))
         package_fo.close()
-        # print(package_file)
         if o:
             # We can cut the package_f variable at \ProcessOptions:
             o_match = re.match('((?:.|\n)*)\\\\ProcessOptions', package_f)
@@ -669,16 +667,13 @@ def RecursiveSearch(package):
     global did_files
     i_files = RequiredPackage(Kpsewhich(package))
     did_files.append(package)
-    # print(input_files)
     re_commands_add = ScanPackage(package, o=False, c=True)[1]
     recursive_dict[package]=remove_duplicates(re_commands_add)
-    # print("re_commands_add="+str(re_commands_add))
     for c in re_commands_add:
 	if not c in re_commands:
             re_commands.append(c)
     for p in i_files:
 	if not p in did_files:
-            # print("rs: "+p)
             RecursiveSearch(p)
 
 
@@ -688,7 +683,8 @@ if vim.eval("recursive") == '0':
     [options, commands]=ScanPackage(package, o, c)
 else:
     RecursiveSearch(package)
-    vim.command("let recursive_dict="+str(recursive_dict))
+    import json
+    vim.command("let recursive_dict="+json.dmup(recursive_dict))
     commands = re_commands
     # print("re_commands="+str(re_commands))
     o = ( str(vim.eval("modes_dict['options']")) == '1' )
