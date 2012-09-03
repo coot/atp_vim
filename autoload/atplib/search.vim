@@ -2180,6 +2180,25 @@ import locale
 encoding = vim.eval("&encoding")
 sys_encoding = locale.getpreferredencoding()
 
+def getfenc(filename):
+    """get encoding of a file
+
+    The filename should be a unicode string, if the buffer is not listed use
+    locale.getpreferredencoding(). The filename might be an integer - the
+    buffer number.
+    """
+    if type(filename) is unicode:
+	vimexpr = '"%s"' % filename.encode(vim.eval("&encoding"))
+    elif type(filename) is int:
+	vimexpr = '%d' % filename
+    else:
+	vimexpr = '"%s"' % filename
+
+    if vim.eval('buflisted(%s)' % vimexpr):
+	return vim.eval('getbufvar(%s, "&fenc")' % vimexpr)
+    else:
+	return locale.getpreferredencoding()
+
 filename = vim.eval('a:main_file').decode(encoding)
 relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
 project_dir = vim.eval('b:atp_ProjectDir').decode(encoding)
@@ -2327,9 +2346,10 @@ def tree(file, level, pattern, bibpattern):
                 file_ob = open(file, 'r')
             except IOError:
                 return [ {}, [], {}, {} ]
-        file_l  = [ l[:-1].decode(sys_encoding, 'replace') for l in file_ob.readlines() ]
+	enc = getfenc(file)
+        file_l  = [ l[:-1].decode(enc, 'replace') for l in file_ob.readlines() ]
         file_ob.close()
-    [found, found_l] =scan_file(file_l, file, pattern, bibpattern)
+    [found, found_l] = scan_file(file_l, file, pattern, bibpattern)
     t_list=[]
     t_level={}
     t_type={}
@@ -2352,8 +2372,9 @@ def tree(file, level, pattern, bibpattern):
     return [ t_tree, t_list, t_type, t_level ]
 
 try:
-    with open(filename, 'r') as mainfile_ob:
-	mainfile = [ line[:-1].decode(sys_encoding) for line in mainfile_ob.readlines() ]
+    enc = getfenc(filename)
+    with open(filename) as sock:
+	mainfile = [ line[:-1].decode(enc) for line in sock.readlines() ]
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:
@@ -2361,7 +2382,7 @@ else:
 	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
 	pattern = re.compile(pat_str)
     else:
-	pat_str = ur'^[^%]*(?:\\\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
 	pattern = re.compile(pat_str)
 
     bibpattern=re.compile(ur'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
