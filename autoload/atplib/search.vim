@@ -2194,10 +2194,10 @@ def getfenc(filename):
     else:
 	vimexpr = '"%s"' % filename
 
-    if vim.eval('buflisted(%s)' % vimexpr):
-	return vim.eval('getbufvar(%s, "&fenc")' % vimexpr)
-    else:
-	return locale.getpreferredencoding()
+    enc = vim.eval('getbufvar(%s, "&fenc")' % vimexpr)
+    if not enc:
+        enc = locale.getpreferredencoding()
+    return enc
 
 filename = vim.eval('a:main_file').decode(encoding)
 relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
