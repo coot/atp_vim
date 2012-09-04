@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Aug 31, 2012 at 17:32:43  +0100
+" Last Change: Tue Sep 04, 2012 at 08:12:14  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1553,22 +1553,22 @@ function! atplib#various#GetAMSRef(what, bibfile)
 	endif
 
 	let linenumbers = map(copy(data), 'v:val["lnum"]')
-	let begin	= min(linenumbers)
+	let begin = min(linenumbers)
 	let end	= max(linenumbers)
 
 	let bufnr = bufnr(atpbib_WgetOutputFile)
 	" To use getbufline() buffer must be loaded. It is enough to use :buffer
 	" command because vimgrep loads buffer and then unloads it. 
 	execute "buffer " . bufnr
-	let bibdata	= getbufline(bufnr, begin, end)
+	let bibdata = getbufline(bufnr, begin, end)
 	execute "bdelete " . bufnr 
 	let type = matchstr(bibdata[0], '@\%(article\|book\%(let\)\=\|conference\|inbook\|incollection\|\%(in\)\=proceedings\|manual\|masterthesis\|misc\|phdthesis\|techreport\|unpublished\)\ze\s*\%("\|{\|(\)')
         " Suggest Key:
 	let bibkey = input("Provide a key (Enter for the AMS bibkey): ")
 	if !empty(bibkey)
-	    let bibdata[0] 	= type . '{' . bibkey . ','
+	    let bibdata[0] = type . '{' . bibkey . ','
 	else
-	    let bibdata[0] 	= substitute(matchstr(bibdata[0], '@\w*.*$'), '\(@\w*\)\(\s*\)', '\1', '')
+	    let bibdata[0] = substitute(matchstr(bibdata[0], '@\w*.*$'), '\(@\w*\)\(\s*\)', '\1', '')
 	    " This will be only used to echomsg:
 	    let bibkey	= matchstr(bibdata[0], '@\w*.\s*\zs[^,]*')
 	endif
@@ -1592,7 +1592,6 @@ function! atplib#various#GetAMSRef(what, bibfile)
 	catch /E480:/
 	endtry
 	let data = getloclist(0)
-	let g:data = data
 	if !len(data) 
 	    echohl WarningMsg
 	    echomsg "[ATP:] nothing found."
@@ -1612,14 +1611,12 @@ function! atplib#various#GetAMSRef(what, bibfile)
 		let bib_data .= line
 	    endwhile
 	endif
-	let g:bib_data = bib_data
 
 	let bibref = '\bibitem{} ' . matchstr(bib_data, '^<tr><td align="left">\zs.*\ze<\/td><\/tr>')
-	let g:atp_bibref = bibref
 	exe "let @" . g:atp_bibrefRegister . ' = "' . escape(bibref, '\"') . '"'
 	let bibdata = [ bibref ]
     endif
-    let g:atp_bibdata = bibdata
+    let g:atp_bibdata = join(bibdata, "\n")
 "     call delete(atpbib_WgetOutputFile)
     return bibdata
 endfunction

@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Sep 02, 2012 at 08:52:27  +0100
+" Last Change: Mon Sep 03, 2012 at 19:01:07  +0100
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -186,7 +186,7 @@ endif
 	\ "\\topmargin", "\\oddsidemargin", "\\evensidemargin", "\\headheight", "\\headsep", 
 	\ "\\textwidth", "\\textheight", "\\marginparwidth", "\\marginparsep", "\\marginparpush", "\\footskip", "\\hoffset",
 	\ "\\voffset", "\\parindent", "\\paperwidth", "\\paperheight", "\\columnsep", "\\columnseprule", 
-	\ "\\theequation", "\\thepage", "\\usetikzlibrary{",
+	\ "\\theequation", "\\thepage", "\\usetikzlibrary{", "\\displaystyle", "\\textstyle", "\\scriptstyle", "\\scriptscriptstyle",
 	\ "\\tableofcontents", "\\newfont{", "\\phantom{", "\\DeclareMathOperator",
 	\ "\\DeclareRobustCommand", "\\DeclareFixedFont", "\\DeclareMathSymbol", 
 	\ "\\DeclareTextFontCommand", "\\DeclareMathVersion", "\\DeclareSymbolFontAlphabet",
@@ -198,7 +198,8 @@ endif
 	\ "\\frenchspacing", "\\nonfrenchspacing", "\\binoppenalty", "\\exhyphenpenalty", 
 	\ "\\displaywindowpenalty", "\\floatingpenalty", "\\interlinepenalty", "\\lastpenalty",
 	\ "\\linepenalty", "\\outputpenalty", "\\penalty", "\\postdisplaypenalty", "\\predisplaypenalty", 
-	\ "\\repenalty", "\\unpenalty" ]
+	\ "\\repenalty", "\\unpenalty", "\\everymath", "\\DeclareMathSizes{",
+	\ "\\abovedisplayskip", "\\belowdisplayskip", "\\abovedisplayshortskip", "\\belowdisplayshortskip", ]
 	
 	let g:atp_picture_commands=[ "\\put", "\\circle", "\\dashbox", "\\frame{", 
 		    \"\\framebox(", "\\line(", "\\linethickness{",
@@ -257,7 +258,7 @@ endif
 	\ "\\langle", "\\rangle", "\\Diamond", "\\lgroup", "\\rgroup", "\\propto", "\\Join", "\\div", 
 	\ "\\land", "\\star", "\\uplus", "\\leadsto", "\\rbrack", "\\lbrack", "\\mho", 
 	\ "\\diamondsuit", "\\heartsuit", "\\clubsuit", "\\spadesuit", "\\top", "\\ell", 
-	\ "\\imath", "\\jmath", "\\wp", "\\Im", "\\Re", "\\prime", "\\ll", "\\gg", "\\Nabla" ]
+	\ "\\imath", "\\jmath", "\\wp", "\\Im", "\\Re", "\\prime", "\\ll", "\\gg", "\\Nabla", ]
 
 	let g:atp_math_commands_PRE=[  
 		    \ "\\diagdown", "\\diagup", 

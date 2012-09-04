@@ -319,7 +319,9 @@ function! atplib#search#LocalCommands_py(write, ...)
 	 endif
      endfor
 python << END
-import re, vim, os.path
+import re
+import vim
+import os.path
 
 def bufnumber(file):
     for buffer in vim.buffers:
@@ -335,7 +337,7 @@ def bufnumber(file):
             pass
     return 0
 
-pattern=re.compile('\s*(?:\\\\(?P<def>def)(?P<def_c>\\\\[^#{]*)|(?:\\\\(?P<nc>newcommand)|\\\\(?P<env>newenvironment)|\\\\(?P<nt>newtheorem\*?)|\\\\(?P<col>definecolor)|\\\\(?P<dec>Declare)(?:RobustCommand|FixedFont|TextFontCommand|MathVersion|SymbolFontAlphabet|MathSymbol|MathDelimiter|MathAccent|MathRadical|MathOperator)\s*{|\\\\(?P<sma>SetMathAlphabet))\s*{(?P<arg>[^}]*)})')
+pattern=re.compile(r'\s*(?:\\(?P<def>def)(?P<def_c>\\[^#{]*)|(?:\\(?P<nc>newcommand)|\\(?P<env>newenvironment)|\\(?P<nt>newtheorem\*?)|\\(?P<col>definecolor)|\\(?P<dec>Declare)(?:RobustCommand|FixedFont|TextFontCommand|MathVersion|SymbolFontAlphabet|MathSymbol|MathDelimiter|MathAccent|MathRadical|MathOperator)\s*{|\\(?P<sma>SetMathAlphabet))\s*{(?P<arg>[^}]*)})')
 
 files=[vim.eval("atp_MainFile")]+vim.eval("files")
 localcommands   =[]
@@ -349,19 +351,18 @@ for file in files:
             if bufnr in vim.buffers:
                 file_l = vim.buffers[bufnr]
             else:
-                file_ob=open(file, 'r')
-                file_l=file_ob.read().split("\n")
-                file_ob.close()
+		with open(file) as file_ob:
+                    file_l = file_ob.readlines()
             for line in file_l:
                 m=re.match(pattern, line)
                 if m:
                     if m.group('def'):
-                        if re.search('\\\\def\\\\\w+#[1-9]', line):
+                        if re.search(r'\\def\\\w+#[1-9]', line):
                             localcommands.append(m.group('def_c')+'{')
                         else:
                             localcommands.append(m.group('def_c'))
                     elif m.group('nc') or m.group('dec') or m.group('sma'):
-                        if re.search('\\\\newcommand\s*{[^}]*}\s*\[[1-9]\]\s*{', line):
+                        if re.search(r'\\newcommand\s*{[^}]*}\s*\[[1-9]\]\s*{', line):
                             localcommands.append(m.group('arg')+'{')
                         else:
                             localcommands.append(m.group('arg'))
