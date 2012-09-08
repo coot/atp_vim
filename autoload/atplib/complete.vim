@@ -1191,8 +1191,16 @@ function! atplib#complete#CheckBracket(bracket_dict)
 	let check_pos[2] -= 1
     endif
     call search('\S', 'bW')
-    let begin_line	= max([search('\%(\\par\>\|^\s*$\)', 'bnW'), limit_line])
-    let end_line	= min([search('\%(\\par\>\|^\s*$\)', 'nW'), min([line('$'), line(".")+g:atp_completion_limits[4]])]) 
+    if !atplib#IsInMath()
+	let begin_line	= max([search('\%(\\part\|\\chapter\|\\section\|\\subsection\|\\par\>\|^\s*$\|\\]\|\\end{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\)', 'bnW'), limit_line])
+	let end_line	= min([search('\%(\\part\|\\chapter\|\\section\|\\subsection\|\\par\>\|^\s*$\|\\[\|\\begin{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\)', 'nW'), min([line('$'), line(".")+g:atp_completion_limits[4]])]) 
+    else
+	let begin_line	= max([search('\%(\\begin\s*{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\|\\(\|\$\$\|\\[\|\\par\>\|^\s*$\)', 'bnW'), limit_line])
+	let end_line	= min([search('\%(\\end\s*{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\|\\)\|\$\$\|\\]\|\\par\>\|^\s*$\)', 'nW'), min([line('$'), line(".")+g:atp_completion_limits[4]])]) 
+	if end_line == begin_line
+	    let end_line += 1
+	endif
+    endif
     call cursor(pos[1:2])
     let length 		= end_line-begin_line
 
