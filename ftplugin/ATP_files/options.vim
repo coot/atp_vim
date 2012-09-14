@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Aug 18, 2012 at 13:46:21  +0100
+" Last Change: Mon Sep 10, 2012 at 19:47:36  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1015,9 +1015,9 @@ endif
 if !exists("g:atp_statusOutDir")
     let g:atp_statusOutDir 	= 1
 endif
-if !exists("g:atp_developer")
-    let g:atp_developer		= 0
-endif
+" if !exists("g:atp_developer") " is set in plugin/tex_atp.vim
+"     let g:atp_developer		= 0
+" endif
 if !exists("g:atp_mapNn")
 	let g:atp_mapNn		= 0 " This value is used only on startup, then :LoadHistory sets the default value.
 endif  				    " user cannot change the value set by :LoadHistory on startup in atprc file.
@@ -2780,12 +2780,22 @@ endfunction "}}}
 " VIM PATH OPTION: 
 exe "setlocal path+=".substitute(g:texmf."/tex,".join(filter(split(globpath(b:atp_ProjectDir, '**'), "\n"), "isdirectory(expand(v:val))"), ","), ' ', '\\\\\\\ ', 'g')
 
+if has("python") || has("python3")
+let atp_path = fnamemodify(split(globpath(&rtp, 'ftplugin/ATP_files'))[0], ':p')
+python << EOF
+import vim
+import sys
+sys.path.append(vim.eval('atp_path'))
+EOF
+endif
+
 " Some Commands:
 " {{{
 command! -buffer HelpMathIMaps 	:echo atplib#helpfunctions#HelpMathIMaps()
 command! -buffer HelpEnvIMaps 	:echo atplib#helpfunctions#HelpEnvIMaps()
 command! -buffer HelpVMaps 	:echo atplib#helpfunctions#HelpVMaps()
 " }}}
+
 
 " Help:
 silent call atplib#helpfunctions#HelpEnvIMaps()
