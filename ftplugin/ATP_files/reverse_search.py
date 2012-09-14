@@ -40,10 +40,10 @@ progname = options.progname
 f = open('/tmp/reverse_search.debug', 'w')
 
 def vim_remote_expr(servername, expr):
-# Send <expr> to vim server,
+    # Send <expr> to vim server,
 
-# expr must be well quoted:
-#       vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
+    # expr must be well quoted:
+    #      vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
     cmd=[progname, '--servername', servername, '--remote-expr', expr]
     with open(os.devnull, "w+") as devnull:
         subprocess.Popen(cmd, stdout=devnull, stderr=f).wait()

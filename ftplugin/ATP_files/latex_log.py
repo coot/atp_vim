@@ -57,6 +57,8 @@
 import sys, re, os, os.path, fnmatch
 from optparse import OptionParser
 
+__all__ = [ 'rewrite_log' ]
+
 class Dict(dict):
     """ 2to3 Python transition. """
     def iterkeys(self):

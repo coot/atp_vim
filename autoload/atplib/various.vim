@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Tue Sep 04, 2012 at 08:12:14  +0100
+" Last Change: Wed Sep 12, 2012 at 09:03:57  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1412,6 +1412,12 @@ endfunction
 " autoload/atplib.vim
 try
 function! atplib#various#ReloadATP(bang)
+    if has("python")
+python << EOF
+import check_bracket
+reload(check_bracket)
+EOF
+    endif
     " First source the option file
     let common_file	= split(globpath(&rtp, 'ftplugin/ATP_files/common.vim'), "\n")[0]
     let options_file	= split(globpath(&rtp, 'ftplugin/ATP_files/options.vim'), "\n")[0]

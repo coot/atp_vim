@@ -13,6 +13,9 @@
 if exists("g:no_atp") && g:no_atp
     finish
 endif
+if !exists("g:atp_developer")
+    let g:atp_developer = 0
+endif
 
 " KpsewhichEdit command: {{{1
 function! <SID>KpsewhichEdit(args)
@@ -170,7 +173,7 @@ augroup ATP_texlog "{{{1
 augroup END
 " Commands: "{{{1
 command! -nargs=* -complete=customlist,atplib#various#TeXdoc_complete 
-	    \  TexDoc					:call atplib#various#TexDoc(<f-args>)
+	    \  Texdoc					:call atplib#various#TexDoc(<f-args>)
 command! -bang	UpdateATP				:call atplib#various#UpdateATP(<q-bang>)
 command! 	ATPversion				:echo atplib#various#ATPversion()
 
@@ -178,4 +181,6 @@ command! 	ATPversion				:echo atplib#various#ATPversion()
 " sets --tex (-t) and --class (-c) texdef option. Without bang only the --tex
 " (-t) option is set ('tex', 'latex', 'contex', 'xelatex', 'lualatex', ...) 
 " NOTE: only the first three are supported.
-command! -bang -nargs=* TexDef :call atplib#tools#TexDef(<q-bang>,<q-args>)
+if g:atp_developer
+    command! -bang -nargs=* Texdef :call atplib#tools#TexDef(<q-bang>,<q-args>)
+endif

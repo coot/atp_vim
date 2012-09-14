@@ -87,7 +87,7 @@ DONATE     						*atp-donate*
     http://sourceforge.net/apps/mediawiki/atp-vim/index.php?title=Main_Page
 
   - For detailed list of changes you can look at:
-    http://atp-vim.svn.sourceforge.net/viewvc/atp-vim/trunk/?sortby=rev&view=log
+    http://atp-vim.git.sourceforge.net/git/gitweb.cgi?p=atp-vim/atp-vim;a=log
 
   - Project news can be tracked through sourceforge watch feature (you need
     sourecforge account)
@@ -167,6 +167,9 @@ NEWS							*atp-news*
  ======================
  Changes in version 11.2
 <
+ |atp-:Texdoc| and |atp-:Texdef| instead of |atp-:TexDoc|, |atp-:TexDef|.
+ |atp-:Texdef| defined only if |g:atp_developer| is 1.
+
  |g:atp_diacritics| variable: switched the values, now 2 (for diacritics: a''
  -> accented a) and 1 (normal imaps).
 
@@ -298,7 +301,7 @@ NEWS							*atp-news*
  CHANGE IN MAPS: ~
  As suggested by F.Heiderich: #< and #> are now maps for \langle and \rangle.
 
- New commands: |atp-:TexDef|, |atp-:KpsewhichEdit|. They are defined in
+ New commands: |atp-:Texdef|, |atp-:KpsewhichEdit|. They are defined in
  plugin/tex_atp.vim script, so you can use them not only inside tex files.
 >
  ======================
@@ -574,10 +577,10 @@ You can also install ATP using Vim Addon Manager (VAM):
 http://www.vim.org/scripts/script.php?script_id=2905
 or GetLatestVimScipt plugin:
 http://www.vim.org/scripts/script.php?script_id=642
-Third option is to checkout svn repository with the command:
-svn co https://atp-vim.svn.sourceforge.net/svnroot/atp-vim/trunk ~/.vim
-If you use VAM you can checkout into your vim-addon directory
-(~/.vim/vim-addons/AutomaticLaTexPlugin) and VAM will update it using svn
+Third option is to clone the git repository with the command: >
+    git clone ssh://mszamotulski@atp-vim.git.sourceforge.net/gitroot/atp-vim/atp-vim ./atp
+If you use VAM you can clone into your vim-addon directory
+(~/.vim/vim-addons/AutomaticLaTexPlugin) and VAM will update it using git
 pull. In this way you will have always the most recent version of ATP.
 
 Note: If you use Pathogen or VAM you need to restart all your vim servers if
@@ -1348,9 +1351,6 @@ automatically using autocommand group |CursorMoved|.
 	will set it 
 	to 0.
 
-	If you set g:atp_developer = 1 this command will also go to files
-	under texmf tree (packages and classes).
-
 							*atp-:SyncXpdf*
 							*g:atp_SyncXpdfLog*
 :SyncXpdf
@@ -1519,7 +1519,7 @@ nmap gf
 	them in any directory listed in g:atp_bibinputs (see
 	|g:atp_bibinputs|).
 
-	If g:atp_developer = 1 (default 0) then the map 'gf' can also open
+	If |g:atp_developer| = 1 (default 0) then the map 'gf' can also open
 	package files and document class files, but only when using 'gf' over
 	\usepackage, \documentclass, and \RequirePackage commands.
 
@@ -1533,8 +1533,8 @@ nmap gf
 	Find {file} using kpsewhich and edit it. For example >
 	    :KpsewhichEdit amsmath.sty
 <
-							*atp-:TexDoc*
-:TexDoc
+							*atp-:Texdoc*
+:Texdoc
 map <F1>, imap <F1>
 	Then you have to type what you are looking for and press enter. The
 	option 'keywordprg' is set to 'texdoc -m', i.e when your cursor is
@@ -1547,14 +1547,16 @@ map <F1>, imap <F1>
 	you use more often, for example you can set it to "-a faq", i.e. 'The
 	UK TeX FAQ' (or even to "-a lshort faq" if you want them both :). 
 
-							*atp-:TexDef*
-:TexDef[!] {args}
-	This command is an interface to the texdef program. Use ':TexDef --help'
-	to see the help message. |atp-:TexDef| command automatically sets the
+							*atp-:Texdef*
+:Texdef[!] {args}
+	This command is an interface to the texdef program. Use ':Texdef --help'
+	to see the help message. |atp-:Texdef| command automatically sets the
 	--tex switch (using |filetype|). If run with bang [!] a comma
 	separeted list of packages of the current tex file will be appended to
 	the texdef command (using --package switch).
-	
+
+	Note: this command is defined only if |g:atp_developer| is set to 1 on
+	startup. See |g:atp_developer| for details.
 
 							*atp-:InputFiles*
 :InputFiles				
@@ -3925,6 +3927,14 @@ s:notreadablebibfiles
 	to 0 the vim runtime indantation script will be used. Also
 	'indentkeys' differ.
 
+							*g:atp_developer*
+>
+ g:atp_developer=0
+<
+	If set to 1 (the default is 0) then |atp-gf| can go to package and
+	class files under texmf tree. When set on startup within your |vimrc|
+	or |atrc| file then also |atp-:Texdef| is defined (when set in |vimrc|
+	file it be defined in any filetype - not only tex).
 
 ================================================================================
 WRITING PROJECTS					*atp-ProjectFiles*
@@ -5427,8 +5437,8 @@ m`vip<``			Indent inner paragraph, they are mapped to: >
 <				There are also defined maps: 2g>, 3g> , 4g>
 				up to 6g>.
 
-:TeXdoc amsCTRL-d		Show tex documentation which matches ams (the
-				completion for TeXdoc command finds matches in
+:Texdoc amsCTRL-d		Show tex documentation which matches ams (the
+				completion for Texdoc command finds matches in
 				alias files of texdoc :!texdoc -f).
 
 \ref{thm:<Tab>			It will list all cross references to theorems

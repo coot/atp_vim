@@ -162,9 +162,6 @@ debug_file.write("*PROGRESS_BAR "+str(progress_bar)+"\n")
 #
 ####################################
 
-def decode_list(byte):
-    return byte.decode()
-
 def write_pbf(string):
     # Open pb_fname and write nr to it 
     # only if int(string) is greater than what is in this file 

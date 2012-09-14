@@ -1694,7 +1694,11 @@ let time = reltime()
 let path = ( a:0 >= 1 ? a:1 : &l:path )
 let l:count = ( a:0 >= 2 ? a:2 : 1 )
 python << EOF
-import vim, os.path, glob, json
+import vim
+import os.path
+import glob
+import json
+
 path=vim.eval("path")
 fname=vim.eval("a:fname")
 file_list = []

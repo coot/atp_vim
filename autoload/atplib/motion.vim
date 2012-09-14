@@ -333,7 +333,7 @@ def scan_project(fname):
                 scan_project(subf.group(2))
     except IOError:
         print("[ATP]: can not open "+add_extension(fname)+" cwd="+os.getcwd())
-        pass
+	pass
 
 
 scan_project(file_name)
