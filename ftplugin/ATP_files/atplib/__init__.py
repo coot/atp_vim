@@ -1,2 +1,5 @@
 
-__all__ = [ 'check_bracket' ]
+
+subpackages = [ 'buffers', 'check_bracket' ]
+'''This variable is used by :ReloadATP, to reload all subpackages.
+'''

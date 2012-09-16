@@ -354,8 +354,8 @@ python << END
 import vim
 import re
 import locale
+from atplib.buffers import readlines
 
-encoding = locale.getpreferredencoding()
 
 files=vim.eval("b:atp_BibFiles")
 
@@ -385,7 +385,7 @@ types=['author', 'bookauthor', 'booktitle', 'date', 'editor', 'eprint', 'eprintc
 
 def parse_bibentry(bib_entry):
     bib={}
-    bib['bibfield_key']=(re.sub('\\r$', '', bib_entry[0])).encode(encoding=encoding, errors="replace")
+    bib['bibfield_key']=(re.sub('\\r$', '', bib_entry[0]))
     nr=1
     while nr < len(bib_entry)-1:
         line=bib_entry[nr]
@@ -394,7 +394,7 @@ def parse_bibentry(bib_entry):
                 while not re.search('=', line) and nr < len(bib_entry)-1:
                     val=re.sub('\s*$', '', bib[p_e_type])+" "+re.sub('^\s*', '', re.sub('\t', ' ', line))
                     val=re.sub('%.*', '', val)
-                    bib[p_e_type]=(remove_quotes(re.sub('\\r$', '', val))).encode(encoding=encoding, errors="replace")
+                    bib[p_e_type]=(remove_quotes(re.sub('\\r$', '', val)))
                     nr+=1
                     line=bib_entry[nr]
             else:
@@ -403,7 +403,7 @@ def parse_bibentry(bib_entry):
                     if re.match('\s*%s\s*=' % e_type, line, re.I):
                         # TODO: this is not working when title is two lines long!
                         line=re.sub('%.*', '', line)
-                        bib[e_type]=remove_quotes(re.sub('\\r$', '', re.sub('\t', ' ', line))).encode(encoding=encoding, errors="replace")
+                        bib[e_type]=remove_quotes(re.sub('\\r$', '', re.sub('\t', ' ', line)))
                         p_e_type=e_type
                         nr+=1
                         v_break=True
@@ -423,8 +423,7 @@ pattern_b=re.compile('\s*@\w+\s*{.+', re.I)
 
 bibresults={}
 for file in files:
-    with open(file) as file_ob:
-	file_l=map(lambda l: (l[:-1]).decode(encoding=encoding, errors="replace"), file_ob.readlines())
+    file_l = readlines(file)
     file_len=len(file_l)
     lnr=0
     bibresults[file]={}

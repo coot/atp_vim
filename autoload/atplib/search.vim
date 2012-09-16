@@ -116,9 +116,8 @@ import re
 import subprocess
 import os
 import glob
-import locale
+from atplib.buffers import readlines
 
-encoding = locale.getpreferredencoding()
 
 def preambule_end(file):
 # find linenr where preambule ends,
@@ -157,13 +156,12 @@ if hasattr(vim, 'bindeval'):
 else:
     defi_dict = {}
 
-for file in files:
-    defi_dict[file]=[]
+for fname in files:
+    defi_dict[fname]=[]
     lnr=1
-    with open(file) as sock:
-	file_l =map(lambda l: (l[:-1]).decode(encoding, 'replace'), sock.readlines())
+    file_l = readlines(fname)
 
-    while lnr <= len(file_l) and ( preambule_only and ( file == main_file and lnr <= preambule_end or file != main_file ) or not preambule_only):
+    while lnr <= len(file_l) and ( preambule_only and ( fname == main_file and lnr <= preambule_end or fname != main_file ) or not preambule_only):
         line=file_l[lnr-1]
         if re.search(pattern, line):
             # add: no search in comments.
@@ -177,9 +175,9 @@ for file in files:
                     _open  += len(re.findall("({)", line))
                     _close += len(re.findall("(})", line))
                 e_lnr = lnr
-                defi_dict[file].extend([[b_lnr, e_lnr ]])
+                defi_dict[fname].extend([[b_lnr, e_lnr ]])
             else:
-                defi_dict[file].extend([[b_lnr, b_lnr ]])
+                defi_dict[fname].extend([[b_lnr, b_lnr ]])
             lnr += 1
         else:
             lnr += 1
@@ -187,9 +185,9 @@ for file in files:
 if not hasattr(vim, 'bindeval'):
     # There is no need of using json.dumps() here since the defi_dict has str
     # type keys and list of intergers inside.
-    vim.command("let defi_dict_py=%s" % defi_dict)
+    import json
+    vim.command("let defi_dict_py=%s" % json.dumps(defi_dict))
 ENDPYTHON
-let g:defi_dict = defi_dict
 return defi_dict
 endfunction
 "}}}
@@ -318,71 +316,55 @@ function! atplib#search#LocalCommands_py(write, ...)
 	     endif
 	 endif
      endfor
+let atp_LocalCommands = []
+let atp_LocalColors = []
+let atp_LocalEnvironments = []
 python << END
 import re
 import vim
 import os.path
-
-def bufnumber(file):
-    for buffer in vim.buffers:
-        # This requires that we are in the directory of the main tex file,
-        # and the directory is changed in the vim script above.
-        if buffer.name == os.path.abspath(file):
-            return buffer.number
-    for buffer in vim.buffers:
-	try:
-            if os.path.basename(buffer.name) == file:
-                return buffer.number
-        except:
-            pass
-    return 0
+from atplib.buffers import readlines
 
 pattern=re.compile(r'\s*(?:\\(?P<def>def)(?P<def_c>\\[^#{]*)|(?:\\(?P<nc>newcommand)|\\(?P<env>newenvironment)|\\(?P<nt>newtheorem\*?)|\\(?P<col>definecolor)|\\(?P<dec>Declare)(?:RobustCommand|FixedFont|TextFontCommand|MathVersion|SymbolFontAlphabet|MathSymbol|MathDelimiter|MathAccent|MathRadical|MathOperator)\s*{|\\(?P<sma>SetMathAlphabet))\s*{(?P<arg>[^}]*)})')
 
 files=[vim.eval("atp_MainFile")]+vim.eval("files")
-localcommands   =[]
-localcolors     =[]
-localenvs       =[]
-for file in files:
+localcommands = []
+localcolors = []
+localenvs  = []
+for fname in files:
     lnr=1
-    bufnr = bufnumber(file)
-    if os.path.exists(file) or bufnr in vim.buffers:
-        try:
-            if bufnr in vim.buffers:
-                file_l = vim.buffers[bufnr]
-            else:
-		with open(file) as file_ob:
-                    file_l = file_ob.readlines()
-            for line in file_l:
-                m=re.match(pattern, line)
-                if m:
-                    if m.group('def'):
-                        if re.search(r'\\def\\\w+#[1-9]', line):
-                            localcommands.append(m.group('def_c')+'{')
-                        else:
-                            localcommands.append(m.group('def_c'))
-                    elif m.group('nc') or m.group('dec') or m.group('sma'):
-                        if re.search(r'\\newcommand\s*{[^}]*}\s*\[[1-9]\]\s*{', line):
-                            localcommands.append(m.group('arg')+'{')
-                        else:
-                            localcommands.append(m.group('arg'))
-                    elif m.group('nt') or m.group('env'):
-                        localenvs.append(m.group('arg'))
-                    elif m.group('col'):
-                        localcolors.append(m.group('arg'))
-        except IOError:
-            pass
-if int(vim.eval("v:version")) < 703 or vim.eval("v:version") == "703" and vim.eval("has('patch569')") == "0":
+    file_l = readlines(fname)
+    for line in file_l:
+        m=re.match(pattern, line)
+        if m:
+            if m.group('def'):
+                if re.search(r'\\def\\\w+#[1-9]', line):
+                    localcommands.append(m.group('def_c')+'{')
+                else:
+                    localcommands.append(m.group('def_c'))
+            elif m.group('nc') or m.group('dec') or m.group('sma'):
+                if re.search(r'\\newcommand\s*{[^}]*}\s*\[[1-9]\]\s*{', line):
+                    localcommands.append(m.group('arg')+'{')
+                else:
+                    localcommands.append(m.group('arg'))
+            elif m.group('nt') or m.group('env'):
+                localenvs.append(m.group('arg'))
+            elif m.group('col'):
+                localcolors.append(m.group('arg'))
+
+if hasattr(vim, 'bindeval'):
+    cmds = vim.bindeval('atp_LocalCommands')
+    cmds.extend(localcommands)
+    envs = vim.bindeval('atp_LocalEnvironments')
+    envs.extend(localenvs)
+    cols = vim.bindeval('atp_LocalColors')
+    cols.extend('localcolors')
+else:
     import json
-    vim.command("let atp_LocalCommands=%s"      % json.dumps(localcommands))
-    vim.command("let atp_LocalEnvironments=%s"  % json.dumps(localenvs))
-    vim.command("let atp_LocalColors=%s"	% json.dumps(localcolors))
+    vim.command("let atp_LocalCommands=%s" % json.dumps(localcommands))
+    vim.command("let atp_LocalEnvironments=%s" % json.dumps(localenvs))
+    vim.command("let atp_LocalColors=%s" % json.dumps(localcolors))
 END
-if v:version == 703 && has('patch569') || v:version > 703
-    let atp_LocalCommands	= atplib#pyeval("localcommands")
-    let atp_LocalEnvironments	= atplib#pyeval("localenvs")
-    let atp_LocalColors		= atplib#pyeval("localcolors")
-endif
 if exists("atp_LocalCommands")
     let b:atp_LocalCommands=map(atp_LocalCommands, 'substitute(v:val, ''\\\\'', ''\'', '''')')
 else
@@ -2181,6 +2163,7 @@ import os
 import glob
 import json
 import locale
+from atplib.buffers import readlines
 
 encoding = vim.eval("&encoding")
 sys_encoding = locale.getpreferredencoding()
@@ -2209,10 +2192,10 @@ relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
 project_dir = vim.eval('b:atp_ProjectDir').decode(encoding)
 
 def vim_remote_expr(servername, expr):
-# Send <expr> to vim server,
+    """Send <expr> to vim server,
 
-# expr must be well quoted:
-#       vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
+    expr must be well quoted:
+          vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")"""
     cmd=[options.progname, '--servername', servername, '--remote-expr', expr]
     subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
 
@@ -2223,9 +2206,9 @@ def isnonempty(string):
         return True
 
 def scan_preambule(file, pattern):
-    # scan_preambule for a pattern
+    """scan_preambule for a pattern
 
-    # file is list of lines
+    file is a list of lines."""
     for line in file:
         ret=re.search(pattern, line)
         if ret:
@@ -2235,9 +2218,9 @@ def scan_preambule(file, pattern):
     return False
 
 def preambule_end(file):
-# find linenr where preambule ends,
+    """find linenr where preambule ends,
 
-# file is list of lines
+    file is list of lines."""
     nr=1
     for line in file:
         if re.search(ur'\\begin\s*{\s*document\s*}', line):
@@ -2246,9 +2229,9 @@ def preambule_end(file):
     return 0
 
 def addext(string, ext):
-# the pattern is not matching .tex extension read from file.
-    assert type(string) == unicode
-    if not re.search(u"\.%s$" % ext, string):
+    """the pattern is not matching .tex extension read from file."""
+
+    if not re.search("\.%s$" % ext, string):
         return string+"."+ext
     else:
         return string
@@ -2274,25 +2257,10 @@ def kpsewhich_find(file, path_list):
         results.extend(found)
     return results
 
-def bufnumber(file):
-    cdir = os.path.abspath(os.curdir)
-    os.chdir(project_dir)
-    for buffer in vim.buffers:
-        # This requires that we are in the directory of the main tex file:
-	if buffer.name.decode(encoding) == os.path.abspath(file):
-            os.chdir(cdir)
-            return buffer.number
-    for buffer in vim.buffers:
-	if os.path.basename(buffer.name) == file:
-            os.chdir(cdir)
-            return buffer.number
-    os.chdir(cdir)
-    return 0
-
 def scan_file(file, fname, pattern, bibpattern):
-# scan file for a pattern, return all groups,
+    """scan file for a pattern, return all groups,
 
-# file is a list of lines, 
+    file is a list of lines."""
     matches_d={}
     matches_l=[]
     nr = 0
@@ -2330,67 +2298,58 @@ def scan_file(file, fname, pattern, bibpattern):
     return [ matches_d, matches_l ]
 
 def tree(file, level, pattern, bibpattern):
-# files - list of file names to scan, 
+    """ files - list of file names to scan, """
 
-    bufnr = bufnumber(file)
-    if bufnr in vim.buffers:
-        file_l = vim.buffers[bufnr]
-    else:
+    try:
+        file_l = readlines(fname)
+    except IOError:
+        if file.endswith('.bib'):
+            path=bib_path
+        else:
+            path=tex_path
         try:
-            file_ob = open(file)
+            file=kpsewhich_find(file, path)[0]
+            file_l = readlines(file)
+        except IndexError:
+            return [ {}, [], {}, {}]
         except IOError:
-            if re.search('\.bib$', file):
-                path=bib_path
-            else:
-                path=tex_path
-            try:
-                file=kpsewhich_find(file, path)[0]
-            except IndexError:
-                pass
-            try:
-                file_ob = open(file, 'r')
-            except IOError:
-                return [ {}, [], {}, {} ]
-	enc = getfenc(file)
-        file_l  = [ l[:-1].decode(enc, 'replace') for l in file_ob.readlines() ]
-        file_ob.close()
+            return [ {}, [], {}, {}]
+
     [found, found_l] = scan_file(file_l, file, pattern, bibpattern)
     t_list=[]
     t_level={}
     t_type={}
     t_tree={}
     for item in found_l:
-        t_list.append(item.encode(encoding))
-        t_level[item.encode(encoding)]=level
-        t_type[item.encode(encoding)]=(found[item][3]).encode(encoding) # t_type values are ASCII
+        t_list.append(item)
+        t_level[item]=level
+        t_type[item]=(found[item][3])
     i_list=[]
     for file in t_list:
-        if found[file][3] == u"input":
+        if found[file][3] == "input":
             i_list.append(file)
     for file in i_list:
         [ n_tree, n_list, n_type, n_level ] = tree(file, level+1, pattern, bibpattern)
         for f in n_list:
-            t_list.append(f.encode(encoding))
-            t_type[f.encode(encoding)] = (n_type[f]).encode(encoding)
-            t_level[f.encode(encoding)] = n_level[f]
+            t_list.append(f)
+            t_type[f] = (n_type[f])
+            t_level[f] = n_level[f]
         t_tree[file] = [ n_tree, found[file][2] ]
     return [ t_tree, t_list, t_type, t_level ]
 
 try:
-    enc = getfenc(filename)
-    with open(filename) as sock:
-	mainfile = [ line[:-1].decode(enc) for line in sock.readlines() ]
+    mainfile = readlines(filename)
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:
-    if scan_preambule(mainfile, re.compile(ur'\\usepackage{[^}]*\bsubfiles\b')):
-	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
+    if scan_preambule(mainfile, re.compile(r'\\usepackage{[^}]*\bsubfiles\b')):
+	pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
 	pattern = re.compile(pat_str)
     else:
-	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+	pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
 	pattern = re.compile(pat_str)
 
-    bibpattern=re.compile(ur'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
+    bibpattern=re.compile(r'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
 
     bib_path=kpsewhich_path('bib')
     tex_path=kpsewhich_path('tex')

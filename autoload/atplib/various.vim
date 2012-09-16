@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Wed Sep 12, 2012 at 09:03:57  +0100
+" Last Change: Sun Sep 16, 2012 at 11:13:59  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1414,8 +1414,12 @@ try
 function! atplib#various#ReloadATP(bang)
     if has("python")
 python << EOF
-import check_bracket
-reload(check_bracket)
+import atplib
+for p in atplib.subpackages:
+    try:
+        exec('reload(%s)' % p)
+    except NameError:
+        pass
 EOF
     endif
     " First source the option file

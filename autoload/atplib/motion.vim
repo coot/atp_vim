@@ -242,11 +242,17 @@ endfunction
 " {{{2 atplib#motion#maketoc_py
 function! atplib#motion#maketoc_py(filename,...)
     " filename is supposed to be b:atp_MainFile
-if exists("s:py_toc")
-    unlet s:py_toc
-endif
+let s:py_toc = []
 python << END
-import vim, fileinput, sys, re, os, os.path
+import vim
+import fileinput
+import sys
+import re
+import os
+import os.path
+from atplib.buffers import readlines
+
+enc = vim.eval('&enc')
 
 # main file
 file_name = vim.eval("a:filename")
@@ -275,71 +281,70 @@ def map_none(val):
     else:
 	return val
 
-def add_extension(fname):
-# add tex extension if the file has no extension,
+def file_path(fname):
+    # add tex extension if the file has no extension,
 
-    if os.path.splitext(fname)[1] != '.tex':
+    if not fname.endswith('.tex'):
         return os.path.join(main_dir,fname+".tex")
     else:
         return os.path.join(main_dir,fname)
 
-def find_in_brackets( string, bra = '{', ket = '}' ):
-# find string in brackets {...},
+def find_in_brackets(string, bra='{', ket='}'):
+    # find string in brackets {...},
 
     if bra in string:
         match = string.split(bra, 1)[1]
-        open = 1
+        bopen = 1
         for index in xrange(len(match)):
             if match[index] == bra:
-                open += 1
+                bopen += 1
             elif match[index] == ket:
-                open -= 1
-            if not open:
+                bopen -= 1
+            if not bopen:
                 return match[:index]
-
 
 def scan_project(fname):
 # scan file for section units starting after line start_line,
 
     try:
-        file_o = open(add_extension(fname), 'r')
-        file = file_o.readlines()
-        length = len(file)
+        flines = readlines(file_path(fname))
+        length = len(flines)
         for ind in xrange(length):
-            line = file[ind]
+            line = flines[ind]
             secu = re.search(section_pattern, line)
             subf = re.search(subfile_pattern, line)
             if secu:
 		# Join lines (find titles if they are spread in more than one line):
                 i = 1
                 while i+ind < length and i < 6:
-                    line += file[ind+i]
+                    line += flines[ind+i]
                     i+=1
                 if re.search(shorttitle_pattern, line):
-                    short_title = find_in_brackets( line, '[', ']')
+                    short_title = find_in_brackets(line, '[', ']')
                     short_title = re.sub('\s*\n\s*', ' ', short_title)
                 else:
                     short_title = ''
-                title = find_in_brackets( line, '{', '}')
+                title = find_in_brackets(line, '{', '}')
                 if title != None:
                     title = re.sub('\s*\n\s*', ' ', title)
                 else:
                     title = ''
                 # sec_nr is added afterwards.
-                add = [ add_extension(fname), ind+1, secu.group(1), title, short_title, secu.group(2)]
+                add = [ file_path(fname), ind+1, secu.group(1), title, short_title, secu.group(2)]
                 toc.append(map(map_none,add))
             if subf:
-                file_list.append(map(map_none,[add_extension(fname), subf.group(2), ind+1]))
+                file_list.append(map(map_none,[file_path(fname), subf.group(2), ind+1]))
                 scan_project(subf.group(2))
     except IOError:
-        print("[ATP]: can not open "+add_extension(fname)+" cwd="+os.getcwd())
+        print("[ATP]: cannot open '%s' (cwd='%s')" % (file_path(fname), os.getcwd()))
 	pass
 
 
+# add stuff to the toc list.
 scan_project(file_name)
 
 def check_sec(sec_name,toc):
-# Check if there is a section sec_name in toc
+    # Check if there is a section sec_name in toc
 
     def filter_toc(val):
         if val[2] == sec_name:
@@ -410,8 +415,12 @@ if len(toc) > 0:
                     sec_nr = str(s_nr)+"."+str(ss_nr)+"."+str(sss_nr)
         toc[i] = toc[i]+[sec_nr]
 
-
-vim.command("let s:py_toc="+re.sub('\\\\\\\\', '\\\\', str(toc)))
+if hasattr(vim, 'bindeval'):
+    vtoc = vim.bindeval('s:py_toc')
+    vtoc.extend(toc)
+else:
+    import json
+    vim.command("let s:py_toc=%s" % json.dumps(toc))
 END
 return { a:filename : s:py_toc }
 endfunction
