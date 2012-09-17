@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 10, 2012 at 21:49:34  +0100
+" Last Change: Mon Sep 17, 2012 at 14:37:53  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2781,7 +2781,7 @@ endfunction "}}}
 exe "setlocal path+=".substitute(g:texmf."/tex,".join(filter(split(globpath(b:atp_ProjectDir, '**'), "\n"), "isdirectory(expand(v:val))"), ","), ' ', '\\\\\\\ ', 'g')
 
 if has("python") || has("python3")
-let atp_path = fnamemodify(split(globpath(&rtp, 'ftplugin/ATP_files'))[0], ':p')
+let atp_path = fnamemodify(expand('<sfile>'), ':p:h')
 python << EOF
 import vim
 import sys
