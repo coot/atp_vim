@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 17, 2012 at 14:37:53  +0100
+" Last Change: Mon Sep 17, 2012 at 22:07:51  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -245,10 +245,6 @@ endif
 " BUFFER LOCAL VARIABLES:
 " {{{ buffer variables
 let b:atp_running	= 0
-
-if has("mac") || has("macunix")
-    let b:atp_openOptions = " -a Skim "
-endif
 
 " these are all buffer related variables:
 function! <SID>TexCompiler()
