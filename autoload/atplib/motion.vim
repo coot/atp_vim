@@ -250,7 +250,7 @@ import sys
 import re
 import os
 import os.path
-from atplib.buffers import readlines
+from atplib.atpvim import readlines
 
 enc = vim.eval('&enc')
 

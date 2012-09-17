@@ -93,17 +93,17 @@ else:
     cite_pattern=re.compile('^(?:[^%]|\\\\%)*\\\\(?:no)?cite(?:\[.*\])?{([^}]*)}')
 
 def vim_remote_expr(servername, expr):
-# Send <expr> to vim server,
+    """Send <expr> to vim server,
 
-# expr must be well quoted:
-#       vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
+    expr must be well quoted:
+          vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")"""
     cmd=[options.progname, '--servername', servername, '--remote-expr', expr]
     subprocess.Popen(cmd)
 
 def get_tag_type(line, match, label):
-# Find tag type,
+    """Find tag type,
 
-# line is a string, match is an element of a MatchingObject
+    line is a string, match is an element of a MatchingObject."""
     tag_type=""
     if label == 'label':
         pat='(?:\\\\hypertarget{.*})?\s*\\\\label'
@@ -136,9 +136,9 @@ def get_tag_type(line, match, label):
     return tag_type
 
 def find_in_filelist(match, file_dict, get_type=False, type_pattern=None):
-    # find match in list of files, 
+    """find match in list of files, 
 
-    # file_dict is a dictionary with { 'file_name' : file }.
+    file_dict is a dictionary with { 'file_name' : file }."""
     r_file = ""
     r_type = ""
     for file in file_dict.iterkeys():
@@ -163,9 +163,9 @@ def comma_split(arg_list):
     return ret_list
 
 try:
-# Read tex files:
+    # Read tex files:
     file_dict=Dict({})
-# { 'file_name' : list_of_lines }
+    # { 'file_name' : list_of_lines }
     for file in file_list:
         try:
             if sys.version_info.major < 3:
@@ -181,7 +181,7 @@ try:
             file_dict[file]=[]
             pass
 
-# Read bib files:
+    # Read bib files:
     if len(bib_list) > 1:
         bib_dict=Dict({})
         # { 'bib_name' : list_of_lines } 
@@ -194,8 +194,8 @@ try:
                     bib_data=file_obj.read()
             bib_dict[bibfile]=bib_data.split("\n")
 
-# GENERATE TAGS:
-# From \label{} and \hypertarget{}{} commands:
+    # GENERATE TAGS:
+    # From \label{} and \hypertarget{}{} commands:
     tags=[]
     tag_dict=Dict({})
     for file_name in file_list:
@@ -257,7 +257,7 @@ try:
                         tags.extend([tag])
             p_line=line
 
-# From aux file:
+    # From aux file:
     ioerror=False
     try:
         if sys.version_info.major < 3:
@@ -290,7 +290,7 @@ try:
         ioerror=True
         pass
 
-# SORT (vim works faster when tag file is sorted) AND WRITE TAGS
+    # SORT (vim works faster when tag file is sorted) AND WRITE TAGS
     time=strftime("%a, %d %b %Y %H:%M:%S +0000", localtime())
     tags = map(lambda u: u.encode(encoding, errors="replace"), tags)
     tags_sorted=sorted(tags, key=str.lower)
@@ -299,7 +299,7 @@ try:
     with open("tags", 'w') as file_obj:
         file_obj.write("\n".join(tags_sorted))
 
-# Communicate to Vim:
+    # Communicate to Vim:
     if not options.silent:
         if options.servername != "":
             vim_remote_expr(options.servername, "atplib#callback#Echo(\"[LatexTags:] tags file written.\",'echo','')")

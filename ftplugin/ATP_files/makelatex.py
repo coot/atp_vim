@@ -166,14 +166,13 @@ run   = 0
 bound = 6
 
 # FUNCTIONS
-
 def vim_remote_expr(servername, expr):
-    # Send <expr> to vim server,
+    """Send <expr> to vim server,
 
-    # expr must be well quoted:
-    #       vim_remote_expr('GVIM', "atplib#CatchStatus()")
-    # (this is the only way it works)
-    #     print("VIM_REMOTE_EXPR "+str(expr))
+    expr must be well quoted:
+          vim_remote_expr('GVIM', "atplib#CatchStatus()")
+    (this is the only way it works)
+        print("VIM_REMOTE_EXPR "+str(expr))"""
     if not options.callback:
         return
     cmd=[progname, '--servername', servername, '--remote-expr', expr]
@@ -185,7 +184,7 @@ def vim_remote_expr(servername, expr):
         sys.exit(1)
 
 def latex_progress_bar(cmd):
-    # Run latex and send data for progress bar,
+    """Run latex and send data for progress bar,"""
 
     debug_file.write("RUN "+str(run)+" CMD"+str(cmd)+"\n")
 
@@ -219,17 +218,18 @@ def latex_progress_bar(cmd):
     return child
 
 def xpdf_server_file_dict():
-    # Make dictionary of the type { xpdf_servername : [ file, xpdf_pid ] },
+    """Make dictionary of the type { xpdf_servername : [ file, xpdf_pid ] },
 
-    # to test if the server host file use:
-    # basename(xpdf_server_file_dict().get(server, ['_no_file_'])[0]) == basename(file)
-    # this dictionary always contains the full path (Linux).
-    # TODO: this is not working as I want to:
-    #    when the xpdf was opened first without a file it is not visible in the command line
-    #    I can use 'xpdf -remote <server> -exec "run('echo %f')"'
-    #    where get_filename is a simple program which returns the filename. 
-    #    Then if the file matches I can just reload, if not I can use:
-    #          xpdf -remote <server> -exec "openFile(file)"
+    to test if the server host file use:
+    basename(xpdf_server_file_dict().get(server, ['_no_file_'])[0]) == basename(file)
+    this dictionary always contains the full path (Linux).
+    TODO: this is not working as I want to:
+       when the xpdf was opened first without a file it is not visible in the command line
+       I can use 'xpdf -remote <server> -exec "run('echo %f')"'
+       where get_filename is a simple program which returns the filename. 
+       Then if the file matches I can just reload, if not I can use:
+             xpdf -remote <server> -exec "openFile(file)"
+     """
     ps_list=psutil.get_pid_list()
     server_file_dict={}
     for pr in ps_list:
@@ -250,7 +250,7 @@ def xpdf_server_file_dict():
     return server_file_dict
 
 def reload_xpdf():
-    # Reload xpdf if asked,
+    """Reload xpdf if asked,"""
 
     if re.search(viewer, '^\s*xpdf\e') and reload_viewer:
         cond=xpdf_server_file_dict().get(XpdfServer, ['_no_file_']) != ['_no_file_']
@@ -261,9 +261,9 @@ def reload_xpdf():
                 subprocess.Popen(cmd, stdout=devnull, stderr=subprocess.STDOUT)
 
 def copy_back_output(tmpdir):
-    # Copy pdf(dvi) and (aux) files back to working directory,
+    """Copy pdf(dvi) and (aux) files back to working directory,
 
-    # aux file is copied also to _aux file used by ATP.
+    aux file is copied also to _aux file used by ATP."""
     os.chdir(tmpdir)
     if os.path.exists(basename+output_ext):
         shutil.copy(basename+output_ext, texfile_dir)

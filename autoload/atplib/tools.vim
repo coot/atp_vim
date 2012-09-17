@@ -340,7 +340,7 @@ let loc_list = []
 python << EOF
 import vim
 import re
-from atplib.buffers import readlines
+from atplib.atpvim import readlines
 
 files = vim.eval("InputFileList")
 loc_list = []

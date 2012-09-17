@@ -1,4 +1,4 @@
-*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 15 September 2012
+*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 17 September 2012
 
 	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 11.1)
 			by Marcin Szamotulski

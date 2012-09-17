@@ -116,13 +116,13 @@ import re
 import subprocess
 import os
 import glob
-from atplib.buffers import readlines
+from atplib.atpvim import readlines
 
 
 def preambule_end(file):
-# find linenr where preambule ends,
+    """find linenr where preambule ends,
 
-# file is list of lines
+    file is list of lines"""
     nr=1
     for line in file:
         if re.search(r'\\begin\s*{\s*document\s*}', line):
@@ -323,7 +323,7 @@ python << END
 import re
 import vim
 import os.path
-from atplib.buffers import readlines
+from atplib.atpvim import readlines
 
 pattern=re.compile(r'\s*(?:\\(?P<def>def)(?P<def_c>\\[^#{]*)|(?:\\(?P<nc>newcommand)|\\(?P<env>newenvironment)|\\(?P<nt>newtheorem\*?)|\\(?P<col>definecolor)|\\(?P<dec>Declare)(?:RobustCommand|FixedFont|TextFontCommand|MathVersion|SymbolFontAlphabet|MathSymbol|MathDelimiter|MathAccent|MathRadical|MathOperator)\s*{|\\(?P<sma>SetMathAlphabet))\s*{(?P<arg>[^}]*)})')
 
@@ -2175,11 +2175,11 @@ def getfenc(filename):
     buffer number.
     """
     if type(filename) is unicode:
-	vimexpr = '"%s"' % filename.encode(vim.eval("&encoding"))
+        vimexpr = '"%s"' % filename.encode(vim.eval("&encoding"))
     elif type(filename) is int:
-	vimexpr = '%d' % filename
+        vimexpr = '%d' % filename
     else:
-	vimexpr = '"%s"' % filename
+        vimexpr = '"%s"' % filename
 
     enc = vim.eval('getbufvar(%s, "&fenc")' % vimexpr)
     if not enc:
@@ -2191,10 +2191,10 @@ relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
 project_dir = vim.eval('b:atp_ProjectDir').decode(encoding)
 
 def vim_remote_expr(servername, expr):
-# Send <expr> to vim server,
+    """Send <expr> to vim server,
 
-# expr must be well quoted:
-#       vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")
+    expr must be well quoted:
+          vim_remote_expr('GVIM', "atplib#callback#TexReturnCode()")"""
     cmd=[options.progname, '--servername', servername, '--remote-expr', expr]
     subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
 
@@ -2205,9 +2205,10 @@ def isnonempty(string):
         return True
 
 def scan_preambule(file, pattern):
-    # scan_preambule for a pattern
+    """Scan_preambule for a pattern
 
-    # file is list of lines
+    file is list of lines"""
+
     for line in file:
         ret=re.search(pattern, line)
         if ret:
@@ -2217,18 +2218,19 @@ def scan_preambule(file, pattern):
     return False
 
 def preambule_end(file):
-# find linenr where preambule ends,
+    """Find linenr where preambule ends,
 
-# file is list of lines
+    file is list of lines."""
     nr=1
     for line in file:
-        if re.search(ur'\\begin\s*{\s*document\s*}', line):
+        if re.search(r'\\begin\s*{\s*document\s*}', line):
             return nr
         nr+=1
     return 0
 
 def addext(string, ext):
-# the pattern is not matching .tex extension read from file.
+    "The pattern is not matching .tex extension read from file."
+
     assert type(string) == unicode
     if not re.search(u"\.%s$" % ext, string):
         return string+"."+ext
@@ -2236,7 +2238,7 @@ def addext(string, ext):
         return string
 
 def kpsewhich_path(format):
-# find fname of format in path given by kpsewhich,
+    """Find fname of format in path given by kpsewhich,"""
 
     kpsewhich=subprocess.Popen(['kpsewhich', '-show-path', format], stdout=subprocess.PIPE)
     kpsewhich.wait()
@@ -2248,6 +2250,7 @@ def kpsewhich_path(format):
     return path_list
 
 def kpsewhich_find(file, path_list):
+
     results=[]
     for path in path_list:
         found=glob.glob(os.path.join(path, file))
@@ -2257,24 +2260,25 @@ def kpsewhich_find(file, path_list):
     return results
 
 def bufnumber(file):
+
     cdir = os.path.abspath(os.curdir)
     os.chdir(project_dir)
     for buffer in vim.buffers:
         # This requires that we are in the directory of the main tex file:
-	if buffer.name.decode(encoding) == os.path.abspath(file):
+        if buffer.name.decode(encoding) == os.path.abspath(file):
             os.chdir(cdir)
             return buffer.number
     for buffer in vim.buffers:
-	if os.path.basename(buffer.name) == file:
+        if os.path.basename(buffer.name) == file:
             os.chdir(cdir)
             return buffer.number
     os.chdir(cdir)
     return 0
 
 def scan_file(file, fname, pattern, bibpattern):
-# scan file for a pattern, return all groups,
+    """Scan file for a pattern, return all groups,
 
-# file is a list of lines, 
+    file is a list of lines."""
     matches_d={}
     matches_l=[]
     nr = 0
@@ -2312,7 +2316,7 @@ def scan_file(file, fname, pattern, bibpattern):
     return [ matches_d, matches_l ]
 
 def tree(file, level, pattern, bibpattern):
-# files - list of file names to scan, 
+    """files - list of file names to scan,"""
 
     bufnr = bufnumber(file)
     if bufnr in vim.buffers:
@@ -2333,7 +2337,7 @@ def tree(file, level, pattern, bibpattern):
                 file_ob = open(file, 'r')
             except IOError:
                 return [ {}, [], {}, {} ]
-	enc = getfenc(file)
+        enc = getfenc(file)
         file_l  = [ l[:-1].decode(enc, 'replace') for l in file_ob.readlines() ]
         file_ob.close()
     [found, found_l] = scan_file(file_l, file, pattern, bibpattern)
@@ -2361,16 +2365,16 @@ def tree(file, level, pattern, bibpattern):
 try:
     enc = getfenc(filename)
     with open(filename) as sock:
-	mainfile = [ line[:-1].decode(enc) for line in sock.readlines() ]
+        mainfile = [ line[:-1].decode(enc) for line in sock.readlines() ]
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:
     if scan_preambule(mainfile, re.compile(ur'\\usepackage{[^}]*\bsubfiles\b')):
-	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
-	pattern = re.compile(pat_str)
+        pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
+        pattern = re.compile(pat_str)
     else:
-	pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
-	pattern = re.compile(pat_str)
+        pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+        pattern = re.compile(pat_str)
 
     bibpattern=re.compile(ur'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
 

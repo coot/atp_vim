@@ -354,7 +354,7 @@ python << END
 import vim
 import re
 import locale
-from atplib.buffers import readlines
+from atplib.atpvim import readlines
 
 
 files=vim.eval("b:atp_BibFiles")
@@ -504,7 +504,8 @@ function! atplib#bibsearch#SearchBibItems()
 
     if has("python")
 python << PEND
-import vim, re
+import vim
+import re
 files=vim.eval("l:includefile_list")
 citekey_label_dict={}
 for f in files:
