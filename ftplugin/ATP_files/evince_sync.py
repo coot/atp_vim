@@ -20,11 +20,38 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 # Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-import dbus, subprocess, time
+import dbus
+import subprocess
+import time
+import os.path
+import logging
+
 from optparse import OptionParser
-parser  = OptionParser()
+usage = """\nto make evince sync (it will exit when sync is done):\n    %prog EVINCE output_file line_number input_file\n\nto make gvim sync in response to evince clicks (keep it running):\n    %prog GVIM gvim_server_name output_file input_file\n\noutput_file -- file path [might be relative to the current directory]\ninput_file  -- as above"""
+
+parser  = OptionParser(usage=usage)
 parser.add_option("-e", "--evince_version", default=None, type="int", action="store", dest="EVINCE_VERSION")
+parser.add_option("-v",  default=False, action="store_true", dest="debug", help="verbose output")
 (options, args) = parser.parse_args()
+
+LOG_FILENAME = "/tmp/evince_sync.log"
+if options.debug:
+    log_level = logging.DEBUG
+else:
+    log_level = logging.INFO
+print(log_level == logging.DEBUG)
+logger = logging.getLogger('evince_sync')
+logger.setLevel(log_level)
+fh = logging.FileHandler(LOG_FILENAME)
+fh.setLevel(log_level)
+ch = logging.StreamHandler()
+ch.setLevel(log_level)
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s: %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+logger.addHandler(fh)
+logger.addHandler(ch)
+
 EVINCE_VERSION=options.EVINCE_VERSION
 if EVINCE_VERSION is None:
     import subprocess, re
@@ -48,7 +75,7 @@ EV_WINDOW_IFACE = "org.gnome.evince.Window"
 
 
 
-class EvinceWindowProxy:
+class EvinceWindowProxy(object):
     """A DBUS proxy for an Evince Window."""
     daemon = None
     bus = None
@@ -113,7 +140,6 @@ class EvinceWindowProxy:
             if self._log:
                 self._log.debug("GetWindowList returned empty list")
 
-
     def set_source_handler (self, source_handler):
         self.source_handler = source_handler
 
@@ -162,23 +188,25 @@ if __name__ == '__main__':
     import dbus.mainloop.glib, gobject, glib, sys, os
 
     def print_usage():
-        print('The usage (to make evince sync ... will exit when sync done) is evince_vim_dbus EVINCE output_file line_number input_file from the directory of output_file.')
-        print('The usage (to make gvim sync in response to evince clicks, keeps running till killed) is evince_vim_dbus GVIM gvim_server_name output_file input_file from the directory of output_file.')
+        usage = """\nto make evince sync (it will exit when sync is done):\n    %(prog)s EVINCE output_file line_number input_file\n\nto make gvim sync in response to evince clicks (keep it running):\n    %(prog)s GVIM gvim_server_name output_file input_file\nor\n    %(prog)s VIM vim_server_name output_file input_file\n\noutput_file -- file path (might be relative to the current directory)\ninput_file  -- as above"""
+        print(usage % { 'prog' : os.path.basename(sys.argv[0])})
         sys.exit(1)
 
-    if len(sys.argv)!=5:
+    if len(args) != 4:
         print_usage()
+        sys.exit(os.EX_USAGE)
 
-    if sys.argv[1] == 'EVINCE':
+    if args[0] == 'EVINCE':
         try:
-            line_number = int(sys.argv[3])
+            line_number = int(args[2])
         except ValueError:
             print_usage()
+            sys.exit(os.EX_USAGE)
 
-        output_file = sys.argv[2]
-        input_file  = sys.argv[4]
+        output_file = args[1]
+        input_file  = args[3]
         if output_file[0] != '/':
-            path_output = os.getcwd() + '/' + output_file
+            path_output = os.path.join(os.getcwd(), output_file)
         else:
             path_output = output_file
         if input_file[0] == '/':
@@ -187,11 +215,13 @@ if __name__ == '__main__':
             path_input   = os.getcwd() + '/./' + os.path.basename(input_file)
 
         if not os.path.isfile(path_output):
-            print("OUTPUT PATH "+path_output)
+            error_msg = "Error: output path '%s' is not a file\n" % path_output
+            logger.error(error_msg)
             print_usage()
+            sys.exit(os.EX_USAGE)
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        a = EvinceWindowProxy('file://' + path_output, True )
+        a = EvinceWindowProxy('file://%s' % path_output, True, logger=logger )
 
         def sync_view(ev_window, path_input, line_number):
             if EVINCE_VERSION >= 3:
@@ -204,32 +234,46 @@ if __name__ == '__main__':
         loop = gobject.MainLoop()
         loop.run()
 
-    elif sys.argv[1] == 'GVIM' or sys.argv[1] == 'VIM':
-        if sys.argv[1] == 'GVIM':
+    elif args[0] == 'GVIM' or args[0] == 'VIM':
+
+        if len(args) != 4:
+            print_usage()
+            sys.exit(os.EX_USAGE)
+
+        if args[0] == 'GVIM':
             progname = 'gvim'
         else:
             progname = 'vim'
-        gvim_server_name = sys.argv[2]
-        output_file = sys.argv[3]
-        input_file  = sys.argv[4]
+        gvim_server_name = args[1]
+        output_file = args[2]
+        input_file  = args[3]
         if output_file[0] == '/':
             path_output = output_file
         else:
-            path_output  = os.getcwd() + '/' + output_file
+            path_output  = os.path.join(os.getcwd(),output_file)
         if input_file[0] == '/':
             path_input   = input_file
         else:
-            path_input   = os.getcwd() + '/' + input_file
+            path_input   = os.path.join(os.getcwd(), input_file)
+
+        logger.debug("path_output='%s'" % path_output)
+        logger.debug("path_input='%s'" % path_input)
 
         if not os.path.isfile(path_input):
+            error_msg = "Error: input path '%s' is not a file\n" % path_input
+            logger.error(error_msg)
             print_usage()
+            sys.exit(OS_EXUSAGE)
 
         def source_view_handler(input_file, source_link, timestamp):
-            print(progname+' --servername "' + gvim_server_name + '" --remote +' + str(source_link[0]) + ' ' + input_file)
-            os.system(progname+' --servername "' + gvim_server_name + '" --remote +' + str(source_link[0]) + ' ' + input_file)
+            if str(input_file).startswith("file://"):
+                input_file = input_file[7:]
+            cmd = progname+' --servername "' + gvim_server_name + '" --remote +' + str(source_link[0]) + ' ' + input_file
+            logger.debug('executing: %s' % cmd)
+            os.system(cmd)
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        a = EvinceWindowProxy('file://' + path_output, True )
+        a = EvinceWindowProxy('file://' + path_output, True, logger = logger )
 
         a.set_source_handler(source_view_handler)
         loop = gobject.MainLoop()
