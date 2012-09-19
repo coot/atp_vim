@@ -276,8 +276,9 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
 	    call atplib#compiler#SyncShow(page_nr, y_coord)
 	endif
     elseif b:atp_Viewer == "evince"
+	let curr_file = atplib#FullPath(expand("%:p"))
 	let evince_sync=split(globpath(&rtp, "ftplugin/ATP_files/evince_sync.py"), "\n")[0]
-	let sync_cmd = g:atp_Python." ".shellescape(evince_sync)." EVINCE ".shellescape(output_file)." ".line." ".shellescape(main_file)
+	let sync_cmd = g:atp_Python." ".shellescape(evince_sync)." EVINCE ".shellescape(output_file)." ".line." ".shellescape(curr_file)
 	call system(sync_cmd)
     elseif b:atp_Viewer =~ '^\s*xdvi\>'
 	if exists("g:atp_xdviOptions")
