@@ -13,28 +13,29 @@ def bufnumber(fpath):
 	if buf.name == fpath:
             return buf.number
     else:
-        return 0
+        return None
 
 def read(file_path):
     """ Read lines from fname, check if the fname is loaded get tge buffer."""
 
     bufnr = bufname(file_path)
-    if bufnr:
+    if bufnr and int(vim.eval('bufloaded(%d)' % bufnr)):
+        buf = vim.buffers[bufnr-1]
         return "\n".join(vim.buffers[bufnr-1])
-    else:
-        with open(file_path, 'r') as fo:
-            # we are not decoding: since we have to assume that files are in &encoding
-            # vim stores buffers, variables, ... in &encoding.
-            return fo.read()
+
+    with open(file_path, 'r') as fo:
+        # we are not decoding: since we have to assume that files are in &encoding
+        # vim stores buffers, variables, ... in &encoding.
+        return fo.read()
 
 def readlines(file_path):
     """ Read lines from fname, if the fname is loaded get the buffer."""
 
     bufnr = bufnumber(file_path)
-    if bufnr:
+    if bufnr and int(vim.eval('bufloaded(%d)' % bufnr)):
         return vim.buffers[bufnr-1]
-    else:
-        with open(file_path, 'r') as fo:
-            # we are not decoding: since we have to assume that files are in &encoding
-            # vim stores buffers, variables, ... in &encoding.
-            return fo.readlines()
+
+    with open(file_path, 'r') as fo:
+        # we are not decoding: since we have to assume that files are in &encoding
+        # and vim stores buffers, variables, ... in &encoding.
+        return fo.readlines()

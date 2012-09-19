@@ -2162,33 +2162,10 @@ import subprocess
 import os
 import glob
 import json
-import locale
 
-encoding = vim.eval("&encoding")
-sys_encoding = locale.getpreferredencoding()
-
-def getfenc(filename):
-    """get encoding of a file
-
-    The filename should be a unicode string, if the buffer is not listed use
-    locale.getpreferredencoding(). The filename might be an integer - the
-    buffer number.
-    """
-    if type(filename) is unicode:
-        vimexpr = '"%s"' % filename.encode(vim.eval("&encoding"))
-    elif type(filename) is int:
-        vimexpr = '%d' % filename
-    else:
-        vimexpr = '"%s"' % filename
-
-    enc = vim.eval('getbufvar(%s, "&fenc")' % vimexpr)
-    if not enc:
-        enc = locale.getpreferredencoding()
-    return enc
-
-filename = vim.eval('a:main_file').decode(encoding)
-relative_path = vim.eval('g:atp_RelativePath').decode(encoding)
-project_dir = vim.eval('b:atp_ProjectDir').decode(encoding)
+filename = vim.eval('a:main_file')
+relative_path = vim.eval('g:atp_RelativePath')
+project_dir = vim.eval('b:atp_ProjectDir')
 
 def vim_remote_expr(servername, expr):
     """Send <expr> to vim server,
@@ -2213,7 +2190,7 @@ def scan_preambule(file, pattern):
         ret=re.search(pattern, line)
         if ret:
             return True
-        elif re.search(ur'\\begin\s*{\s*document\s*}', line):
+        elif re.search(r'\\begin\s*{\s*document\s*}', line):
             return False
     return False
 
@@ -2231,8 +2208,7 @@ def preambule_end(file):
 def addext(string, ext):
     "The pattern is not matching .tex extension read from file."
 
-    assert type(string) == unicode
-    if not re.search(u"\.%s$" % ext, string):
+    if not re.search("\.%s$" % ext, string):
         return string+"."+ext
     else:
         return string
@@ -2242,7 +2218,7 @@ def kpsewhich_path(format):
 
     kpsewhich=subprocess.Popen(['kpsewhich', '-show-path', format], stdout=subprocess.PIPE)
     kpsewhich.wait()
-    path=kpsewhich.stdout.read().decode(encoding)
+    path=kpsewhich.stdout.read()
     path=re.sub("!!", "",path)
     path=re.sub("\/\/+", "/", path)
     path=re.sub("\n", "",path)
@@ -2263,15 +2239,15 @@ def bufnumber(file):
 
     cdir = os.path.abspath(os.curdir)
     os.chdir(project_dir)
-    for buffer in vim.buffers:
+    for buf in vim.buffers:
         # This requires that we are in the directory of the main tex file:
-        if buffer.name.decode(encoding) == os.path.abspath(file):
+        if buf.name == os.path.abspath(file):
             os.chdir(cdir)
-            return buffer.number
-    for buffer in vim.buffers:
-        if os.path.basename(buffer.name) == file:
+            return buf.number
+    for buf in vim.buffers:
+        if os.path.basename(buf.name) == file:
             os.chdir(cdir)
-            return buffer.number
+            return buf.number
     os.chdir(cdir)
     return 0
 
@@ -2323,7 +2299,8 @@ def tree(file, level, pattern, bibpattern):
         file_l = vim.buffers[bufnr]
     else:
         try:
-            file_ob = open(file)
+            with open(file) as fo:
+                file_l = fo.read().splitlines(False)
         except IOError:
             if file.endswith('.bib'):
                 path=bib_path
@@ -2331,52 +2308,48 @@ def tree(file, level, pattern, bibpattern):
                 path=tex_path
             try:
                 file=kpsewhich_find(file, path)[0]
-            except IndexError:
-                pass
-            try:
-                file_ob = open(file, 'r')
+                with open(file) as fo:
+                    file_l = fo.read().splitlines(False)
             except IOError:
                 return [ {}, [], {}, {} ]
-        enc = getfenc(file)
-        file_l  = [ l[:-1].decode(enc, 'replace') for l in file_ob.readlines() ]
-        file_ob.close()
+            except IndexError:
+                return [ {}, [], {}, {} ]
     [found, found_l] = scan_file(file_l, file, pattern, bibpattern)
     t_list=[]
     t_level={}
     t_type={}
     t_tree={}
     for item in found_l:
-        t_list.append(item.encode(encoding))
-        t_level[item.encode(encoding)]=level
-        t_type[item.encode(encoding)]=(found[item][3]).encode(encoding) # t_type values are ASCII
+        t_list.append(item)
+        t_level[item]=level
+        t_type[item]=(found[item][3]) # t_type values are ASCII
     i_list=[]
     for file in t_list:
-        if found[file][3] == u"input":
+        if found[file][3] == "input":
             i_list.append(file)
     for file in i_list:
         [ n_tree, n_list, n_type, n_level ] = tree(file, level+1, pattern, bibpattern)
         for f in n_list:
-            t_list.append(f.encode(encoding))
-            t_type[f.encode(encoding)] = (n_type[f]).encode(encoding)
-            t_level[f.encode(encoding)] = n_level[f]
+            t_list.append(f)
+            t_type[f] = (n_type[f])
+            t_level[f] = n_level[f]
         t_tree[file] = [ n_tree, found[file][2] ]
     return [ t_tree, t_list, t_type, t_level ]
 
 try:
-    enc = getfenc(filename)
     with open(filename) as sock:
-        mainfile = [ line[:-1].decode(enc) for line in sock.readlines() ]
+        mainfile = sock.read().splitlines(False)
 except IOError:
     [ tree_of_files, list_of_files, type_dict, level_dict]= [ {}, [], {}, {} ]
 else:
-    if scan_preambule(mainfile, re.compile(ur'\\usepackage{[^}]*\bsubfiles\b')):
-        pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
+    if scan_preambule(mainfile, re.compile(r'\\usepackage{[^}]*\bsubfiles\b')):
+        pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
         pattern = re.compile(pat_str)
     else:
-        pat_str = ur'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+        pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
         pattern = re.compile(pat_str)
 
-    bibpattern=re.compile(ur'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
+    bibpattern=re.compile(r'^[^%]*\\(?:bibliography|addbibresource|addsectionbib(?:\s*\[.*\])?|addglobalbib(?:\s*\[.*\])?)\s*{([^}]*)}')
 
     bib_path=kpsewhich_path('bib')
     tex_path=kpsewhich_path('tex')
