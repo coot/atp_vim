@@ -139,7 +139,7 @@ if int(vim.eval("preambule_only")) != 0:
         if type_dict[f] == "preambule":
             files.append(f)
     with open(main_file) as sock:
-	main_file_l=map(lambda l: (l[:-1]).decode(encoding, 'replace'), sock.readlines())
+	main_file_l=sock.read().splitlines()
     preambule_end=preambule_end(main_file_l)
 else:
     preambule_only=False

@@ -38,4 +38,4 @@ def readlines(file_path):
     with open(file_path, 'r') as fo:
         # we are not decoding: since we have to assume that files are in &encoding
         # and vim stores buffers, variables, ... in &encoding.
-        return fo.readlines()
+        return fo.read().splitlines()
