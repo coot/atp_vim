@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Aug 25, 2012 at 11:05:29  +0100
+" Last Change: Tue Sep 18, 2012 at 22:06:12  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -279,11 +279,8 @@ if !( g:atp_map_forward_motion_leader == "]" && &l:diff )
 	execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."c 	<Plug>vGotoNextChapter"
     endif
 endif
-if !hasmapto("<Plug>GotoNextEnvironment", "n")
-    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."e	<Plug>GotoNextEnvironment"
-endif
 if !hasmapto("<Plug>JumptoNextEnvironment", "n")
-    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."E	<Plug>JumptoNextEnvironment"
+    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."e	<Plug>JumptoNextEnvironment"
 endif
 if !hasmapto("<Plug>GotoNextMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."m	<Plug>GotoNextMath"
@@ -319,11 +316,8 @@ if !( g:atp_map_backward_motion_leader == "]" && &l:diff )
 	execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."c 	<Plug>vGotoPreviousChapter"
     endif
 endif
-if !hasmapto("<Plug>GotoPreviousEnvironment", "n")
-    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."e	<Plug>GotoPreviousEnvironment"
-endif
 if !hasmapto("<Plug>JumptoPreviousEnvironment", "n")
-    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."E 	<Plug>JumptoPreviousEnvironment"
+    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."e 	<Plug>JumptoPreviousEnvironment"
 endif
 if !hasmapto("<Plug>GotoPreviousMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."m	<Plug>GotoPreviousMath"
@@ -760,16 +754,16 @@ endif
 " From vim.vim plugin (by Bram Mooleaner)
 " Move around functions.
 exe "nnoremap <silent> <buffer> <Plug>BegPrevEnvironment m':call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
-if !hasmapto("<Plug>BegPrevEnvironment", "n")
-    nmap <silent> <buffer> [[ <Plug>BegPrevEnvironment
+if !hasmapto("<Plug>GotoPreviousEnvironment", "n")
+    nmap <silent> <buffer> [[ <Plug>GotoPreviousEnvironment
 endif
 exe "vnoremap <silent> <buffer> <Plug>vBegPrevEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
 if !hasmapto("<Plug>vBegPrevEnvironment", "v")
     vmap <silent> <buffer> [[ <Plug>vBegPrevEnvironment
 endif
 exe "nnoremap <silent> <buffer> <Plug>BegNextEnvironment m':call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
-if !hasmapto("<Plug>BegNextEnvironment", "n")
-    nmap <silent> <buffer> ]] <Plug>BegNextEnvironment
+if !hasmapto("<Plug>GotoNextEnvironment", "n")
+    nmap <silent> <buffer> ]] <Plug>GotoNextEnvironment
 endif
 exe "vnoremap <silent> <buffer> <Plug>vBegNextEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
 if !hasmapto("<Plug>vBegNextEnvironment", "v")

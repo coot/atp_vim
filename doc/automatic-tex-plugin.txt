@@ -167,6 +167,10 @@ NEWS							*atp-news*
  ======================
  Changes in version 11.2
 <
+ The maps >E and <E are now |atp->e| and |atp-<e|, and the previus >e and <e
+ maps are |atp-]]| and |atp-[[|. The accept a count. There are also [] and ][
+ maps (the count for them is not yet implemented).
+ 
  |atp-:Texdoc| and |atp-:Texdef| instead of |atp-:TexDoc|, |atp-:TexDef|.
  |atp-:Texdef| defined only if |g:atp_developer| is 1.
 
@@ -1877,10 +1881,10 @@ map <LocalLeader>L
 	Go (backward) to {arg}, like above |atp-:F|.
 
 
-							*atp-:NEnv* *atp->e*
+							*atp-:NEnv* *atp-]]*
 :NEnv {environment}
 :[count]F {environment}
-map [count]>e
+map [count]]]
 	Move to next environment, for example ':NEnv definition'. Completion
 	is set, which finds environments defined in current tex source file.
 	This function omits environments in comment lines.
@@ -1892,29 +1896,24 @@ map [count]>e
 	If g:atp_mapNn is set to one (see |atp-:ToggleNn|) then this command
 	is using |atp-:S|.
 
-							*atp-:PEnv* *atp-<e*
+							*atp-:PEnv* *atp-[[*
 :PEnv {environment}
 [count]:B {environment}
-map [count]<e
+map [count][[
 	Move to previous environment, for example ':NEnv definition'. Completion
 	is set, which finds environments defined in current tex source file.
 	This function omits environments in comment lines.
 
- 							*atp->E* *atp-<E*
-nmap [count]>E
-nmap [count]<E
-	There are two more nice map >E which is something like %>e, i.e. jump
-	over the current environment and go to next one. The reverse <E is
-	also implemented, thought it is not simply <e%. They do not support
+ 							*atp->e* *atp-<e*
+nmap [count]>e
+nmap [count]<e
+	There are two more nice maps: >e which is something like %]], i.e. jump
+	over the current environment and go to next one. The reverse <e is
+	also implemented, thought it is not simply [[%. They do not support
 	count (yet), and actually count breaks them. If you want to add |zz|,
-	(|zt| or |zb|) after >E you can put this in your |atprc| file:
-	    map <buffer> <silent> >E	<Plug>JumptoNextEnvironmentzz
-	    map <buffer> <silent> <E	<Plug>JumptoPreviousEnvironmentzz
-
-	|atp--S|, |atp--s|, |atp--c|, |atp--p| new maps for |atp-:SSec|,
-	|atp-:Sec|, |atp-:Chap| and |atp-:Part|. They also works relatively to
-	the current unit (section/chapter/part), i.e. 2]s will jump to second
-	section of the current chapter.
+	(|zt| or |zb|) after >e you can put this in your |atprc| file:
+	    map <buffer> <silent> >e	<Plug>JumptoNextEnvironmentzz
+	    map <buffer> <silent> <e	<Plug>JumptoPreviousEnvironmentzz
 
 							*atp->f* *atp-<f*
 							*atp->F* *atp-<F*
@@ -4377,11 +4376,9 @@ However, they require that there are no maps such that no lhs is a subset ot
 the another, i.e. like "ab" and "abc". With the default settings it is
 shouldn't be a problem.
 
-							*atp-]]*
 nmap ]], vmap ]]
 	Goto next \begin{
 
-							*atp-[[*
 nmap [[, vmap [[
 	Goto previous \begin{
 
