@@ -2,26 +2,25 @@
 
 import vim
 
-__all__ = [ 'read', 'readlines', 'bufnumber', ]
+__all__ = [ 'read', 'readlines', 'getbuffer', ]
 
-def bufnumber(fpath):
+def getbuffer(fpath):
     """ Return bufer number of fpath,
 
     fpath should be a full path of a file.
     """
     for buf in vim.buffers:
 	if buf.name == fpath:
-            return buf.number
+            return buf
     else:
         return None
 
 def read(file_path):
     """ Read lines from fname, check if the fname is loaded get tge buffer."""
 
-    bufnr = bufname(file_path)
-    if bufnr and int(vim.eval('bufloaded(%d)' % bufnr)):
-        buf = vim.buffers[bufnr-1]
-        return "\n".join(vim.buffers[bufnr-1])
+    buffer = getbuffer(file_path)
+    if buffer and int(vim.eval('bufloaded(%d)' % buffer.number)):
+        return "\n".join(buffer)
 
     with open(file_path, 'r') as fo:
         # we are not decoding: since we have to assume that files are in &encoding
@@ -31,9 +30,9 @@ def read(file_path):
 def readlines(file_path):
     """ Read lines from fname, if the fname is loaded get the buffer."""
 
-    bufnr = bufnumber(file_path)
-    if bufnr and int(vim.eval('bufloaded(%d)' % bufnr)):
-        return vim.buffers[bufnr-1]
+    buffer = getbuffer(file_path)
+    if buffer and int(vim.eval('bufloaded(%d)' % buffer.number)):
+        return buffer
 
     with open(file_path, 'r') as fo:
         # we are not decoding: since we have to assume that files are in &encoding
