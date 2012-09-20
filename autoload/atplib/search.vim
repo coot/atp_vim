@@ -117,6 +117,7 @@ import subprocess
 import os
 import glob
 from atplib.atpvim import readlines
+from atplib.search import newcmd_pattern as pattern
 
 
 def preambule_end(file):
@@ -147,9 +148,6 @@ else:
     files.extend(vim.eval("b:ListOfFiles"))
 
 only_begining = (vim.eval("only_begining") != "0")
-
-# Does the no comment work?
-pattern=re.compile('^(?:[^%]|\\\\%)*(?:\\\\def|\\\\(?:re)?newcommand\s*{|\\\\providecommand\s*{|\\\\(?:re)?newenvironment\s*{|\\\\(?:re)?newtheorem\s*{|\\\\definecolor\s*{)')
 
 if hasattr(vim, 'bindeval'):
     defi_dict = vim.bindeval("defi_dict")
@@ -191,6 +189,85 @@ ENDPYTHON
 return defi_dict
 endfunction
 "}}}
+function! atplib#search#GlobalDefi(command) "{{{
+    " This function behaves like gD, but descends to included files.
+    " a:cmd   - cmd which definition we are searching for
+if !has("python")
+    return
+endif
+python << EOF
+import vim
+import re
+import os
+from atplib.atpvim import bufnumber
+from atplib.atpvim import readlines
+from atplib.search import scan_preambule
+from atplib.search import addext
+from atplib.search import kpsewhich_find
+from atplib.search import kpsewhich_path
+from atplib.search import newcmd_pattern as pattern
+
+cur_line = vim.eval('line(".")')
+cur_file = vim.eval('atplib#FullPath(expand("%"))')
+command = vim.eval('a:command')
+mainfile = vim.eval('atplib#FullPath(b:atp_MainFile)')
+if scan_preambule(mainfile, re.compile(r'\\usepackage{[^}]*\bsubfiles\b')):
+    pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?|subfile)\s*{([^}]*)})'
+    inclpat = re.compile(pat_str)
+else:
+    pat_str = r'^[^%]*(?:\\input\s+([\w_\-\.]*)|\\(?:input|include(?:only)?)\s*{([^}]*)})'
+    inclpat = re.compile(pat_str)
+
+tex_path=kpsewhich_path('tex')
+relative_path = vim.eval('g:atp_RelativePath')
+project_dir = vim.eval('b:atp_ProjectDir')
+
+def scan_file(fname, command, pattern=pattern):
+    linenr = 0
+    flines = readlines(fname)
+    for line in flines:
+        linenr += 1
+        matches = re.findall(inclpat, line)
+        if len(matches) > 0:
+            for match in matches:
+                for m in match:
+                    if str(m) != "":
+                        m=addext(m, "tex")
+                        if not os.access(m, os.F_OK):
+                            try:
+                                m=kpsewhich_find(m, tex_path)[0]
+                            except IndexError:
+                                pass
+                        (ffile, linenr, col) = scan_file(m, command, pattern)
+                        if ffile:
+                            return (ffile, linenr, col)
+        match = re.search(pattern, line)
+        if match:
+            if match.group(1) == command:
+                col = match.start(1)+1
+                return (fname, linenr, col)
+    else:
+        return ("", 0, 0)
+    if os.path.abspath(fname) == os.path.abspath(cur_file) and linenr > cur_line:
+        return ("", 0, 0)
+
+
+(ffile, line, col) = scan_file(mainfile, command, pattern)
+vim.command("let ffile='%s'" % ffile)
+vim.command(" let line=%d" % line)
+vim.command(" let col=%d" % col)
+EOF
+if !empty(ffile)
+    let bufnr = bufnr(ffile)
+    if bufnr != -1 && buflisted(bufnr)
+        exe "b ".bufnr
+        call setpos(".", [0, line, col, 0])
+    else
+        exe "edit +".line." ".ffile
+        call setpos(".", [0, line, col, 0])
+    endif
+endif
+endfunction "}}}
 
 "{{{ atplib#search#LocalCommands_vim 
 " a:1 = pattern
@@ -2162,6 +2239,10 @@ import subprocess
 import os
 import glob
 import json
+from atplib.search import scan_preambule
+from atplib.search import addext
+from atplib.search import kpsewhich_find
+from atplib.search import kpsewhich_path
 
 filename = vim.eval('a:main_file')
 relative_path = vim.eval('g:atp_RelativePath')
@@ -2175,25 +2256,6 @@ def vim_remote_expr(servername, expr):
     cmd=[options.progname, '--servername', servername, '--remote-expr', expr]
     subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
 
-def isnonempty(string):
-    if str(string) == "":
-        return False
-    else:
-        return True
-
-def scan_preambule(file, pattern):
-    """Scan_preambule for a pattern
-
-    file is list of lines"""
-
-    for line in file:
-        ret=re.search(pattern, line)
-        if ret:
-            return True
-        elif re.search(r'\\begin\s*{\s*document\s*}', line):
-            return False
-    return False
-
 def preambule_end(file):
     """Find linenr where preambule ends,
 
@@ -2204,36 +2266,6 @@ def preambule_end(file):
             return nr
         nr+=1
     return 0
-
-def addext(string, ext):
-    "The pattern is not matching .tex extension read from file."
-
-    if not re.search("\.%s$" % ext, string):
-        return string+"."+ext
-    else:
-        return string
-
-def kpsewhich_path(format):
-    """Find fname of format in path given by kpsewhich,"""
-
-    kpsewhich=subprocess.Popen(['kpsewhich', '-show-path', format], stdout=subprocess.PIPE)
-    kpsewhich.wait()
-    path=kpsewhich.stdout.read()
-    path=re.sub("!!", "",path)
-    path=re.sub("\/\/+", "/", path)
-    path=re.sub("\n", "",path)
-    path_list=path.split(":")
-    return path_list
-
-def kpsewhich_find(file, path_list):
-
-    results=[]
-    for path in path_list:
-        found=glob.glob(os.path.join(path, file))
-        results.extend(found)
-        found=glob.glob(os.path.join(path, file))
-        results.extend(found)
-    return results
 
 def bufnumber(file):
 

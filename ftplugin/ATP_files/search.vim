@@ -30,6 +30,28 @@ function! LocalCommands(write, ...)
 endfunction
 " }}}
 
+try " <SID>GlobalDefi (interface) {{{
+function! <SID>GlobalDefi()
+    exe "normal! m`"
+    let word = expand("<cword>")
+    let word = matchstr(word, '^\w\+')
+    let line = getline(".")
+    let col = col(".")
+    for l in range(0, len(word))
+        let str = line[(col-l):]
+        if str[:len(word)-1] == word
+            break
+        endif
+    endfor
+    if line[(col(".")-l-1)] == "\\"
+        let word = "\\".word
+    endif
+    let g:word = word
+    call atplib#search#GlobalDefi(word)
+endfunction
+catch /E127/
+endtry "}}}
+
 " BibSearch:
 "{{{ variables
 let g:bibentries=['article', 'book', 'booklet', 'conference', 'inbook', 'incollection', 'inproceedings', 'manual', 'mastertheosis', 'misc', 'phdthesis', 'proceedings', 'techreport', 'unpublished']
@@ -55,9 +77,10 @@ let g:kwflagsdict={ 	  '@a' : '@article',
 
 "}}}
 
-" Mappings:
-nnoremap <silent> <Plug>BibSearchLast		:call atplib#search#BibSearch("", b:atp_LastBibPattern, b:atp_LastBibFlags)<CR>
-"
+" Maps:
+nnoremap <silent> <Plug>BibSearchLast :call atplib#search#BibSearch("", b:atp_LastBibPattern, b:atp_LastBibFlags)<CR>
+nnoremap <silent> gD :call <SID>GlobalDefi()<CR>
+
 " Commands And Highlightgs:
 " {{{
 command! -buffer -bang -complete=customlist,atplib#search#SearchHistCompletion -nargs=* S 	:call atplib#search#Search(<q-bang>, <q-args>) | let v:searchforward = ( atplib#search#GetSearchArgs(<q-args>, 'bceswWx')[1] =~# 'x' ? v:searchforward :  ( atplib#search#GetSearchArgs(<q-args>, 'bceswWx')[1] =~# 'b' ? 0 : 1 ) )

@@ -170,6 +170,8 @@ NEWS							*atp-news*
  The default values of |g:atp_map_forward_motion_leader| has changed to "]"
  and |g:atp_map_backward_motion_leader| to "[".
 
+ New |atp-gD| normal command.
+
  The maps >E and <E are now |atp-]e| and |atp-[e|, and the previus >e and <e
  maps are |atp-]]| and |atp-[[|. The accept a count. There are also [] and ][
  maps (the count for them is not yet implemented).
@@ -2195,6 +2197,16 @@ vmap <F4>
 	case what follows) and '\c' (ignore case in what follows).
 
 	It works likes [D but handles multi line definitions.
+
+							*atp-gD*
+nmap gD
+	This works like |gD|: it finds the first global definition of the
+	command under the cursor. It start from the first line of the main
+	project file (|b:atp_MainFile|) and goes down visiting all included
+	files on the way. It finds definitions of commands, environments and
+	colors. You can use |CTRL-O| to return.
+
+	Only available if vim is compiled with |+python| interface.
 
 *g:atp_DsearchMaxWindowHeight* = 15
 	You can set the maximal height of the window which shows the results of

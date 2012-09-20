@@ -203,7 +203,6 @@ function! atplib#FullPath(file_name) "{{{1
 		endif
 	    endfor
 	endif
-        let g:project_dir = project_dir
 	if project_dir != ""
 	    try
 		exe "lcd " . fnameescape(project_dir)

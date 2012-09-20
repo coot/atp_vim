@@ -2,7 +2,7 @@
 
 import vim
 
-__all__ = [ 'read', 'readlines', 'bufnumber' ]
+__all__ = [ 'read', 'readlines', 'bufnumber', ]
 
 def bufnumber(fpath):
     """ Return bufer number of fpath,
