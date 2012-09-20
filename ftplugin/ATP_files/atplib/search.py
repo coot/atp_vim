@@ -17,7 +17,7 @@ newcmd_pattern = re.compile(r'''
             \\(?:re)?newenvironment\s*{|
             \\(?:re)?newtheorem\s*{|
             \\def)
-        ([^#{}]*)                           # are necessary for \def statemtn
+        ([^#{}]*)                           # are necessary for \def statemnt
         ''', re.VERBOSE)
 
 def scan_preambule(file, pattern):
