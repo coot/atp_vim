@@ -32,7 +32,7 @@ endfunction
 
 function! <SID>ReadKeyword() " {{{
     let word = expand("<cword>")
-    let word = matchstr(word, '^\w\+')
+    let word = matchstr(word, '[a-zA-Z]\+')
     let line = getline(".")
     let col = col(".")
     for l in range(0, len(word))
@@ -57,6 +57,7 @@ endtry "}}}
 function! <SID>DsearchMap(bang) " {{{
     let word = <SID>ReadKeyword()
     call atplib#search#Dsearch(a:bang, word)
+    wincmd p
 endfunction " }}}
 
 " BibSearch:

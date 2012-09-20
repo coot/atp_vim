@@ -2203,7 +2203,9 @@ nmap [d, [D
 	cursors (in the same way as |atp-gD| does), |atp-[D| uses the bang
 	option of |atp-:Dsearch|.
 
-	It works likes |[d|, |[D| but handles multi line definitions.
+	It works likes |[d|, |[D| but handles multi line definitions. The also
+	jump back to the current buffer, while the command leaves in the
+	preview buffer.
 
 	Recommendation: you can make command alias to |:ds| with cmdalias plugin
 	(vimscript 746) in your |atprc| file.
@@ -2219,8 +2221,8 @@ nmap gD
 	It uses slightly more advanced technique than just expand("<cword>")
 	(which is |iskeywod| dependent) to get the keyword under the cursor:
 	first it takes expand("<cword>") and if the first character before it
-	is a backslash it is included, then only first word characters |\w|
-	(plush the backslash) are processed.
+	is a backslash it is included, then only [a-zA-Z] charecters (plus the
+	backslash) are processed.
 
 	Note: to find environment the cursor have to be over the environment
 	name rather than the '\begin' command. If you want to go to the

@@ -587,7 +587,7 @@ function! atplib#search#Dsearch(bang,...)
 	setl readonly
 	map <buffer> <silent> q	:bd<CR>
 	" Place signs:
-	if has("signs")
+	if has("signs") && len(signs) > 1
 	    sign unplace *
 	    for i in range(0,len(signs)-1)
 		try
