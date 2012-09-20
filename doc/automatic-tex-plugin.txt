@@ -2206,6 +2206,15 @@ nmap gD
 	files on the way. It finds definitions of commands, environments and
 	colors. You can use |CTRL-O| to return.
 
+	It uses slightly more advanced technique than just expand("<cword>")
+	(which is |iskeywod| dependent) to get the keyword under the cursor:
+	first it takes expand("<cword>") and if the first character before it
+	is a backslash it is included, then only first word characters |\w|
+	(plush the backslash) are processed.
+
+	Note: to find environment the cursor have to be over the environment
+	name rather than the '\begin' command.
+
 	Only available if vim is compiled with |+python| interface.
 
 *g:atp_DsearchMaxWindowHeight* = 15
