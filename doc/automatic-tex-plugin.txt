@@ -1257,8 +1257,9 @@ nmap <LocalLeader>e					/for other maps see |atp-:ShowErrors-maps|/
 :Cgetfile	
 	This works like |:cgetfile| command, but also filters errors from
 	quick fix list which are not recognised by |errorformat| (it is done
-	by |atp-:ShowErrors|). This is only useful with |g:atp_ParseLog|=1.
-	Otherwise it acts like |:cgetfile|. If you use cmdalias plugin
+	by |atp-:ShowErrors|). This is only useful with |g:atp_ParseLog|=1 and
+	when vim is not compiled with the patch 468, see |has-patch|
+	(otherwise the command is not provided). If you use cmdalias plugin
 	(vimscript 746) you can alias this command to cg (|:cg|) in |atprc|
 	file.
 
@@ -2188,7 +2189,9 @@ vmap <F4>
 	file might be highlighted).
 
 							*atp-:Dsearch*
+							*atp-[d* *atp-[D*
 :Dsearch[!] [/]{pattern}[/] 					
+nmap [d, [D
 	The {pattern} argument is optional. It is any vim pattern. Finds all
 	definitions which matches the pattern. It looks in the main file (only
 	in the preamble, unless the optional bang '!' is used) and all the
@@ -2196,15 +2199,22 @@ vmap <F4>
 	'ignorecase' and 'smartcase'. You can override them with '\C' (match
 	case what follows) and '\c' (ignore case in what follows).
 
-	It works likes [D but handles multi line definitions.
+	The maps |atp-[d| and |atp-[D| are reading the keyword under the
+	cursors (in the same way as |atp-gD| does), |atp-[D| uses the bang
+	option of |atp-:Dsearch|.
 
+	It works likes |[d|, |[D| but handles multi line definitions.
+
+	Recommendation: you can make command alias to |:ds| with cmdalias plugin
+	(vimscript 746) in your |atprc| file.
 							*atp-gD*
 nmap gD
-	This works like |gD|: it finds the first global definition of the
-	command under the cursor. It start from the first line of the main
-	project file (|b:atp_MainFile|) and goes down visiting all included
-	files on the way. It finds definitions of commands, environments and
-	colors. You can use |CTRL-O| to return.
+	This works like |gD| (with the difference that it searches in include
+	files as well): it finds the first global definition of the command
+	under the cursor. It start from the first line of the main project
+	file (|b:atp_MainFile|) and goes down visiting all included files on
+	the way. It finds definitions of commands, environments and colors.
+	You can use |CTRL-O| to return.
 
 	It uses slightly more advanced technique than just expand("<cword>")
 	(which is |iskeywod| dependent) to get the keyword under the cursor:
@@ -2213,7 +2223,8 @@ nmap gD
 	(plush the backslash) are processed.
 
 	Note: to find environment the cursor have to be over the environment
-	name rather than the '\begin' command.
+	name rather than the '\begin' command. If you want to go to the
+	reference definition (\label) use |CTRL-]|, see |atp-:Tags|.
 
 	Only available if vim is compiled with |+python| interface.
 

@@ -8,7 +8,17 @@ import subprocess
 
 __all__ = [ 'newcmd_pattern', 'scan_preambule', 'addext', 'kpsewhich_find' ]
 
-newcmd_pattern = re.compile(r'^(?:[^%]|\\%)*(?:\\definecolor\s*{|\\(?:re)?newcommand\s*{|\\providecommand\s*{|\\(?:re)?newenvironment\s*{|\\(?:re)?newtheorem\s*{|\\def)([^#{}]*)')
+newcmd_pattern = re.compile(r'''
+        ^(?:[^%]|\\%)*                      # comment lines
+        (?:
+            \\definecolor\s*{|
+            \\(?:re)?newcommand\s*{|
+            \\providecommand\s*{|
+            \\(?:re)?newenvironment\s*{|
+            \\(?:re)?newtheorem\s*{|
+            \\def)
+        ([^#{}]*)                           # are necessary for \def statemtn
+        ''', re.VERBOSE)
 
 def scan_preambule(file, pattern):
     """Scan_preambule for a pattern

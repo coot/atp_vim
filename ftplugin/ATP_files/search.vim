@@ -30,9 +30,7 @@ function! LocalCommands(write, ...)
 endfunction
 " }}}
 
-try " <SID>GlobalDefi (interface) {{{
-function! <SID>GlobalDefi()
-    exe "normal! m`"
+function! <SID>ReadKeyword() " {{{
     let word = expand("<cword>")
     let word = matchstr(word, '^\w\+')
     let line = getline(".")
@@ -46,11 +44,20 @@ function! <SID>GlobalDefi()
     if line[(col(".")-l-1)] == "\\"
         let word = "\\".word
     endif
-    let g:word = word
+    return word
+endfunction " }}}
+try " <SID>GlobalDefi (interface) {{{
+function! <SID>GlobalDefi()
+    exe "normal! m`"
+    let word = <SID>ReadKeyword()
     call atplib#search#GlobalDefi(word)
 endfunction
 catch /E127/
 endtry "}}}
+function! <SID>DsearchMap(bang) " {{{
+    let word = <SID>ReadKeyword()
+    call atplib#search#Dsearch(a:bang, word)
+endfunction " }}}
 
 " BibSearch:
 "{{{ variables
@@ -80,6 +87,8 @@ let g:kwflagsdict={ 	  '@a' : '@article',
 " Maps:
 nnoremap <silent> <Plug>BibSearchLast :call atplib#search#BibSearch("", b:atp_LastBibPattern, b:atp_LastBibFlags)<CR>
 nnoremap <silent> gD :call <SID>GlobalDefi()<CR>
+nnoremap <buffer> <silent> [d    :call <SID>DsearchMap("")<CR>
+nnoremap <buffer> <silent> [D    :call <SID>DsearchMap("!")<CR>
 
 " Commands And Highlightgs:
 " {{{

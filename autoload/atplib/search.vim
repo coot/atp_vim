@@ -557,7 +557,7 @@ function! atplib#search#Dsearch(bang,...)
 	    if a:bang == "!"
 		echomsg "[ATP:] definition not found."
 	    else
-		echomsg "[ATP:] definition not found in the preambule, try with a bang ! to search beyond."
+		echomsg "[ATP:] definition not found in the preambule, try [D or :Dsearch! to search beyond."
 	    endif
 	    echohl None
 	    return
