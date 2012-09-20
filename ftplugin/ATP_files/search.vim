@@ -55,7 +55,7 @@ endfunction
 catch /E127/
 endtry "}}}
 function! <SID>DsearchMap(bang) " {{{
-    let word = <SID>ReadKeyword()
+    let word = substitute(<SID>ReadKeyword(), '\', '\\\\', 'g')
     call atplib#search#Dsearch(a:bang, word)
     wincmd p
 endfunction " }}}
