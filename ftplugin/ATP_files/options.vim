@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Sep 19, 2012 at 09:16:16  +0100
+" Last Change: Thu Sep 20, 2012 at 12:32:56  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -170,11 +170,11 @@ endif
 " {{{ Vim options
 
 " undo_ftplugin
-let b:undo_ftplugin = "setlocal nrformats< complete< keywordprg< suffixes< comments< commentstring< define< include< suffixesadd< includeexpr<"
+let b:undo_ftplugin = "setlocal nrformats< complete< keywordprg< suffixes< comments< commentstring< define< include< suffixesadd< includeexpr< eventignore<"
 
 " Make CTRL-A, CTRL-X work over alphabetic characters:
 setl nrformats=alpha
-set  backupskip+=*.tex.project.vim
+setl  backupskip+=*.tex.project.vim
 
 " The vim option 'iskeyword' is adjust just after g:atp_separator and
 " g:atp_no_separator variables are defined.
@@ -198,21 +198,20 @@ exe "setlocal complete+=".
 " setlocal iskeyword+=\
 let suffixes = split(&suffixes, ",")
 if index(suffixes, ".pdf") == -1
-    setlocal suffixes+=.pdf
+    setl suffixes+=.pdf
 elseif index(suffixes, ".dvi") == -1
-    setlocal suffixes+=.dvi
+    setl suffixes+=.dvi
 endif
 " As a base we use the standard value defined in 
 " The suffixes option is also set after g:atp_tex_extensions is set.
 
 " Borrowed from tex.vim written by Benji Fisher:
     " Set 'comments' to format dashed lists in comments
-    setlocal comments=sO:%\ -,mO:%\ \ ,eO:%%,:%
-"     setlocal comments=n:%,s:%,m:%,e:%
+    setl comments=sO:%\ -,mO:%\ \ ,eO:%%,:%
 
     " Set 'commentstring' to recognize the % comment character:
     " (Thanks to Ajit Thakkar.)
-    setlocal commentstring=%%s
+    setl commentstring=%%s
 
     " Allow "[d" to be used to find a macro definition:
     " Recognize plain TeX \def as well as LaTeX \newcommand and \renewcommand .
@@ -226,13 +225,17 @@ endif
 	    \ . '\|DeclareMathOperator\s*{\=\s*'
 	    \ . '\|DeclareFixedFont\s*{\s*'
     if &l:filetype != "plaintex"
-	setlocal include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\)
+	if atplib#search#SearchPackage('subfiles')
+	    setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\\\|\\\\subfile\\s*{\\)
+	else
+	    setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\)
+	endif
     else
 	setlocal include=^[^%]*\\\\input
     endif
-    setlocal suffixesadd=.tex
+    setl suffixesadd=.tex
 
-    setlocal includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
+    setl includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
     " TODO set define and work on the above settings, these settings work with [i
     " command but not with [d, [D and [+CTRL D (jump to first macro definition)
     
@@ -1148,7 +1151,7 @@ if !exists("g:atp_amsmath")
     let g:atp_amsmath=atplib#search#SearchPackage('ams')
 endif
 if atplib#search#SearchPackage('amsmath') || g:atp_amsmath != 0 || atplib#search#DocumentClass(b:atp_MainFile) =~ '^ams'
-    exe "setlocal complete+=k".split(globpath(&rtp, "ftplugin/ATP_files/dictionaries/ams_dictionary"), "\n")[0]
+    exe "setl complete+=k".split(globpath(&rtp, "ftplugin/ATP_files/dictionaries/ams_dictionary"), "\n")[0]
 endif
 if !exists("g:atp_no_math_command_completion")
     let g:atp_no_math_command_completion = 0
@@ -1162,7 +1165,7 @@ endif
 for ext in g:atp_tex_extensions
     let suffixes = split(&suffixes, ",")
     if index(suffixes, ".".ext) == -1 && ext !~ 'mtc'
-	exe "setlocal suffixes+=.".ext
+	exe "setl suffixes+=.".ext
     endif
 endfor
 if !exists("g:atp_delete_output")
