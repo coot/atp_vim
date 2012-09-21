@@ -167,6 +167,18 @@ NEWS							*atp-news*
  ======================
  Changes in version 11.2
 <
+
+>
+ You can help me get new hardware, since my laptop is dying ...
+https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
+>
+ Thanks for your donation, any amount counts!
+
+		    Marcin Szamotulski
+<
+
+
+
  The default values of |g:atp_map_forward_motion_leader| has changed to "]"
  and |g:atp_map_backward_motion_leader| to "[".
 
