@@ -3680,10 +3680,10 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_TexOptions*
 >
  let b:atp_TexOptions	= "-synctex=1"			
-<	This is a comma ',' separated list of TeX compiler options. If you
-	want to set some additional options to your tex compiler you can use
-	this variable, note that '-output-directory' and '-interaction' are
-	set by ATP. 
+<	This variable is a string of TeX compiler options separated by a comma. 
+	If you want to set some additional options to your tex compiler you
+	can use this variable, note that '-output-directory' and
+	'-interaction' are set by ATP. 
 
 							*b:atp_OutDir*
 >
