@@ -2218,11 +2218,11 @@ nmap gD
 	the way. It finds definitions of commands, environments and colors.
 	You can use |CTRL-O| to return.
 
-	It uses slightly more advanced technique than just expand("<cword>")
-	(which is |iskeywod| dependent) to get the keyword under the cursor:
-	first it takes expand("<cword>") and if the first character before it
-	is a backslash it is included, then only [a-zA-Z] charecters (plus the
-	backslash) are processed.
+							*g:atp_iskeyword*
+	To get the keyword under the cursor, he 'iskeyword' is set to the
+	value of |g:atp_iskeyword| variable. By default it will only match
+	[a-zA-Z] and the backslash. At the end your 'iksyeword' setting will
+	be restored.
 
 	Note: to find environment the cursor have to be over the environment
 	name rather than the '\begin' command. If you want to go to the

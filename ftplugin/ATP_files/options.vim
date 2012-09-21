@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Sep 20, 2012 at 12:32:56  +0100
+" Last Change: Fri Sep 21, 2012 at 08:59:51  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1260,6 +1260,9 @@ endif
 if !exists("g:atp_ProgressBarFile")
     " Only needed if g:atp_callback == 0
     let g:atp_ProgressBarFile = tempname()
+endif
+if !exists("g:atp_iskeyword")
+    let g:atp_iskeyword = '65-90,97-122,\'
 endif
 " }}}
 

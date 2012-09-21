@@ -199,7 +199,6 @@ python << EOF
 import vim
 import re
 import os
-from atplib.atpvim import bufnumber
 from atplib.atpvim import readlines
 from atplib.search import scan_preambule
 from atplib.search import addext

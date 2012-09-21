@@ -30,32 +30,16 @@ function! LocalCommands(write, ...)
 endfunction
 " }}}
 
-function! <SID>ReadKeyword() " {{{
-    let word = expand("<cword>")
-    let word = matchstr(word, '[a-zA-Z]\+')
-    let line = getline(".")
-    let col = col(".")
-    for l in range(0, len(word))
-        let str = line[(col-l):]
-        if str[:len(word)-1] == word
-            break
-        endif
-    endfor
-    if line[(col(".")-l-1)] == "\\"
-        let word = "\\".word
-    endif
-    return word
-endfunction " }}}
 try " <SID>GlobalDefi (interface) {{{
 function! <SID>GlobalDefi()
     exe "normal! m`"
-    let word = <SID>ReadKeyword()
+    let word = atplib#TexKeyword()
     call atplib#search#GlobalDefi(word)
 endfunction
 catch /E127/
 endtry "}}}
 function! <SID>DsearchMap(bang) " {{{
-    let word = substitute(<SID>ReadKeyword(), '\', '\\\\', 'g')
+    let word = substitute(atplib#TexKeyword(), '\', '\\\\', 'g')
     call atplib#search#Dsearch(a:bang, word)
     wincmd p
 endfunction " }}}

@@ -700,4 +700,12 @@ function! atplib#Add(list,what)
     return new
 endfunction
 "}}}1
+" String Functions:
+function! atplib#TexKeyword() " {{{
+    let isk = &isk
+    let &isk = g:atp_iskeyword
+    let word = expand("<cword>")
+    let &isk = isk
+    return word
+endfunction " }}}
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
