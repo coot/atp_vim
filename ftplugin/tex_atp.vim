@@ -3,10 +3,10 @@
 " Web Page:		http://atp-vim.sourceforge.net
 " Mailing List: 	atp-vim-list [AT] lists.sourceforge.net
 " Do NOT DELETE the line just below, it is used by :UpdateATP (':help atp-:UpdateATP')
-" Time Stamp: 21-09-12_12-38
+" Time Stamp: 21-09-12_18-33
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language:	    tex
-" Last Change: Tue Jul 31, 2012 at 08:47:16  +0100
+" Last Change: Sat Sep 22, 2012 at 00:22:55  +0100
 " GetLatestVimScripts: 2945 62 :AutoInstall: tex_atp.vim
 " GetLatestVimScripts: 884 1 :AutoInstall: AutoAlign.vim
 " Copyright Statement: 
@@ -49,6 +49,17 @@ let saved_cpo = &cpo
 if &cpo =~ '<'
     setl cpo-=<
 endif
+
+" Set Python path.
+if has("python") || has("python3")
+let atp_path = fnamemodify(expand('<sfile>'), ':p:s?tex_atp.vim$?ATP_files?')
+python << EOF
+import vim
+import sys
+sys.path.insert(0, vim.eval('atp_path'))
+EOF
+endif
+
 
 	" Source Project Script
 	runtime ftplugin/ATP_files/project.vim

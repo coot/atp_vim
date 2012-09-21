@@ -2,13 +2,22 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Fri Sep 21, 2012 at 08:59:51  +0100
+" Last Change: Sat Sep 22, 2012 at 00:17:52  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
 
 " Some options (functions) should be set once:
 let s:did_options 	= exists("s:did_options") ? 1 : 0
+
+if has("python") || has("python3")
+let atp_path = fnamemodify(expand('<sfile>'), ':p:h')
+python << EOF
+import vim
+import sys
+sys.path.insert(0, vim.eval('atp_path'))
+EOF
+endif
 
 "{{{ tab-local variables
 " We need to know bufnumber and bufname in a tabpage.
@@ -2781,15 +2790,6 @@ endfunction "}}}
 
 " VIM PATH OPTION: 
 exe "setlocal path+=".substitute(g:texmf."/tex,".join(filter(split(globpath(b:atp_ProjectDir, '**'), "\n"), "isdirectory(expand(v:val))"), ","), ' ', '\\\\\\\ ', 'g')
-
-if has("python") || has("python3")
-let atp_path = fnamemodify(expand('<sfile>'), ':p:h')
-python << EOF
-import vim
-import sys
-sys.path.insert(0, vim.eval('atp_path'))
-EOF
-endif
 
 " Some Commands:
 " {{{
