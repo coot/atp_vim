@@ -2317,16 +2317,16 @@ endif
 
     if (exists("g:atp_StatusLine") && g:atp_StatusLine == '1') || !exists("g:atp_StatusLine")
 	" Note: ctoc doesn't work in include files (and it is slow there).
-	if b:atp_StatusCurSection 
+	if b:atp_statusCurSection 
 	    if exists("b:TypeDict")
-		let b:atp_StatusCurSection = !( len(filter(copy(b:TypeDict), 'v:val == "input"')) )
+		let b:atp_statusCurSection = !( len(filter(copy(b:TypeDict), 'v:val == "input"')) )
 	    else
-		let b:atp_StatusCurSection = atplib#FullPath(b:atp_MainFile) != expand("%:p")
+		let b:atp_statusCurSection = atplib#FullPath(b:atp_MainFile) != expand("%:p")
 	    endif
 	endif
 	augroup ATP_Status
 	    au!
-	    au BufEnter,BufWinEnter,TabEnter *.tex 	:call ATPStatus(0,b:atp_StatusCurSection)
+	    au BufEnter,BufWinEnter,TabEnter *.tex 	:call ATPStatus(0,b:atp_statusCurSection)
 	augroup END
     endif
 

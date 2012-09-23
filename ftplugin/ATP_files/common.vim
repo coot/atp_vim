@@ -299,7 +299,7 @@ function! ATPStatus(command,...) "{{{
 	    let g:status_OutDir = ""
 	    let g:atp_statusOutDir = 0
 	endif
-	let b:atp_StatusCurSection = ( a:0 >= 2 ? a:2 : 0 )
+	let b:atp_statusCurSection = ( a:0 >= 2 ? a:2 : 0 )
     else
 	" This is run by the autocommand group ATP_Status
 	if g:atp_statusOutDir
@@ -307,12 +307,12 @@ function! ATPStatus(command,...) "{{{
 	else
 	    let g:status_OutDir = ""
 	endif
-	let b:atp_StatusCurSection = ( a:0 >= 1 ? a:1 : 0 )
+	let b:atp_statusCurSection = ( a:0 >= 1 ? a:1 : 0 )
     endif
     " There is a bug in CTOC() which prevents statusline option from being set right.
     " This is a dirty workaround:
 "     silent echo CTOC("return")
-    let status_CTOC	= ( b:atp_StatusCurSection && &l:filetype =~ '^\(ams\)\=tex' ? '%{CTOC("return")}' : '' )
+    let status_CTOC	= ( b:atp_statusCurSection && &l:filetype =~ '^\(ams\)\=tex' ? '%{CTOC("return")}' : '' )
     if g:atp_statusNotifHi > 9 || g:atp_statusNotifHi < 0
 	let g:atp_statusNotifHi = 9
 	if !s:errormsg
