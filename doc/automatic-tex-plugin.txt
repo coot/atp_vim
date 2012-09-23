@@ -2326,9 +2326,12 @@ nmap gD
 	compilation: see |atp-status-line-notification|, |g:atp_ProgressBar|.
 	This function is called at startup unless the variable
 	'|g:atp_statusline|=0' is set. The status is set by the autocommand: >
-	    au BufWinEnter,BufWinEnter,TabEnter *.tex :call ATPStatus()
+	    au BufWinEnter,BufWinEnter,TabEnter *.tex :call ATPStatus(0,b:atp_StatusCurSection)
 <	In this way every opened window with a '*.tex' file will get the correct
 	status line.
+							*b:atp_StatusCurSection*
+	If |g:atp_StatusCurSection| is set to 1 (the default) the current section will be
+	put in the status line. Some times it is slow though.
 
 	The command respects the |'ruler'| vim option.
 

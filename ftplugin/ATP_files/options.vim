@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Sep 22, 2012 at 00:17:52  +0100
+" Last Change: Sun Sep 23, 2012 at 14:25:44  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -313,7 +313,9 @@ let s:optionsDict= {
 		\ "atp_MakeidxReturnCode"	: 0,
 		\ "atp_BibtexOutput"		: "",
 		\ "atp_MakeidxOutput"		: "",
-		\ "atp_DocumentClass"		: atplib#search#DocumentClass(b:atp_MainFile)}
+		\ "atp_DocumentClass"		: atplib#search#DocumentClass(b:atp_MainFile),
+		\ "atp_StatusCurSection"	: 1,
+		\ }
 
 " Note: the above atp_OutDir is not used! the function s:SetOutDir() is used, it is just to
 " remember what is the default used by s:SetOutDir().
@@ -2315,14 +2317,16 @@ endif
 
     if (exists("g:atp_StatusLine") && g:atp_StatusLine == '1') || !exists("g:atp_StatusLine")
 	" Note: ctoc doesn't work in include files (and it is slow there).
-	if exists("b:TypeDict")
-	    let g:atp_ctoc = !( len(filter(copy(b:TypeDict), 'v:val == "input"')) )
-	else
-	    let g:atp_ctoc = atplib#FullPath(b:atp_MainFile) != expand("%:p")
+	if b:atp_StatusCurSection 
+	    if exists("b:TypeDict")
+		let b:atp_StatusCurSection = !( len(filter(copy(b:TypeDict), 'v:val == "input"')) )
+	    else
+		let b:atp_StatusCurSection = atplib#FullPath(b:atp_MainFile) != expand("%:p")
+	    endif
 	endif
 	augroup ATP_Status
 	    au!
-	    au BufEnter,BufWinEnter,TabEnter *.tex 	call ATPStatus(0,g:atp_ctoc)
+	    au BufEnter,BufWinEnter,TabEnter *.tex 	:call ATPStatus(0,b:atp_StatusCurSection)
 	augroup END
     endif
 
