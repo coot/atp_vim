@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 24, 2012 at 11:38:52  +0100
+" Last Change: Mon Sep 24, 2012 at 18:22:11  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -822,7 +822,7 @@ if !exists("g:atp_CommentLeader")
     let g:atp_CommentLeader="% "
 endif
 if !exists("g:atp_MapCommentLines")
-    let g:atp_MapCommentLines = 1
+    let g:atp_MapCommentLines = empty(globpath(&rtp, 'plugin/EnhancedCommentify.vim').globpath(&rtp,'NERD_commenter.vim').globpath(&rtp, 'commenter.vim'))
 endif
 if !exists("g:atp_XpdfSleepTime")
     let g:atp_XpdfSleepTime = "0"

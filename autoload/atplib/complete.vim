@@ -1952,9 +1952,9 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	"{{{4 --------- close environments
 	elseif (!normal_mode &&  index(g:atp_completion_active_modes, 'close environments') != '-1' ) ||
 		    \ (normal_mode && index(g:atp_completion_active_modes_normal_mode, 'close environments') != '-1' )
-	    let completion_method='close_env X'
+	    let completion_method='close_env'
 	    " DEBUG:
-	    let b:comp_method='close_env' 
+	    let b:comp_method='close_env X' 
 	    if g:atp_debugTabCompletion
 		call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	    endif
@@ -1976,7 +1976,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    return ''
 	endif
 	let g:time_TabCompletion=reltimestr(reltime(time))
-	return ''
 	"}}}3
     endif
     let b:completion_method = ( exists("completion_method") ? completion_method : 'completion_method does not exists' )
