@@ -165,7 +165,14 @@ for all the defined functions :help atp*()CTRL-d, mappings: :help atp-mapCTRL-d
 NEWS							*atp-news*
 >
  ======================
- Changes in version 11.2
+ Changes in version 12.1
+<
+ |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
+ (begin/end which might be slow on a slow computer).
+
+>
+ ======================
+ Changes in version 12
 <
 
 >
@@ -5610,14 +5617,14 @@ COLOUR HIGHLIGHTING AND SYNTAX GROUPS			*atp-highlight*
 
 When the cursor is positioned on \begin{envname} or \end{envname} both
 corresponding \begin:\end get highlighted with syntax group MatchParen. 
-To disable it type this in ex mode or put it in your atprc file: >
-	augroup LatexBox_HighlightPairs 
-	     au!
-	augroup END
+							*g:atp_HighlightMatchingPair*
+>
+ g:atp_HighlightMatchingPair = 1
 <
+If you set this variable to 0 highlighting will be turned off.
 
-There is a colour scheme included: coots-beauty-256. You need 256 colours to use
-it (in the terminal). 
+There is a colour scheme included: coots-beauty-256. You need 256 colours to
+use it (in the terminal). 
 
 These are the highlights groups defined for various files and the default
 links:

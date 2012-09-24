@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Sep 23, 2012 at 14:25:44  +0100
+" Last Change: Mon Sep 24, 2012 at 11:38:52  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -314,7 +314,7 @@ let s:optionsDict= {
 		\ "atp_BibtexOutput"		: "",
 		\ "atp_MakeidxOutput"		: "",
 		\ "atp_DocumentClass"		: atplib#search#DocumentClass(b:atp_MainFile),
-		\ "atp_StatusCurSection"	: 1,
+		\ "atp_statusCurSection"	: 1,
 		\ }
 
 " Note: the above atp_OutDir is not used! the function s:SetOutDir() is used, it is just to
@@ -1274,6 +1274,9 @@ if !exists("g:atp_ProgressBarFile")
 endif
 if !exists("g:atp_iskeyword")
     let g:atp_iskeyword = '65-90,97-122,\'
+endif
+if !exists("g:atp_HighlightMatchingPair")
+    let g:atp_HighlightMatchingPair = 1
 endif
 " }}}
 

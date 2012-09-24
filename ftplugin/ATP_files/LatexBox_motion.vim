@@ -514,6 +514,10 @@ endfunction
 " 	winsaveview()['topline'] 	returns the top line
 function! <SID>HighlightMatchingPair()
 
+	if !g:atp_HighlightMatchingPair
+	    return
+	endif
+
 	2match none
 
 	if LatexBox_InComment()
