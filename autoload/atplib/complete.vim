@@ -1643,15 +1643,15 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 
 " {{{2 SET COMPLETION METHOD
     " {{{3 --------- command
-    if o > n && o > s && 
-	\ pline !~ '\%(input\s*{[^}]*$\|include\%(only\)\=\s*{[^}]*$\|[^\\]\\\\[^\\]$\)' &&
-	\ pline !~ '\\\@<!\\$' &&
-	\ begin !~ '{\|}\|,\|-\|\^\|\$\|(\|)\|&\|-\|+\|=\|#\|:\|;\|\.\|,\||\|?$' &&
-	\ begin !~ '^\[\|\]\|-\|{\|}\|(\|)' &&
-	\ cbegin =~ '^\\' && !normal_mode &&
+    if index(g:atp_completion_active_modes, 'commands') != -1 &&
+	\ cbegin[0] == '\' && !normal_mode &&
+	\ o > n && o > s && 
 	\ l !~ '\\\%(no\)\?cite[^}]*$' &&
 	\ l !~ '\\ref\s*{\S*$' &&
-	\ index(g:atp_completion_active_modes, 'commands') != -1
+	\ pline !~ '\\\@<!\\$' &&
+	\ begin !~ '^\[\|\]\|-\|{\|}\|(\|)' &&
+	\ pline !~ '\%(input\s*{[^}]*$\|include\%(only\)\=\s*{[^}]*$\|[^\\]\\\\[^\\]$\)' &&
+	\ begin !~ '{\|}\|,\|\^\|\$\|(\|)\|&\|-\|+\|=\|#\|:\|;\|\.\|,\||\|?$'
 	" in this case we are completing a command
 	" the last match are the things which for sure do not ends any
 	" command. The pattern '[^\\]\\\\[^\\]$' do not matches "\" and "\\\",
@@ -3308,7 +3308,8 @@ from atplib.completion import *
 def list_int(L):
     return map(lambda x: int(x), L)
 
-completion_limits = list_int(vim.eval(g:atp_completion_limits))
+completion_limits = list_int(vim.eval("g:atp_completion_limits"))
+completion_active_modes = vim.eval("g:atp_completion_active_modes")
 
 cwindow = vim.current.window
 pos = cwindow.cursor
@@ -3346,7 +3347,19 @@ ppline = l[c:]
 limit_line = max(1,pos[1]-completion_limits[1])
 
 # SET COMPLETION METHOD {{{
-if o > n and o > s and re.search(
+if ('commands' in completion_atcive_modes and
+    o > n and o > s and
+    cbegin[0] == "\\" and
+    not re.search(l, cite2_pat) and
+    not re.search(l, ref_pat) and
+    not re.search(input_pat, pline) and
+    not re.search(bracket_pat, begin) and
+    not re.search(r'(?<!\\)\\$', pline) and
+    not re.search(delim_pat, begin)
+   ):
+   completion_method = 'command'
+elif ( ):
+
 # }}}
 
 EOF
