@@ -3295,4 +3295,60 @@ endfunction
 catch /E127:/
 endtry
 " }}}1
+function! TabCompletion_py(expert_mode,...)
+    let time=reltime()
+    if a:0 >= 1
+	let normal_mode=a:1
+    endif
+python << EOF
+import vim
+import re
+from atplib.completion import *
+
+def list_int(L):
+    return map(lambda x: int(x), L)
+
+completion_limits = list_int(vim.eval(g:atp_completion_limits))
+
+cwindow = vim.current.window
+pos = cwindow.cursor
+line = vim.current.buffer[pos[0]-1]
+l = line[:pos[1]]
+n = l.index('{')
+m = l.index(',')
+o = l.index('\\')
+s = l.index(' ')
+p = l.index('[')
+r = l.index('=')
+match = re.search(cite_pat, l)
+if match:
+    c = re.search(cite_pat, l).start() # cite pat is imported from atplib.completion
+else:
+    c = -1
+a = len(l)-l[::-1].index('=')
+nr = max(n,m,o,s,p)
+color_nr = max(nr,r)
+
+abegin = l[a:]
+begin = l[nr+1:]
+cmd_val_begin = l[max(nr+1,r+1):]
+color_begin = l[color_nr+1:]
+cbegin = l[nr:]
+match = re.search(r'\b\w*$', l)
+if match:
+    tbegin = match.group()
+else:
+    tbegin = ''
+obegin = l[o:]
+ebegin = l[max(r,m,n)+1:]
+pline = l[:nr]
+ppline = l[c:]
+limit_line = max(1,pos[1]-completion_limits[1])
+
+# SET COMPLETION METHOD {{{
+if o > n and o > s and re.search(
+# }}}
+
+EOF
+endfun
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
