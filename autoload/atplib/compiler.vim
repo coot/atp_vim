@@ -262,8 +262,7 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
     elseif b:atp_Viewer == "okular"
 	let [ page_nr, y_coord, x_coord ] = atplib#compiler#GetSyncData(line, col, a:main_file)
 	" This will not work in project files. (so where it is mostly needed.) 
-	let sync_cmd = "okular --unique ".shellescape(expand("%:p:r")).".pdf\\#src:".line.shellescape(expand("%:p"))." &"
-	let sync_args = " ".shellescape(expand("%:p:r")).".pdf\\#src:".line.shellescape(expand("%:p"))." "
+	let sync_cmd = "okular --unique ".shellescape(fnamemodify(main_file, ":p:r").".pdf")."\\#src:".line.shellescape(expand("%:p"))." &"
 	if !dryrun
 	    call system(sync_cmd)
 	    call atplib#compiler#SyncShow(page_nr, y_coord)
@@ -294,7 +293,6 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
 		\ " --remote-wait +%l %f' -sourceposition ". 
 		\ line.":".col.shellescape(fnameescape(fnamemodify(expand("%"),":p"))). 
 		\ " ".fnameescape(output_file)." &"
-	let sync_args = " -sourceposition ".line.":".col.shellescape(fnameescape(fnamemodify(expand("%"),":p")))." "
 	if !dryrun
 	    call system(sync_cmd)
 	endif
