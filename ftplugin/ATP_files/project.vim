@@ -46,7 +46,6 @@ let s:windows	= has("win16") || has("win32") || has("win64") || has("win95")
 if !exists("s:project_Load")
     " Load once in s:LoadScript() function
     let s:project_Load	= {}
-    let g:project_Load	= s:project_Load
 endif
 if !exists("g:atp_CommonScriptDirectory")
     let g:atp_CommonScriptDirectory	= expand('<sfile>:p:h')
