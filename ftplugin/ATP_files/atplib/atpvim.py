@@ -22,10 +22,13 @@ def read(file_path):
     if buffer and int(vim.eval('bufloaded(%d)' % buffer.number)):
         return "\n".join(buffer)
 
-    with open(file_path, 'r') as fo:
-        # we are not decoding: since we have to assume that files are in &encoding
-        # vim stores buffers, variables, ... in &encoding.
-        return fo.read()
+    try:
+        with open(file_path, 'r') as fo:
+            # we are not decoding: since we have to assume that files are in &encoding
+            # vim stores buffers, variables, ... in &encoding.
+            return fo.read()
+    except IOError:
+        return ""
 
 def readlines(file_path):
     """ Read lines from fname, if the fname is loaded get the buffer."""
@@ -34,7 +37,10 @@ def readlines(file_path):
     if buffer and int(vim.eval('bufloaded(%d)' % buffer.number)):
         return buffer
 
-    with open(file_path, 'r') as fo:
-        # we are not decoding: since we have to assume that files are in &encoding
-        # and vim stores buffers, variables, ... in &encoding.
-        return fo.read().splitlines()
+    try:
+        with open(file_path, 'r') as fo:
+            # we are not decoding: since we have to assume that files are in &encoding
+            # and vim stores buffers, variables, ... in &encoding.
+            return fo.read().splitlines()
+    except IOError
+        return []

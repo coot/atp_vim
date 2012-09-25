@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Sep 25, 2012 at 09:08:50  +0100
+" Last Change: Tue Sep 25, 2012 at 20:52:55  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -286,7 +286,7 @@ let s:optionsDict= {
 		\ "atp_updatetime_normal"	: 2000,
 		\ "atp_MaxProcesses"		: 3,
 		\ "atp_KillYoungest"		: 0,
-		\ "atp_ProjectScript"		: ( fnamemodify(b:atp_MainFile, ":e") != "tex" ? "0" : "1" ),
+		\ "atp_ProjectScript"		: ( fnamemodify(b:atp_MainFile, ":e") != "tex" || stridx(expand('%'), 'fugitive:') == 0 ? "0" : "1" ),
 		\ "atp_Viewer" 			: has("win26") || has("win32") || has("win64") || has("win95") || has("win32unix") ? "AcroRd32.exe" : ( has("mac") || has("macunix") ? "open" : "okular" ), 
 		\ "atp_TexFlavor" 		: &l:filetype, 
 		\ "atp_XpdfServer" 		: fnamemodify(b:atp_MainFile,":t:r"), 

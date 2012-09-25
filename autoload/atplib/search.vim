@@ -1803,7 +1803,10 @@ function! atplib#search#SearchPackage(name,...)
     endif
     let cwd = getcwd()
     if exists("b:atp_ProjectDir") && getcwd() != b:atp_ProjectDir
-	exe "lcd " . fnameescape(b:atp_ProjectDir)
+	try
+	    exe "lcd " . fnameescape(b:atp_ProjectDir)
+	catch /E344/
+	endtry
     endif
 
     if getbufvar("%", "atp_MainFile") == ""
@@ -2269,7 +2272,10 @@ def preambule_end(file):
 def bufnumber(file):
 
     cdir = os.path.abspath(os.curdir)
-    os.chdir(project_dir)
+    try:
+	os.chdir(project_dir)
+    except OSError:
+	return 0
     for buf in vim.buffers:
         # This requires that we are in the directory of the main tex file:
         if buf.name == os.path.abspath(file):

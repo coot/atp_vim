@@ -211,9 +211,13 @@ function! atplib#FullPath(file_name) "{{{1
 	    catch /E344:/
 		" If project_dir points to non existing path
 		" this will show not the right place:
-		echohl ErrorMsg
-		echomsg "E344: in atplib#FullPath(): b:atp_ProjectDir=".project_dir." from buffer ".bufname." does not exist."
-		echohl Normal
+		if stridx(project_dir, 'fugitive:') == 0
+		    return a:file_name
+		else
+		    echohl ErrorMsg
+		    echomsg "E344: in atplib#FullPath(): b:atp_ProjectDir=".project_dir." from buffer ".bufname." does not exist."
+		    echohl Normal
+		endif
 		let file_path = fnamemodify(a:file_name, ":p")
 	    endtry
 	else
