@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 24, 2012 at 18:22:11  +0100
+" Last Change: Tue Sep 25, 2012 at 09:08:50  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1277,6 +1277,9 @@ if !exists("g:atp_iskeyword")
 endif
 if !exists("g:atp_HighlightMatchingPair")
     let g:atp_HighlightMatchingPair = 1
+endif
+if !exists("g:atp_SelectInlineMath_withSpace")
+    let g:atp_SelectInlineMath_withSpace = 0
 endif
 " }}}
 

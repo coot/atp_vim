@@ -62,20 +62,15 @@ SOURCEFORGE						*atp-sourceforge*
   - The project is hosted on SourceForge:
     http://sourceforge.net/projects/atp-vim/
 
-DONATE     						*atp-donate*
+SUPPORT     						*atp-support*
     You can [DONATE] for this project through your [PayPal] account (my email
-    is <mszamot [AT] gmail [dot] com>). This will be highly appreciated. You
-    can also feel like you are supporting my [PhD] in Mathematics :). Whether
-    you donate or not you are always cordially invited to give suggestions,
-    feature requests, bug reports or just to write that you like it or not :).
+    is <mszamot [AT] gmail [dot] com>). This will be highly appreciated.
+    I have a problem with my hardware now, and the donations will help to
+    solve it. This is [quite_an_issue] for me now so thanks a lot for you
+    support.
 							Thank You. ~
     You can use this link:							
     https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
-
-    Note: The donations are accepted through PayPal, if you are from Europe
-    and you want to donate Euro, use your PayPal account rather than
-    SourceForge link where you cannot donate Euro (avoiding twice money
-    exchange).
 
   							*atp-mailing-list*
   - There is a mailing list which will serve for: feature requests, bug
@@ -167,24 +162,32 @@ NEWS							*atp-news*
  ======================
  Changes in version 12.1
 <
- |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
- (begin/end which might be slow on a slow computer).
-
->
- ======================
- Changes in version 12
-<
 
 >
  You can help me get new hardware, since my laptop is dying ...
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
 >
- Thanks for your donation, any amount counts!
+ This is quite important issue for me these days so if you can donate just a few
+ pennies ...  
+
+ Thanks for your donation,
 
 		    Marcin Szamotulski
 <
 
 
+ |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
+ (begin/end which might be slow on a slow computer).
+
+ A few bug fixes.
+
+ If you set |g:atp_SelectInlineMath_withSpace|=1 |atp-im| will select the
+ space just after/before \(:\).
+
+>
+ ======================
+ Changes in version 12
+<
 
  The default values of |g:atp_map_forward_motion_leader| has changed to "]"
  and |g:atp_map_backward_motion_leader| to "[".
@@ -1895,39 +1898,31 @@ map <LocalLeader>L
 <       you can turned labels into named destinations.
 
 
-							*atp-:F*
-:[count]F {arg}							
+							*atp-:F* *atp-]]*
+:[count]F {arg}
+nmap [count]]]
 	Go (forward) to {arg}, {arg} might be: part, section, subsection,
-	subsubsection, and defined environment. You can use command completion
-	which uses all the locally defined environments.
+	subsubsection, defined environment name. You can use command
+	completion which uses all the locally defined environments.
 
-							*atp-:B*
+							*atp-:B* *atp-[[*
 :[count]B {arg}
-	Go (backward) to {arg}, like above |atp-:F|.
+nmap [count][[
+	Go backward to {arg}, like above |atp-:F|.
 
-
-							*atp-:NEnv* *atp-]]*
-:NEnv {environment}
-:[count]F {environment}
-map [count]]]
-	Move to next environment, for example ':NEnv definition'. Completion
-	is set, which finds environments defined in current tex source file.
-	This function omits environments in comment lines.
-
+							*atp-[m* *atp-[M*
 							*atp-]m* *atp-]M*
-	{environment} can be also math or displayedmath. For convenience
-	there are maps: }m and }M respectively.
+nmap [count]]m [count]]M
+nmap [count][m [count][M
+	Got to next/previous math environment, with the captial M go to
+	displayed math environment.
 
 	If g:atp_mapNn is set to one (see |atp-:ToggleNn|) then this command
 	is using |atp-:S|.
 
-							*atp-:PEnv* *atp-[[*
-:PEnv {environment}
-[count]:B {environment}
-map [count][[
-	Move to previous environment, for example ':NEnv definition'. Completion
-	is set, which finds environments defined in current tex source file.
-	This function omits environments in comment lines.
+							*atp-%*
+nmap %
+	Jump to the matching pair (:), {:}, [:], \begin:\end.
 
  							*atp-]e* *atp-[e*
 nmap [count]]e
@@ -1946,17 +1941,7 @@ nmap [count]]f [count]]F
 nmap [count][f [count][F
 	These two maps are only valid in beamer. They goto next/previous
 	frame. ]F and [F are using |zt| command.
-    	
 						
-
-
-							*atp-[m* *atp-[M*
-	{environment} can be also math or displayedmath. For convenience
-	there are maps: {m and {M respectively.
-
-	If g:atp_mapNn is set to one (see |atp-:ToggleNn|) then this command
-	is using |atp-:S|.
-
 							*atp-:NextSection*
 							*atp-:NPart*	*atp-]p*
 							*atp-:NChap*	*atp-]c*
@@ -4065,9 +4050,7 @@ WRITING PROJECTS					*atp-ProjectFiles*
 	Vim |search()| function (which looks only in the current buffer).
 	These are: 
 	|atp-:NPart|, |atp-:NChap|, |atp-:NSec|, |atp-:NSSec|, |atp-:NSSSec|, 
-	|atp-:PPart|, |atp-:PChap|, |atp-:PSec|, |atp-:PSSec|, |atp-:PSSSec|, 
-	|atp-:NEnv|,
-	|atp-:PEnv|.
+	|atp-:PPart|, |atp-:PChap|, |atp-:PSec|, |atp-:PSSec|, |atp-:PSSSec|.
 
 	The default value of |g:atp_mapNn| is 0.
 
@@ -5115,9 +5098,18 @@ EDITING TOOLS							*atp-editing*
 		of an environment, so it can be environment name or an option
 		just after. 	
 
-							*atp-vim* *atp-vam*
-	im, am	selects mathematics.
-							*atp-vip* *atp-vap*
+							*atp-im* *atp-am*
+	im, am	selects mathematics operators: you can use "vim" to select
+	inlnie math, "xim" to remove it "cim", ...
+							*g:atp_SelectInlineMath_withSpace*
+>
+  let g:atp_SelectInlineMath_withSpace = 0
+<       By default |atp-im| will not select spaces just after, before
+	\(:\) (and other math environments), i.e. in \(  xxx  \) only xxx will
+	be selected. If you set this variable to 1 always whole inner part of
+	math will be selected.
+
+							*atp-ip* *atp-ap*
 	ip, ap  selects paragraph. 
 		In inner mode (ip): from the nearest >
 			\begin, \end, \par, \newline, ^\s*% (comment) or empty line (top) 
@@ -5130,8 +5122,6 @@ EDITING TOOLS							*atp-editing*
 <						
 	ip over a commented line will match all the comment like =c
 
-							*atp-omap-im* *atp-omap-am*
-							*atp-omap-ip* *atp-omap-ap*
 	The correspondin operator maps are defined. For example you can use
 	xim to delete the inner part of math mode \(:\), etc.
 
