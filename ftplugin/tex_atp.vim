@@ -3,7 +3,7 @@
 " Web Page: http://atp-vim.sourceforge.net
 " Mailing List:	atp-vim-list [AT] lists.sourceforge.net
 " Do NOT DELETE the line just below, it is used by :UpdateATP (':help atp-:UpdateATP')
-" Time Stamp: 21-09-12_18-33
+" Time Stamp: 26-09-12_19-33
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
 " Last Change: Tue Sep 25, 2012 at 21:04:09  +0100
@@ -45,7 +45,7 @@ elseif  stridx(expand("%"), 'fugitive:') == 0
 endif
 
 let b:did_ftplugin	= 1
-let g:loaded_AutomaticLatexPlugin = "12"
+let g:loaded_AutomaticLatexPlugin = "12.1"
 
 if !exists("g:atp_reload_functions")
 	let g:atp_reload_functions = 0

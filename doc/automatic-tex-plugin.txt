@@ -1,6 +1,6 @@
-*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 21 September 2012
+*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 26 September 2012
 
-	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 12)
+	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 12.1)
 			by Marcin Szamotulski
 		    mszamot [AT] gmail [DOT] com
 -----------------------------------------------------------------------------
@@ -63,15 +63,16 @@ SOURCEFORGE						*atp-sourceforge*
     http://sourceforge.net/projects/atp-vim/
 
 SUPPORT     						*atp-support*
+>
     You can [DONATE] for this project through your [PayPal] account (my email
     is <mszamot [AT] gmail [dot] com>). This will be highly appreciated.
     I have a problem with my hardware now, and the donations will help to
-    solve it. This is [quite_an_issue] for me now so thanks a lot for you
+    solve it. This is quite_an_issue for me now so thanks a lot for you
     support.
 							Thank You. ~
     You can use this link:							
     https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
-
+<
   							*atp-mailing-list*
   - There is a mailing list which will serve for: feature requests, bug
     reports, suggestions. You can subscribe at:
@@ -170,7 +171,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  This is quite important issue for me these days so if you can donate just a few
  pennies ...  
 
- Thanks for your donation,
+ Thanks for your support,
 
 		    Marcin Szamotulski
 <
@@ -179,10 +180,10 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
  (begin/end which might be slow on a slow computer).
 
- A few bug fixes.
-
  If you set |g:atp_SelectInlineMath_withSpace|=1 |atp-im| will select the
  space just after/before \(:\).
+
+ A few reported bug were fixed.
 
 >
  ======================
