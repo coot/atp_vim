@@ -1708,7 +1708,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	endif
     "{{{3 --------- pagenumbering
-    elseif l =~ '\\pagenumbering{[^}]*$' &&
+    elseif l =~ '\\pagenumbering\s*{[^}]*$' &&
 		\ index(g:atp_completion_active_modes, 'page numberings') != -1 
 	let completion_method='pagenumbering'
 	" DEBUG:
@@ -3347,8 +3347,8 @@ pline = l[:nr]
 ppline = l[c:]
 limit_line = max(1,pos[1]-completion_limits[1])
 
-# SET COMPLETION METHOD {{{
-if ('commands' in completion_atcive_modes and
+# SET COMPLETION METHOD {{{1
+if ('commands' in completion_atcive_modes and # {{{2
     not normal_mode and
     o > n and o > s and
     cbegin[0] == "\\" and
@@ -3360,7 +3360,7 @@ if ('commands' in completion_atcive_modes and
     not re.search(delim_pat, begin)
    ):
    completion_method = 'command'
-elif ( 'environment names' in completion_active_modes and
+elif ( 'environment names' in completion_active_modes and # {{{2
     not normal_mode and
     re.search(beginop_pat, l)
     ):
@@ -3368,16 +3368,33 @@ elif ( 'environment names' in completion_active_modes and
 	completion_method = 'environment values of options'
     else:
 	completion_metdho = 'environment options'
-elif ( 'environment names' in completion_active_modes and
+elif ( 'environment names' in completion_active_modes and # {{{2
     not normal_mode and
     not re.search('}.*$', begin) and
     re.search(begend_pat, pline)
     )
     completion_method = 'environment_names'
-elif ( 'labels' in completion_active_modes and
+elif ( 'labels' in completion_active_modes and # {{{2
     not normal_mode and
     re.search(label_pat, l)
     completion_method = 'labels'
+elif ( 'pagestyle' in completion_active_modes and # {{{2
+    not normal_mode and
+    re.search(pagestyle_pat, l)
+    )
+    completion_method = 'pagestyle'
+elif ( 'page numberings' in completion_active_modes and # {{{2
+    re.search(pagenumbering_pat, l
+    )
+    completion_method = 'pagenumbering'
+elif ( 'bibitems' in completion_active_modes and # {{{2
+    not normal_mode and
+    re.search(bibitems_pat, ppline
+    )
+    completion_method = 'bibitems'
+elif ( not normal_mode and # {{{2
+    searchpos(tikz1_pat, 'b') > searchpos(tikz2_pat, 'b')
+    )
 
 # }}}
 
