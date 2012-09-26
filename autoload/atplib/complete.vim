@@ -1543,7 +1543,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
     " {{{2 Match the completed word 
     let normal_mode=0
-
     if a:0 >= 1
 	let normal_mode=a:1
     endif
@@ -3295,7 +3294,7 @@ endfunction
 catch /E127:/
 endtry
 " }}}1
-function! TabCompletion_py(expert_mode,...)
+function! TabCompletion_py(expert_mode,...) "{{{
     let time=reltime()
     if a:0 >= 1
 	let normal_mode=a:1
@@ -3304,6 +3303,8 @@ python << EOF
 import vim
 import re
 from atplib.completion import *
+
+normal_mode = int(vim.eval("normal_mode"))
 
 def list_int(L):
     return map(lambda x: int(x), L)
@@ -3348,6 +3349,7 @@ limit_line = max(1,pos[1]-completion_limits[1])
 
 # SET COMPLETION METHOD {{{
 if ('commands' in completion_atcive_modes and
+    not normal_mode and
     o > n and o > s and
     cbegin[0] == "\\" and
     not re.search(l, cite2_pat) and
@@ -3358,10 +3360,27 @@ if ('commands' in completion_atcive_modes and
     not re.search(delim_pat, begin)
    ):
    completion_method = 'command'
-elif ( ):
+elif ( 'environment names' in completion_active_modes and
+    not normal_mode and
+    re.search(beginop_pat, l)
+    ):
+    if re.search(beginop2_pat, l):
+	completion_method = 'environment values of options'
+    else:
+	completion_metdho = 'environment options'
+elif ( 'environment names' in completion_active_modes and
+    not normal_mode and
+    not re.search('}.*$', begin) and
+    re.search(begend_pat, pline)
+    )
+    completion_method = 'environment_names'
+elif ( 'labels' in completion_active_modes and
+    not normal_mode and
+    re.search(label_pat, l)
+    completion_method = 'labels'
 
 # }}}
 
 EOF
-endfun
+endfun " }}}
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
