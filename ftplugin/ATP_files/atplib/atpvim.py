@@ -42,5 +42,5 @@ def readlines(file_path):
             # we are not decoding: since we have to assume that files are in &encoding
             # and vim stores buffers, variables, ... in &encoding.
             return fo.read().splitlines()
-    except IOError
+    except IOError:
         return []
