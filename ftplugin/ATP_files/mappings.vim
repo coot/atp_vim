@@ -976,13 +976,13 @@ if !hasmapto("<Plug>PdfFonts", "n")
 endif
 " TEXDOC: {{{2
 " Note :TexDoc map cannot be <silent>
-nnoremap           <buffer> <Plug>TexDoc		:TexDoc<space>
-if !hasmapto("<Plug>TexDoc", "n")
-    nmap           <buffer> <F1>			<Plug>TexDoc
+nnoremap           <buffer> <Plug>Texdoc		:Texdoc<space>
+if !hasmapto("<Plug>Texdoc", "n")
+    nmap           <buffer> <F1>			<Plug>Texdoc
 endif
-inoremap           <buffer> <Plug>iTexDoc		<C-O>:TexDoc<space>
-if !hasmapto("<Plug>iTexDoc", "i")
-    imap           <buffer> <F1> 			<Plug>iTexDoc
+inoremap           <buffer> <Plug>iTexdoc		<C-O>:Texdoc<space>
+if !hasmapto("<Plug>iTexdoc", "i")
+    imap           <buffer> <F1> 			<Plug>iTexdoc
 endif
 
 " FONT IMAPS: {{{1
