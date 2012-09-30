@@ -1204,11 +1204,7 @@ if hasattr(vim, 'bindeval'):
     e_pos = vim.bindeval("e_pos")
 else:
     e_pos = []
-
-if e_idx != (-1, -1):
-    e_pos.extend([e_idx[0]+begin_line, e_idx[1]+1, e_idx[2]])
-else:
-    e_pos.extend([0,0, e_idx[2]])
+e_pos.extend(e_idx)
 
 if not hasattr(vim, 'bindeval'):
     import json
@@ -1486,7 +1482,6 @@ endfunction
 catch /E127:/
 endtry
 "}}}1
-
 
 " Completions:
 " atplib#complete#TabCompletion {{{1
@@ -3296,9 +3291,11 @@ endtry
 function! atplib#complete#TabCompletion_py(expert_mode,...) "{{{
     let time=reltime()
     let normal_mode = (a:0 >= 1 ? a:1 : 0 )
+    let append='i'
 python << EOF
 import vim
 import re
+import json
 from atplib.completion import *
 
 normal_mode = int(vim.eval("normal_mode"))
@@ -3310,6 +3307,7 @@ def list_int(L):
 
 completion_limits = list_int(vim.eval("g:atp_completion_limits"))
 completion_active_modes = vim.eval("g:atp_completion_active_modes")
+completion_active_modes_normal_mode = vim.eval("g:atp_completion_active_modes_normal_mode")
 
 cwindow = vim.current.window
 pos = cwindow.cursor
@@ -3394,16 +3392,41 @@ elif ( 'bibitems' in completion_active_modes and # {{{2
     re.search(bibitems_pat, ppline)
     ):
     completion_method = 'bibitems'
-elif ( not normal_mode and # {{{2
-    searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b')
+elif ( not normal_mode and  searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b') # {{{2
     ):
+    # {{{3 colors
     if re.match('color=', begin):
 	completion_method = 'tikzpicture colors'
+    # {{{3 keywords
     elif not expert_mode and re.search(tikzdelim_pat, l[:-len(tbegin)]):
 	completion_method = 'tikzpicture keywords'
+    #{{{3 brackets
     else:
 	"""CheckBracket..."""
-	completion_method = 'brackets tikzpicture'
+	buf = vim.current.buffer
+	begin_line = limit_line
+	end_line = min(len(buf), pos[0]+completion_limits[4])
+	text = ('\n'.join(buf[begin_line-1:end_line])).decode(encoding)
+	bracket_dict = vim.eval("g:atp_bracket_dict")
+	begParen = atplib.check_bracket.check_bracket(text, pos[0], pos[1], bracket_dict)
+	if begParen[2] != '\\begin' and (begParen[1] != 0 || int(vim.eval("atplib#complete#CheckSyntaxGroups(['texMathZoneX', 'texMathZoneY'])")) and (
+                (!normal_mode and 'brackets' in completion_active_modes) or
+                (normal_mode and 'brackets' in completion_active_modes_normal_mode)
+            ):
+            completion_method = 'brackets'
+            vim.command("let begParen=%s" % json.dumps(begParen))
+            bracket = vim.eval("atplib#complete#GetBracket(append, g:atp_bracket_dict, 0, begParen)")
+            if !expert_mode:
+                move = "\\<Left>"*len(bracket)
+            else:
+                move = ''
+            return bracket.move
+	#{{{3 close environments
+        elsif (!normal_mode and  'close environments' in completion_active_modes or
+            normal_mode and 'close environments' in completion_active_modes_normal_mode ):
+            completion_method = 'close_env'
+        else:
+            return ''
 else:
     completion_method = '???'
 

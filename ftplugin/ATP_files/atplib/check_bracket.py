@@ -68,16 +68,21 @@ def check_bracket_frompos(text, o_bra, c_bra, pos):
             print("  >> False; finished at (%d, %s)" % (idx, repr(text[idx-1])))
         return -1
 
-def check_bracket(text, line, col, bracket_dict):
+def check_bracket(text, line, col, bline, bracket_dict):
     """ Return position of the first opened and not closed bracket before
     (line, col) [excluding]
 
     text    - text to search within
     line    - the line where to start (lines start count from 0)
     col     - the columnt where to start (columns start count from 0)
+    bline   - the line nr where we start (absolute to the buffer rather than
+              line above which is relative to the text)
+              /used only to return absolute line/
     bracket_dict - dictinoary of keys:values : '(' : ')'
 
-    Returns triple (line, col, ket) - line, col position where ket was opened.
+    Returns triple (line+bline, col+1, ket) - line, col position where ket was
+    opened (relative to text), this makes the position relative to the buffer
+    (it is cursor position rather than index).
     """
 
     pos = byte_pos(text, line, col)
@@ -136,7 +141,7 @@ def check_bracket(text, line, col, bracket_dict):
                 if DEBUG:
                     pos = line_pos(text, x)
                     print("break at (%d,%d,%s)" % (pos[0], pos[1], text[x]))
-                return (lpos[0], lpos[1], stack[0][1])
+                return (bline+lpos[0], lpos[1]+1, stack[0][1])
         elif c_cond:
             # Skip till the matching o_bra.
 
@@ -170,7 +175,7 @@ def check_bracket(text, line, col, bracket_dict):
                         count_closed += 1
                 if x == 0:
                     # Ups. There was no matching (.
-                    return (-1, -1, O_BRA)
+                    return (0, 0, O_BRA)
 
             if DEBUG:
                 print("Skipping `%s:%s` (%d:%s,%d,%s)." % (O_BRA, C_BRA, s_x, text[s_x], x, text[x]))
