@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sun Sep 16, 2012 at 11:13:59  +0100
+" Last Change: Sun Sep 30, 2012 at 20:37:38  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1443,7 +1443,15 @@ EOF
 	    endif
 	endif
     else
+	let var_dict = g:
+	for var in keys(var_dict)
+	    if stridx(var, 'atp_') == 0 && index(['atp_StatusLine', 'atp_ParseLog', 'atp_eventIgnoreInsertEnter'], var) == -1
+		" Why some vars cannot be deleted.
+		exe 'unlet g:'.var
+	    endif
+	endfor
 	" Reload all functions and variables, 
+	unlet b:did_ftplugin
 	let tex_atp_file = split(globpath(&rtp, 'ftplugin/tex_atp.vim'), "\n")[0]
 	execute "source " . tex_atp_file
 
