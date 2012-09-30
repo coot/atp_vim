@@ -1749,7 +1749,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	"{{{4 ----------- brackets
 	else
 	    let begParen = atplib#complete#CheckBracket(g:atp_bracket_dict)
-	    let g:begParen = begParen
 	    if begParen[2] != '\begin' && ( begParen[1] != 0 || atplib#complete#CheckSyntaxGroups(['texMathZoneX', 'texMathZoneY']) &&
 		    \ (!normal_mode &&  index(g:atp_completion_active_modes, 'brackets') != -1 ) ||
 		    \ (normal_mode && index(g:atp_completion_active_modes_normal_mode, 'brackets') != -1 ) )
@@ -3294,17 +3293,17 @@ endfunction
 catch /E127:/
 endtry
 " }}}1
-function! TabCompletion_py(expert_mode,...) "{{{
+function! atplib#complete#TabCompletion_py(expert_mode,...) "{{{
     let time=reltime()
-    if a:0 >= 1
-	let normal_mode=a:1
-    endif
+    let normal_mode = (a:0 >= 1 ? a:1 : 0 )
 python << EOF
 import vim
 import re
 from atplib.completion import *
 
 normal_mode = int(vim.eval("normal_mode"))
+
+DEBUG = True
 
 def list_int(L):
     return map(lambda x: int(x), L)
@@ -3316,18 +3315,20 @@ cwindow = vim.current.window
 pos = cwindow.cursor
 line = vim.current.buffer[pos[0]-1]
 l = line[:pos[1]]
-n = l.index('{')
-m = l.index(',')
-o = l.index('\\')
-s = l.index(' ')
-p = l.index('[')
-r = l.index('=')
+if DEBUG:
+    vim.command("let g:l='%s'" % l)
+n = index('{', l)
+m = index(',', l)
+o = index('\\', l)
+s = index(' ', l)
+p = index('[', l)
+r = index('=', l)
 match = re.search(cite_pat, l)
 if match:
     c = re.search(cite_pat, l).start() # cite pat is imported from atplib.completion
 else:
     c = -1
-a = len(l)-l[::-1].index('=')
+a = len(l)-index('=', l[::-1])
 nr = max(n,m,o,s,p)
 color_nr = max(nr,r)
 
@@ -3348,56 +3349,67 @@ ppline = l[c:]
 limit_line = max(1,pos[1]-completion_limits[1])
 
 # SET COMPLETION METHOD {{{1
-if ('commands' in completion_atcive_modes and # {{{2
+if ('commands' in completion_active_modes and # {{{2
     not normal_mode and
     o > n and o > s and
     cbegin[0] == "\\" and
-    not re.search(l, cite2_pat) and
-    not re.search(l, ref_pat) and
+    not re.search(cite2_pat, l) and
+    not re.search(ref_pat, l) and
     not re.search(input_pat, pline) and
     not re.search(bracket_pat, begin) and
     not re.search(r'(?<!\\)\\$', pline) and
     not re.search(delim_pat, begin)
    ):
    completion_method = 'command'
-elif ( 'environment names' in completion_active_modes and # {{{2
+elif ( 'environment options' in completion_active_modes and # {{{2
     not normal_mode and
     re.search(beginop_pat, l)
     ):
     if re.search(beginop2_pat, l):
 	completion_method = 'environment values of options'
     else:
-	completion_metdho = 'environment options'
+	completion_method = 'environment options'
 elif ( 'environment names' in completion_active_modes and # {{{2
     not normal_mode and
     not re.search('}.*$', begin) and
     re.search(begend_pat, pline)
-    )
+    ):
     completion_method = 'environment_names'
 elif ( 'labels' in completion_active_modes and # {{{2
     not normal_mode and
     re.search(label_pat, l)
+    ):
     completion_method = 'labels'
-elif ( 'pagestyle' in completion_active_modes and # {{{2
+elif ( 'page styles' in completion_active_modes and # {{{2
     not normal_mode and
     re.search(pagestyle_pat, l)
-    )
+    ):
     completion_method = 'pagestyle'
 elif ( 'page numberings' in completion_active_modes and # {{{2
-    re.search(pagenumbering_pat, l
-    )
+    re.search(pagenumbering_pat, l)
+    ):
     completion_method = 'pagenumbering'
 elif ( 'bibitems' in completion_active_modes and # {{{2
     not normal_mode and
-    re.search(bibitems_pat, ppline
-    )
+    re.search(bibitems_pat, ppline)
+    ):
     completion_method = 'bibitems'
 elif ( not normal_mode and # {{{2
-    searchpos(tikz1_pat, 'b') > searchpos(tikz2_pat, 'b')
-    )
+    searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b')
+    ):
+    if re.match('color=', begin):
+	completion_method = 'tikzpicture colors'
+    elif not expert_mode and re.search(tikzdelim_pat, l[:-len(tbegin)]):
+	completion_method = 'tikzpicture keywords'
+    else:
+	"""CheckBracket..."""
+	completion_method = 'brackets tikzpicture'
+else:
+    completion_method = '???'
 
+vim.command("let completion_method='%s'" % completion_method)
 # }}}
-
 EOF
+return completion_method
 endfun " }}}
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
