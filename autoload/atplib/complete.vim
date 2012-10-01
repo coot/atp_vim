@@ -1811,7 +1811,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	    endif
     "{{{3 --------- includegraphics
-    elseif (l =~ '\\includegraphics\s*\(\[[^\]]*\]\s*\)\?{[^}]*$') &&
+    elseif (l =~ '\\includegraphics\s*\%(\[[^\]]*\]\s*\)\?{[^}]*$') &&
 		\ index(g:atp_completion_active_modes, 'includegraphics') != -1
 	    let completion_method='includegraphics'
 	    " DEBUG:
@@ -3427,6 +3427,31 @@ elif ( not normal_mode and  searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b'
             completion_method = 'close_env'
         else:
             return ''
+elif (re.search(usepackage1_pat, l) and re.search(usepackage2_pat, l) and
+      not normal_mode and
+      'package options values' in completion_active_modes):
+      completion_method = 'package options values'
+elif (re.search(usepackage_pat, l) and not normal_mode and
+      'package options' in completion_active_modes):
+      completion_method = 'package options' 
+elif (re.search(usepackage3_pat, pline) and not normal_mode and
+      'package' in completion_active_modes):
+      completion_method = 'package'
+elif (re.search(tikzlib_pat, pline) and not normal_mode and
+      'tikz libraries' in completion_active_modes):
+      completion_method = 'tikz libraries' 
+elif ((re.search(input1_pat, l) or re.search(input2_pat, l)) and
+      not normal_mode and 'input files' in completion_active_modes):
+      completion_method = 'input files' 
+elif (re.search(incgraphics_pat, l) and
+      'includegraphics' in completion_active_modes):
+      completion_method = 'includegraphics'
+elif (re.search(bib_pat, pline) and not normal_mode and
+      'bibfiles' in completion_active_modes):
+      completion_method = 'bibfiles'
+elif (re.search(bibstyle_pat, pline) and not normal_mode and
+      'bibstyles' in completion_active_modes):
+      completion_method = 'bibstyles'
 else:
     completion_method = '???'
 
