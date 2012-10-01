@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Mon Oct 01, 2012 at 10:04:16  +0100
+" Last Change: Mon Oct 01, 2012 at 18:46:05  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -801,14 +801,12 @@ endfunction "}}}
 " But it simulates it with a nice command completion (Ctrl-D, <Tab>)
 " based on alias files for texdoc.
 function! atplib#various#TexDoc(...)
-    let texdoc_arg	= ""
-    for i in range(1,a:0)
-	let texdoc_arg.=" " . a:{i}
-    endfor
-    if texdoc_arg == "" && exists("g:atp_TeXdocDefault")
+    let texdoc_arg = join(a:000)
+    if texdoc_arg == ""
+	if !exists("g:atp_TeXdocDefault")
+	    let g:atp_TeXdocDefault = '-I lshort'
+	endif
 	let texdoc_arg 	= g:atp_TeXdocDefault
-    else
-	let texdoc_arg  = '-I lshort'
     endif
     " If the file is a text file texdoc is 'cat'-ing it into the terminal,
     " we use echo to capture the output. 

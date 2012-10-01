@@ -6,7 +6,7 @@
 Supported OS'es: Linux, Mac OS, Windows (it is in development).
 
 Note: support of Windows is not yet fully implemented. The main tools are
-not working, yet, come back in a some time (watch the news!).
+not working, yet.
 
 -------------------------------------------------------------
 The directory 'releases' contains stable releases.
