@@ -710,6 +710,6 @@ function! atplib#TexKeyword() " {{{
     let &isk = g:atp_iskeyword
     let word = expand("<cword>")
     let &isk = isk
-    return word
+    return split(word, '\ze\')[0]
 endfunction " }}}
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
