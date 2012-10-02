@@ -1,7 +1,8 @@
 [Automatic TeX Plugin](http://atp-vim.sf.net) For [Vim](http://vim.org) version 7.3
 ========================================
 
-Supported OS'es: Linux, Mac OS, Windows (not quite, your welcome to help).
+Supported OS'es: *Linux*, *Mac OS*, *Windows* (not quite!, your welcome to
+help - ask me how to and I will be happy to provide help).
 
 Visit http://atp-vim.sf.net to get more info: features, vidoes presenting some
 functionalities, online help. Just to list the main features:
@@ -13,7 +14,7 @@ functionalities, online help. Just to list the main features:
  * excelent completion, which also closes environments and brackets, and
  inputing labels by their numbers (as seen in the output) and much more ...
  * table of contents,
- * ...
+ * [go to](http://atp-vim.sf.net) for more ...
 
 
 ATP is written in *Python* and *VimL*.
