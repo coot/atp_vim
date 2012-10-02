@@ -1,7 +1,5 @@
-		    Automatic TeX Plugin For Vim version 7.3
-			 http://atp-vim.sf.net
-		         by Marcin Szamotulski
-
+[Automatic TeX Plugin](http://atp-vim.sf.net) For [Vim](http://vim.org) version 7.3
+========================================
 
 Supported OS'es: Linux, Mac OS, Windows (not quite, your welcome to help).
 
