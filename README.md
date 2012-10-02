@@ -14,7 +14,7 @@ functionalities, online help. Just to list the main features:
  * excelent completion, which also closes environments and brackets, and
  inputing labels by their numbers (as seen in the output) and much more ...
  * table of contents,
- * [go to](http://atp-vim.sf.net) for more ...
+ * do you want to see [more](http://atp-vim.sf.net) ... / even that is not complete ... /
 
 
 ATP is written in *Python* and *VimL*.
