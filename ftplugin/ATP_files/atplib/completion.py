@@ -1,8 +1,15 @@
 
-__all__ = [ 'start', 'searchpos', 'index', 'cite_pat', 'cite2_pat', 'ref_pat',
-            'input_pat', 'delim_pat', 'bracket_pat', 'begend_pat',
-            'beginop_pat', 'beginop2_pat', 'label_pat', 'pagestyle_pat',
-            'pagenumbering_pat', 'bibitems_pat', 'tikz1_pat', 'tikz3_pat' ]
+__all__ = [ 'start', 'searchpos', 'index',
+            'cite_pat', 'cite2_pat', 'ref_pat', 'input_pat', 'delim_pat',
+            'bracket_pat', 'beginop_pat', 'beginop2_pat', 'begend_pat',
+            'label_pat', 'pagestyle_pat', 'pagenumbering_pat', 'bibitems_pat',
+            'tikz1_pat', 'tikz3_pat', 'tikzdelim_pat', 'usepackage_pat',
+            'usepackage1_pat', 'usepackage2_pat', 'usepackage3_pat',
+            'tikzlib_pat', 'input1_pat', 'input2_pat', 'incgraphics_pat',
+            'bib_pat', 'bibstyle_pat', 'todoop_pat', 'missfigop_pat',
+            'docclassop_pat', 'docclass_pat', 'fontfam_pat', 'fontseries_pat',
+            'fontshape_pat', 'fontenc_pat', 'comvalval_pat', 'comval_pat',
+            'abbrev_pat']
 
 import vim
 import re
@@ -88,3 +95,14 @@ input2_pat = re.compile(r'\\include\s*{[^}]*$')
 incgraphics_pat = re.compile(r'\\includegraphics\s*(?:\[[^\]]*\]\s*)?{[^}]*$')
 bib_pat = re.compile(r'\\(?:bibliography(?!style)|addbibresource|addglobalbib)')
 bibstyle_pat = re.compile(r'\\bibliographystyle')
+todoop_pat = re.compile(r'\\todo\[[^\]]*$')
+missfigop_pat = re.compile(r'\\missingfigure\[[^\]]*$')
+docclassop_pat = re.compile(r'\\documentclass\s*\[[^\]]*$')
+docclass_pat = re.compile(r'\\documentclass\b')
+fontfam_pat = re.compile(r'(?:\\renewcommand\s*{\s*\\(?:rm|sf|bf|tt|md|it|sl|sc|up)default\s*}\s*{|\\usefont\s*{[^}]*}{|\\DeclareFixedFont\s*{[^}]*}{[^}]*}{|\\fontfamily\s*{)[^}]*$')
+fontseries_pat = re.compile(r'(?:\\usefont{[^}]*}{[^}]*}{|\\DeclareFixedFont{[^}]*}{[^}]*}{[^}]*}{|\\fontseries{)[^}]*$')
+fontshape_pat = re.compile(r'(?:\\usefont{[^}]*}{[^}]*}{[^}]*}{|\\DeclareFixedFont{[^}]*}{[^}]*}{[^}]*}{[^}]*}{|\\fontshape{)[^}]*$')
+fontenc_pat = re.compile(r'(:\\usefont{|\\DeclareFixedFont{[^}]*}{|\\fontencoding{)[^}]*$')
+comvalval_pat = re.compile(r'\\\w\+{(?:[^}]*,)?[^,}=]*=[^,}]*$')
+comval_pat = re.compile(r'(?:\\\w\+(?:\[(?:[^\]]|\[[^\]]*\])*\])?(?:{(?:[^}]|{(?:[^}]|{[^}]*})*})*})?{(?:[^}]|{(?:[^}]|{[^}]*})*})*$|\\renewcommand{[^}]*}{[^}]*$)')
+abbrev_pat = re.compile(r'=[a-zA-Z]+\*=$')

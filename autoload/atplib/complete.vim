@@ -1913,7 +1913,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " this is at the end because there are many command completions done
     " before - they would not work if this would be on the top.
     elseif (l =~ '\%(\\\w\+\%(\[\%([^\]]\|\[[^\]]*\]\)*\]\)\?\%({\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*}\)\?{\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*$\|\\renewcommand{[^}]*}{[^}]*$\)' && !normal_mode) &&
-		\ index(g:atp_completion_active_modes, 'environment names') != -1 
+		\ index(g:atp_completion_active_modes, 'command values') != -1 
 	    let completion_method="command values"
 	    " DEBUG:
 	    let b:comp_method=completion_method
@@ -3288,7 +3288,7 @@ endfunction
 catch /E127:/
 endtry
 " }}}1
-function! atplib#complete#TabCompletion_py(expert_mode,...) "{{{
+fun! atplib#complete#TabCompletion_py(expert_mode,...) "{{{1
     let time=reltime()
     let normal_mode = (a:0 >= 1 ? a:1 : 0 )
     let append='i'
@@ -3346,8 +3346,8 @@ pline = l[:nr]
 ppline = l[c:]
 limit_line = max(1,pos[1]-completion_limits[1])
 
-# SET COMPLETION METHOD {{{1
-if ('commands' in completion_active_modes and # {{{2
+# SET COMPLETION METHOD {{{2
+if ('commands' in completion_active_modes and # {{{3
     not normal_mode and
     o > n and o > s and
     cbegin[0] == "\\" and
@@ -3359,7 +3359,7 @@ if ('commands' in completion_active_modes and # {{{2
     not re.search(delim_pat, begin)
    ):
    completion_method = 'command'
-elif ( 'environment options' in completion_active_modes and # {{{2
+elif ('environment options' in completion_active_modes and # {{{3
     not normal_mode and
     re.search(beginop_pat, l)
     ):
@@ -3367,40 +3367,39 @@ elif ( 'environment options' in completion_active_modes and # {{{2
 	completion_method = 'environment values of options'
     else:
 	completion_method = 'environment options'
-elif ( 'environment names' in completion_active_modes and # {{{2
+elif ('environment names' in completion_active_modes and # {{{3
     not normal_mode and
     not re.search('}.*$', begin) and
     re.search(begend_pat, pline)
     ):
     completion_method = 'environment_names'
-elif ( 'labels' in completion_active_modes and # {{{2
+elif ('labels' in completion_active_modes and # {{{3
     not normal_mode and
     re.search(label_pat, l)
     ):
     completion_method = 'labels'
-elif ( 'page styles' in completion_active_modes and # {{{2
+elif ('page styles' in completion_active_modes and # {{{3
     not normal_mode and
     re.search(pagestyle_pat, l)
     ):
     completion_method = 'pagestyle'
-elif ( 'page numberings' in completion_active_modes and # {{{2
+elif ('page numberings' in completion_active_modes and # {{{3
     re.search(pagenumbering_pat, l)
     ):
     completion_method = 'pagenumbering'
-elif ( 'bibitems' in completion_active_modes and # {{{2
+elif ('bibitems' in completion_active_modes and # {{{3
     not normal_mode and
     re.search(bibitems_pat, ppline)
     ):
     completion_method = 'bibitems'
-elif ( not normal_mode and  searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b') # {{{2
-    ):
-    # {{{3 colors
+elif (searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b') not normal_mode:  # {{{3
+    # {{{4 colors
     if re.match('color=', begin):
 	completion_method = 'tikzpicture colors'
-    # {{{3 keywords
+    # {{{4 keywords
     elif not expert_mode and re.search(tikzdelim_pat, l[:-len(tbegin)]):
 	completion_method = 'tikzpicture keywords'
-    #{{{3 brackets
+    #{{{4 brackets
     else:
 	"""CheckBracket..."""
 	buf = vim.current.buffer
@@ -3421,43 +3420,105 @@ elif ( not normal_mode and  searchpos(tikz1_pat, 'b') > searchpos(tikz3_pat, 'b'
             else:
                 move = ''
             return bracket.move
-	#{{{3 close environments
+	#{{{4 close environments
         elsif (!normal_mode and  'close environments' in completion_active_modes or
             normal_mode and 'close environments' in completion_active_modes_normal_mode ):
             completion_method = 'close_env'
         else:
             return ''
-elif (re.search(usepackage1_pat, l) and re.search(usepackage2_pat, l) and
+elif (re.search(usepackage1_pat, l) and re.search(usepackage2_pat, l) and #{{{3
       not normal_mode and
       'package options values' in completion_active_modes):
       completion_method = 'package options values'
-elif (re.search(usepackage_pat, l) and not normal_mode and
+elif (re.search(usepackage_pat, l) and not normal_mode and #{{{3
       'package options' in completion_active_modes):
-      completion_method = 'package options' 
-elif (re.search(usepackage3_pat, pline) and not normal_mode and
+      completion_method = 'package options'
+elif (re.search(usepackage3_pat, pline) and not normal_mode and #{{{3
       'package' in completion_active_modes):
       completion_method = 'package'
-elif (re.search(tikzlib_pat, pline) and not normal_mode and
+elif (re.search(tikzlib_pat, pline) and not normal_mode and #{{{3
       'tikz libraries' in completion_active_modes):
-      completion_method = 'tikz libraries' 
-elif ((re.search(input1_pat, l) or re.search(input2_pat, l)) and
+      completion_method = 'tikz libraries'
+elif ((re.search(input1_pat, l) or re.search(input2_pat, l)) and #{{{3
       not normal_mode and 'input files' in completion_active_modes):
-      completion_method = 'input files' 
-elif (re.search(incgraphics_pat, l) and
+      completion_method = 'input files'
+elif (re.search(incgraphics_pat, l) and #{{{3
       'includegraphics' in completion_active_modes):
       completion_method = 'includegraphics'
-elif (re.search(bib_pat, pline) and not normal_mode and
+elif (re.search(bib_pat, pline) and not normal_mode and #{{{3
       'bibfiles' in completion_active_modes):
       completion_method = 'bibfiles'
-elif (re.search(bibstyle_pat, pline) and not normal_mode and
+elif (re.search(bibstyle_pat, pline) and not normal_mode and #{{{3
       'bibstyles' in completion_active_modes):
       completion_method = 'bibstyles'
-else:
-    completion_method = '???'
+elif (re.search(todoop_pat, obegin) and 'todonotes' in completion_active_modes): #{{{3
+    completion_method = 'todo options'
+elif (re.search(missfigop_pat, obegin) and 'todonotes' in completion_active_modes): #{{{3
+    completion_method = 'missingfigure options'
+elif (re.search(docclassop_pat, l) and 'codumentclass options' in completion_active_modes and  #{{{3
+    not normal_mode):
+    completion_method = 'documentclass options'
+elif (re.search(docclass_pat, pline) and  'documentclass' in completion_active_modes and  #{{{3
+    not normal_mode):
+    completion_method = 'documentclass'
+elif (re.search(fontfam_pat, l) and 'font family' in completion_active_modes and #{{{3
+    not normal_mode):
+    completion_method = 'font family'
+elif (re.search(fontseries_pat, l) and 'font series' in completion_active_modes and #{{{3
+    not normal_mode):
+    completion_method = 'font series'
+elif (re.search(fontshape_pat, l) and 'font shape' in completion_active_modes and #{{{3
+    not normal_mode):
+    completion_method = 'font shape'
+elif (re.search(fontenc_pat, l) and 'font encoding' in completion_active_modes and #{{{3
+    not normal_mode):
+    completion_method = 'font encoding'
+elif (re.search(comvalval_pat, l) and not normal_mode): #{{{3
+    completion_method = 'command values of values'
+elif (re.search(comval_pat, l) and 'command values' in completion_active_modes and #{{{3
+    not normal_mode):
+    completion_method = 'command values'
+else: #{{{3 brackets, algorithmic, abbreviations, close environments
+    """CheckBracket..."""
+    buf = vim.current.buffer
+    begin_line = limit_line
+    end_line = min(len(buf), pos[0]+completion_limits[4])
+    text = ('\n'.join(buf[begin_line-1:end_line])).decode(encoding)
+    bracket_dict = vim.eval("g:atp_bracket_dict")
+    begParen = atplib.check_bracket.check_bracket(text, pos[0], pos[1], bracket_dict)
+    if (re.search(abbrev_pat, l) and 'abbreviations' in completion_active_modes and #{{{4
+            vim.eval('atplib#IsInMath()') != '0'):
+        completion_method = 'abbreviations'
+    elif (begParen[2] != '\\begin' and ( begParen[1] != 0 or 
+            vim.eval("atplib#complete#CheckSyntaxGroups(['texMathZoneX', 'texMathZoneY'])") and
+            (not normal_mode and 'brackets' in completion_active_modes) or
+            (normal_mode and  'brackets' in completion_active_modes_normal_mode)):
+        completion_method = 'brackets'
+        bracket = vim.eval("atplib#complete#GetBracket(%s, g:atp_bracket_dict, 0, %s)" % (append, json.dumps(begParen)))
+        if expert_mode:
+            move = "\\<Left>"*len(bracket)
+        else:
+            move = ''
+        return bracket+move
+    elif (('close environments' in completion_active_modes and not normal_mode) or #{{{4
+             'close environments' in completion_active_modes_normal_modde and normal_mode):
+         completion_method = 'close_env'
+    elif (vim.eval("atplib#complete#CheckBracket(g:atp_algorithmic_dict)")[0] != "0" and #{{{4
+            vim.eval("atplib#complete#CheckSyntaxGroups(['texMathZoneALG'])") and
+            (not normal_mode and 'alogrithmic' in completion_active_modes) or
+            (normal_mode and 'alogrithmic' in completion_active_modes_normal_mode):
+        completion_method = 'alogrithmic'
+        vim.eval("atplib#complete#CloseLastBracket(g:atp_algorithmic_dict, 0, 1)")
+        return ''
+    else: #{{{4
+        return ''
+    #}}}3
+#}}}2
+
 
 vim.command("let completion_method='%s'" % completion_method)
-# }}}
+# }}}2
 EOF
 return completion_method
-endfun " }}}
+endfun " }}}1
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
