@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Oct 02, 2012 at 13:28:29  +0100
+" Last Change: Wed Oct 03, 2012 at 09:56:36  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1042,7 +1042,7 @@ endif
 "ToDo: to doc.
 "ToDo: luatex! (can produce both!)
 if !exists("g:atp_CompilersDict")
-    let g:atp_CompilersDict 	= { 
+    let g:atp_CompilersDict	= { 
 		\ "pdflatex" 	: ".pdf", 	"pdftex" 	: ".pdf", 
 		\ "xetex" 	: ".pdf", 	"latex" 	: ".dvi", 
 		\ "tex" 	: ".dvi",	"elatex"	: ".dvi",
@@ -1551,12 +1551,6 @@ function! <SID>SetXdvi()
 	    endif
 	endif
     endif
-
-    map <buffer> <LocalLeader>rs				:call RevSearch()<CR>
-    try
-	nmenu 550.65 &LaTeX.Reverse\ Search<Tab>:map\ <LocalLeader>rs	:RevSearch<CR>
-    catch /E329:/
-    endtry
 
     " Put new menu entries:
     let Compiler	= get(g:CompilerMsg_Dict, matchstr(b:atp_TexCompiler, '^\s*\zs\S*'), 'Compile')

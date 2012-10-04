@@ -1655,7 +1655,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	\ begin !~ '{\|}\|,\|-\|\^\|\$\|(\|)\|&\|-\|+\|=\|#\|:\|;\|\.\|,\||\|?$' &&
 	\ begin !~ '^\[\|\]\|-\|{\|}\|(\|)' &&
 	\ cbegin =~ '^\\' && !normal_mode &&
-	\ l !~ '\\\%(no\)\?cite[^}]*$' &&
+	\ l !~ '\\\%(no\)\?cite[a-z]*\s*{[^}]*$' &&
 	\ l !~ '\\ref\s*{\S*$' &&
 	\ index(g:atp_completion_active_modes, 'commands') != -1
 	" in this case we are completing a command

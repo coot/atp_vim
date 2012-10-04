@@ -22,7 +22,6 @@ function! s:GetSID()
 	return matchstr(expand('<sfile>'), '\zs<SNR>\d\+_\ze.*$')
 endfunction
 let s:SID = s:GetSID()
-" a:1 is the file where the function is defined. 
 function! s:SIDWrap(func,...)
 	return s:SID . a:func
 endfunction
