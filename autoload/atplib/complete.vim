@@ -1640,7 +1640,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     if index(g:atp_completion_active_modes, 'commands') != -1 &&
 	\ cbegin[0] == '\' && !normal_mode &&
 	\ o > n && o > s && 
-	\ l !~ '\\\%(no\)\?cite[^}]*$' &&
+	\ l !~ '\\\%(no\)\?cite[a-z]*\s*{[^}]*$' &&
 	\ l !~ '\\ref\s*{\S*$' &&
 	\ pline !~ '\\\@<!\\$' &&
 	\ begin !~ '^\[\|\]\|-\|{\|}\|(\|)' &&
