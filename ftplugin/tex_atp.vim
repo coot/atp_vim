@@ -6,7 +6,7 @@
 " Time Stamp: 01-10-12_09-07
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
-" Last Change: Tue Sep 25, 2012 at 21:04:09  +0100
+" Last Change: Wed Oct 03, 2012 at 09:51:36  +0100
 " GetLatestVimScripts: 2945 62 :AutoInstall: tex_atp.vim
 " GetLatestVimScripts: 884 1 :AutoInstall: AutoAlign.vim
 " Copyright: © Marcin Szamotulski, 2012

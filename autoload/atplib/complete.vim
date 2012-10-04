@@ -1473,11 +1473,17 @@ function! atplib#complete#GetBracket(append,bracket_dict,...)
 	    else
 		return ''
 	    endif
+	else
+	    return ''
 	endif
     else
 	let [s:open_line, s:open_col, s:opening_bracket]=begParen
-	let bracket = atplib#complete#CloseLastBracket(a:bracket_dict, 1, 1)
-	call setpos(".", pos) " CloseLastBracket moves position.
+	if begParen[1] != 0
+	    let bracket = atplib#complete#CloseLastBracket(a:bracket_dict, 1, 1)
+	    call setpos(".", pos) " CloseLastBracket moves position.
+	else
+	    let bracket = ''
+	endif
 	return bracket
     endif
     let g:time_GetBrackets=reltimestr(reltime(time))
@@ -2604,7 +2610,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ INPUTFILES
     elseif completion_method ==  'inputfiles'
 	let completion_list=[]
-	call  extend(completion_list, atplib#search#KpsewhichGlobPath('tex', b:atp_OutDir . ',' . g:atp_texinputs, '*.tex', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\)'))
+	call extend(completion_list, atplib#search#KpsewhichGlobPath('tex', b:atp_OutDir . ',' . g:atp_texinputs, '*.tex', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\)'))
 	call sort(completion_list)
     " {{{3 ------------ TEX INCLUDEGRAPHICS
     elseif completion_method == 'includegraphics'
