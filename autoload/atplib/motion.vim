@@ -2215,9 +2215,8 @@ function! atplib#motion#StartVisualMode(mode)
 endfunction
 " atplib#motion#ParagraphVisualMotion {{{1
 function! atplib#motion#ParagraphVisualMotion(backward,count)
-    let cond = !atplib#CompareCoordinates(g:atp_visualstartpos[1:2],getpos("'>")[1:2])
-"     let g:pos = string(g:atp_visualstartpos)." ".string(getpos("'<"))." ".string(getpos("'>"))." ".cond
     let bpos = g:atp_visualstartpos
+    let cond = !atplib#CompareCoordinates(bpos[1:2],getpos("'>")[1:2])
     normal! m`
     if a:backward != "b"
 	if cond
