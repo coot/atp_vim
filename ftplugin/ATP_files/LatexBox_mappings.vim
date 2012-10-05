@@ -23,28 +23,28 @@ omap <buffer> <silent> im :normal vim<CR>
 omap <buffer> <silent> am :normal vam<CR>
 
 vmap <buffer> <silent> i( <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> i( :normal vi(<CR>
+omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i("<CR>
 vmap <buffer> <silent> a( <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> a( :normal va(<CR>
+omap <buffer> <silent> a( :<C-U>exe ":normal v".v:count1."a("<CR>
 vmap <buffer> <silent> i) <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> i) :normal vi)<CR>
+omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i)"<CR>
 vmap <buffer> <silent> a) <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> a) :normal va)<CR>
+omap <buffer> <silent> a( :<C-U>exe ":normal v".v:count1."a)"<CR>
 
 vmap <buffer> <silent> i{ <Plug>LatexBox_SelectBracketInner_2
-omap <buffer> <silent> i{ :normal vi{<CR>
+omap <buffer> <silent> i{ :<C-U>exe ":normal v".v:count1."i{"<CR>
 vmap <buffer> <silent> a{ <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a{ :normal va{<CR>
+omap <buffer> <silent> a{ :<C-U>exe ":normal v".v:count1."a{"<CR>
 vmap <buffer> <silent> i} <Plug>LatexBox_SelectBracketInner_2
-omap <buffer> <silent> i} :normal vi}<CR>
+omap <buffer> <silent> i} :<C-U>exe ":normal v".v:count1."i}"<CR>
 vmap <buffer> <silent> a} <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a} :normal va}<CR>
+omap <buffer> <silent> a} :<C-U>exe ":normal v".v:count1."a{"<CR>
 
-vmap <buffer> i[ <Plug>LatexBox_SelectBracketInner_3
-omap <buffer> i[ :normal vi[<CR>
-vmap <buffer> a[ <Plug>LatexBox_SelectBracketOuter_3
-omap <buffer> a[ :normal va[<CR>
-vmap <buffer> i] <Plug>LatexBox_SelectBracketInner_3
-omap <buffer> i] :normal vi]<CR>
-vmap <buffer> a] <Plug>LatexBox_SelectBracketOuter_3
-omap <buffer> a] :normal va]<CR>
+vmap <buffer> <silent> i[ <Plug>LatexBox_SelectBracketInner_3
+omap <buffer> <silent> i[ :<C-U>exe ":normal v".v:count1."i["<CR>
+vmap <buffer> <silent> a[ <Plug>LatexBox_SelectBracketOuter_3
+omap <buffer> <silent> a[ :<C-U>exe ":normal v".v:count1."a["<CR>
+vmap <buffer> <silent> i] <Plug>LatexBox_SelectBracketInner_3
+omap <buffer> <silent> i] :<C-U>exe ":normal v".v:count1."i]"<CR>
+vmap <buffer> <silent> a] <Plug>LatexBox_SelectBracketOuter_3
+omap <buffer> <silent> a] :<C-U>exe ":normal v".v:count1."a]"<CR>

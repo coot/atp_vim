@@ -5068,18 +5068,28 @@ EDITING TOOLS							*atp-editing*
 	    s	- syntax
 <							*atp-vi)* *atp-vi(*
 							*atp-vi]* *atp-vi[*
+vmap [count]i), [count]i]
+vmap [count]i(, [count]i[
 	i), i(, i], i[ -- select between (:) and [:] without the bracket
 	sizes, i.e. '\left(XXX\right)' i( and i) will select 'XXX'. These maps
 	will not select between \(:\), and \[:\] (for these use |atp-im|)
+
+	The [count] has the same meaning as in |i(|.
 							*atp-vi}* *atp-vi{*
-	i}, i{ -- select between {:} and \{:\} (omitting sizes as above)
+vmap [counti]i}
+vmap [counti]i{   
+	 i}, i{ -- select between {:} and \{:\} (omitting sizes as above)
  							*atp-va)* *atp-va(*
 							*atp-va]* *atp-va[*
+vmap [count]a), [count]a]
+vmap [count]a(, [count]a[
 	a), a(, a], a[ -- select between (:) and [:] together with the
 	brackets and the bracket sizes, i.e. a) and a( over '\left(XXX\right)'
 	will select whole sequence. These map will not select \(:\) and \[:\]
 	(use |atp-am| instead)
 							*atp-va}* *atp-va{*
+vmap [counti]a}
+vmap [counti]a{   
 	a}, a{ -- select between {:}, \{:\} together with the sizes.
 
 							*atp-omap-i)* *atp-omap-i(*
@@ -5089,7 +5099,7 @@ EDITING TOOLS							*atp-editing*
 							*atp-omap-a]* *atp-omap-a[*
 							*atp-omap-a}* *atp-omap-a{*
 	The corresponding operator maps are defined. For example you can use
-	ci( to change the inner part of \left(...\right), etc.
+	"ci(" to change the inner part of \left(...\right), or "c2a{" ... ..
 
 							*atp-vie* *atp-viE* *atp-vae*
 	ie, iE, ae select environment: from the nearest \begin (top) to the nearest \end (bottom).	
