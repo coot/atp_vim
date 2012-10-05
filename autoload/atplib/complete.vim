@@ -1205,7 +1205,7 @@ if hasattr(vim, 'bindeval'):
 else:
     e_pos = []
 
-if e_idx != (-1, -1):
+if (e_idx[0], e_idx[1]) != (-1, -1):
     e_pos.extend([e_idx[0]+begin_line, e_idx[1]+1, e_idx[2]])
 else:
     e_pos.extend([0,0, e_idx[2]])
