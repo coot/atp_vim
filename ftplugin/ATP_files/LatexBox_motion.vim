@@ -271,16 +271,9 @@ vnoremap <silent> <Plug>LatexBox_SelectInlineMathOuter :<C-U>call <SID>SelectInl
 function! <SID>LatexBox_SelectBracket(inner, bracket, bracket_sizes)
     " a:bracket_sizes a dictionary of matching bracket sizse { '\bigl' : '\bigr' }.
 
-    " This prevents from matching \(:\) and \[:\] (but not \{:\})
-    if a:bracket == '(' || a:bracket == '['
-	let pat = '\\\@<!'
-    else
-	let pat = ''
-    endif
-
-    let begin_pos = searchpairpos(pat.escape(a:bracket, '[]\'), '', pat.escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
     if !begin_pos[0]
-	let begin_pos=searchpos(pat.escape(a:bracket, '[]\'), 'W', line('.'))
+	let begin_pos=searchpos(escape(a:bracket, '[]\'), 'Wc', line('.'))
     endif
 
     if !begin_pos[0]
@@ -288,23 +281,20 @@ function! <SID>LatexBox_SelectBracket(inner, bracket, bracket_sizes)
     endif
 
     let o_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
-    let b_len = len(matchstr(getline(line("."))[0:col(".")-2], '\\\w*\s*$'))
-    let c_size = get(a:bracket_sizes, o_size, "")
-
     " In the case of \{ 
     if o_size == "\\"
-	let add = 1
-	let o_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$')
-	let b_len = len(matchstr(getline(line("."))[0:col(".")-3], '\\\w*\s*$'))+1
-	let c_size = get(a:bracket_sizes, o_size, "")
-    else 
-	let add = 0
+	let o_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$').o_size
     endif
+    let b_len = len(o_size)
 
     if a:inner == 'inner'
-	call cursor(line("."), col(".")+1)
+	if col(".")+len(a:bracket) <= len(getline(line(".")))
+	    call cursor(line("."), col(".")+len(a:bracket))
+	else
+	    call cursor(line(".")+1, 1)
+	endif
     else
-	if c_size != ""
+	if o_size != ""
 	    let s_pos = [line("."), col(".")]
 	    call cursor(line("."), col(".")-b_len)
 	endif
@@ -317,23 +307,30 @@ function! <SID>LatexBox_SelectBracket(inner, bracket, bracket_sizes)
 
     let b_pos = [ line("."), col(".") ]
 
-    let end_pos = searchpairpos(pat.escape(a:bracket, '[]\'), '', pat.escape(g:atp_bracket_dict[a:bracket], '[]\'), 'nW')
+    let end_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'nW')
     call cursor(end_pos)
-    let len	= len(matchstr(getline(".")[0:col(".")-1], 
-		    \ escape(c_size, '\'). '\s*'.(add ? '\\': '').'\ze'.escape(g:atp_bracket_dict[a:bracket], '[]\')))
+
+    let c_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
+    " In the case of \{ 
+    if c_size == "\\"
+	let c_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$').c_size
+    endif
+    let e_len = len(c_size)
 
     if a:inner == 'inner'
-	let end_pos[1] -= len+1
+	if end_pos[1] > e_len+len(g:atp_bracket_dict[a:bracket])
+	    let end_pos[1] -= e_len+len(g:atp_bracket_dict[a:bracket])
+	else
+	    let end_pos = [line(".")-1, len(getline(line(".")-1))]
+	endif
     endif
 
     call cursor(begin_pos)
-
     if visualmode() ==# 'V'
-	    normal! V
+	normal! V
     else
-	    normal! v
+	normal! v
     endif
-
     call cursor(end_pos)
 
 endfunction
