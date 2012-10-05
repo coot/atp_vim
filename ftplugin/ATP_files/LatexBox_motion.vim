@@ -56,16 +56,15 @@ endfunction
 " - search backwards if backward is given and nonzero
 " - search forward otherwise
 "
-function! s:JumpToMatch(mode, ...)
+function! LaTeXBox_JumpToMatch(mode, ...)
 
-    	if a:0 >= 1
-	    let backward = a:1
-	else
-	    let backward = 0
-	endif
+	let backward = (a:0>=1 ? a:1 : 0)
+	let setmark = (a:0>=2 ? a:2 : 1)
 
 	" add current position to the jump-list (see :help jump-motions)
-	normal! m`
+	if setmark
+	    normal! m`
+	endif
 
 	let sflags = backward ? 'cbW' : 'cW'
 

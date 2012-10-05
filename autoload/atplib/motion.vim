@@ -1490,24 +1490,30 @@ nnoremap <Plug>PreviousFrame	:<C-U>call atplib#motion#GotoFrame('backward', v:co
 " endfunction
 " Jump over current \begin and go to next one.
 " i.e. if on line =~ \begin => % and then search, else search
-function! atplib#motion#JumptoEnvironment(backward)
+function! atplib#motion#JumptoEnvironment(backward, ...)
+    let cnt = (a:0>=1 ? a:1 : 1)
+    k`
     call setpos("''", getpos("."))
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if !a:backward
-	let col	= searchpos('\w*\>\zs', 'n')[1]-1
-	if strpart(getline(line(".")), 0, col) =~ '\\begin\>$' &&
-		    \ strpart(getline(line(".")), col) !~ '^\s*{\s*document\s*}'
-	    exe "normal g%"
-	endif
-	call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
+	for i in range(cnt)
+	    let col	= searchpos('\w*\>\zs', 'n')[1]-1
+	    if strpart(getline(line(".")), 0, col) =~ '\\begin\>$' &&
+			\ strpart(getline(line(".")), col) !~ '^\s*{\s*document\s*}'
+		call LaTeXBox_JumpToMatch('n', 0, 0)
+	    endif
+	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
+	endfor
     else
-	let found =  search('^\%([^%]\|\\%\)*\\end\>', 'bcW')
-	if getline(line(".")) !~ '^\%([^%]\|\\%\)*\\end\s*{\s*document\s*}' && found
-	    exe "normal %"
-	elseif !found
-	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'bW')
-	endif
+	for i in range(cnt)
+	    let found =  search('^\%([^%]\|\\%\)*\\end\>', 'bcW')
+	    if getline(line(".")) !~ '^\%([^%]\|\\%\)*\\end\s*{\s*document\s*}' && found
+		call LaTeXBox_JumpToMatch('n', 1, 0)
+	    elseif !found
+		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'bW')
+	    endif
+	endfor
     endif
     let &l:lazyredraw=lazyredraw
 endfunction 
