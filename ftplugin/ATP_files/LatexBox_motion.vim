@@ -268,10 +268,12 @@ vnoremap <silent> <Plug>LatexBox_SelectInlineMathOuter :<C-U>call <SID>SelectInl
 " }}}
 
 " {{{ select bracket
-function! <SID>LatexBox_SelectBracket(inner, bracket, bracket_sizes)
+function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     " a:bracket_sizes a dictionary of matching bracket sizse { '\bigl' : '\bigr' }.
 
-    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+    for i in range(a:count)
+	let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+    endfor
     if !begin_pos[0]
 	let begin_pos=searchpos(escape(a:bracket, '[]\'), 'Wc', line('.'))
     endif
@@ -334,12 +336,12 @@ function! <SID>LatexBox_SelectBracket(inner, bracket, bracket_sizes)
     call cursor(end_pos)
 
 endfunction
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_1 :<C-U>call <SID>LatexBox_SelectBracket('inner', '(', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_1 :<C-U>call <SID>LatexBox_SelectBracket('outer', '(', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_2 :<C-U>call <SID>LatexBox_SelectBracket('inner', '{', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_2 :<C-U>call <SID>LatexBox_SelectBracket('outer', '{', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_3 :<C-U>call <SID>LatexBox_SelectBracket('inner', '[', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_3 :<C-U>call <SID>LatexBox_SelectBracket('outer', '[', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_1 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '(', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_1 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '(', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_2 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '{', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_2 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '{', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_3 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '[', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_3 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '[', g:atp_sizes_of_brackets)<CR>
 " }}}
 
 " {{{ select syntax
