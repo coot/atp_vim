@@ -17,34 +17,32 @@ functionalities, online help. Just to list the main features:
  * do you want to see [more](http://atp-vim.sf.net) ... / even that is not complete ... /
 
 
-ATP is written in *Python* and *VimL*.
+_ATP_ is written in *Python* and *VimL*.
 
 Help:
 -----
 
-You can start with :help atp
-You can get more help subscribing to the [mailing list](https://lists.sourceforge.net/lists/listinfo/atp-vim-list)
-and post your question. I will also announce new releases there.
+You can start with ":help atp". You also subscribe to the [mailing
+list](https://lists.sourceforge.net/lists/listinfo/atp-vim-list) and post your
+question there.
 
 Dependencies:
 -------------
 
 The plugin contains:
 [LatexBox](http://www.vim.org/scripts/script.php?script_id=3109) developed by
-D.Munger. LatexBox code is hosted on
-[Launchpad](https://launchpad.net/vim-latex-box).
-
-This plugin uses [latexmk](http://www.phys.psu.edu/~collins/software/latexmk-jcc/)
+D.Munger. LatexBox is developed [GitHub](https://github.com/LaTeX-Box-Team/LaTeX-Box).
+It uses [latexmk](http://www.phys.psu.edu/~collins/software/latexmk-jcc/)
 (If you cannot install it, or obtain it there is a command in ATP which does
 the same using internal vim language).
 
-GNU [wdiff](http://www.gnu.org/software/wdiff/)
-This is for making word diff of files (see :help atp-:Wdiff).
+*GNU* [wdiff](http://www.gnu.org/software/wdiff/) for making word
+diffs (see ":help atp-:Wdiff").
 
 
 Licence note:
 -------------
 
-ATP is published under GPL v3+ 
+ATP is published under *GPL v3+*.
 
 Copyright: Marcin Szamotulski, © 2011, 2012
