@@ -6,7 +6,7 @@
 " Time Stamp: 01-10-12_09-07
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
-" Last Change: Wed Oct 03, 2012 at 09:51:36  +0100
+" Last Change: Sat Oct 06, 2012 at 12:27:10  +0100
 " GetLatestVimScripts: 2945 62 :AutoInstall: tex_atp.vim
 " GetLatestVimScripts: 884 1 :AutoInstall: AutoAlign.vim
 " Copyright: © Marcin Szamotulski, 2012
@@ -40,6 +40,8 @@ elseif  stridx(expand("%"), 'fugitive:') == 0
     let b:TypeDict = {}
     let b:ListOfFiles = []
     let b:LevelDict = {}
+    let b:atp_updatetime_normal = 0
+    let b:atp_updatetime_insert = 0
     " Note: ATP could run, but in this way Gdiff is faster.
     finish
 endif

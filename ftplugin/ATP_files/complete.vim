@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 03, 2012 at 19:01:07  +0100
+" Last Change: Sat Oct 06, 2012 at 10:28:03  +0100
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -511,7 +511,7 @@ let g:atp_siuinits= [
 let g:atp_package_dict={}
 function! g:atp_package_dict.ScanPackage(package_name,...) dict "{{{1
     " Todo: add { if the command takes an argument {} but only if it doesn't have
-    " arguments [].
+    " optional arguments [].
     " Fails to find options in geometry.sty since there options are defined using:
     " \define@key{Gm}{option_name}... macro defined in keyval.sty.
 
@@ -535,8 +535,15 @@ if !has("python")
     return {'options' : []}
 endif
 python << EOF
-import vim, re, subprocess, os.path
+import vim
+import re
+import subprocess
+import os.path
+import json
 package = vim.eval("a:package_name")
+
+skip_group = False # if True skips \begingroup:\endgroup:
+                   # This will not work in hyperref.sty, since there is a command: \x which ends the group.
 
 # Pattern to find declared options:
 option_pat = re.compile('\\\\(?:KOMA@|X)?Declare(?:Void|Local|(?:Bi)?Bool(?:ean)?|String|Standard|Switch|Type|Unicode|Entry|Bibliography|Caption|Complementary|Quote)?Option(?:Beamer)?X?\*?(?:<\w+>)?\s*(?:%\s*\n\s)?{((?:\w|\d|-|_|\*)+)}|\\\\Declare(?:Exclusive|Local|Void)?Options\*?\s*{((?:\n|[^}])+)}')
@@ -557,7 +564,8 @@ option_pat = re.compile('\\\\(?:KOMA@|X)?Declare(?:Void|Local|(?:Bi)?Bool(?:ean)
 # /usr/local/texlive/2011/texmf-dist/tex/latex/koma-script/scrbook.cls
 
 # Pattern to find command name without the leading '\':
-command_pat = re.compile('(?:^\s*\\\\e\?def|\\\\(?:newcommand|Declare(?:Document|Uni|(?:Multi)?Cite|Page|Url|Robust|Text(?:Font|Composite)?|OldFont|)Command(?:Default)?\*?))\s*(?:{\\\\([^}]*)|\\\\([^#\[{]*))', re.MULTILINE)
+command_pat = re.compile(r'(?:^\s*\\[egx]?def|\\(?:newcommand|Declare(?:Document|Uni|(?:Multi)?Cite|Page|Url|Robust|Text(?:Font|Composite)?|OldFont|)Command(?:Default)?\*?))\s*(?:{\\([^}]*)|\\([^#\[{]*))', re.MULTILINE)
+command_l_pat = re.compile(r'(?:^\s*\\[egx]?def|\\(?:newcommand|Declare(?:Document|Uni|(?:Multi)?Cite|Page|Url|Robust|Text(?:Font|Composite)?|OldFont|)Command(?:Default)?\*?))\s*({\\(?:[^}]*)|\\(?:[^#\[{]*))')
 # only accept \def and \edef statements at the begining of a line. This excludes internal variables (inside groups: {...}).
 
 # How to work with this :
@@ -629,12 +637,83 @@ def ScanPackage(package, o=True, c=True):
                 options+=option_list
         if c:
             vim.command("echomsg '[ATP]: processing commands from "+package+"'")
-            matches = re.findall(command_pat, package_f)
-            for match in matches:
-                for m in match:
-                    if not re.search('@', m) and not re.search('\\\\', m) and \
-			not re.match('Declare\w*(?:Command|Option)', m) and m != '':
-                        commands.append(re.match('(\S*)', m).group(1))
+            idx = -1
+            package_fl = package_f.splitlines()
+            lnr = 0
+            package_len = len(package_f)
+            while idx < package_len-1:
+                idx +=1
+                if package_f[idx] == "\n":
+                    lnr +=1
+                    # print lnr, package_fl[lnr][:10]
+                    match = re.match(command_l_pat, package_fl[lnr])
+                    if match:
+                        cmd_name = match.group(1).strip()
+                        # print("CMD_NAME(0): '%s'" % cmd_name)
+                        if cmd_name.startswith('{'):
+                            cmd_name = cmd_name[1:].lstrip()
+                        if (not re.search('@', cmd_name) and
+                                not re.search('Declare\w*(?:Command|Option)', cmd_name) and
+                                cmd_name != ''):
+                            commands.append(cmd_name)
+                            # print("CMD_NAME: '%s' at %d" % (cmd_name, lnr))
+                elif package_f[idx] == '{':
+                    idx_o = 1
+                    idx_c = 0
+                    # print "SKIP {"
+                    while idx_o > idx_c and idx < package_len-1:
+                        idx +=1
+                        if package_f[idx] == "\n":
+                            lnr +=1
+                        elif package_f[idx] == "{" and package_f[idx-1] != "\\":
+                            idx_o += 1
+                        elif package_f[idx] == "}" and package_f[idx-1] != "\\":
+                            idx_c += 1
+                    else:
+                        if idx == package_len:
+                            break
+                elif package_f[idx:idx+15].startswith("\\begingroup") and skip_group:
+                    # print "SKIP \\begingroup at %d" % lnr
+                    idx_og = 1
+                    idx_cg = 0
+                    while idx_og > idx_cg and idx < package_len-1:
+                        idx +=1
+                        if package_f[idx] == "\n":
+                            lnr +=1
+                        elif package_f[idx:idx+15].startswith('\\global\\def') or package_f[idx:idx+15].startswith('\\gdef'):
+                            match = re.match(r'(?:\\global\\def|\\gdef)\s*({\\(?:[^}]*)|\\(?:[^#\[{]*))', package_fl[lnr])
+                            if match:
+                                cmd_name = match.group(1).strip()
+                                if cmd_name.startswith('{'):
+                                    cmd_name = cmd_name[1:].lstrip()
+                                if (not re.search('@', cmd_name) and
+                                        not re.search('Declare\w*(?:Command|Option)', cmd_name) and
+                                        cmd_name != ''):
+                                    commands.append(cmd_name)
+                                    # print("CMD_NAME: '%s' at %d" % (cmd_name, lnr))
+                        elif package_f[idx] == "{":
+                            idx_o = 1
+                            idx_c = 0
+                            while idx_o > idx_c and idx < package_len-1:
+                                idx +=1
+                                if package_f[idx] == "\n":
+                                    lnr +=1
+                                elif package_f[idx] == "{" and package_f[idx-1] != "\\":
+                                    idx_o += 1
+                                elif package_f[idx] == "}" and package_f[idx-1] != "\\":
+                                    idx_c += 1
+                            else:
+                                if idx == package_len:
+                                    break
+                        elif package_f[idx:idx+15].startswith("\\begingroup"):
+                            print "     \\begingroup at %d" % lnr
+                            idx_og += 1
+                        elif package_f[idx:idx+15].startswith("\\endgroup"):
+                            print "     \\endgroup at %d" % lnr
+                            idx_cg += 1
+                    # print "SKIPEND \\endgroup at %d" % lnr
+
+
     return [options, remove_duplicates(commands)]
 
 require_package_pat = re.compile('\\\\RequirePackage\s*{([^}]*)}')
@@ -695,8 +774,8 @@ else:
         options=[]
 
 
-vim.command("let options = "+str(options))
-vim.command("let commands= "+str(commands))
+vim.command("let options = "+json.dumps(options))
+vim.command("let commands= "+json.dumps(commands))
 EOF
 if exists('path')
     let self[a:package_name]['path'] = path
@@ -705,7 +784,8 @@ if exists('options') && modes_dict['options']
     let self[a:package_name]['options']=options
 endif
 if exists('commands') && modes_dict['commands']
-    let self[a:package_name]['commands']=map(commands, "'\\'.v:val")
+    " let self[a:package_name]['commands']=map(commands, "'\\'.v:val")
+    let self[a:package_name]['commands']=commands
 endif
 if exists('recursive_dict')
     call map(recursive_dict, 'map(v:val, "''\\''.v:val")')
@@ -719,3 +799,4 @@ endif
 return self
 endfunction "}}}1
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
+
