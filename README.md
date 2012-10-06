@@ -31,10 +31,10 @@ Dependencies:
 
 The plugin contains:
 [LatexBox](http://www.vim.org/scripts/script.php?script_id=3109) developed by
-D.Munger. LatexBox is developed [GitHub](https://github.com/LaTeX-Box-Team/LaTeX-Box).
+D.Munger. LatexBox is developed on [GitHub](https://github.com/LaTeX-Box-Team/LaTeX-Box).
 It uses [latexmk](http://www.phys.psu.edu/~collins/software/latexmk-jcc/)
-(If you cannot install it, or obtain it there is a command in ATP which does
-the same using internal vim language).
+(If you cannot install it, or obtain it there is a command in _ATP_ which does
+the same, but also prints a progress information on the *Vim* status line.).
 
 *GNU* [wdiff](http://www.gnu.org/software/wdiff/) for making word
 diffs (see ":help atp-:Wdiff").
