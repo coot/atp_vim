@@ -1490,6 +1490,12 @@ function! atplib#motion#JumptoEnvironment(backward, ...)
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if !a:backward
+	let min = max([1, col(".")-6])
+	let max = min([col(".")+5, len(getline(line(".")))])
+	if getline(line("."))[(min):(max)] =~ '\\begin\>'
+	    " If on \begin moved to the start of it.
+	    call search('\\begin\>', 'b', line('.'))
+	endif
 	for i in range(cnt)
 	    if !i && getline(".")[col(".")-1:] !~ '^\\begin\s*{'
 		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
@@ -1499,6 +1505,7 @@ function! atplib#motion#JumptoEnvironment(backward, ...)
 	    endif
 	endfor
     else
+	call search('\\begin\>', 'b', line('.'))
 	for i in range(cnt)
 	    call search('^\%([^%]\|\\%\)*\zs\\\%(begin\|end\)\>', 'Wb')
 	    if getline(".")[col(".")-1:] =~ '^\\end\s*{'
@@ -1518,13 +1525,15 @@ function! atplib#motion#FastJumptoEnvironment(backward, ...)
     set lazyredraw
     if !a:backward
 	for i in range(cnt)
-	    call searchpair('\\begin\s*{\s*\%(document/>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
+	    call searchpair('\\begin\s*{\s*\zs\%(document/>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
 	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	endfor
     else
+	call search('\\begin\>', 'b', line("."))
 	for i in range(cnt)
 	    let ppos = getpos(".")[1:2]
-	    call searchpair('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'Wb')
+	    call searchpair('\\begin\s*{\s*\zs\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'Wb')
+	    call search('\\begin', 'b')
 	    if  ppos == getpos(".")[1:2]
 		call search('\\end\s*{\s*\%(document\>\)\@!', 'b')
 		call LaTeXBox_JumpToMatch('n', 0, 0)

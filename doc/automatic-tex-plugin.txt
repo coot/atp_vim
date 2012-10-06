@@ -1953,6 +1953,10 @@ nmap [count][e
 
 <
 
+	Note: the '\begin{' is not included as being inside, i.e. ]e from
+	above \begin will move over it (as on the above diagram). This also
+	applies to backwar motion. But the environment name is included.
+
 
 	If you want to add |zz|, (|zt| or |zb|) after ]e you can put this in
 	your |atprc| file:
@@ -1983,6 +1987,12 @@ nmap [count][E
 	    ....
 	\end{center>
 <
+
+	Note: the '\begin{' is not included as being inside, i.e. ]E from
+	above \begin will to the same place as being just before it (as on the
+	above diagram). This also applies to backward motions. The environment
+	name is treated as an interior part of the environment.
+
 							*atp-]f* *atp-[f*
 							*atp-]F* *atp-[F*
 nmap [count]]f [count]]F
