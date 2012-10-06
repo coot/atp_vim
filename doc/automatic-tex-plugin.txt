@@ -159,11 +159,11 @@ for all the defined functions :help atp*()CTRL-d, mappings: :help atp-mapCTRL-d
 
 ================================================================================
 NEWS							*atp-news*
+
 >
  ======================
- Changes in version 12.1
+ Changes in version 12.2
 <
-
 >
  You can help me get new hardware, since my laptop is dying ...
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
@@ -176,7 +176,14 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 		    Marcin Szamotulski
 <
 
+ |atp-]e|, |atp-[e|,  |atp-]E|, |atp-[E| rewritten from scratch (see the nice
+ graphical explanation therein). 
 
+
+>
+ ======================
+ Changes in version 12.1
+<
  |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
  (begin/end which might be slow on a slow computer).
 
@@ -195,10 +202,6 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  New |atp-gD| normal command.
 
- The maps >E and <E are now |atp-]e| and |atp-[e|, and the previus >e and <e
- maps are |atp-]]| and |atp-[[|. The accept a count. There are also [] and ][
- maps (the count for them is not yet implemented).
- 
  |atp-:Texdoc| and |atp-:Texdef| instead of |atp-:TexDoc|, |atp-:TexDef|.
  |atp-:Texdef| defined only if |g:atp_developer| is 1.
 
@@ -1928,14 +1931,58 @@ nmap %
  							*atp-]e* *atp-[e*
 nmap [count]]e
 nmap [count][e
-	There are two more nice maps: ]e which is something like %]], i.e. jump
-	over the current environment and go to next one. The reverse <e is
-	also implemented, thought it is not simply [[%. They do not support
-	count (yet), and actually count breaks them. If you want to add |zz|,
-	(|zt| or |zb|) after ]e you can put this in your |atprc| file:
+	Go to previous/next environment. If the cursor is on the \begin the
+	forward motion will not descent into child nodes (i.e. it will omitt
+	environments inside). The same applies to the backward motion. 
+
+>
+        \begin{theorem}
+	        .....
+		\begin{center} ◀――┐
+		    ....          |
+		    \begin{X}     |
+                       ...        | ]e, [e
+		    \end{X}       |
+		    ....          |
+		\end{center>      |
+		.....             |
+		\begin{center} ◀――┘
+		    ....
+		\end{center>
+		.....
+
+<
+
+
+	If you want to add |zz|, (|zt| or |zb|) after ]e you can put this in
+	your |atprc| file:
 	    map <buffer> <silent> ]e	<Plug>JumptoNextEnvironmentzz
 	    map <buffer> <silent> [e	<Plug>JumptoPreviousEnvironmentzz
 
+ 							*atp-]E* *atp-[E*
+nmap [count]]E
+nmap [count][E
+	Go to previous/next environment one level up. These are good motions
+	when you want to go out of a nested environment, or jump to the \begin
+	of the current environment.
+
+>
+        \begin{theorem} ◀―――――――――┐
+	        .....             |
+		\begin{center}    |
+		    ....          | [E
+		\end{center}      |
+		.....          ―――┤
+		\begin{center}    |
+		    ....          |
+		\end{center}      | ]E 
+		....              |
+	\end{theorem}             |
+	....                      |
+	\begin{center} ◀――――――――――┘
+	    ....
+	\end{center>
+<
 							*atp-]f* *atp-[f*
 							*atp-]F* *atp-[F*
 nmap [count]]f [count]]F

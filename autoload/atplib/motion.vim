@@ -1481,15 +1481,8 @@ endfunction
 nnoremap <Plug>NextFrame	:<C-U>call atplib#motion#GotoFrame('forward', v:count1)<CR>
 nnoremap <Plug>PreviousFrame	:<C-U>call atplib#motion#GotoFrame('backward', v:count1)<CR>
 " atplib#motion#JumptoEnvironment {{{1 
-" function! atplib#motion#GotoEnvironmentB(flag,count,...)
-"     let env_name 	= (a:0 >= 1 && a:1 != ""  ? a:1 : '[^}]*')
-"     for i in range(1,a:count)
-" 	let flag 	= (i!=1?substitute(a:flag, 's', '', 'g'):a:flag)
-" 	call atplib#motion#GotoEnvironment(flag,1,env_name)
-"     endfor
-" endfunction
-" Jump over current \begin and go to next one.
-" i.e. if on line =~ \begin => % and then search, else search
+" Good for going through all \begin:\end pairs in a given envionrment, without
+" visiting child nodes.
 function! atplib#motion#JumptoEnvironment(backward, ...)
     let cnt = (a:0>=1 ? a:1 : 1)
     k`
@@ -1498,20 +1491,43 @@ function! atplib#motion#JumptoEnvironment(backward, ...)
     set lazyredraw
     if !a:backward
 	for i in range(cnt)
-	    let col	= searchpos('\w*\>\zs', 'n')[1]-1
-	    if strpart(getline(line(".")), 0, col) =~ '\\begin\>$' &&
-			\ strpart(getline(line(".")), col) !~ '^\s*{\s*document\s*}'
+	    if !i && getline(".")[col(".")-1:] !~ '^\\begin\s*{'
+		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
+	    else
+		call searchpair('\\begin\s*{\s*\%(document/>\)\@!', '', '\\end\s*{\s*\%(document/>\)\@!', 'W')
+		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
+	    endif
+	endfor
+    else
+	for i in range(cnt)
+	    call search('^\%([^%]\|\\%\)*\zs\\\%(begin\|end\)\>', 'Wb')
+	    if getline(".")[col(".")-1:] =~ '^\\end\s*{'
 		call LaTeXBox_JumpToMatch('n', 0, 0)
 	    endif
+	endfor
+    endif
+    let &l:lazyredraw=lazyredraw
+endfunction 
+" atplib#motion#FastJumptoEnvironment {{{1 
+" Good for going up one level omittig current nodes.
+function! atplib#motion#FastJumptoEnvironment(backward, ...)
+    let cnt = (a:0>=1 ? a:1 : 1)
+    k`
+    call setpos("''", getpos("."))
+    let lazyredraw=&l:lazyredraw
+    set lazyredraw
+    if !a:backward
+	for i in range(cnt)
+	    call searchpair('\\begin\s*{\s*\%(document/>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
 	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	endfor
     else
 	for i in range(cnt)
-	    let found =  search('^\%([^%]\|\\%\)*\\end\>', 'bcW')
-	    if getline(line(".")) !~ '^\%([^%]\|\\%\)*\\end\s*{\s*document\s*}' && found
-		call LaTeXBox_JumpToMatch('n', 1, 0)
-	    elseif !found
-		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'bW')
+	    let ppos = getpos(".")[1:2]
+	    call searchpair('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'Wb')
+	    if  ppos == getpos(".")[1:2]
+		call search('\\end\s*{\s*\%(document\>\)\@!', 'b')
+		call LaTeXBox_JumpToMatch('n', 0, 0)
 	    endif
 	endfor
     endif

@@ -166,10 +166,10 @@ function! LaTeXBox_JumpToMatch(mode, ...)
 
 endfunction
 
-nnoremap <silent> <Plug>LatexBox_JumpToMatch		:call <SID>JumpToMatch('n')<CR>
-vnoremap <silent> <Plug>LatexBox_JumpToMatch 		:<C-U>call <SID>JumpToMatch('v')<CR>
-nnoremap <silent> <Plug>LatexBox_BackJumpToMatch 	:call <SID>JumpToMatch('n', 1)<CR>
-vnoremap <silent> <Plug>LatexBox_BackJumpToMatch 	:<C-U>call <SID>JumpToMatch('v', 1)<CR>
+nnoremap <silent> <Plug>LatexBox_JumpToMatch		:call LaTeXBox_JumpToMatch('n')<CR>
+vnoremap <silent> <Plug>LatexBox_JumpToMatch 		:<C-U>call LaTeXBox_JumpToMatch('v')<CR>
+nnoremap <silent> <Plug>LatexBox_BackJumpToMatch 	:call LaTeXBox_JumpToMatch('n', 1)<CR>
+vnoremap <silent> <Plug>LatexBox_BackJumpToMatch 	:<C-U>call LaTeXBox_JumpToMatch('v', 1)<CR>
 " }}}
 
 " select inline math {{{
