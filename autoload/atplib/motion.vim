@@ -949,7 +949,6 @@ function! atplib#motion#UpdateToCLine(...)
         let sorted	= sort(keys(t:atp_toc[t:atp_bufname]), "atplib#CompareNumbers")
     endif
     let num_list = [0]
-    let g:sorted=deepcopy(sorted)
     let f_test = ( t:atp_bufname == atplib#FullPath(getbufvar(bufnr(t:atp_bufname), "atp_MainFile")) )
     for ind in range(0,len(sorted)-1)
 	let line_l = sorted[ind]
@@ -1409,30 +1408,34 @@ function! atplib#motion#GotoEnvironment(flag,count,...)
     " Set the pattern : 
     if env_name == 'math'
 	let pattern = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\%(\\begin\s*{\s*\%(\(displayed\)\?math\|\%(fl\)\?align\|eqnarray\|equation\|gather\|multline\|subequations\|xalignat\|xxalignat\)\s*\*\=\s*}\)\|\\\@<!\\\[\|\\\@<!\\(\|\\\@<!\$\$\=\)'
+	let pattern_zs = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\%(\\begin\s*\zs{\s*\%(\(displayed\)\?math\|\%(fl\)\?align\|eqnarray\|equation\|gather\|multline\|subequations\|xalignat\|xxalignat\)\s*\*\=\s*}\)\|\\\@<!\\\[\|\\\@<!\\(\|\\\@<!\$\$\=\)'
     elseif env_name == 'displayedmath'
 	let pattern = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\%(\\begin\s*{\s*\%(displayedmath\|\%(fl\)\?align\*\=\|eqnarray\*\=\|equation\*\=\|gather\*\=\|multline\*\=\|xalignat\*\=\|xxalignat\*\=\)\s*}\)\|\\\@<!\\\[\|\\\@!\$\$\)'
+	let pattern_zs = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\%(\\begin\zs\s*{\s*\%(displayedmath\|\%(fl\)\?align\*\=\|eqnarray\*\=\|equation\*\=\|gather\*\=\|multline\*\=\|xalignat\*\=\|xxalignat\*\=\)\s*}\)\|\\\@<!\\\[\|\\\@!\$\$\)'
     elseif env_name == 'inlinemath'
 	let pattern = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\\begin\s*{\s*math\s*}\|\\\@<!\\(\|\$\@<!\\\@<!\$\$\@!\)'
+	let pattern_zs = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\%(\\begin\s*\zs{\s*math\s*}\|\\\@<!\\(\|\$\@<!\\\@<!\$\$\@!\)'
     else
 	let pattern = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\\begin\s*{\s*' . env_name 
+	let pattern_zs = '\m\%(\(\\\@<!\\\)\@<!%.*\)\@<!\\begin\s*\zs{\s*' . env_name 
     endif
 
 
-    " Search (twise if needed)
+    " Search (twice if needed)
     for i in range(1, a:count)
 	if i > 1
 	    " the 's' flag should be used only in the first search. 
 	    let flag=substitute(flag, 's', '', 'g') 
 	endif
 	if g:atp_mapNn
-	    let search_cmd 	= "S /"
+	    let search_cmd = "S /"
 	    let search_cmd_e= "/ " . flag
 	else
-	    let search_cmd	= "silent! call search('"
+	    let search_cmd = "silent! call search('"
 	    let search_cmd_e= "','" . flag . "')"
 	endif
-	execute  search_cmd . pattern . search_cmd_e
 	if a:flag !~# 'b'
+            execute  search_cmd . pattern . search_cmd_e
 	    if getline(".")[col(".")-1] == "$" 
 		if ( get(split(getline("."), '\zs'), col(".")-1, '') == "$" && get(split(getline("."), '\zs'), col("."), '') == "$" )
 		    "check $$
@@ -1446,6 +1449,8 @@ function! atplib#motion#GotoEnvironment(flag,count,...)
 		endif
 	    endif
 	else " a:flag =~# 'b'
+            execute  search_cmd . pattern_zs . search_cmd_e
+            call search(pattern, 'bc', line("."))
 	    if getline(".")[col(".")-1] == "$" 
 		if ( get(split(getline("."), '\zs'), col(".")-1, '') == "$" && get(split(getline("."), '\zs'), col(".")-2, '') == "$" )
 		    "check $$
@@ -1455,7 +1460,8 @@ function! atplib#motion#GotoEnvironment(flag,count,...)
 		    let rerun = atplib#complete#CheckSyntaxGroups(['texMathZoneX', 'texMathZoneY'], line("."), col(".")-2 )
 		endif
 		if rerun
-		    silent! execute search_cmd . pattern . search_cmd_e
+		    silent! execute search_cmd . pattern_zs . search_cmd_e
+                    call search(pattern, 'bc', line("."))
 		endif
 	    endif
 	endif
@@ -1822,10 +1828,6 @@ function! atplib#motion#GotoFile(bang,args,...)
 	call extend(level_d, { atp_MainFile : 0 })
     endif
 
-    let g:file_l = copy(file_l)
-    let g:method = method
-    let g:line 	= line
-
     if len(file_l) > 1 && file =~ '^\s*$'
 	if method == "all"
 	    let msg = "Which file to edit?"
@@ -1914,12 +1916,6 @@ function! atplib#motion#GotoFile(bang,args,...)
 	let file 	= atplib#FullPath(file)
 	let fname	= file
     endif
-
-"     DEBUG
-"     let g:fname  = fname
-"     let g:file   = file 
-"     let g:file_l = file_l
-"     let g:choice = choice 
 
     if !exists("file")
 	exe "lcd " . fnameescape(cwd)
@@ -2072,9 +2068,6 @@ function! atplib#motion#TexSyntaxMotion(forward, how, ...)
     let SectionModifierCount 	= count(synstack, 'texSectionModifier')
     let SectionModifierCounth 	= count(synstackh, 'texSectionModifier') && !count(synstackh, 'Delimiter') && col(".") > 1
 "     let MathZonesCount		= len(filter(copy(synstack), 'v:val =~ ''^texMathZone[A-Z]'''))
-
-"     let g:col	= col(".")
-"     let g:line	= line(".")
 
     if DelimiterCount 
 	let syntax	= [ 'Delimiter' ]
