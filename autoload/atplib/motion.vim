@@ -1483,13 +1483,13 @@ nnoremap <Plug>PreviousFrame	:<C-U>call atplib#motion#GotoFrame('backward', v:co
 " atplib#motion#JumptoEnvironment {{{1 
 " Good for going through all \begin:\end pairs in a given envionrment, without
 " visiting child nodes.
-function! atplib#motion#JumptoEnvironment(backward, ...)
+function! atplib#motion#JumptoEnvironment(forward, ...)
     let cnt = (a:0>=1 ? a:1 : 1)
     k`
     call setpos("''", getpos("."))
     let lazyredraw=&l:lazyredraw
     set lazyredraw
-    if !a:backward
+    if a:forward
 	let min = max([1, col(".")-6])
 	let max = min([col(".")+5, len(getline(line(".")))])
 	if getline(line("."))[(min):(max)] =~ '\\begin\>'
@@ -1500,7 +1500,7 @@ function! atplib#motion#JumptoEnvironment(backward, ...)
 	    if !i && getline(".")[col(".")-1:] !~ '^\\begin\s*{'
 		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	    else
-		call searchpair('\\begin\s*{\s*\%(document/>\)\@!', '', '\\end\s*{\s*\%(document/>\)\@!', 'W')
+		call searchpair('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
 		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	    endif
 	endfor
@@ -1517,15 +1517,15 @@ function! atplib#motion#JumptoEnvironment(backward, ...)
 endfunction 
 " atplib#motion#FastJumptoEnvironment {{{1 
 " Good for going up one level omittig current nodes.
-function! atplib#motion#FastJumptoEnvironment(backward, ...)
+function! atplib#motion#FastJumptoEnvironment(forward, ...)
     let cnt = (a:0>=1 ? a:1 : 1)
     k`
     call setpos("''", getpos("."))
     let lazyredraw=&l:lazyredraw
     set lazyredraw
-    if !a:backward
+    if a:forward
 	for i in range(cnt)
-	    call searchpair('\\begin\s*{\s*\zs\%(document/>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
+	    call searchpair('\\begin\s*{\s*\zs\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
 	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	endfor
     else
@@ -1533,15 +1533,38 @@ function! atplib#motion#FastJumptoEnvironment(backward, ...)
 	for i in range(cnt)
 	    let ppos = getpos(".")[1:2]
 	    call searchpair('\\begin\s*{\s*\zs\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'Wb')
-	    call search('\\begin', 'b')
-	    if  ppos == getpos(".")[1:2]
-		call search('\\end\s*{\s*\%(document\>\)\@!', 'b')
-		call LaTeXBox_JumpToMatch('n', 0, 0)
+	    call search('\\begin', 'b', line('.'))
+	    let pos = getpos(".")[1:2]
+	    if  ppos == pos
+		call search('\\end\s*{\s*\%(document\>\)\@!', 'Wb')
+		if pos != getpos(".")[1:2]
+		    call LaTeXBox_JumpToMatch('n', 0, 0)
+		endif
 	    endif
 	endfor
     endif
     let &l:lazyredraw=lazyredraw
 endfunction 
+" atplib#motion#JumpOut {{{1 
+function! atplib#motion#JumpOut(forward)
+    k`
+    call setpos("''", getpos("."))
+    let lazyredraw=&l:lazyredraw
+    set lazyredraw
+    if a:forward
+	let flags = 'W'
+    else
+	let flags = 'Wb'
+    endif
+    let ppos = getpos(".")[1:2]
+    let pos = searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags)
+    while pos != ppos
+	let ppos = pos
+	let pos =  searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags)
+    endwhile
+    let &l:lazyredraw=lazyredraw
+endfunction 
+
 " atplib#motion#GotoSection {{{1 
 " The extra argument is a pattern to match for the
 " section title. The first, obsolete argument stands for:

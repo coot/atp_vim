@@ -137,16 +137,18 @@ augroup END
 " {{{1
 if exists(":Tags") != 2
     let b:atp_LatexTags = 1
-    command! -buffer -bang Tags						:call atplib#motion#LatexTags(<q-bang>)
+    command! -buffer -bang Tags					:call atplib#motion#LatexTags(<q-bang>)
 else
     let b:atp_LatexTags = 0
-    command! -buffer -bang LatexTags					:call atplib#motion#LatexTags(<q-bang>)
+    command! -buffer -bang LatexTags				:call atplib#motion#LatexTags(<q-bang>)
 endif
 command! -nargs=? -complete=custom,atplib#motion#RemoveFromToCComp RemoveFromToC	:call atplib#motion#RemoveFromToC(<q-args>)
-map	<buffer> <silent> <Plug>JumptoPreviousEnvironment		:<C-U>call atplib#motion#JumptoEnvironment(1,v:count1)<CR>
-map	<buffer> <silent> <Plug>JumptoNextEnvironment			:<C-U>call atplib#motion#JumptoEnvironment(0,v:count1)<CR>
-map	<buffer> <silent> <Plug>FastJumptoPreviousEnvironment		:<C-U>call atplib#motion#FastJumptoEnvironment(1,v:count1)<CR>
-map	<buffer> <silent> <Plug>FastJumptoNextEnvironment		:<C-U>call atplib#motion#FastJumptoEnvironment(0,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>JumptoNextEnvironment		:<C-U>call atplib#motion#JumptoEnvironment(1,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>JumptoPreviousEnvironment	:<C-U>call atplib#motion#JumptoEnvironment(0,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>FastJumptoNextEnvironment	:<C-U>call atplib#motion#FastJumptoEnvironment(1,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>FastJumptoPreviousEnvironment	:<C-U>call atplib#motion#FastJumptoEnvironment(0,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>JumpOutForward			:<C-U>call atplib#motion#JumpOut(1)<CR>
+nnoremap <buffer> <silent> <Plug>JumpOutBackward			:<C-U>call atplib#motion#JumpOut(0)<CR>
 command! -buffer -count=1 Part		:call atplib#motion#ggGotoSection(<q-count>, 'part')
 command! -buffer -count=1 Chap		:call atplib#motion#ggGotoSection(<q-count>, 'chapter')
 command! -buffer -count=1 Sec		:call atplib#motion#ggGotoSection(<q-count>, 'section')

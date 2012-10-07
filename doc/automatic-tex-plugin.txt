@@ -179,6 +179,8 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  |atp-]e|, |atp-[e|,  |atp-]E|, |atp-[E| rewritten from scratch (see the nice
  graphical explanation therein). 
 
+ New motions |atp-]o|, |atp-[o|.
+
 
 >
  ======================
@@ -1992,6 +1994,26 @@ nmap [count][E
 	above \begin will to the same place as being just before it (as on the
 	above diagram). This also applies to backward motions. The environment
 	name is treated as an interior part of the environment.
+ 							*atp-]o* *atp-[o*
+nmap ]o
+nmap [o
+        Go out of all nested environments: |atp-]o| - forward; |atp-[o|
+        - backward.
+
+>
+        \begin{document}
+
+            \begin{theorem} ◀――――――――――――┐
+                \begin{center}           |
+                    \begin{align}        | [o
+                        \begin{split}    |
+                           ....       ―――┤
+                        \end{split}      |
+                    \end{align}          | ]o
+                \end{center}             |
+            \end{theorem} ◀――――――――――――――┘
+	
+<
 
 							*atp-]f* *atp-[f*
 							*atp-]F* *atp-[F*
