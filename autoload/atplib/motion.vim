@@ -1496,7 +1496,7 @@ function! atplib#motion#JumptoEnvironment(forward, ...)
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if a:forward
-	let min = max([1, col(".")-6])
+	let min = max([0, col(".")-6])
 	let max = min([col(".")+5, len(getline(line(".")))])
 	if getline(line("."))[(min):(max)] =~ '\\begin\>'
 	    " If on \begin moved to the start of it.
@@ -1530,8 +1530,14 @@ function! atplib#motion#FastJumptoEnvironment(forward, ...)
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if a:forward
+	let min = max([0, col(".")-6])
+	let max = min([col(".")+5, len(getline(line(".")))])
+	if getline(line("."))[(min):(max)] =~ '\\begin\>'
+	    " If on \begin moved to the start of it.
+	    call search('\\begin\>', 'b', line('.'))
+	endif
 	for i in range(cnt)
-	    call searchpair('\\begin\s*{\s*\zs\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
+	    call searchpair('\\begin\s*\zs{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
 	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	endfor
     else
@@ -1559,14 +1565,21 @@ function! atplib#motion#JumpOut(forward)
     set lazyredraw
     if a:forward
 	let flags = 'W'
+	let limit = line(".")+g:atp_completion_limits[3]
     else
 	let flags = 'Wb'
+	let limit = max([1, line(".")-g:atp_completion_limits[3]])
     endif
     let ppos = getpos(".")[1:2]
-    let pos = searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags)
+    let pos = searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags, '', limit)
     while pos != ppos
 	let ppos = pos
-	let pos =  searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags)
+	if a:forward
+	    let limit = line(".")+g:atp_completion_limits[3]
+	else
+	    let limit = max([1, line(".")-g:atp_completion_limits[3]])
+	endif
+	let pos =  searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags, '', limit)
     endwhile
     let &l:lazyredraw=lazyredraw
 endfunction 

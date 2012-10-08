@@ -2015,6 +2015,11 @@ nmap [o
 	
 <
 
+	Note: the motion is written using the |searchpair()| function. Since
+	it is slow on long files every call to |searchpair()| is limited to
+	the scope of |g:atp_completion_limits|[3] ahead/back (it is computed
+	for every call). 
+
 							*atp-]f* *atp-[f*
 							*atp-]F* *atp-[F*
 nmap [count]]f [count]]F
@@ -2051,13 +2056,16 @@ vmap ]p, vmap ]c, vmap ]s, vmap ]S
 	You can set the leader ']' using |g:atp_map_forward_motion_leader|
 	variable.
 
-	Note: If you set |g:atp_forward_motion_leader| to '>' then ATP remaps
+	Note: If you set |g:atp_map_forward_motion_leader| to '>' then ATP remaps
 	|>>| to >> and also |v_>| to >>. |>| is working and is not touched by
 	ATP. If you have |'timeout'| set then the map is executed faster, if
 	you use |'notimeout'| this workaround it makes these operators work.
 
-	Note: If you set |g:atp_forward_motion_leader|="}" then ATP remaps |}|
-	operator to }}
+	Note: If you set |g:atp_map_forward_motion_leader|="}" then ATP remaps |}|
+	operator to }}.
+
+	Note: if you set |g:atp_map_forward_motion_leader|="]" you might need
+	to remap |]s|.
 
 	Note: the maps work in visual mode and operator pending mode ('d\ns'
 	will delete till the end of the section). You can use |n| and |N| Vim
