@@ -302,17 +302,21 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     " if index(keys(g:atp_sizes_of_brackets), '\'.expand("<cword>")) != -1
 	" normal! w
     " endif
-    let o_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
+    let matches = matchlist(getline(line("."))[0:col(".")-2], '\(\\\w*\)\(\s*\)$')
+    let o_size = get(matches, 1, '')
+    let o_space = get(matches, 2, '')
     if index(keys(a:bracket_sizes), o_size) != -1
-	let b_len = len(o_size)
+	let b_len = len(o_size)+len(o_space)
     else
 	let b_len = 0
     endif
     " In the case of \{ 
     if o_size == "\\"
-	let o_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$')
+	let matches = matchlist(getline(line("."))[0:col(".")-3], '\(\\\w*\)\(\s*\)$')
+	let o_size = get(matches, 1, '')
+	let o_space = get(matches, 2, '')
 	if index(keys(a:bracket_sizes), o_size) != -1
-	    let b_len += len(o_size)
+	    let b_len += len(o_size)+len(o_space)
 	endif
     endif
 
@@ -339,17 +343,21 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     let end_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'nW')
     call cursor(end_pos)
 
-    let c_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
+    let matches = matchlist(getline(line("."))[0:col(".")-2], '\(\\\w*\)\(\s*\)$')
+    let c_size = get(matches, 1, '')
+    let c_space = get(matches, 2, '')
     if index(values(a:bracket_sizes), c_size) != -1
-	let e_len = len(c_size)
+	let e_len = len(c_size)+len(c_space)
     else
 	let e_len = 0
     endif
     " In the case of \{ 
     if c_size == "\\"
-	let c_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$')
+	let matches = matchlist(getline(line("."))[0:col(".")-3], '\(\\\w*\)\(\s*\)$')
+	let c_size = get(matches, 1, '')
+	let c_space = get(matches, 2, '')
 	if index(values(a:bracket_sizes), c_size) != -1
-	    let e_len += len(c_size)
+	    let e_len += len(c_size)+len(c_space)
 	endif
     endif
 
