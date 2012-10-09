@@ -147,8 +147,10 @@ nnoremap <buffer> <silent> <Plug>JumptoNextEnvironment		:<C-U>call atplib#motion
 nnoremap <buffer> <silent> <Plug>JumptoPreviousEnvironment	:<C-U>call atplib#motion#JumptoEnvironment(0,v:count1)<CR>
 nnoremap <buffer> <silent> <Plug>FastJumptoNextEnvironment	:<C-U>call atplib#motion#FastJumptoEnvironment(1,v:count1)<CR>
 nnoremap <buffer> <silent> <Plug>FastJumptoPreviousEnvironment	:<C-U>call atplib#motion#FastJumptoEnvironment(0,v:count1)<CR>
-nnoremap <buffer> <silent> <Plug>JumpOutForward			:<C-U>call atplib#motion#JumpOut(1)<CR>
-nnoremap <buffer> <silent> <Plug>JumpOutBackward			:<C-U>call atplib#motion#JumpOut(0)<CR>
+nnoremap <buffer> <silent> <Plug>JumpOutForward			:<C-U>call atplib#motion#JumpOut(1,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>JumpOutBackward		:<C-U>call atplib#motion#JumpOut(0,v:count1)<CR>
+nnoremap <buffer> <silent> <Plug>FastJumpOutForward		:<C-U>call atplib#motion#FastJumpOut(1)<CR>
+nnoremap <buffer> <silent> <Plug>FastJumpOutBackward		:<C-U>call atplib#motion#FastJumpOut(0)<CR>
 command! -buffer -count=1 Part		:call atplib#motion#ggGotoSection(<q-count>, 'part')
 command! -buffer -count=1 Chap		:call atplib#motion#ggGotoSection(<q-count>, 'chapter')
 command! -buffer -count=1 Sec		:call atplib#motion#ggGotoSection(<q-count>, 'section')
@@ -171,8 +173,8 @@ nmap <Plug>TexJMotionForward	:call atplib#motion#JMotion('')<CR>
 nmap <Plug>TexJMotionBackward	:call atplib#motion#JMotion('b')<CR>
 
 " command! -buffer -nargs=1 -complete=buffer MakeToc	:echo atplib#motion#maketoc(fnamemodify(<f-args>, ":p"))[fnamemodify(<f-args>, ":p")] 
-command! -buffer -bang -nargs=? TOC	:call atplib#motion#TOC(<q-bang>)
-command! -buffer CTOC			:call CTOC()
+command! -buffer -bang -nargs=? Toc	:call atplib#motion#TOC(<q-bang>)
+command! -buffer Ctoc			:call CTOC()
 command! -buffer -bang Labels		:call atplib#motion#Labels(<q-bang>)
 command! -buffer -count=1 -nargs=? -complete=customlist,EnvCompletionWithoutStarEnvs Nenv	:call atplib#motion#GotoEnvironment('sW',<q-count>,<q-args>)  | let v:searchforward=1 
 command! -buffer -count=1 -nargs=? -complete=customlist,EnvCompletionWithoutStarEnvs Penv	:call atplib#motion#GotoEnvironment('bsW',<q-count>,<q-args>) | let v:searchforward=0

@@ -270,9 +270,27 @@ vnoremap <silent> <Plug>LatexBox_SelectInlineMathOuter :<C-U>call <SID>SelectInl
 function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     " a:bracket_sizes a dictionary of matching bracket sizse { '\bigl' : '\bigr' }.
 
-    for i in range(a:count)
-	let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+    for key in keys(a:bracket_sizes)
+	let idx = stridx(getline(line("."))[(col(".")-len(key)):(col(".")+len(key)-2)], key)
+	if idx != -1
+	    call cursor(line("."), col(".")+idx+len(key))
+	    break
+	endif
     endfor
+    let idx = stridx(getline(line("."))[(col(".")-len(a:bracket)):(col(".")+len(a:bracket)-2)], a:bracket) != -1
+    if idx != -1
+    " Note I have to add 'c' flag if the cursor is over the bra.
+	call cursor(line("."), col(".")+idx+len(a:bracket)-1)
+	let flag = 'cbW'
+    else
+	let flag = 'bW'
+    endif
+    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), flag)
+    if a:count > 1
+	for i in range(a:count-1)
+	    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+	endfor
+    endif
     if !begin_pos[0]
 	let begin_pos=searchpos(escape(a:bracket, '[]\'), 'Wc', line('.'))
     endif
@@ -281,12 +299,22 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
 	return
     endif
 
+    " if index(keys(g:atp_sizes_of_brackets), '\'.expand("<cword>")) != -1
+	" normal! w
+    " endif
     let o_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
+    if index(keys(a:bracket_sizes), o_size) != -1
+	let b_len = len(o_size)
+    else
+	let b_len = 0
+    endif
     " In the case of \{ 
     if o_size == "\\"
-	let o_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$').o_size
+	let o_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$')
+	if index(keys(a:bracket_sizes), o_size) != -1
+	    let b_len += len(o_size)
+	endif
     endif
-    let b_len = len(o_size)
 
     if a:inner == 'inner'
 	if col(".")+len(a:bracket) <= len(getline(line(".")))
@@ -312,11 +340,18 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     call cursor(end_pos)
 
     let c_size = matchstr(getline(line("."))[0:col(".")-2], '\\\w*\ze\s*$')
+    if index(values(a:bracket_sizes), c_size) != -1
+	let e_len = len(c_size)
+    else
+	let e_len = 0
+    endif
     " In the case of \{ 
     if c_size == "\\"
-	let c_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$').c_size
+	let c_size = matchstr(getline(line("."))[0:col(".")-3], '\\\w*\ze\s*$')
+	if index(values(a:bracket_sizes), c_size) != -1
+	    let e_len += len(c_size)
+	endif
     endif
-    let e_len = len(c_size)
 
     if a:inner == 'inner'
 	if end_pos[1] > e_len+len(g:atp_bracket_dict[a:bracket])

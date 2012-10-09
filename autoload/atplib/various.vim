@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Mon Oct 01, 2012 at 18:46:05  +0100
+" Last Change: Tue Oct 09, 2012 at 13:58:56  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1190,15 +1190,6 @@ if &buftype == 'quickfix'
 	setlocal modifiable
 	setlocal autoread
 endif	
-function! atplib#various#TexLog(...)
-    if executable("texloganalyser")
-       let cmd="texloganalyser ".( a:0 ? a:1 : "")." ".shellescape(fnamemodify(atplib#FullPath(b:atp_MainFile),":r").".log")
-       echo system(cmd)
-    else	
-       echo "Please install 'texloganalyser' to have this functionality. The perl program written by Thomas van Oudenhove."  
-    endif
-endfunction
-
 function! atplib#various#PdfFonts()
     if executable("pdffonts")
 	echo system("pdffonts " . fnameescape(fnamemodify(atplib#FullPath(b:atp_MainFile),":r")) . ".pdf")

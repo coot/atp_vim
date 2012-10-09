@@ -103,7 +103,7 @@ TABLE OF CONTENTS 					*atp*
 	|atp-commands| 			Functions and commands:
 	some most important commands: ~
 	    compile ~
-		|atp-:TEX|
+		|atp-:Tex|
 		|atp-:MakeLatex|
 		|atp-:Bibtex|
 		|atp-:DebugMode|
@@ -181,6 +181,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  New motions |atp-]o|, |atp-[o|.
 
+ |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :TEX, :TEXL,
+ :DTEX, :PID. I think it is easier to type.
+
 
 >
  ======================
@@ -213,7 +216,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  If you don't want the ruler in the ATP status set the vim option |'noruler'|
  and use the command |atp-:Status| (or |atp-:ATPStatus|).
 
- |atp-:TEXL| and the \\l map supports count.
+ |atp-:Texl| and the \\l map supports count.
  There are two maps to |atp-:SyncTexL|: \\f (like \\l) and \F.
 
  completion: if you use subfiles packages the completion for \ref{} and
@@ -254,7 +257,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  gf	    - works faster if vim is compiled with |+python| interface.
  C-XC-O	    - closing brackets: a small bug fixed.
  vip	    - better support for "\begin{...}[...]\label{...}".
- TEX!
+ Tex!
  MakeLatex! - with the bang "!" the commands writes (using |update| command)
 	      all the loaded project buffers.
 >
@@ -303,7 +306,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  Support for subfiles.sty package:~
  Compilation of parts of a project (using subfiles package).
- |atp-:TEXL|, |atp-:ViewL|, |atp-:SyncTexL|, see also |b:atp_autex| (when set
+ |atp-:Texl|, |atp-:ViewL|, |atp-:SyncTexL|, see also |b:atp_autex| (when set
  to 2 automatic compilations of subfiles is turned on).
 
  |atp-:S| command has additional flag 'x', when used the
@@ -1077,7 +1080,7 @@ reloaded).
 There is also a variable which stores the last command which executed
 your tex compiler, see |g:atp_TexCommand|.   
 
-:[count]TEX[!] [debug_mode]				*atp-:TEX*
+:[count]Tex[!] [debug_mode]				*atp-:Tex*
 map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	If anyway you want to run TeX yourself but you do not want to see the
 	output this is the right tool. This runs TeX in 'nonstopmode'. You can
@@ -1092,7 +1095,7 @@ map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	running on the output file then this function will open a viewer. By
 	default b:atp_OpenViewer=0 and this feature is disabled. 
 
-	The command :2TEX will call the compiler two times.
+	The command :2Tex will call the compiler two times.
 
 	It is useful when you want to make the outline (using hyperref
 	package) of your article in pdf files, the tex file has to be
@@ -1109,15 +1112,15 @@ map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	'D', 'v' or "si"/"sil"/"sile"/... etc.) See the description of
 	|atp-debug-mode|.
 
-	\d is mapped to :TEX debug and \l to :TEX (thus it uses your default
+	\d is mapped to :Tex debug and \l to :Tex (thus it uses your default
 	debug mode).
 
-:[count]TEXL [debug_mode]					*atp-:TEXL*
+:[count]Texl [debug_mode]					*atp-:Texl*
 map [count]<LocalLeader>k
 	This command compiles the current subfile (L - comes from "local") of
 	the project (you have to use subfiles package). 
 
-	This commands also sets 'errorfile' option (using |atp-:TEX| will set
+	This commands also sets 'errorfile' option (using |atp-:Tex| will set
 	it back to the main log file).
 	
 	Note that ATP is coping the project aux file (if present) and using it
@@ -1125,7 +1128,7 @@ map [count]<LocalLeader>k
 	references. If you add new labels to the subfile then ATP will copy
         the corresponding entries from the subfile aux file to the main aux
         file. However, it will not work if the label (its value) was changed
-        or removed. Then you need to compile the project with |atp-:TEX|
+        or removed. Then you need to compile the project with |atp-:Tex|
         command.
 
 	Note: the advantage of using subfiles package is that you
@@ -1133,9 +1136,9 @@ map [count]<LocalLeader>k
 	output.
 
 
-:[count]DTEX 							*atp-:DTEX*
+:[count]Dtex 							*atp-:Dtex*
 map [count]<LocalLeader>d 
-	This is equivalent to ':TEX debug'.
+	This is equivalent to ':Tex debug'.
 
 :MakeLatex[!]						*atp-:MakeLatex*
 	With one command you can make your whole document: cross references,
@@ -1166,7 +1169,7 @@ map <LocalLeader>b
 	compiler are called to make the bibliography.
 
 	If you specify any value to the [debug_mode] option (for the values
-	see |atp-:TEX|) In verbose mode (only the last time tex compiler will
+	see |atp-:Tex|) In verbose mode (only the last time tex compiler will
 	run in errorstop mode and echoed to the console). This gives you the
 	chance to see the output of bibtex command (it will be also printed
 	when latex ends). 
@@ -1181,9 +1184,9 @@ map <LocalLeader>b
 	The command |atp-:Bibtex|  will :call Bibtex(), while :Bibtex v
 	(and :Bibtex [debug_mode]) will :call Bibtex(1)
 
-	The bang "!" is used in the same way as for |atp-:TEX| command.
+	The bang "!" is used in the same way as for |atp-:Tex| command.
 
-	For the description of optional argument [debug_mode] see |atp-:TEX|.
+	For the description of optional argument [debug_mode] see |atp-:Tex|.
 
 
 							*g:atp_raw_bibinputs*
@@ -1210,7 +1213,7 @@ map <LocalLeader>b
 	Kill python scripts running (b:atp_PythonPIDs) and all pids in
 	|b:atp_LatexPIDs|. This only works with |g:atp_Compiler|="python".
 
-:PID 							*atp-:PID*
+:Pid 							*atp-:Pid*
 	Prints PIDs of all running instances of |b:atp_TexCompiler|.
 
 
@@ -1416,7 +1419,7 @@ let |g:atp_OpenAndSyncSleepTime|="500m"
 
 :ViewL[!]						*atp-:ViewL*
 map <LocalLeader>V, map <S-F3>, imap <S-F3>  
-	With this command you can view the subfile comiled by |atp-:TEXL|
+	With this command you can view the subfile comiled by |atp-:Texl|
 	command (or with |b:atp_autex|=2). "L" comes from "local".
 
 	Bang and [i]map <S-F3> works as in |atp-:View|! command (and its <F3>
@@ -1450,7 +1453,7 @@ map <LocalLeader>f, map <S-LeftMouse>
 map <LocalLeader>F
 map <LocalLeader><LocalLeader>f
 	Forward search from the subfile to its output (as compiled with
-	|atp-:TEXL| or |b:atp_autex|=2).
+	|atp-:Texl| or |b:atp_autex|=2).
 
 	With bang |atp-:SyncTexL| will not check if the viewer is running.
 
@@ -1955,9 +1958,8 @@ nmap [count][e
 
 <
 
-	Note: the '\begin{' is not included as being inside, i.e. ]e from
-	above \begin will move over it (as on the above diagram). This also
-	applies to backwar motion. But the environment name is included.
+	Note: the [e, motion when on a line with \begin will first move to the
+	prvious \begin on this line and jump from there. 
 
 
 	If you want to add |zz|, (|zt| or |zb|) after ]e you can put this in
@@ -1994,10 +1996,33 @@ nmap [count][E
 	above \begin will to the same place as being just before it (as on the
 	above diagram). This also applies to backward motions. The environment
 	name is treated as an interior part of the environment.
+
  							*atp-]o* *atp-[o*
-nmap ]o
-nmap [o
-        Go out of all nested environments: |atp-]o| - forward; |atp-[o|
+nmap [count]]o
+nmap [count][o
+        Go out of nested environments: |atp-]o| - forward; |atp-[o|
+        - backward.
+
+>
+        \begin{document}
+
+                \begin{center}◀――――――――――┐ 2[o        
+		      ....               |
+                    \begin{align} ◀――――――┤ [o
+                           ....          |
+                           ....       ―――┤
+			   ....          |
+                    \end{align} ◀――――――――┤ ]o
+		      ....               |
+                \end{center} ◀―――――――――――┘ 2]o
+            \end{theorem} 
+	
+<
+
+ 							*atp-]O* *atp-[O*
+nmap ]O
+nmap [O
+        Go out of all nested environments: |atp-]O| - forward; |atp-[O|
         - backward.
 
 >
@@ -3729,8 +3754,8 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_TexCompiler*
 >
  let b:atp_TexCompiler	= "pdflatex"			
-<	Used by functions: TEX() (map <LocalLeader>l, imap <LocalLeader>l),
-	VTEX() (map <F5>, imap <F5>)
+<	Used by the command: |atp-:Tex| (map <LocalLeader>l, imap
+	<LocalLeader>l, map <F5>, imap <F5>)
 
 	You can set it to latex, tex, luatex, and so on and possibly to
 	lilypond as well.  
@@ -3755,7 +3780,7 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	The default value will be "biber" if the preamule contains
 	\usepackge[backend=biber]{biblatex}. If it is set to "biber" ATP will
 	adjust |g:atp_keep| variable (add run.xml, bcf extensions) when you use
-	|atp-:TEX|, |atp-:Bibtex|, or |atp-:MakeLatex| commands.
+	|atp-:Tex|, |atp-:Bibtex|, or |atp-:MakeLatex| commands.
 
 	Biblatex package allows for putting \bibliography{} type commands only
 	in the preamble. Thus ATP will search for them only there. The
@@ -3963,9 +3988,9 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 <	This variable is for debugging purposes. It stores the last executed command to
 	compile your document. It changes also when your compiler was run
 	automatically. >
-		:TEX
+		:Tex
 		:echo g:atp_TexCommand
-		:TEX!
+		:Tex!
 		:echo g:atp_TexCommand
 <	It is read-only variable.	
 							*b:atp_TempDir*
@@ -4097,7 +4122,7 @@ WRITING PROJECTS					*atp-ProjectFiles*
 	files /but |:ijump| is much faster/. 
 
 	If you write a project you might want to use subfiles package. Then
-	you can compile with |atp-:TEXL|, view with |atp-:ViewL| and forward
+	you can compile with |atp-:TexL|, view with |atp-:ViewL| and forward
 	search with |atp-:SyncTexL|. Furthermore, you can still use completion
 	of labels by numbers if you add to the preambule of the subfile the
 	following command (requires ifthen package): >
@@ -5159,13 +5184,20 @@ vmap [count]i), [count]i]
 vmap [count]i(, [count]i[
 	i), i(, i], i[ -- select between (:) and [:] without the bracket
 	sizes, i.e. '\left(XXX\right)' i( and i) will select 'XXX'. These maps
-	will not select between \(:\), and \[:\] (for these use |atp-im|)
+	will also select between \(:\), and \[:\].
 
 	The [count] has the same meaning as in |i(|.
+
+	Note: the bracket size is included, i.e. 'vi(' on '\left' in
+	'\left(...\right)' will match the inside of the following bracket
+	pair. If you want to match as vim's 'vi(' would do, add a count at
+	this position: 'v2i('.
 							*atp-vi}* *atp-vi{*
 vmap [counti]i}
 vmap [counti]i{   
 	 i}, i{ -- select between {:} and \{:\} (omitting sizes as above)
+
+	 Note: the bracket size is included (see |atp-vi)|).
  							*atp-va)* *atp-va(*
 							*atp-va]* *atp-va[*
 vmap [count]a), [count]a]
@@ -5174,10 +5206,14 @@ vmap [count]a(, [count]a[
 	brackets and the bracket sizes, i.e. a) and a( over '\left(XXX\right)'
 	will select whole sequence. These map will not select \(:\) and \[:\]
 	(use |atp-am| instead)
+
+	Note: the bracket size is included (see |atp-vi)|).
 							*atp-va}* *atp-va{*
 vmap [counti]a}
 vmap [counti]a{   
 	a}, a{ -- select between {:}, \{:\} together with the sizes.
+
+	Note: the bracket size is included (see |atp-vi)|).
 
 							*atp-omap-i)* *atp-omap-i(*
 							*atp-omap-i]* *atp-omap-i[*
@@ -5185,8 +5221,10 @@ vmap [counti]a{
  							*atp-omap-a)* *atp-omap-a(*
 							*atp-omap-a]* *atp-omap-a[*
 							*atp-omap-a}* *atp-omap-a{*
+
 	The corresponding operator maps are defined. For example you can use
-	"ci(" to change the inner part of \left(...\right), or "c2a{" ... ..
+	"ci(" to change the inner part of '\left(...\right)' (it will also
+	work when the cursor is somewhere over '\left'), or "c2a{" ...
 
 							*atp-vie* *atp-viE* *atp-vae*
 	ie, iE, ae select environment: from the nearest \begin (top) to the nearest \end (bottom).	

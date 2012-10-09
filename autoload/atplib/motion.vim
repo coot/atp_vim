@@ -1496,12 +1496,12 @@ function! atplib#motion#JumptoEnvironment(forward, ...)
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if a:forward
-	let min = max([0, col(".")-6])
-	let max = min([col(".")+5, len(getline(line(".")))])
-	if getline(line("."))[(min):(max)] =~ '\\begin\>'
+	" let min = max([0, col(".")-6])
+	" let max = min([col(".")+5, len(getline(line(".")))])
+	" if getline(line("."))[(min):(max)] =~ '\\begin\>'
 	    " If on \begin moved to the start of it.
-	    call search('\\begin\>', 'b', line('.'))
-	endif
+	    call search('\\begin\>\(.*\\end\>\)\@!', 'b', line('.'))
+	" endif
 	for i in range(cnt)
 	    if !i && getline(".")[col(".")-1:] !~ '^\\begin\s*{'
 		call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
@@ -1511,7 +1511,12 @@ function! atplib#motion#JumptoEnvironment(forward, ...)
 	    endif
 	endfor
     else
-	call search('\\begin\>', 'b', line('.'))
+	" let min = max([0, col(".")-6])
+	" let max = min([col(".")+5, len(getline(line(".")))])
+	" if getline(line("."))[(min):(max)] =~ '\\begin\>'
+	    " If on \begin moved to the start of it.
+	    call search('\\begin\>\(.*\\end\>\)\@!', 'b', line('.'))
+	" endif
 	for i in range(cnt)
 	    call search('^\%([^%]\|\\%\)*\zs\\\%(begin\|end\)\>', 'Wb')
 	    if getline(".")[col(".")-1:] =~ '^\\end\s*{'
@@ -1530,18 +1535,19 @@ function! atplib#motion#FastJumptoEnvironment(forward, ...)
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if a:forward
-	let min = max([0, col(".")-6])
-	let max = min([col(".")+5, len(getline(line(".")))])
-	if getline(line("."))[(min):(max)] =~ '\\begin\>'
-	    " If on \begin moved to the start of it.
-	    call search('\\begin\>', 'b', line('.'))
-	endif
+	call search('\\begin\>\(.*\\end\>\)\@!', 'b', line('.'))
 	for i in range(cnt)
+	    let ppos = getpos(".")[1:2]
 	    call searchpair('\\begin\s*\zs{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
+	    call search('\\begin\>\(.*\\end\>\)\@!', 'b', line('.'))
+	    let pos = getpos(".")[1:2]
+	    if pos == ppos
+		call searchpair('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'W')
+	    endif
 	    call search('^\%([^%]\|\\%\)*\zs\\begin\>', 'W')
 	endfor
     else
-	call search('\\begin\>', 'b', line("."))
+	call search('\\begin\>\(.*\\end\>\)\@!', 'b', line('.'))
 	for i in range(cnt)
 	    let ppos = getpos(".")[1:2]
 	    call searchpair('\\begin\s*{\s*\zs\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', 'Wb')
@@ -1558,9 +1564,38 @@ function! atplib#motion#FastJumptoEnvironment(forward, ...)
     let &l:lazyredraw=lazyredraw
 endfunction 
 " atplib#motion#JumpOut {{{1 
-function! atplib#motion#JumpOut(forward)
+function! atplib#motion#JumpOut(forward,count)
     k`
     call setpos("''", getpos("."))
+    let lazyredraw=&l:lazyredraw
+    set lazyredraw
+    if a:forward
+	let flags = 'W'
+	" let limit = line(".")+g:atp_completion_limits[3]
+    else
+	let flags = 'Wb'
+	" let limit = max([1, line(".")-g:atp_completion_limits[3]])
+    endif
+    let ppos = getpos(".")[1:2]
+    let pos = searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags) " , '', limit)
+    for i in range(a:count-1)
+	let ppos = pos
+	if a:forward
+	    let limit = line(".")+g:atp_completion_limits[3]
+	else
+	    let limit = max([1, line(".")-g:atp_completion_limits[3]])
+	endif
+	let pos =  searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags) " , '', limit)
+	if pos == ppos
+	    break
+	endif
+    endfor
+    let &l:lazyredraw=lazyredraw
+endfunction 
+" atplib#motion#FastJumpOut {{{1 
+function! atplib#motion#FastJumpOut(forward)
+    k`
+    let s_pos = getpos(".")[1:2]
     let lazyredraw=&l:lazyredraw
     set lazyredraw
     if a:forward
@@ -1581,6 +1616,15 @@ function! atplib#motion#JumpOut(forward)
 	endif
 	let pos =  searchpairpos('\\begin\s*{\s*\%(document\>\)\@!', '', '\\end\s*{\s*\%(document\>\)\@!', flags, '', limit)
     endwhile
+    if getpos(".")[1:2] == s_pos
+	echohl ErrorMsg
+	if a:forward
+	    echom '[ATP]: End not found within limits. Try ]o or enlarge g:atp_completion_limits[3]='.g:atp_completion_limits[3].'.'
+	else
+	    echom '[ATP]: Begin not found within limits. Try [o or enlarge g:atp_completion_limits[3]='.g:atp_completion_limits[3].'.'
+	endif
+	echohl None
+    endif
     let &l:lazyredraw=lazyredraw
 endfunction 
 

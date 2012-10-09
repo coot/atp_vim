@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Oct 06, 2012 at 22:30:55  +0100
+" Last Change: Mon Oct 08, 2012 at 17:18:21  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -288,6 +288,9 @@ endif
 if !hasmapto("<Plug>JumpOutForward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."o	<Plug>JumpOutForward"
 endif
+if !hasmapto("<Plug>FastJumpOutForward", "n")
+    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."O	<Plug>FastJumpOutForward"
+endif
 if !hasmapto("<Plug>GotoNextMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."m	<Plug>GotoNextMath"
 endif
@@ -330,6 +333,9 @@ if !hasmapto("<Plug>FastJumptoPreviousEnvironment", "n")
 endif
 if !hasmapto("<Plug>JumpOutBackward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."o 	<Plug>JumpOutBackward"
+endif
+if !hasmapto("<Plug>FastJumpOutBackward", "n")
+    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."O 	<Plug>FastJumpOutBackward"
 endif
 if !hasmapto("<Plug>GotoPreviousMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."m	<Plug>GotoPreviousMath"

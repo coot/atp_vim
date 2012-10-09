@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Aug 17, 2012 at 08:46:06  +0100
+" Last Change: Tue Oct 09, 2012 at 13:59:48  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 "{{{ ATP_strlen()
@@ -415,25 +415,23 @@ nnoremap <silent> <buffer> 	<Plug>TexDoc		:TexDoc
 " Commands: "{{{1
 command! -nargs=1 -bang -complete=customlist,atplib#various#EnvCompletion InsertEnv :call <SID>InsertEnvironment(<q-bang>,<q-args>)
 command! -nargs=? -bang -complete=file  Open call atplib#tools#Open(<q-bang>, g:atp_LibraryPath, g:atp_OpenTypeDict, <q-args>)
-command! -buffer Unwrap	:call atplib#various#Unwrap()
+command! -buffer Unwrap						:call atplib#various#Unwrap()
 command! -buffer -nargs=1 -complete=custom,atplib#various#Complete_Dictionary Dictionary :call atplib#various#Dictionary(<f-args>)
 command! -buffer -nargs=* SetUpdateTime				:call atplib#various#UpdateTime(<f-args>)
 command! -buffer -nargs=* -complete=file Wdiff			:call atplib#various#Wdiff(<f-args>)
-command! -buffer -nargs=* -complete=custom,atplib#various#WrapSelection_compl -range Wrap			:call atplib#various#WrapSelection(<f-args>)
-command! -buffer -nargs=? -complete=customlist,atplib#various#EnvCompletion -range WrapEnvironment		:call atplib#various#WrapEnvironment(<f-args>)
+command! -buffer -nargs=* -complete=custom,atplib#various#WrapSelection_compl -range Wrap :call atplib#various#WrapSelection(<f-args>)
+command! -buffer -nargs=? -complete=customlist,atplib#various#EnvCompletion -range WrapEnvironment :call atplib#various#WrapEnvironment(<f-args>)
 command! -buffer -nargs=? -range IWrap				:call atplib#various#InteligentWrapSelection(<args>)
 command! -buffer -bang	TexAlign				:call atplib#various#TexAlign(<q-bang>)
-command! -buffer 	ToggleStar   				:call atplib#various#ToggleStar()<CR>
+command! -buffer ToggleStar					:call atplib#various#ToggleStar()<CR>
 command! -buffer -nargs=? ToggleEnv	   			:call atplib#various#ToggleEnvironment(0, <f-args>)
 command! -buffer -nargs=* -complete=customlist,atplib#various#EnvCompletion ChangeEnv				:call atplib#various#ToggleEnvironment(1, <f-args>)
 command! -buffer -nargs=1 ChangeLabel				:call atplib#various#ChangeLabel(<q-args>)
 command! -buffer -bang 	Delete					:call atplib#various#Delete(<q-bang>)
 nmap <silent> <buffer>	 <Plug>Delete				:call atplib#various#Delete("")<CR>
-command! -buffer 	OpenLog					:call atplib#various#OpenLog()
+command! -buffer OpenLog					:call atplib#various#OpenLog()
 nnoremap <silent> <buffer> <Plug>OpenLog			:call atplib#various#OpenLog()<CR>
-command! -buffer 	TexLog					:call atplib#various#TexLog()
-nnoremap <silent> <buffer> <Plug>TexLog				:call atplib#various#TexLog()<CR>
-command! -buffer 	PdfFonts				:call atplib#various#PdfFonts()
+command! -buffer PdfFonts					:call atplib#various#PdfFonts()
 nnoremap <silent> <buffer> <Plug>PdfFonts			:call atplib#various#PdfFonts()<CR>
 command! -complete=custom,atplib#various#Complete_lpr  -buffer -nargs=* SshPrint 	:call atplib#various#SshPrint("", <f-args>)
 command! -complete=custom,atplib#various#CompleteLocal_lpr  -buffer -nargs=* Lpr	:call atplib#various#Lpr(<f-args>)

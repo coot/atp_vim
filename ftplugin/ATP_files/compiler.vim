@@ -73,12 +73,12 @@ command! -buffer -bang  	View			:call atplib#compiler#ViewOutput(<q-bang>, b:atp
 command! -buffer -bang  	ViewL			:call atplib#compiler#ViewOutput(<q-bang>, expand("%:p"), b:atp_LocalXpdfServer)
 command! -buffer -bang 		SyncTex			:call atplib#compiler#SyncTex(<q-bang>, 0, b:atp_MainFile, b:atp_XpdfServer)
 command! -buffer -bang 		SyncTexL		:call atplib#compiler#SyncTex(<q-bang>, 0, expand("%"), b:atp_LocalXpdfServer)
-command! -buffer 		PID			:call atplib#compiler#GetPID()
+command! -buffer 		Pid			:call atplib#compiler#GetPID()
 command! -buffer -nargs=? -bang -complete=custom,atplib#compiler#DebugComp MakeLatex	:call atplib#compiler#SetBiberSettings() | call atplib#compiler#MakeLatex(<q-bang>, <q-args>, 0)
 nmap <buffer> <Plug>ATP_MakeLatex			:MakeLatex<CR>
-command! -buffer -nargs=? -bang -count=1 -complete=custom,atplib#compiler#DebugComp TEX	:call atplib#compiler#TeX(<count>, <q-bang>, <f-args>)
-command! -buffer -nargs=? -count=1 -complete=custom,atplib#compiler#DebugComp TEXL 	:call atplib#compiler#LocalCompiler("n", <count>, <f-args>)
-command! -buffer -count=1 DTEX				:call atplib#compiler#TeX(<count>, <q-bang>, 'debug') 
+command! -buffer -nargs=? -bang -count=1 -complete=custom,atplib#compiler#DebugComp Tex	:call atplib#compiler#TeX(<count>, <q-bang>, <f-args>)
+command! -buffer -nargs=? -count=1 -complete=custom,atplib#compiler#DebugComp Texl 	:call atplib#compiler#LocalCompiler("n", <count>, <f-args>)
+command! -buffer -count=1 Dtex				:call atplib#compiler#TeX(<count>, <q-bang>, 'debug') 
 command! -buffer -bang -nargs=? -complete=custom,atplib#compiler#BibtexComp Bibtex		:call atplib#compiler#Bibtex(<q-bang>, <f-args>)
 " command! -buffer BibtexOutput	:echo b:atp_BibtexOutput
 " command! -buffer MakeidxOutput 	:echo b:atp_MakeidxOutput
