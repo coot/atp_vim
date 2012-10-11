@@ -267,8 +267,12 @@ vnoremap <silent> <Plug>LatexBox_SelectInlineMathOuter :<C-U>call <SID>SelectInl
 " }}}
 
 " {{{ select bracket
-function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
-    " a:bracket_sizes a dictionary of matching bracket sizse { '\bigl' : '\bigr' }.
+function! <SID>SelectBracket(count, inner, bracket, bracket_dict, bracket_sizes)
+    " a:bracket an opening bracket which is a key in a:bracket_dict
+    " a:bracet_dict a dictionary of bracket pairs { '(' : ')', '\langle' : '\rangle', ... }
+    " a:bracket_sizes a dictionary of matching bracket sizes { '\bigl' : '\bigr', ... }.
+    "
+    " implementation detail: (the \{:\} is treated as {:} with a size '\'.
 
     for key in keys(a:bracket_sizes)
 	let idx = stridx(getline(line("."))[(col(".")-len(key)):(col(".")+len(key)-2)], key)
@@ -277,18 +281,18 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
 	    break
 	endif
     endfor
-    let idx = stridx(getline(line("."))[(col(".")-len(a:bracket)):(col(".")+len(a:bracket)-2)], a:bracket) != -1
+    let idx = stridx(getline(line("."))[(col(".")-len(a:bracket)):(col(".")+len(a:bracket)-2)], a:bracket)
     if idx != -1
-    " Note I have to add 'c' flag if the cursor is over the bra.
+	" Note: add 'c' flag if the cursor is over the opening bracket.
 	call cursor(line("."), col(".")+idx+len(a:bracket)-1)
 	let flag = 'cbW'
     else
 	let flag = 'bW'
     endif
-    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), flag)
+    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(a:bracket_dict[a:bracket], '[]\'), flag)
     if a:count > 1
 	for i in range(a:count-1)
-	    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'bW')
+	    let begin_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(a:bracket_dict[a:bracket], '[]\'), 'bW')
 	endfor
     endif
     if !begin_pos[0]
@@ -299,9 +303,6 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
 	return
     endif
 
-    " if index(keys(g:atp_sizes_of_brackets), '\'.expand("<cword>")) != -1
-	" normal! w
-    " endif
     let matches = matchlist(getline(line("."))[0:col(".")-2], '\(\\\w*\)\(\s*\)$')
     let o_size = get(matches, 1, '')
     let o_space = get(matches, 2, '')
@@ -310,7 +311,7 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     else
 	let b_len = 0
     endif
-    " In the case of \{ 
+    " \{:
     if o_size == "\\"
 	let matches = matchlist(getline(line("."))[0:col(".")-3], '\(\\\w*\)\(\s*\)$')
 	let o_size = get(matches, 1, '')
@@ -340,7 +341,7 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
 
     let b_pos = [ line("."), col(".") ]
 
-    let end_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(g:atp_bracket_dict[a:bracket], '[]\'), 'nW')
+    let end_pos = searchpairpos(escape(a:bracket, '[]\'), '', escape(a:bracket_dict[a:bracket], '[]\'), 'nW')
     call cursor(end_pos)
 
     let matches = matchlist(getline(line("."))[0:col(".")-2], '\(\\\w*\)\(\s*\)$')
@@ -351,7 +352,7 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     else
 	let e_len = 0
     endif
-    " In the case of \{ 
+    " \}:
     if c_size == "\\"
 	let matches = matchlist(getline(line("."))[0:col(".")-3], '\(\\\w*\)\(\s*\)$')
 	let c_size = get(matches, 1, '')
@@ -362,8 +363,8 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     endif
 
     if a:inner == 'inner'
-	if end_pos[1] > e_len+len(g:atp_bracket_dict[a:bracket])
-	    let end_pos[1] -= e_len+len(g:atp_bracket_dict[a:bracket])
+	if end_pos[1] > e_len+len(a:bracket_dict[a:bracket])
+	    let end_pos[1] -= e_len+len(a:bracket_dict[a:bracket])
 	else
 	    let end_pos = [line(".")-1, len(getline(line(".")-1))]
 	endif
@@ -378,12 +379,12 @@ function! <SID>LatexBox_SelectBracket(count, inner, bracket, bracket_sizes)
     call cursor(end_pos)
 
 endfunction
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_1 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '(', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_1 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '(', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_2 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '{', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_2 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '{', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketInner_3 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'inner', '[', g:atp_sizes_of_brackets)<CR>
-vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_3 :<C-U>call <SID>LatexBox_SelectBracket(v:count1, 'outer', '[', g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_1 :<C-U>call <SID>SelectBracket(v:count1, 'inner', '(', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_1 :<C-U>call <SID>SelectBracket(v:count1, 'outer', '(', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_2 :<C-U>call <SID>SelectBracket(v:count1, 'inner', '{', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_2 :<C-U>call <SID>SelectBracket(v:count1, 'outer', '{', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketInner_3 :<C-U>call <SID>SelectBracket(v:count1, 'inner', '[', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
+vnoremap <silent> <Plug>LatexBox_SelectBracketOuter_3 :<C-U>call <SID>SelectBracket(v:count1, 'outer', '[', g:atp_bracket_dict, g:atp_sizes_of_brackets)<CR>
 " }}}
 
 " {{{ select syntax

@@ -6,7 +6,7 @@
 
 let s:loaded = ( !exists("s:loaded") ? 1 : s:loaded+1 )
 
-" begin/end pairs [[[
+" begin/end pairs {{{
 nmap <buffer> <silent> %    <Plug>LatexBox_JumpToMatch
 nmap <buffer> <silent> g%   <Plug>LatexBox_BackJumpToMatch
 xmap <buffer> <silent> %    <Plug>LatexBox_JumpToMatch
@@ -21,11 +21,17 @@ vmap <buffer> <silent> im <Plug>LatexBox_SelectInlineMathInner
 vmap <buffer> <silent> am <Plug>LatexBox_SelectInlineMathOuter
 omap <buffer> <silent> im :normal vim<CR>
 omap <buffer> <silent> am :normal vam<CR>
+" }}}
 
+" text objects {{{
 vmap <buffer> <silent> i( <Plug>LatexBox_SelectBracketInner_1
 omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i("<CR>
 vmap <buffer> <silent> a( <Plug>LatexBox_SelectBracketOuter_1
 omap <buffer> <silent> a( :<C-U>exe ":normal v".v:count1."a("<CR>
+vmap <buffer> <silent> ib <Plug>LatexBox_SelectBracketInner_1
+omap <buffer> <silent> ib :<C-U>exe ":normal v".v:count1."i("<CR>
+vmap <buffer> <silent> ab <Plug>LatexBox_SelectBracketOuter_1
+omap <buffer> <silent> ab :<C-U>exe ":normal v".v:count1."a("<CR>
 vmap <buffer> <silent> i) <Plug>LatexBox_SelectBracketInner_1
 omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i)"<CR>
 vmap <buffer> <silent> a) <Plug>LatexBox_SelectBracketOuter_1
@@ -48,3 +54,4 @@ vmap <buffer> <silent> i] <Plug>LatexBox_SelectBracketInner_3
 omap <buffer> <silent> i] :<C-U>exe ":normal v".v:count1."i]"<CR>
 vmap <buffer> <silent> a] <Plug>LatexBox_SelectBracketOuter_3
 omap <buffer> <silent> a] :<C-U>exe ":normal v".v:count1."a]"<CR>
+" }}}

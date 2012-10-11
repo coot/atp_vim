@@ -184,6 +184,10 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :TEX, :TEXL,
  :DTEX, :PID. I think it is easier to type.
 
+ |atp-gW| instead of gw (if you prefer the previous map you can redefine in
+ your |atprc| file with: >
+    nmap gw <Plug>FormatLines
+< (in |vimrc| file you have to use an autocommand).
 
 >
  ======================
@@ -5282,16 +5286,19 @@ vmap [counti]a{
 		d=c to delete the comment.
 
 
-							*atp-gw*	
-nmap gw
-	Quite useful normal map: m`vipgq``. It is mapped to gw (in normal
-	mode).
+							*atp-gW*	
+nmap gW
+	Quite useful normal map to: >
+	    m`vipgq``
+<	It is mapped to gW (in normal mode).
 
 							*atp-g<*
 							*atp-g>*	
 nmaps: g>, g<, 2g>, ..., 6g>  
-	A normal map to m`vipg>`` (or m`vip2g>``).
-								
+	A normal maps to >
+	    m`vipg>``
+	    m`vip2g>``
+<
 							*atp-r*
 nmap r{char}
 	Over any charackter which is not a bracket: (:), [:], {:} it acts as
