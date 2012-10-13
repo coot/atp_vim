@@ -756,7 +756,7 @@ if !hasmapto(" vap<CR>", "o")
 endif
 " FORMATING: {{{1
 if !hasmapto("<Plug>FormatLines", "n")
-    nmap <silent> <buffer> gw		<Plug>FormatLines
+    nmap <silent> <buffer> gW		<Plug>FormatLines
 endif
 " INDENT BLOCK: {{{1
 nnoremap <buffer> g>	:<C-U>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1).">``", 't')<CR>

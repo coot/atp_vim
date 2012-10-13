@@ -261,9 +261,10 @@ main_dir = os.path.dirname(file_name)
 if main_dir != '':
     os.chdir(main_dir)
 
-section_pattern         = re.compile('^[^%]*\\\\(subsection|section|chapter|part)(\*)?\s*(?:\[|{)')
-shorttitle_pattern      = re.compile('^[^%]*\\\\(subsection|section|chapter|part)(\*)?\s*\[')
-subfile_pattern         = re.compile('^[^%]*\\\\(input|include|subfile)\s*{([^}]*)}')
+section_pattern         = re.compile(r'[^%]*\\(subsection|section|chapter|part)(\*)?\s*(?:\[|{)')
+shorttitle_pattern      = re.compile(r'[^%]*\\(subsection|section|chapter|part)(\*)?\s*\[')
+subfile_pattern         = re.compile(r'[^%]*\\(input|include|subfile)\s*{([^}]*)}')
+bib_pattern		= re.compile(r'[^%]*\\bibliography\s*{([^}]*)}')
 
 # the toc list:
 toc = []
@@ -311,15 +312,14 @@ def scan_project(fname):
         length = len(flines)
         for ind in xrange(length):
             line = flines[ind]
-            secu = re.search(section_pattern, line)
-            subf = re.search(subfile_pattern, line)
+            secu = re.match(section_pattern, line)
             if secu:
 		# Join lines (find titles if they are spread in more than one line):
                 i = 1
                 while i+ind < length and i < 6:
                     line += flines[ind+i]
                     i+=1
-                if re.search(shorttitle_pattern, line):
+                if re.match(shorttitle_pattern, line):
                     short_title = find_in_brackets(line, '[', ']')
                     short_title = re.sub('\s*\n\s*', ' ', short_title)
                 else:
@@ -332,9 +332,15 @@ def scan_project(fname):
                 # sec_nr is added afterwards.
                 add = [ file_path(fname), ind+1, secu.group(1), title, short_title, secu.group(2)]
                 toc.append(map(map_none,add))
-            if subf:
-                file_list.append(map(map_none,[file_path(fname), subf.group(2), ind+1]))
-                scan_project(subf.group(2))
+            else:
+                subf = re.match(subfile_pattern, line)
+                if subf:
+                    file_list.append(map(map_none,[file_path(fname), subf.group(2), ind+1]))
+                    scan_project(subf.group(2))
+                else:
+                    bibf = re.match(bib_pattern, line)
+                    if bibf:
+                        toc.append([file_path(fname), ind+1, 'bibliography', re.sub('\s*,\s*',' ',bibf.group(1)), '', '*'])
     except IOError:
         print("[ATP]: cannot open '%s' (cwd='%s')" % (file_path(fname), os.getcwd()))
 	pass
@@ -517,7 +523,10 @@ function! atplib#motion#showtoc(toc)
 	let toc_winnr=bufwinnr(bufnr("__ToC__"))
 	if toc_winnr == -1
 	    let openbuffer="keepalt " . (labels_winnr == -1 ? t:toc_window_width : ''). split_cmd." +setl\\ buftype=nofile\\ modifiable\\ noreadonly\\ noswapfile\\ bufhidden=delete\\ nobuflisted\\ tabstop=1\\ filetype=toc_atp\\ nowrap\\ nonumber\\ norelativenumber\\ winfixwidth\\ nobuflisted\\ nospell\\ cursorline __ToC__"
+	    let splitright = &splitright
+	    let &splitright = g:atp_splitright
 	    keepalt silent exe openbuffer
+	    let &splitright = splitright
 	else
 	    exe toc_winnr."wincmd w"
 	    setl modifiable noreadonly
@@ -555,6 +564,7 @@ function! atplib#motion#showtoc(toc)
 	call setline(number,fnamemodify(openfile,":t") . " (" . fnamemodify(openfile,":p:h") . ")")
 	call extend(b:atp_Toc, { number : [ openfile, 1 ]}) 
 	let number+=1
+	let showline = " "
 	for line in sorted
 	    call extend(b:atp_Toc,  { number : [ openfile, line ] })
 	    let lineidx=index(sorted,line)
@@ -564,25 +574,11 @@ function! atplib#motion#showtoc(toc)
 	    else
 		let nline=line("$")
 	    endif
-	    let lenght=len(line) 	
-	    if lenght == 0
-		let showline="     "
-	    elseif lenght == 1
-		let showline="    " . line
-	    elseif lenght == 2
-		let showline="   " . line
-	    elseif lenght == 3
-		let showline="  " . line
-	    elseif lenght == 4
-		let showline=" " . line
-	    elseif lenght>=5
-		let showline=line
-	    endif
 	    " Print ToC lines.
 	    if a:toc[openfile][line][0] == 'abstract' || a:toc[openfile][line][2] =~ '^\cabstract$'
-		call setline(number, showline . "\t" . "  " . "Abstract" )
+		call setline(number, showline . "- " . "Abstract" )
 	    elseif a:toc[openfile][line][0] =~ 'bibliography\|references'
-		call setline (number, showline . "\t" . "  " . a:toc[openfile][line][2])
+		call setline(number, showline . "- " . a:toc[openfile][line][2])
 	    elseif a:toc[openfile][line][0] == 'part'
 		let partnr=a:toc[openfile][line][1]
 		let nr=partnr
@@ -591,11 +587,9 @@ function! atplib#motion#showtoc(toc)
 		    let nr=substitute(nr,'.',' ','')
 		endif
 		if a:toc[openfile][line][4] != ''
-" 		    call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][4])
-		    call setline (number, showline . "\t" . " " . a:toc[openfile][line][4])
+		    call setline (number, " " . a:toc[openfile][line][4])
 		else
-" 		    call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][2])
-		    call setline (number, showline . "\t" . " " . a:toc[openfile][line][2])
+		    call setline (number, " " . a:toc[openfile][line][2])
 		endif
 	    elseif a:toc[openfile][line][0] == 'chapter'
 		let chnr=a:toc[openfile][line][1]
@@ -605,9 +599,9 @@ function! atplib#motion#showtoc(toc)
 		    let nr=substitute(nr,'.',' ','')
 		endif
 		if a:toc[openfile][line][4] != ''
-		    call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][4])
+		    call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		else
-		    call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][2])
+		    call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		endif
 	    elseif a:toc[openfile][line][0] == 'section' || a:toc[openfile][line][0] == 'frame'
 		let secnr=a:toc[openfile][line][1]
@@ -618,9 +612,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][4])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][2])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		else
 		    let nr=secnr 
@@ -629,9 +623,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][4])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline (number, showline . "\t" . nr . " " . a:toc[openfile][line][2])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		endif
 	    elseif a:toc[openfile][line][0] == 'subsection'
@@ -643,9 +637,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline (number, showline . "\t\t\t" . nr . " " . a:toc[openfile][line][4])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline (number, showline . "\t\t\t" . nr . " " . a:toc[openfile][line][2])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		else
 		    let nr=secnr  . "." . ssecnr
@@ -654,9 +648,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][4])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][2])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		endif
 	    elseif a:toc[openfile][line][0] == 'subsubsection'
@@ -668,9 +662,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline(number, a:toc[openfile][line][0] . "\t\t\t" . nr . " " . a:toc[openfile][line][4])
+			call setline(number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline(number, a:toc[openfile][line][0] . "\t\t\t" . nr . " " . a:toc[openfile][line][2])
+			call setline(number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		else
 		    let nr=secnr  . "." . ssecnr . "." . sssecnr
@@ -679,9 +673,9 @@ function! atplib#motion#showtoc(toc)
 			let nr=substitute(nr,'.',' ','g')
 		    endif
 		    if a:toc[openfile][line][4] != ''
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][4])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][4])
 		    else
-			call setline (number, showline . "\t\t" . nr . " " . a:toc[openfile][line][2])
+			call setline (number, showline . nr . " " . a:toc[openfile][line][2])
 		    endif
 		endif
 	    else
@@ -710,22 +704,22 @@ function! atplib#motion#showtoc(toc)
     endfor
    
     " Help Lines:
-    if search('<Enter> jump and close', 'nW') == 0
+    if search('" <Enter> jump and close', 'nW') == 0
 	call append('$', [ '', 			
-		\ '_       set',
-		\ '<Space> jump', 
-		\ '<Enter> jump and close', 	
-		\ 's       jump and split', 
-		\ 'y or c  yank label', 	
-		\ 'p       paste label', 
-		\ 'q       close', 		
-		\ 'zc	     fold section[s]',
-		\ ":'<,'>Fold",
-		\ ':YankSection', 
-		\ ':DeleteSection', 
-		\ ':PasteSection[!]', 		
-		\ ':SectionStack', 
-		\ ':Undo' ])
+		\ '" _       set',
+		\ '" <Space> jump', 
+		\ '" <Enter> jump and close', 	
+		\ '" s       jump and split', 
+		\ '" y or c  yank label', 	
+		\ '" p       paste label', 
+		\ '" q       close', 		
+		\ '" zc	     fold section[s]',
+		\ '" :[range]Fold',
+		\ '" :YankSection', 
+		\ '" :DeleteSection', 
+		\ '" :PasteSection[!]', 		
+		\ '" :SectionStack', 
+		\ '" :Undo' ])
     endif
     setl nomodifiable
     lockvar 3 b:atp_Toc
@@ -770,10 +764,14 @@ function! atplib#motion#show_pytoc(toc)
 	else
 	    let split_cmd = "vsplit"
 	endif
+	let g:split_cmd = split_cmd
 	let toc_winnr=bufwinnr(bufnr("__ToC__"))
 	if toc_winnr == -1
 	    let openbuffer="keepalt " . (labels_winnr == -1 ? t:toc_window_width : ''). split_cmd." +setl\\ buftype=nofile\\ modifiable\\ noreadonly\\ noswapfile\\ bufhidden=delete\\ nobuflisted\\ tabstop=1\\ filetype=toc_atp\\ nowrap\\ nonumber\\ norelativenumber\\ winfixwidth\\ nospell\\ cursorline __ToC__"
+	    let splitright = &splitright
+	    let &splitright = g:atp_splitright
 	    keepalt silent exe openbuffer
+	    let &splitright = splitright
 	else
 	    exe toc_winnr."wincmd w"
 	    setl modifiable noreadonly
@@ -807,32 +805,19 @@ function! atplib#motion#show_pytoc(toc)
 	    else
 		let nline=line("$")
 	    endif
-	    let lenght=len(line)
-	    if lenght == 0
-		let showline="     "
-	    elseif lenght == 1
-		let showline="    " . line
-	    elseif lenght == 2
-		let showline="   " . line
-	    elseif lenght == 3
-		let showline="  " . line
-	    elseif lenght == 4
-		let showline=" " . line
-	    elseif lenght>=5
-		let showline=line
-	    endif
+	    let showline = ' '
 	    " Print ToC lines.
 	    if line_list[2] == 'abstract' || line_list[3] =~ '^\cabstract$'
-		call setline(number, showline . "\t" . "  " . "Abstract" )
+		call setline(number, showline . "- " . "Abstract" )
 	    elseif line_list[2] =~ 'bibliography\|references'
-		call setline (number, showline . "\t" . "  " . a:toc[openfile][line][2])
+		call setline (number, showline . "- bib:" . line_list[3])
 	    else
 		let secnr=get(line_list,6,"XXX") " there might not bee section number in the line_list
                 let nr=secnr 
                 if line_list[4] != ''
-                    call setline (number, showline . "\t" . nr . " " . line_list[4])
+                    call setline (number, showline . nr . " " . line_list[4])
                 else
-                    call setline (number, showline . "\t" . nr . " " . line_list[3])
+                    call setline (number, showline . nr . " " . line_list[3])
                 endif
 	    endif
 	    let number+=1
@@ -880,22 +865,22 @@ function! atplib#motion#show_pytoc(toc)
     endif
    
     " Help Lines:
-    if search('<Enter> jump and close', 'nW') == 0
+    if search('"<Enter> jump and close', 'nW') == 0
 	call append('$', [ '', 			
-		\ '_       set',
-		\ '<Space> jump', 
-		\ '<Enter> jump and close', 	
-		\ 's       jump and split', 
-		\ 'y or c  yank label', 	
-		\ 'p       paste label', 
-		\ 'q       close', 		
-		\ ':YankSection', 
-		\ ':DeleteSection', 
-		\ ':PasteSection[!]', 		
-		\ ':SectionStack', 
-		\ ':Undo' ])
-" 		\ 'zc	     fold section[s]',
-" 		\ ":'<,'>Fold",
+		\ '" _       set',
+		\ '" <Space> jump', 
+		\ '" <Enter> jump and close', 	
+		\ '" s       jump and split', 
+		\ '" y or c  yank label', 	
+		\ '" p       paste label', 
+		\ '" q       close', 		
+		\ '" :YankSection', 
+		\ '" :DeleteSection', 
+		\ '" :PasteSection[!]', 		
+		\ '" :SectionStack', 
+		\ '" :Undo' ])
+" 		\ '" zc	     fold section[s]',
+" 		\ '" :[range]Fold',
     endif
     setl nomodifiable
     lockvar 3 b:atp_Toc
@@ -943,6 +928,10 @@ function! atplib#motion#UpdateToCLine(...)
 	exe cwinnr."wincmd w"
 	return
     endif
+    let lazyredraw = &lazyredraw
+    let eventignore=&eventignore
+    set lazyredraw
+    set eventignore=all
     if g:atp_python_toc
         let sorted	= t:atp_pytoc[MainFile]
     else
@@ -987,10 +976,9 @@ function! atplib#motion#UpdateToCLine(...)
 
     call atplib#tools#CursorLine()
 
-    let eventignore=&eventignore
-    set eventignore+=BufEnter
     exe cwinnr."wincmd w"
-    let &eventignore=eventignore
+    let &eventignore = eventignore
+    let &lazyredraw = lazyredraw
     let g:time_UpdateTocLine = reltimestr(reltime(time))
 endfunction
 " This is User Front End Function 

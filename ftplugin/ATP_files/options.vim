@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 03, 2012 at 09:56:36  +0100
+" Last Change: Thu Oct 11, 2012 at 13:47:05  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1281,6 +1281,9 @@ endif
 if !exists("g:atp_SelectInlineMath_withSpace")
     let g:atp_SelectInlineMath_withSpace = 0
 endif
+if !exists("g:atp_splitright")
+    let g:atp_splitright = &splitright
+endif
 " }}}
 
 " PROJECT SETTINGS:
@@ -2154,7 +2157,7 @@ if !s:did_options
     function! RedrawToC()
 	if bufwinnr(bufnr("__ToC__")) != -1
 	    let winnr = winnr()
-	    TOC
+	    Toc
 	    exe winnr." wincmd w"
 	endif
     endfunction

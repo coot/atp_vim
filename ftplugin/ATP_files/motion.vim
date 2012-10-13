@@ -119,7 +119,7 @@ function! <SID>toc_onwrite()
     if g:atp_python_toc
 	" check if there is a __ToC__ window:
 	if index(map(tabpagebuflist(), 'bufname(v:val)'), "__ToC__") != -1
-	    TOC!
+	    Toc!
 	    let ei=&ei
 	    set ei=all
 	    wincmd w

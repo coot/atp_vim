@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Fri Apr 20, 2012 at 09:36:46  +0100
+" Last Change: Sat Oct 13, 2012 at 11:21:28  +0100
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -117,14 +117,13 @@ function! GotoLine(closebuffer) "{{{
 	
     "if we were asked to close the window
     if a:closebuffer == 1
-	exe "bdelete " . tocbufnr
+        exe "silent! bdelete " . tocbufnr
     endif
 
     "finally, set the position
     call setpos("''", getpos("."))
     call setpos('.', [0, nr, 1, 0])
     exe "normal zt"
-    
 endfunction
 " }}}
 
@@ -384,7 +383,11 @@ function! EchoLine()
     endif
 
     let label		= matchstr(sec_line,'\\label\s*{\zs[^}]*\ze}')
-    let section		= strpart(sec_line,stridx(sec_line,'{')+1,stridx(sec_line,'}')-stridx(sec_line,'{')-1)
+    try
+        let section	= matchstr(sec_line, '{\zs\%([^{}]*\|{\%([^{}]\|{[^{}]*}\)*}\)*\ze}')
+    catch /E363/
+        let section     = sec_line
+    endtry
     if section != "" && label != ""
 	echo sec_type . " : '" . section . "'\t label : " . label
     elseif section != ""
@@ -640,7 +643,7 @@ if expand("%") == "__ToC__" &&
 	    let g:atp_SectionBackup	= [[title, type, deleted_section, section_nr, expand("%:p")]]
 	endif
 	" return to toc 
-	TOC! 0
+	Toc! 0
 
 	" Update the stack of deleted sections
 	call extend(t:atp_SectionStack, [[title, type, deleted_section, section_nr, file_name]],0)
@@ -705,7 +708,7 @@ if expand("%") == "__ToC__" &&
 	call setpos(".", [0, begin_line, 1, 0])
 
 	" Regenerate the Table of Contents:
-	TOC!
+	Toc!
 
 	" Update the stack
 	call remove(t:atp_SectionStack, stack_number)
@@ -741,7 +744,7 @@ if expand("%") == "__ToC__" &&
 	let winnr	= s:gotowinnr()
 	exe winnr . " wincmd w"
 	exe "normal! " . cmd
-	TOC!
+	Toc!
     endfunction
     command! -buffer -nargs=? Undo 	:call <SID>Undo(<f-args>) 
     nnoremap <buffer> u			:call <SID>Undo('u')<CR>
@@ -779,11 +782,11 @@ augroup END
 " }}}1
 
 " Fold section
-" {{{1
+" CompareNumbers, Section2Nr {{{1
 func! CompareNumbers(i1, i2)
     return str2nr(a:i1) == str2nr(a:i2) ? 0 : str2nr(a:i1) > str2nr(a:i2) ? 1 : -1
 endfunc
-function! Section2Nr(section)
+function! <sid>Section2Nr(section)
     if a:section == 'part'
 	return 1
     elseif a:section == 'chapter'
@@ -801,31 +804,80 @@ function! Section2Nr(section)
     endif
 endfunction
 " }}}1
+" Get the file name and its path from the LABELS/ToC list.
+function! <sid>file() "{{{
+    let labels		= expand("%") == "__Labels__" ? 1 : 0
+
+    if labels == 0
+	return get(b:atp_Toc, line("."), ["", ""])[0]
+    else
+	return get(b:atp_Labels, line("."), ["", ""])[0]
+    endif
+endfunction
+"}}}
 function! FoldClose(...) " {{{1
-    let atp_toc	= deepcopy(t:atp_toc)
+    if g:atp_python_toc
+	let atp_toc	= deepcopy(t:atp_pytoc)
+    else
+	let atp_toc	= deepcopy(t:atp_toc)
+    endif
     let f_line = (a:0 >= 1 ? a:1 : line(".") )
     let l_line = (a:0 >= 2 ? a:2 : line(".") )
     " This function is not working well with sections put into chapters. Then
     " chapters are not folded with greater fold level.
     for line in range(f_line, l_line)
 	let [beg_file,beg_line] = <sid>GetLineNr(line)
-	let type = <SID>Section2Nr(get(get(deepcopy(atp_toc), file, {}), beg_line, [''])[0])
-	let type_dict = get(deepcopy(atp_toc), beg_file, {})
-	call filter(map(type_dict, "<SID>Section2Nr(v:val[0])"), "str2nr(v:val) <= str2nr(type)")
-	let line_list = sort(filter(keys(type_dict), "str2nr(v:val) >= str2nr(beg_line)"), "<SID>CompareNumbers")
-	let [end_file,end_line] = <SID>GetLineNr(line(".")+1)
+	let file = <sid>file()
+	if !g:atp_python_toc
+	    let type = <sid>Section2Nr(get(get(deepcopy(atp_toc), file, {}), beg_line, [''])[0])
+	    let type_dict = get(deepcopy(atp_toc), beg_file, {})
+	    call filter(map(type_dict, "<sid>Section2Nr(v:val[0])"), "str2nr(v:val) <= str2nr(type)")
+	    let line_list = sort(filter(keys(type_dict), "str2nr(v:val) >= str2nr(beg_line)"), "<sid>CompareNumbers")
+	    let [end_file,end_line] = <SID>GetLineNr(line(".")+1)
+	    let end_line = get(line_list, 1, "")
+	else
+	    let toc = deepcopy(t:atp_pytoc)[file] 
+	    let type = -1
+	    let toc_entry = ['', '', '', '', '', '', ''] 
+	    let ind = 0
+	    for toc_entry in toc
+		if toc_entry[0:1] == [beg_file, beg_line]
+		    let type	= <sid>Section2Nr(toc_entry[2])
+		    break
+		endif
+	    endfor
+	    let line_list = get(deepcopy(atp_toc), beg_file, [])
+	    call filter(map(line_list, '[v:val[1], <sid>Section2Nr(v:val[2]), v:val[0]]'), 'v:val[0] > beg_line && str2nr(v:val[1]) <= str2nr(type)')
+	    let end_line = get(line_list, 0, "")[0]
+	    let end_file = get(line_list, 0, "")[2]
+	endif
 	" Goto file
 	let winnr = s:gotowinnr()
 	let toc_winnr = winnr()
 	exe winnr."wincmd w"
-	let end_line = get(line_list, 1, "")
 	if end_line != ""
 	    let end_line = end_line-1
 	else
 	    let end_line = line("$")
 	endif
-	echomsg beg_line." ".end_line
-	execute beg_line.",".end_line."fold"
+
+	let fc = foldclosed(beg_line)
+	if fc != -1
+	    " Preserve folding the same range over and over again.
+	    " - one cannot fold subsection in a folded section,
+	    "   but vim is not working well when trying to do that.
+	    exe toc_winnr."wincmd w"
+	    continue
+	endif
+	if !foldlevel(beg_line) || foldlevel(beg_line) == foldlevel(beg_line-1)
+	    echomsg beg_line." ".end_line
+	    execute beg_line.",".end_line."fold"
+	else
+	    let saved_pos = getpos(".")[1:2]
+	    call cursor(beg_line, 0)
+	    normal! zc
+	    call cursor(saved_pos)
+	endif
 	exe toc_winnr."wincmd w"
     endfor
 endfunction " }}}1
