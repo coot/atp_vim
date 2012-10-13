@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Oct 11, 2012 at 13:47:05  +0100
+" Last Change: Sat Oct 13, 2012 at 20:16:06  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -958,10 +958,10 @@ if !exists("g:atp_vmap_big_bracket_leader")
     let g:atp_vmap_big_bracket_leader='<LocalLeader>b'
 endif
 if !exists("g:atp_map_forward_motion_leader")
-    let g:atp_map_forward_motion_leader=']'
+    let g:atp_map_forward_motion_leader='}'
 endif
 if !exists("g:atp_map_backward_motion_leader")
-    let g:atp_map_backward_motion_leader='['
+    let g:atp_map_backward_motion_leader='{'
 endif
 if !exists("g:atp_RelativePath")
     " This is here only for completness, the default value is set in project.vim

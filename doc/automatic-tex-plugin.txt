@@ -176,10 +176,13 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 		    Marcin Szamotulski
 <
 
- |atp-]e|, |atp-[e|,  |atp-]E|, |atp-[E| rewritten from scratch (see the nice
- graphical explanation therein). 
+ |atp-}e|, |atp-{e|,  |atp-}E|, |atp-{E| rewritten from scratch (see the nice
+ graphical explanation therein). Furthermore, the default value of
+ |g:atp_map_forward_motion_leader| is '}' (|g:atp_map_backward_motion_leader|
+ is '{'). Setting it to ']', '[' colides with |]s| and |[s| which are quite
+ useful.
 
- New motions |atp-]o|, |atp-[o|.
+ New motions |atp-}o|, |atp-{o|.
 
  |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :TEX, :TEXL,
  :DTEX, :PID. I think it is easier to type.
@@ -1923,8 +1926,8 @@ nmap [count]]]
 nmap [count][[
 	Go backward to {arg}, like above |atp-:F|.
 
-							*atp-[m* *atp-[M*
-							*atp-]m* *atp-]M*
+							*atp-}m* *atp-}M*
+							*atp-{m* *atp-{M*
 nmap [count]]m [count]]M
 nmap [count][m [count][M
 	Got to next/previous math environment, with the captial M go to
@@ -1937,9 +1940,9 @@ nmap [count][m [count][M
 nmap %
 	Jump to the matching pair (:), {:}, [:], \begin:\end.
 
- 							*atp-]e* *atp-[e*
-nmap [count]]e
-nmap [count][e
+ 							*atp-}e* *atp-{e*
+nmap [count]}e
+nmap [count]{e
 	Go to previous/next environment. If the cursor is on the \begin the
 	forward motion will not descent into child nodes (i.e. it will omitt
 	environments inside). The same applies to the backward motion. 
@@ -1950,7 +1953,7 @@ nmap [count][e
 		\begin{center} ◀――┐
 		    ....          |
 		    \begin{X}     |
-                       ...        | ]e, [e
+                       ...        | }e, {e
 		    \end{X}       |
 		    ....          |
 		\end{center>      |
@@ -1962,18 +1965,18 @@ nmap [count][e
 
 <
 
-	Note: the [e, motion when on a line with \begin will first move to the
+	Note: the {e, motion when on a line with \begin will first move to the
 	prvious \begin on this line and jump from there. 
 
 
-	If you want to add |zz|, (|zt| or |zb|) after ]e you can put this in
+	If you want to add |zz|, (|zt| or |zb|) after }e you can put this in
 	your |atprc| file:
-	    map <buffer> <silent> ]e	<Plug>JumptoNextEnvironmentzz
-	    map <buffer> <silent> [e	<Plug>JumptoPreviousEnvironmentzz
+	    map <buffer> <silent> }e	<Plug>JumptoNextEnvironmentzz
+	    map <buffer> <silent> {e	<Plug>JumptoPreviousEnvironmentzz
 
- 							*atp-]E* *atp-[E*
-nmap [count]]E
-nmap [count][E
+ 							*atp-}E* *atp-{E*
+nmap [count]}E
+nmap [count]{E
 	Go to previous/next environment one level up. These are good motions
 	when you want to go out of a nested environment, or jump to the \begin
 	of the current environment.
@@ -1982,12 +1985,12 @@ nmap [count][E
         \begin{theorem} ◀―――――――――┐
 	        .....             |
 		\begin{center}    |
-		    ....          | [E
+		    ....          | {E
 		\end{center}      |
 		.....          ―――┤
 		\begin{center}    |
 		    ....          |
-		\end{center}      | ]E 
+		\end{center}      | }E 
 		....              |
 	\end{theorem}             |
 	....                      |
@@ -1996,37 +1999,37 @@ nmap [count][E
 	\end{center>
 <
 
-	Note: the '\begin{' is not included as being inside, i.e. ]E from
+	Note: the '\begin{' is not included as being inside, i.e. }E from
 	above \begin will to the same place as being just before it (as on the
 	above diagram). This also applies to backward motions. The environment
 	name is treated as an interior part of the environment.
 
- 							*atp-]o* *atp-[o*
-nmap [count]]o
-nmap [count][o
-        Go out of nested environments: |atp-]o| - forward; |atp-[o|
+ 							*atp-}o* *atp-{o*
+nmap [count]}o
+nmap [count]{o
+        Go out of nested environments: |atp-}o| - forward; |atp-{o|
         - backward.
 
 >
         \begin{document}
 
-                \begin{center}◀――――――――――┐ 2[o        
+                \begin{center}◀――――――――――┐ 2{o        
 		      ....               |
-                    \begin{align} ◀――――――┤ [o
+                    \begin{align} ◀――――――┤ {o
                            ....          |
                            ....       ―――┤
 			   ....          |
-                    \end{align} ◀――――――――┤ ]o
+                    \end{align} ◀――――――――┤ }o
 		      ....               |
-                \end{center} ◀―――――――――――┘ 2]o
+                \end{center} ◀―――――――――――┘ 2}o
             \end{theorem} 
 	
 <
 
- 							*atp-]O* *atp-[O*
-nmap ]O
-nmap [O
-        Go out of all nested environments: |atp-]O| - forward; |atp-[O|
+ 							*atp-}O* *atp-{O*
+nmap }O
+nmap {O
+        Go out of all nested environments: |atp-}O| - forward; |atp-{O|
         - backward.
 
 >
@@ -2034,11 +2037,11 @@ nmap [O
 
             \begin{theorem} ◀――――――――――――┐
                 \begin{center}           |
-                    \begin{align}        | [o
+                    \begin{align}        | {o
                         \begin{split}    |
                            ....       ―――┤
                         \end{split}      |
-                    \end{align}          | ]o
+                    \end{align}          | }o
                 \end{center}             |
             \end{theorem} ◀――――――――――――――┘
 	
@@ -2049,23 +2052,23 @@ nmap [O
 	the scope of |g:atp_completion_limits|[3] ahead/back (it is computed
 	for every call). 
 
-							*atp-]f* *atp-[f*
-							*atp-]F* *atp-[F*
-nmap [count]]f [count]]F
-nmap [count][f [count][F
+							*atp-}f* *atp-{f*
+							*atp-}F* *atp-{F*
+nmap [count]}f [count]}F
+nmap [count]{f [count]{F
 	These two maps are only valid in beamer. They goto next/previous
-	frame. ]F and [F are using |zt| command.
+	frame. }F and {F are using |zt| command.
 						
 							*atp-:NextSection*
-							*atp-:NPart*	*atp-]p*
-							*atp-:NChap*	*atp-]c*
-							*atp-:NSec*	*atp-]s*
-							*atp-:NSSec*	*atp-]S*
+							*atp-:NPart*	*atp-}p*
+							*atp-:NChap*	*atp-}c*
+							*atp-:NSec*	*atp-}s*
+							*atp-:NSSec*	*atp-}S*
 							*atp-:NSSSec*
 :NPart[!], :NChap[!], :NSec[!], :NSSec[!], :NSSSec[!] [title_pattern]
 [count]:F {section}
- map ]p,  map ]c,  map ]s,  map ]S
-vmap ]p, vmap ]c, vmap ]s, vmap ]S
+ map }p,  map }c,  map }s,  map }S
+vmap }p, vmap }c, vmap }s, vmap }S
 
 	Go to next part/chapter/section/subsection/subsubsection which title
 	matches optionally given [title_pattern]. With bang "!" the command
@@ -2076,13 +2079,13 @@ vmap ]p, vmap ]c, vmap ]s, vmap ]S
 	    part/chapter/section/subsection/subsubsection.
 
 	Map  		Command			Meaning
-	]p		:NPart			go to next part
-	]c		:NChap			go to next chapter
-	]s		:NSec			go to next section	
-	]S		:NSSec			go to next subsection
+	}p		:NPart			go to next part
+	}c		:NChap			go to next chapter
+	}s		:NSec			go to next section	
+	}S		:NSSec			go to next subsection
 
 							*g:atp_map_forward_motion_leader*
-	You can set the leader ']' using |g:atp_map_forward_motion_leader|
+	You can set the leader '}' using |g:atp_map_forward_motion_leader|
 	variable.
 
 	Note: If you set |g:atp_map_forward_motion_leader| to '>' then ATP remaps
@@ -2127,8 +2130,8 @@ vmap ]p, vmap ]c, vmap ]s, vmap ]S
 							*atp-:PSSSec*
 :PPart[!], :PChap[!], :PSec[!], :PSSec[!], :PSSSec[!] [title_pattern]
 [count]:B {section}
- map [p,  map [c,  map [s,  map [S
-vmap [p, vmap [c, vmap [s, vmap [S
+ map {p,  map {c,  map {s,  map {S
+vmap {p, vmap {c, vmap {s, vmap {S
 
 	Go to previous part/chapter/section/subsection/subsubsection which
 	title matches [title_pattern] (an optional argument). With bang "!"
@@ -2136,7 +2139,7 @@ vmap [p, vmap [c, vmap [s, vmap [S
 	search will wrap around the beginning of a file if 'wrapscan' is set.
 
 							*g:atp_map_backward_motion_leader*
-	You can set the leader '[' using |g:atp_map_backward_motion_leader|
+	You can set the leader '{' using |g:atp_map_backward_motion_leader|
 	variable.
 
 	The {section} argument for :B is one off:
@@ -2145,10 +2148,10 @@ vmap [p, vmap [c, vmap [s, vmap [S
 	For description of arguments read |atp-:NextSection| just above.
 
 	Map  		Command			Meaning
-	[p		:PPart			go to previous part
-	[c		:PChap			go to previous chapter
-	[s		:PSec			go to previous section	
-	[S		:PSSec			go to previous subsection
+	{p		:PPart			go to previous part
+	{c		:PChap			go to previous chapter
+	{s		:PSec			go to previous section	
+	{S		:PSSec			go to previous subsection
 
 	These commands (and maps) use Vim |search()| function or |atp-:S|
 	command depending on the value of |g:atp_mapNn| (see |atp-:ToggleNn|,
