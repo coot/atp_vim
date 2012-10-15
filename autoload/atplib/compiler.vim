@@ -2548,14 +2548,14 @@ function! atplib#compiler#ShowErrors(bang,...)
     let show_message = ( a:0 >= 3 ? a:3 : 1 )
 
     if local_errorfile
-	if !exists("s:errorfile")
-	    let s:errorfile = &l:errorfile
+	if !exists("errorfile")
+	    let errorfile = &l:errorfile
 	endif
-	let &l:errorfile = expand("%:p:r")."._log"
+	let &l:errorfile = b:atp_OutDir . "/" . expand("%:t:r")."._log"
     else
-	if exists("s:errorfile")
-	    let &l:errorfile = s:errorfile
-	    unlet s:errorfile
+	if exists("errorfile")
+	    let &l:errorfile = errorfile
+	    unlet errorfile
 	endif
     endif
 

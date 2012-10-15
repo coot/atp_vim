@@ -320,7 +320,7 @@ if os.path.islink(mainfile_fp):
 
 mainfile_dir    = os.path.normcase(mainfile_dir)
 [basename, ext] = os.path.splitext(mainfile)
-output_fp       = os.path.splitext(mainfile_fp)[0]+extension
+output_fp       = os.path.join(options.output_dir,basename+extension)
 
 try:
     # Send pid to ATP:
@@ -543,7 +543,7 @@ try:
             vim_remote_expr(servername, "atplib#SyncTex()")
 
     # Rewrite LaTeX log file
-    latex_log.rewrite_log(os.path.splitext(mainfile_fp)[0]+".log", check_path=True, project_dir=mainfile_dir, project_tmpdir=tmpdir)
+    latex_log.rewrite_log(os.path.splitext(output_fp)[0]+".log", check_path=True, project_dir=mainfile_dir, project_tmpdir=tmpdir)
 
 ####################################
 #

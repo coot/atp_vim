@@ -542,7 +542,7 @@ except Exception:
     vim_remote_expr(servername, "atplib#callback#Echo(\"[ATP:] error in makelatex.py, catched python exception:\n"+error_str+"[ATP info:] this error message is recorded in makelatex.log under g:atp_TempDir\",'echo','ErrorMsg')")
 
 # Rewrite the LaTeX log file.
-latex_log.rewrite_log(logfile, check_path=True, project_dir=texfile_dir, project_tmpdir=tmpdir)
+latex_log.rewrite_log(os.path.join(outdir,logfile), check_path=True, project_dir=texfile_dir, project_tmpdir=tmpdir)
 
 debug_file.write("PIDS="+str(pids))
 vim_remote_expr(servername, "atplib#callback#Echo('[ATP:] MakeLatex finished.', 'echomsg', 'Normal')")
