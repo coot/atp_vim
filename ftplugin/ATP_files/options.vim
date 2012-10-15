@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Oct 13, 2012 at 20:16:06  +0100
+" Last Change: Sun Oct 14, 2012 at 10:36:41  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1183,7 +1183,7 @@ if !exists("g:atp_delete_output")
     let g:atp_delete_output	= 0
 endif
 if !exists("g:atp_keep")
-    " Files with this extensions will be compied back and forth to/from temporary
+    " Files with this extensions will be copied back and forth to/from temporary
     " directory in which compelation happens.
     let g:atp_keep=[ "log", "aux", "toc", "bbl", "ind", "idx", "synctex.gz", "blg", "loa", "toc", "lot", "lof", "thm", "out", "nav" ]
     " biber stuff is added before compelation, this makes it possible to change 
