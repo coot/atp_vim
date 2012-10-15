@@ -307,10 +307,14 @@ try:
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
 
+    debug_file.write("bibliographies = %s\n" % bibliographies)
     for bib in bibliographies:
-        if os.path.exists(os.path.join(texfile_dir,os.path.basename(bib))):
+        if os.path.exists(os.path.join(outdir,os.path.basename(bib))):
+            os.symlink(os.path.join(outdir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+        elif os.path.exists(os.path.join(texfile_dir,os.path.basename(bib))):
             os.symlink(os.path.join(texfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
+    debug_file.write("TMPDIR contains: %s\n" % os.listdir(tmpdir))
     # SET ENVIRONMENT
     for var in env:
         os.putenv(var[0], var[1])
