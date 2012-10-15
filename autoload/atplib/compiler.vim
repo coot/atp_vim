@@ -33,10 +33,10 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
 
     " Follow the symbolic link
     let link=resolve(tex_file)
-    if link != ""
-	let outfile	= fnamemodify(link,":r") . ext
+    if link != tex_file
+	let outfile	= fnamemodify(link, ":r") . ext
     else
-	let outfile	= fnamemodify(tex_file,":r"). ext 
+	let outfile	= b:atp_OutDir . "/" . fnamemodify(a:tex_file, ':t:r') . ext
     endif
 
     if b:atp_Viewer == "xpdf"	
@@ -769,6 +769,7 @@ function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, 
     let cmd=g:atp_Python." ".g:atp_PythonCompilerPath." --command ".b:atp_TexCompiler
 		\ ." --tex-options ".shellescape(tex_options)
 		\ ." --tempdir ".shellescape(b:atp_TempDir)
+		\ ." --output-dir ".shellescape(b:atp_OutDir)
 		\ ." --verbose ".a:verbose
 		\ ." --file ".shellescape(atplib#FullPath(a:filename))
 		\ ." --bufnr ".bufnr("%")

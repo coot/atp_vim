@@ -36,6 +36,7 @@ parser.add_option("--bibcommand",       dest="bibcommand",      default="bibtex"
 parser.add_option("--progname",         dest="progname",        default="gvim"                          )
 parser.add_option("--aucommand",        dest="aucommand",       default=False, action="store_true"      )
 parser.add_option("--tex-options",      dest="tex_options",     default="-synctex=1,-interaction=nonstopmode")
+parser.add_option("--output-dir",       dest="output_dir",      default=os.path.abspath(os.curdir)      )
 parser.add_option("--verbose",          dest="verbose",         default="silent"                        )
 parser.add_option("--file",             dest="mainfile",                                                )
 parser.add_option("--bufnr",            dest="bufnr",                                                   )
@@ -135,6 +136,7 @@ debug_file.write("BIBCOMMAND "+bibcommand+"\n")
 debug_file.write("AUCOMMAND "+aucommand+"\n")
 debug_file.write("PROGNAME "+progname+"\n")
 debug_file.write("COMMAND_OPT "+str(command_opt)+"\n")
+debug_file.write("OUTPUT DIR %s\n" % options.output_dir)
 debug_file.write("MAINFILE_FP "+str(mainfile_fp)+"\n")
 debug_file.write("OUTPUT FORMAT "+str(output_format)+"\n")
 debug_file.write("EXT "+extension+"\n")
@@ -348,11 +350,13 @@ try:
 
     # Copy important files to output directory:
     # /except the log file/
-    os.chdir(mainfile_dir)
+    # os.chdir(mainfile_dir)
+    os.chdir(options.output_dir)
     for ext in filter(lambda x: x != "log", keep):
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
+    os.chdir(mainfile_dir)
 
     tempdir_list = os.listdir(tmpdir)
     debug_file.write("\nls tmpdir "+str(tempdir_list)+"\n")
@@ -364,6 +368,7 @@ try:
 
     # Link local bibliographies:
     for bib in bibliographies:
+        # XXX: test this with options.output_dir.
         if os.path.exists(os.path.join(mainfile_dir,os.path.basename(bib))):
             os.symlink(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
@@ -478,17 +483,17 @@ try:
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
             debug_file.write(file_cp+' \n')
-            shutil.copy(file_cp, mainfile_dir)
+            shutil.copy(file_cp, options.output_dir)
 
     # Copy aux file if there were no compilation errors or if it doesn't exists in mainfile_dir.
     # copy aux file to _aux file (for atplib#tools#GrepAuxFile)
     if latex_returncode == 0 or not os.path.exists(os.path.join(mainfile_dir, basename+".aux")):
         file_cp=basename+".aux"
         if os.path.exists(file_cp):
-            shutil.copy(file_cp, mainfile_dir)
+            shutil.copy(file_cp, options.output_dir)
     file_cp=basename+".aux"
     if os.path.exists(file_cp):
-        shutil.copy(file_cp, os.path.join(mainfile_dir, basename+"._aux"))
+        shutil.copy(file_cp, os.path.join(options.output_dir, basename+"._aux"))
     os.chdir(cwd)
 
     ####################################
