@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Tue Oct 09, 2012 at 13:58:56  +0100
+" Last Change: Tue Oct 16, 2012 at 21:14:54  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -2582,7 +2582,10 @@ endfunction
 function! atplib#various#FormatLines()
     " This function is not using winsaveview() since this might change the
     " cursor position in the text.
+    let cb = &clipboard
+    set clipboard-=autoselect
     normal m`vipgq``
+    let &clipboard=cb
 endfunction
 " }}}
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1

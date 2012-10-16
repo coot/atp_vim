@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Oct 11, 2012 at 14:23:20  +0100
+" Last Change: Tue Oct 16, 2012 at 21:50:22  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -771,35 +771,35 @@ endif
 " ENVIRONMENT MOVES: {{{1
 " From vim.vim plugin (by Bram Mooleaner)
 " Move around functions.
-exe "nnoremap <silent> <buffer> <Plug>BegPrevEnvironment m':call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
+exe "nnoremap <silent> <buffer> <Plug>BegPrevEnvironment m`:call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
 if !hasmapto("<Plug>GotoPreviousEnvironment", "n")
     nmap <silent> <buffer> [[ <Plug>GotoPreviousEnvironment
 endif
-exe "vnoremap <silent> <buffer> <Plug>vBegPrevEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
+exe "vnoremap <silent> <buffer> <Plug>vBegPrevEnvironment m`:<C-U>exe \"normal! gv\"<Bar>call search('".s:backslash."%(".s:bbackslash."begin".s:backslash."s*{[^}]*}".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$".s:backslash.")".s:backslash."_s*".s:backslash."zs', 'bW')<CR>"
 if !hasmapto("<Plug>vBegPrevEnvironment", "v")
     vmap <silent> <buffer> [[ <Plug>vBegPrevEnvironment
 endif
-exe "nnoremap <silent> <buffer> <Plug>BegNextEnvironment m':call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
+exe "nnoremap <silent> <buffer> <Plug>BegNextEnvironment m`:call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
 if !hasmapto("<Plug>GotoNextEnvironment", "n")
     nmap <silent> <buffer> ]] <Plug>GotoNextEnvironment
 endif
-exe "vnoremap <silent> <buffer> <Plug>vBegNextEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
+exe "vnoremap <silent> <buffer> <Plug>vBegNextEnvironment m`:<C-U>exe \"normal! gv\"<Bar>call search('".s:backslash."(".s:backslash."n".s:backslash."s*".s:backslash.")".s:backslash."?".s:backslash."%(".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$".s:backslash.")', 'W')<CR>"
 if !hasmapto("<Plug>vBegNextEnvironment", "v")
     vmap <silent> <buffer> ]] <Plug>vBegNextEnvironment
 endif
-exe "nnoremap <silent> <buffer> <Plug>EndPrevEnvironment m':call search('".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
+exe "nnoremap <silent> <buffer> <Plug>EndPrevEnvironment m`:call search('".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
 if !hasmapto("<Plug>EndPrevEnvironment", "n")
     nmap <silent> <buffer> [] <Plug>EndPrevEnvironment
 endif
-exe "vnoremap <silent> <buffer> <Plug>vEndPrevEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
+exe "vnoremap <silent> <buffer> <Plug>vEndPrevEnvironment m`:<C-U>exe \"normal! gv\"<Bar>call search('".s:backslash."%(".s:bbackslash."end".s:backslash."s*{[^}]*}".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$".s:backslash.")".s:backslash."_s*".s:backslash."zs', 'bW')<CR>"
 if !hasmapto("<Plug>vEndPrevEnvironment", "v")
     vmap <silent> <buffer> [] <Plug>vEndPrevEnvironment
 endif
-exe "nnoremap <silent> <buffer> <Plug>EndNextEnvironment m':call search('".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
+exe "nnoremap <silent> <buffer> <Plug>EndNextEnvironment m`:call search('".s:backslash."%(".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$".s:backslash.")', 'W')<CR>"
 if !hasmapto("<Plug>EndNextEnvironment", "n")
     nmap <silent> <buffer> ][ <Plug>EndNextEnvironment
 endif
-exe "vnoremap <silent> <buffer> <Plug>vEndNextEnvironment m':<C-U>exe \"normal! gv\"<Bar>call search('".s:bbackslash."end".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'W')<CR>"
+exe "vnoremap <silent> <buffer> <Plug>vEndNextEnvironment m`:<C-U>exe \"normal! gv\"<Bar>call search('".s:backslash."(".s:backslash."n".s:backslash."s*".s:backslash.")".s:backslash."?".s:backslash."%(".s:bbackslash."end".s:backslash."s*{[^}]*}".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."]".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$".s:backslash.")', 'W')<CR>"
 if !hasmapto("<Plug>vEndNextEnvironment", "v")
     vmap <silent> <buffer> ][ <Plug>vEndNextEnvironment
 endif
