@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 17, 2012 at 10:24:57  +0100
+" Last Change: Wed Oct 17, 2012 at 15:26:53  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -229,16 +229,16 @@ endif
 " nmap <buffer> <C-k> <Plug>TexSyntaxMotionBackward
 
 if !hasmapto("<Plug>TexJMotionForward", 'i')
-    imap <buffer> <C-j> <Plug>TexJMotionForward
+    imap <silent> <buffer> <C-j> <Plug>TexJMotionForward
 endif
 if !hasmapto("<Plug>TexJMotionForward", 'n')
-    nmap <buffer> <C-j> <Plug>TexJMotionForward
+    nmap <silent> <buffer> <C-j> <Plug>TexJMotionForward
 endif
 if !hasmapto("<Plug>TexJMotionBackward", 'i')
-    imap <buffer> <C-k> <Plug>TexJMotionBackward
+    imap <silent> <buffer> <C-k> <Plug>TexJMotionBackward
 endif
 if !hasmapto("<Plug>TexJMotionBackward", 'n')
-    nmap <buffer> <C-k> <Plug>TexJMotionBackward
+    nmap <silent> <buffer> <C-k> <Plug>TexJMotionBackward
 endif
 
 " Repair: } and { 

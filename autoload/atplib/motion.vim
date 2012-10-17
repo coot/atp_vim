@@ -2241,6 +2241,8 @@ function! atplib#motion#JMotion(flag)
 	    return
 	endif
     endif
+    let lz = &lz
+    set lz
     if a:flag !~# 'b'
 	let pattern = '\%(\]\zs\|{\zs\|}\zs\|(\zs\|)\zs\|\[\zs\|\]\zs\|\$\zs\|^\zs\s*$\|\(\\\w\+\>\s*{\)\@!\\\w\+\>\zs\)'
     else
@@ -2250,26 +2252,22 @@ function! atplib#motion#JMotion(flag)
 	let pattern = '\%(&\s*\zs\|^\s*\zs\)\|' . pattern
     endif
 
-    "     let g:col = col(".") " sometimes this doesn't work - in normal mode go to
-    "     end of line and press 'a' - then col(".") is not working!
-"     let g:let = getline(line("."))[col(".")-1]
-"     let g:con = getline(line("."))[col(".")-1] =~ '\%(\$\|{\|}\|(\|)\|\[\|\]\)' && col(".") < len(getline(line(".")))
     if getline(line("."))[col(".")-1] =~ '\%(\$\|{\|}\|(\|)\|\[\|\]\)' && a:flag !~# 'b'
 	if col(".") == len(getline(line(".")))
 	    execute "normal a "
 	else
 	    call cursor(line("."), col(".")+1)
 	endif
-	return
     else
 	call search(pattern, a:flag)
 	" In the imaps we use 'a' for the backward move and 'i' for forward move! 
 	let condition = getline(line("."))[col(".")-1] =~ '\%(\$\|{\|}\|(\|)\|\[\|\]\)'
 	if a:flag !~# 'b' && col(".") == len(getline(line("."))) && condition
-" 	    Add a space at the end of line and move there
-		execute "normal a "
+	    " Add a space at the end of line and move there
+	    execute "normal a"
 	endif
     endif
+    let &lz=lz
 endfunction
 " }}}1
 " atplib#motion#ParagraphNormalMotion {{{1

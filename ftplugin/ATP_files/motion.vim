@@ -167,10 +167,10 @@ imap <Plug>TexSyntaxMotionBackward	<Esc>:call atplib#motion#TexSyntaxMotion(0,1,
 nmap <Plug>TexSyntaxMotionForward	:call atplib#motion#TexSyntaxMotion(1,1)<CR>
 nmap <Plug>TexSyntaxMotionBackward	:call atplib#motion#TexSyntaxMotion(0,1)<CR>
 
-imap <Plug>TexJMotionForward	<Esc><Right>:call atplib#motion#JMotion('')<CR>i
-imap <Plug>TexJMotionBackward	<Esc>:call atplib#motion#JMotion('b')<CR>a
-nmap <Plug>TexJMotionForward	:call atplib#motion#JMotion('')<CR>
-nmap <Plug>TexJMotionBackward	:call atplib#motion#JMotion('b')<CR>
+inoremap <Plug>TexJMotionForward	<Esc><Right>:call atplib#motion#JMotion('')<CR>i
+inoremap <Plug>TexJMotionBackward	<Esc>:call atplib#motion#JMotion('b')<CR>a
+nnoremap <Plug>TexJMotionForward	:call atplib#motion#JMotion('')<CR>
+nnoremap <Plug>TexJMotionBackward	:call atplib#motion#JMotion('b')<CR>
 
 " command! -buffer -nargs=1 -complete=buffer MakeToc	:echo atplib#motion#maketoc(fnamemodify(<f-args>, ":p"))[fnamemodify(<f-args>, ":p")] 
 command! -buffer -bang -nargs=? Toc	:call atplib#motion#TOC(<q-bang>)
