@@ -64,10 +64,11 @@ texfile = options.texfile
 bufnr   = options.bufnr
 basename = os.path.splitext(os.path.basename(texfile))[0]
 texfile_dir = os.path.dirname(texfile)
+debug_file.write("texfile_dir='%s'\n" % texfile_dir)
 if options.tempdir == "":
     options.tempdir = os.path.join(texfile_dir,".tmp")
 logfile = basename+".log"
-debug_file.write("logfile="+logfile+"\n")
+debug_file.write("logfile='%s'\n" % logfile)
 auxfile = basename+".aux"
 bibfile = basename+".bbl"
 idxfile = basename+".idx"
@@ -100,7 +101,7 @@ def cleanup(debug_file, tmpdir, pids):
 #         except OSError:
 #             # No such process error.
 #             pass
-atexit.register(cleanup, debug_file, tmpdir, pids)
+# atexit.register(cleanup, debug_file, tmpdir, pids)
 
 # FILTER:
 nonempty = lambda x: (re.match('\s*$', x) is None)
@@ -186,7 +187,7 @@ def vim_remote_expr(servername, expr):
 def latex_progress_bar(cmd):
     """Run latex and send data for progress bar,"""
 
-    debug_file.write("RUN "+str(run)+" CMD"+str(cmd)+"\n")
+    debug_file.write("RUN %s\n  CMD %s\n  CDIR %s\n" % (run, cmd, os.path.abspath(os.curdir)))
 
     child = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     pid   = child.pid
@@ -288,8 +289,6 @@ def copy_back(tmpdir, latex_returncode):
 try:
     # Send pid to ATP:
     vim_remote_expr(servername, "atplib#callback#PythonPID("+str(os.getpid())+")")
-    cwd = getcwd()
-    os.chdir(texfile_dir)
 
     # Note always run first time.
     # this ensures that the aux, ... files are uptodate.
@@ -306,6 +305,7 @@ try:
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
+    os.chdir(texfile_dir)
 
     debug_file.write("bibliographies = %s\n" % bibliographies)
     for bib in bibliographies:
@@ -408,6 +408,7 @@ try:
         lotfile_readable = os.path.isfile(lotfile)
         thmfile_readable = os.path.isfile(thmfile)
 
+        debug_file.write("AUXFILE: %s\n" % tmpaux)
         try:
             if sys.version_info.major < 3:
                 with open(tmpaux, "r") as aux_file:

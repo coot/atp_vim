@@ -573,6 +573,10 @@ endfunction
 " Function Arguments:
 function! atplib#compiler#MakeLatex(bang, mode, start)
 
+    if fnamemodify(&l:errorfile, ":p") != b:atp_OutDir."/".fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
+	exe "setl errorfile=".b:atp_OutDir."/".fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
+    endif
+
     if a:mode =~# '^s\%[ilent]$'
 	let mode = 'silent'
     elseif a:mode =~# '^d\%[ebug]$'
@@ -648,8 +652,8 @@ endfunction
 function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, filename, bang, ...)
     " a:1	= b:atp_XpdfServer (default value)
 
-    if fnamemodify(&l:errorfile, ":p") != fnamemodify(a:filename, ":p:r").".".(g:atp_ParseLog ? "_" : "")."log"
-	exe "setl errorfile=".fnameescape(fnamemodify(a:filename, ":p:r").".".(g:atp_ParseLog ? "_" : "")."log")
+    if fnamemodify(&l:errorfile, ":p") != b:atp_OutDir."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
+	exe "setl errorfile=".b:atp_OutDir."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
     endif
 
     " Kill comiple.py scripts if there are too many of them.
@@ -849,7 +853,7 @@ if os.path.exists(basename+".aux"):
         main_aux_file.close()
     else:
         main_aux = []
-# There is no sens of comparing main_aux and local_aux!
+    # There is no sens of comparing main_aux and local_aux!
     pattern = re.compile('^\\\\newlabel.*$', re.M)
     local_labels = re.findall(pattern, "".join(local_aux))
     def get_labels(line):
@@ -861,12 +865,6 @@ if os.path.exists(basename+".aux"):
         match = re.search('^\\\\newlabel\s*{'+re.escape(label)+'}.*', "\n".join(main_aux), re.M)
         if not match:
             main_aux.append(local_labels_dict[label]+"\n")
-#     elif match.group(0) != local_labels_dict[label]:
-#         print("A "+match.group(0))
-#         print("A "+local_labels_dict[label])
-#         print("\n".join(main_aux))
-#         main_aux.remove(match.group(0))
-#         main_aux.append(local_labels_dict[label])
     main_aux_file  = open(mainfile_base+".aux", "w")
     main_aux_file.write("".join(main_aux))
     main_aux_file.close()
@@ -902,8 +900,8 @@ endfunction
 function! atplib#compiler#Compiler(bibtex, start, runs, verbose, command, filename, bang, ...)
 	" a:1	= b:atp_XpdfServer (default value)
 	let XpdfServer = ( a:0 >= 1 ? a:1 : b:atp_XpdfServer )
-	if fnamemodify(&l:errorfile, ":p") != fnamemodify(a:filename, ":p:r").".".(g:atp_ParseLog ? "_" : "")."log"
-	    exe "setl errorfile=".fnamemodify(a:filename, ":p:r").".".(g:atp_ParseLog ? "_" : "")."log"
+	if fnamemodify(&l:errorfile, ":p") != b:atp_OutDir."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
+	    exe "setl errorfile=".b:atp_OutDir."/".fnamemodify(a:filenamt, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
 	endif
     
 	" Set biber setting on the fly
