@@ -210,7 +210,7 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
     let [ line, col ] 	= [ line("."), col(".") ]
     let main_file	= atplib#FullPath(a:main_file)
     let ext		= get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf")
-    let output_file	= fnamemodify(main_file,":r") . ext
+    let output_file	= b:atp_OutDir."/".fnamemodify(main_file,":t:r") . ext
     if !filereadable(output_file) && output_check
 	" Here should be a test if viewer is running, this can be made with python.
 	" this is way viewer starts not well when using :SyncTex command while Viewer
@@ -225,17 +225,9 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
        echohl None
        return 2
     endif
-    let main_file         = atplib#FullPath(a:main_file)
-    let ext		  = get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf")
-    let link=resolve(main_file)
-    if link != ""
-        let outfile     = fnamemodify(link,":r") . ext
-    else
-        let outfile     = fnamemodify(main_file,":r"). ext 
-    endif
 
     if IsRunning_check
-	if (!atplib#compiler#IsRunning(b:atp_Viewer, atplib#FullPath(outfile), a:xpdf_server) && output_check) 
+	if (!atplib#compiler#IsRunning(b:atp_Viewer, output_file, a:xpdf_server) && output_check) 
 	    "Note: I should test here if Xpdf is not holding a file (it might be not
 	    "visible through cmdline arguments -> this happens if file is opened in
 	    "another server. We can use: xpdf -remote a:xpdf_server "run('echo %f')"
