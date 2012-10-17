@@ -100,15 +100,18 @@ function! atplib#tools#GrepAuxFile(...)
     " Aux file to read:
 
     let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : b:atp_OutDir . "/" . fnamemodify(b:atp_MainFile, ":t:r") ) 
-    let aux_filename = base."._aux"
+    let aux_filename = base . "._aux"
     if !filereadable(aux_filename)
-	let aux_filename = ( a:0 >= 1 ? a:1 : b:atp_OutDir . "/" .fnamemodify(b:atp_MainFile, ":t:r:) )
-	if !filereadable(a:1) && exists("b:atp_MainFile")
-	    let aux_filename = b:atp_OutDir . "/" . fnamemodify(atplib#FullPath(b:atp_MainFile), ":t:r") . "._aux"
+	let aux_filename = base . ".aux"
+	if !filereadable(aux_filename)
+	    let base = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r")
+	    let aux_filename =  base . "._aux"
 	    if !filereadable(aux_filename)
-		let aux_filename = b:atp_OutDir . "/" . fnamemodify(atplib#FullPath(b:atp_MainFile), ":t:r") . ".aux"
+		let aux_filename = base . ".aux"
 	    else
-		echoerr "[ATP] aux file not found (atplib#tools#GrepAuxFile)."
+		echohl WarningMsg
+		echom "[ATP] aux file not found (atplib#tools#GrepAuxFile)."
+		echohl Normal
 	    endif
 	endif
     endif
