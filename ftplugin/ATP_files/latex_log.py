@@ -93,11 +93,12 @@ else:
     log_to_path = None
 
 def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir="", project_tmpdir="", encoding="utf8"):
-    # this function rewrites LaTeX log file (input_fname) to output_fname,
-    # changeing its format to something readable by Vim.
-    # check_path -- ATP process files in a temporary directory, with this
-    # option the files under project_tmpdir will be written using project_dir
-    # (this is for the aux file).
+    """This function rewrites LaTeX log file (input_fname) to output_fname,
+    changeing its format to something readable by Vim.
+    check_path -- ATP process files in a temporary directory, with this
+    option the files under project_tmpdir will be written using project_dir
+    (this is for the aux file).
+    """
 
     if output_fname is None:
         output_fname = os.path.splitext(input_fname)[0]+"._log"

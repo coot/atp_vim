@@ -99,14 +99,14 @@ endfunction
 function! atplib#tools#GrepAuxFile(...)
     " Aux file to read:
 
-    let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : fnamemodify(b:atp_MainFile, ":r") ) 
-    let aux_filename	= base."._aux"
+    let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : b:atp_OutDir . "/" . fnamemodify(b:atp_MainFile, ":t:r") ) 
+    let aux_filename = base."._aux"
     if !filereadable(aux_filename)
-	let aux_filename	= a:1
+	let aux_filename = a:1
 	if !filereadable(a:1) && exists("b:atp_MainFile")
-	    let aux_filename = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r") . "._aux"
+	    let aux_filename = b:atp_OutDir . "/" . fnamemodify(atplib#FullPath(b:atp_MainFile), ":t:r") . "._aux"
 	    if !filereadable(aux_filename)
-		let aux_filename = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r") . ".aux"
+		let aux_filename = b:atp_OutDir . "/" . fnamemodify(atplib#FullPath(b:atp_MainFile), ":t:r") . ".aux"
 	    else
 		echoerr "[ATP] aux file not found (atplib#tools#GrepAuxFile)."
 	    endif

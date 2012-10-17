@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Oct 14, 2012 at 10:36:41  +0100
+" Last Change: Wed Oct 17, 2012 at 08:48:52  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1293,7 +1293,7 @@ if !exists("g:atp_ProjectLocalVariables")
     let g:atp_ProjectLocalVariables = [
 		\ "b:atp_MainFile", 	"g:atp_mapNn", 		"b:atp_autex",
 		\ "b:atp_TexCompiler", 	"b:atp_TexOptions", 	"b:atp_TexFlavor", 
-		\ "b:atp_auruns", 	"b:atp_ReloadOnError",
+		\ "b:atp_auruns", 	"b:atp_ReloadOnError",	"b:atp_OutDir",
 		\ "b:atp_OpenViewer", 	"b:atp_XpdfServer",
 		\ "b:atp_Viewer", 	"b:TreeOfFiles",	"b:ListOfFiles",
 		\ "b:TypeDict", 	"b:LevelDict", 		"b:atp_BibCompiler",

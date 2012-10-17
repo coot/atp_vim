@@ -2323,7 +2323,10 @@ def scan_file(file, fname, pattern, bibpattern):
                     for m in  match.split(','):
                         m=addext(m, "bib")
                         if not os.access(m, os.F_OK):
-                            m=kpsewhich_find(m, bib_path)[0]
+                            try:
+                                m=kpsewhich_find(m, bib_path)[0]
+                            except IndexError:
+                                pass
                         matches_d[m]=[m, fname,  nr, 'bib']
                         matches_l.append(m)
     return [ matches_d, matches_l ]
@@ -2344,9 +2347,16 @@ def tree(file, level, pattern, bibpattern):
             else:
                 path=tex_path
             try:
-                file=kpsewhich_find(file, path)[0]
-                with open(file) as fo:
-                    file_l = fo.read().splitlines(False)
+                k_list = kpsewhich_find(file, path)
+                if k_list:
+                    file = k_list[0]
+                else:
+                    file = None
+                if file:
+                    with open(file) as fo:
+                        file_l = fo.read().splitlines(False)
+                else:
+                    return [ {}, [], {}, {} ]
             except IOError:
                 return [ {}, [], {}, {} ]
             except IndexError:

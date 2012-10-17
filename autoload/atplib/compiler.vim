@@ -33,10 +33,10 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
 
     " Follow the symbolic link
     let link=resolve(tex_file)
-    if link != ""
-	let outfile	= fnamemodify(link,":r") . ext
+    if link != tex_file
+	let outfile	= fnamemodify(link, ":r") . ext
     else
-	let outfile	= fnamemodify(tex_file,":r"). ext 
+	let outfile	= b:atp_OutDir . "/" . fnamemodify(a:tex_file, ':t:r') . ext
     endif
 
     if b:atp_Viewer == "xpdf"	
@@ -210,7 +210,7 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
     let [ line, col ] 	= [ line("."), col(".") ]
     let main_file	= atplib#FullPath(a:main_file)
     let ext		= get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf")
-    let output_file	= fnamemodify(main_file,":r") . ext
+    let output_file	= b:atp_OutDir."/".fnamemodify(main_file,":t:r") . ext
     if !filereadable(output_file) && output_check
 	" Here should be a test if viewer is running, this can be made with python.
 	" this is way viewer starts not well when using :SyncTex command while Viewer
@@ -225,17 +225,9 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
        echohl None
        return 2
     endif
-    let main_file         = atplib#FullPath(a:main_file)
-    let ext		  = get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf")
-    let link=resolve(main_file)
-    if link != ""
-        let outfile     = fnamemodify(link,":r") . ext
-    else
-        let outfile     = fnamemodify(main_file,":r"). ext 
-    endif
 
     if IsRunning_check
-	if (!atplib#compiler#IsRunning(b:atp_Viewer, atplib#FullPath(outfile), a:xpdf_server) && output_check) 
+	if (!atplib#compiler#IsRunning(b:atp_Viewer, output_file, a:xpdf_server) && output_check) 
 	    "Note: I should test here if Xpdf is not holding a file (it might be not
 	    "visible through cmdline arguments -> this happens if file is opened in
 	    "another server. We can use: xpdf -remote a:xpdf_server "run('echo %f')"
@@ -769,6 +761,7 @@ function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, 
     let cmd=g:atp_Python." ".g:atp_PythonCompilerPath." --command ".b:atp_TexCompiler
 		\ ." --tex-options ".shellescape(tex_options)
 		\ ." --tempdir ".shellescape(b:atp_TempDir)
+		\ ." --output-dir ".shellescape(b:atp_OutDir)
 		\ ." --verbose ".a:verbose
 		\ ." --file ".shellescape(atplib#FullPath(a:filename))
 		\ ." --bufnr ".bufnr("%")
@@ -2547,14 +2540,14 @@ function! atplib#compiler#ShowErrors(bang,...)
     let show_message = ( a:0 >= 3 ? a:3 : 1 )
 
     if local_errorfile
-	if !exists("s:errorfile")
-	    let s:errorfile = &l:errorfile
+	if !exists("errorfile")
+	    let errorfile = &l:errorfile
 	endif
-	let &l:errorfile = expand("%:p:r")."._log"
+	let &l:errorfile = b:atp_OutDir . "/" . expand("%:t:r")."._log"
     else
-	if exists("s:errorfile")
-	    let &l:errorfile = s:errorfile
-	    unlet s:errorfile
+	if exists("errorfile")
+	    let &l:errorfile = errorfile
+	    unlet errorfile
 	endif
     endif
 

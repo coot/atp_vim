@@ -3821,9 +3821,9 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	to the directory in which the real file is located. 
 	
 	If you set this variable to './' (or '.') and change the current
-	working directory for example to /tmp (:cd /tmp) then the latex output
+	working directory for example to /tmp (|:cd| /tmp) then the latex output
 	will be placed in /tmp, i.e. it will move with with cd. However, the
-	default value of b:atp_OutDir is not affected by :cd command.
+	default value of |b:atp_OutDir| is not affected by the |:cd| command.
 
 	White spaces and other characters should not be escaped. It will be
 	quoted in '...' using the |shellescape()| function.
@@ -3834,7 +3834,11 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	or use the |atp-:ShowOptions| command.		
 
 	If in your environment the variable $TEXMFOUTDIR is set the value of
-	b:atp_OutDir will be set to its value.
+	|b:atp_OutDir| will be set to its value.
+
+	If you reset this variable you also should reset the |errorfile| vim
+	setting (or save the file - then |b:atp_OutDir| will be recorded in
+	the |atp-ProjectScript|, and restart vim).
 
 							*b:atp_auruns*
 >
@@ -4260,7 +4264,7 @@ PROJECT SCRIPT						*atp-ProjectScript*
     let g:atp_ProjectLocalVariables = [
 		\ "b:atp_MainFile", 	"g:atp_mapNn", 		"b:atp_autex", 
 		\ "b:atp_TexCompiler", 	"b:atp_TexOptions", 	"b:atp_TexFlavor", 	
-		\ "b:atp_auruns", 	"b:atp_ReloadOnErr", 	
+		\ "b:atp_auruns", 	"b:atp_ReloadOnErr",	"b:atp_OutDir",
 		\ "b:atp_OpenViewer", 	"b:atp_XpdfServer",
 		\ "b:atp_Viewer", 	"b:TreeOfFiles",	"b:ListOfFiles", 	
 		\ "b:TypeDict", 	"b:LevelDict", 		"b:atp_BibCompiler", 

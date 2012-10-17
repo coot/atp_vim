@@ -266,10 +266,10 @@ def copy_back_output(tmpdir):
     aux file is copied also to _aux file used by ATP."""
     os.chdir(tmpdir)
     if os.path.exists(basename+output_ext):
-        shutil.copy(basename+output_ext, texfile_dir)
+        shutil.copy(basename+output_ext, outdir)
     if os.path.exists(basename+".aux"):
-        shutil.copy(basename+".aux", texfile_dir)
-        shutil.copy(basename+".aux", os.path.join(texfile_dir, basename+"._aux"))
+        shutil.copy(basename+".aux", outdir)
+        shutil.copy(basename+".aux", os.path.join(outdir, basename+"._aux"))
     os.chdir(texfile_dir)
 
 def copy_back(tmpdir, latex_returncode):
@@ -282,7 +282,7 @@ def copy_back(tmpdir, latex_returncode):
     for ext in ext_list:
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
-            shutil.copy(file_cp, texfile_dir)
+            shutil.copy(file_cp, outdir)
     os.chdir(texfile_dir)
 
 try:
@@ -300,17 +300,21 @@ try:
     debug_file.write("TMPLOG="+tmplog+"\n")
     tmpaux  = os.path.join(tmpdir,basename+".aux")
 
+    cdir = os.curdir
+    os.chdir(outdir)
     for ext in filter(lambda x: x != 'log', keep):
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
 
-    tempdir_list = os.listdir(tmpdir)
-    debug_file.write("ls tmpdir "+str(tempdir_list)+"\n")
+    debug_file.write("bibliographies = %s\n" % bibliographies)
     for bib in bibliographies:
-        if os.path.exists(os.path.join(texfile_dir,os.path.basename(bib))):
+        if os.path.exists(os.path.join(outdir,os.path.basename(bib))):
+            os.symlink(os.path.join(outdir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+        elif os.path.exists(os.path.join(texfile_dir,os.path.basename(bib))):
             os.symlink(os.path.join(texfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
+    debug_file.write("TMPDIR contains: %s\n" % os.listdir(tmpdir))
     # SET ENVIRONMENT
     for var in env:
         os.putenv(var[0], var[1])
@@ -413,7 +417,7 @@ try:
                     aux=aux_file.read()
         except IOError:
             aux=""
-        bibtex=re.search('\\\\bibdata\s*{', aux)
+        bibtex=re.search(r'\\bibdata\s*{', aux)
         # This can be used to make it faster and use the old bbl file.
         # For this I have add a switch (bang).
         #         bibtex=re.search('No file '+basename+'\.bbl\.', log)
@@ -426,10 +430,10 @@ try:
                 with open(texfile, 'r', encoding=encoding, errors="replace") as sock:
                     tex_lines = sock.read().split("\n")
             for line in tex_lines:
-                if re.match('[^%]*\\\\usepackage\s*(\[[^]]*\])?\s*{(\w\|,)*biblatex',line):
+                if re.match(r'[^%]*\\usepackage\s*(\[[^]]*\])?\s*{(\w\|,)*biblatex',line):
                     bibtex=True
                     break
-                elif re.search('\\\\begin\s*{\s*document\s*}',line):
+                elif re.search(r'\\begin\s*{\s*document\s*}',line):
                     break
         debug_file.write("BIBTEX="+str(bibtex)+"\n")
 
@@ -542,7 +546,7 @@ except Exception:
     vim_remote_expr(servername, "atplib#callback#Echo(\"[ATP:] error in makelatex.py, catched python exception:\n"+error_str+"[ATP info:] this error message is recorded in makelatex.log under g:atp_TempDir\",'echo','ErrorMsg')")
 
 # Rewrite the LaTeX log file.
-latex_log.rewrite_log(logfile, check_path=True, project_dir=texfile_dir, project_tmpdir=tmpdir)
+latex_log.rewrite_log(os.path.join(outdir,logfile), check_path=True, project_dir=texfile_dir, project_tmpdir=tmpdir)
 
 debug_file.write("PIDS="+str(pids))
 vim_remote_expr(servername, "atplib#callback#Echo('[ATP:] MakeLatex finished.', 'echomsg', 'Normal')")
