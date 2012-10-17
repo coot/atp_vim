@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Oct 16, 2012 at 21:50:22  +0100
+" Last Change: Wed Oct 17, 2012 at 10:24:57  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -758,9 +758,6 @@ endif
 if !hasmapto("<Plug>FormatLines", "n")
     nmap <silent> <buffer> gW		<Plug>FormatLines
 endif
-" INDENT BLOCK: {{{1
-nnoremap <buffer> g>	:<C-U>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1).">``", 't')<CR>
-nnoremap <buffer> g<	:<C-U>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1)."<``", 't')<CR>
 " SELECT SYNTAX: {{{1
 if !hasmapto("<Plug>SelectOuterSyntax", "v")
     vmap <buffer> <silent> aS		<Plug>SelectOuterSyntax

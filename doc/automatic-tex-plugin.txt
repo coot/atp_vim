@@ -192,6 +192,12 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
     nmap gw <Plug>FormatLines
 < (in |vimrc| file you have to use an autocommand).
 
+ The map g< and g> are removed (indenting inner paragraph). If you still want
+ to use them put this in your |atprc| file: >
+    nnoremap <buffer> g>	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1).">``", 't')<cr>
+    nnoremap <buffer> g<	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1)."<``", 't')<cr>
+<
+
 >
  ======================
  Changes in version 12.1
@@ -5297,15 +5303,22 @@ vmap [counti]a{
 nmap gW
 	Quite useful normal map to: >
 	    m`vipgq``
-<	It is mapped to gW (in normal mode).
+<	It is mapped to gW (in normal mode). It is slightly better than the
+	above. If you use autselect in 'clipboard' vim option, it will not
+	ovwerwrite what is in the "* register (what would happen due to
+	useage of the visual mode).
 
 							*atp-g<*
 							*atp-g>*	
-nmaps: g>, g<, 2g>, ..., 6g>  
+nmaps: g>, g<				{not defined by default}
 	A normal maps to >
 	    m`vipg>``
 	    m`vip2g>``
+<	You can put this into your |atprc| file:  >
+	    nnoremap <buffer> g>	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1).">``", 't')<cr>
+	    nnoremap <buffer> g<	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1)."<``", 't')<cr>
 <
+
 							*atp-r*
 nmap r{char}
 	Over any charackter which is not a bracket: (:), [:], {:} it acts as
