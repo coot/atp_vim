@@ -102,7 +102,7 @@ function! atplib#tools#GrepAuxFile(...)
     let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : b:atp_OutDir . "/" . fnamemodify(b:atp_MainFile, ":t:r") ) 
     let aux_filename = base."._aux"
     if !filereadable(aux_filename)
-	let aux_filename = ( a:0 >= 1 ? a:1 & b:atp_OutDir . "/" .fnamemodify(b:atp_MainFile, ":t:r:) )
+	let aux_filename = ( a:0 >= 1 ? a:1 : b:atp_OutDir . "/" .fnamemodify(b:atp_MainFile, ":t:r:) )
 	if !filereadable(a:1) && exists("b:atp_MainFile")
 	    let aux_filename = b:atp_OutDir . "/" . fnamemodify(atplib#FullPath(b:atp_MainFile), ":t:r") . "._aux"
 	    if !filereadable(aux_filename)
