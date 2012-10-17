@@ -107,21 +107,22 @@ endfunction
 " {{{ atplib#compiler#GetSyncData
 function! atplib#compiler#GetSyncData(line, col, file)
 
-    let g:file = a:file
-     	if !filereadable(fnamemodify(atplib#FullPath(a:file), ":r").'.synctex.gz') 
+     	if !filereadable(b:atp_OutDir . "/" . fnamemodify(a:file, ":t:r").'.synctex.gz') 
 	    redraw!
-	    let cmd=b:atp_TexCompiler." ".join(split(b:atp_TexOptions, ','), " ")." ".shellescape(atplib#FullPath(a:file))
+	    " We use "system(cmd)" rather than ATP :Tex command, since we
+	    " don't want to background.
+	    let cmd=b:atp_TexCompiler." -output-directory=".shellescape(b:atp_OutDir)." ".join(split(b:atp_TexOptions, ','), " ")." ".shellescape(atplib#FullPath(a:file))
 	    if b:atp_TexOptions !~ '\%(-synctex\s*=\s*1\|-src-specials\>\)'
 		echomsg "[SyncTex:] b:atp_TexOptions does not contain -synctex=1 or -src-specials switches!"
 		return
 	    else
 		echomsg "[SyncTex:] calling ".get(g:CompilerMsg_Dict, b:atp_TexCompiler, b:atp_TexCompiler)." to generate synctex data. Wait a moment..."
 	    endif
- 	    call system(cmd) 
+	    call system(cmd)
  	endif
 	" Note: synctex view -i line:col:tex_file -o output_file
 	" tex_file must be full path.
-	let synctex_cmd="synctex view -i ".a:line.":".a:col.":'".expand("%:p"). "' -o '".fnamemodify(atplib#FullPath(a:file), ":r").".pdf'"
+	let synctex_cmd="synctex view -i ".a:line.":".a:col.":'".expand("%:p")."' -o '".b:atp_OutDir."/".fnamemodify(a:file,":r").".pdf'"
 
 	" SyncTex is fragile for the file name: if it is file name or full path, it
 	" must agree literally with what is written in .synctex.gz file
