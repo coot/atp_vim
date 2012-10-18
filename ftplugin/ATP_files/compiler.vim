@@ -41,10 +41,10 @@ noremap <silent> <Plug>ATP_ViewOutput_sync		:call atplib#compiler#ViewOutput("!"
 noremap <silent> <Plug>ATP_ViewOutput_nosync		:call atplib#compiler#ViewOutput("",  b:atp_MainFile, b:atp_XpdfServer)<CR>
 noremap <silent> <Plug>ATP_ViewLocalOutput_sync		:call atplib#compiler#ViewOutput("!", expand("%:p"), b:atp_LocalXpdfServer)<CR>
 noremap <silent> <Plug>ATP_ViewLocalOutput_nosync	:call atplib#compiler#ViewOutput("",  expand("%:p"), b:atp_LocalXpdfServer)<CR>
-nmap <buffer> <Plug>SyncTexKeyStroke	:call atplib#compiler#SyncTex("", 0, b:atp_MainFile, b:atp_XpdfServer)<CR>
-nmap <buffer> <Plug>SyncTexMouse	:call atplib#compiler#SyncTex("", 1, b:atp_MainFile, b:atp_XpdfServer)<CR>
-nmap <buffer> <Plug>SyncTexLKeyStroke	:call atplib#compiler#SyncTex("", 0, expand("%:t"), b:atp_LocalXpdfServer)<CR>
-nmap <buffer> <Plug>SyncTexLMouse	:call atplib#compiler#SyncTex("", 1, expand("%:t"), b:atp_LocalXpdfServer)<CR>
+nnoremap <buffer> <Plug>SyncTexKeyStroke	:call atplib#compiler#SyncTex("", 0, b:atp_MainFile, b:atp_XpdfServer)<CR>
+nnoremap <buffer> <Plug>SyncTexMouse	:call atplib#compiler#SyncTex("", 1, b:atp_MainFile, b:atp_XpdfServer)<CR>
+nnoremap <buffer> <Plug>SyncTexLKeyStroke	:call atplib#compiler#SyncTex("", 0, expand("%:t"), b:atp_LocalXpdfServer)<CR>
+nnoremap <buffer> <Plug>SyncTexLMouse	:call atplib#compiler#SyncTex("", 1, expand("%:t"), b:atp_LocalXpdfServer)<CR>
 noremap <silent> <Plug>ATP_TeXCurrent	:<C-U>call atplib#compiler#TeX(v:count1, "", t:atp_DebugMode)<CR>
 noremap <silent> <Plug>ATP_TeXLocal	:<C-U>call atplib#compiler#LocalCompiler("n", v:count1, "silent")<CR>
 noremap <silent> <Plug>ATP_TeXDefault	:<C-U>call atplib#compiler#TeX(v:count1, "", 'default')<CR>

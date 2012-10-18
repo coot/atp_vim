@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Wed Oct 17, 2012 at 10:21:24  +0100
+" Last Change: Thu Oct 18, 2012 at 21:30:39  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -11,7 +11,17 @@ let s:sourced 	= exists("s:sourced") ? 1 : 0
 function! atplib#various#WrapSelection(...)
 
     let wrapper		= ( a:0 >= 1 ? a:1 : '{' )
-    let end_wrapper 	= ( a:0 >= 2 ? a:2 : '}' )
+    if a:0 >= 2
+	let end_wrapper = a:2
+    else
+	let wrapper_dict = { '(' : ')', '[' : ']', '{' : '}', '<' : '>' }
+	if len(wrapper) >= 2 && wrapper[len(wrapper)-2] == '\' && has_key(wrapper_dict, wrapper[len(wrapper)-1])
+	    let end_wrapper = '\' . get(wrapper_dict, wrapper[len(wrapper)-1], '}')
+	else
+	    let end_wrapper = get(wrapper_dict, wrapper[len(wrapper)-1], '}')
+	endif
+    endif
+
     if a:0 >=6 && a:6 || a:0 <= 5
 	if a:0 <= 5 || a:6 == 1 
 	    let s:lastwrapper_begin	= [ wrapper, wrapper ]

@@ -1722,16 +1722,19 @@ map <F6>d
 	Puts selected text between [beginWrapper] and [endWrapper]. Also sets
 	the cursor position according to the [cursor_pos]. Possible values
 	are: a number -- indicates the character offset from beginning of
-	[beginWrapper]; or 'end' put the cursor at the end of [endWrapper] or
-	'begin' leave the cursor at the beginning (to be precise at the end of
-	the starting wrapper).  The default [beginWrapper] is '{' and
-	[endWrapper] is '}'.  The last argument [new_lines] has two values 0/1
-	(default is 0): if 1 then the [beginWrapper] and [endWrapper] are put
-	in separate lines (the begin line and end line are split), this is
-	useful for putting text into an environment \begin{}:\end{}. 
+	[beginWrapper]; or "end" put the cursor at the end of [endWrapper] or
+	"begin" leave the cursor at the beginning (to be precise at the end of
+	the starting wrapper).  The default [beginWrapper] is '{', the default
+	[endWrapper] is the bracket which closes the last character of
+	[beginWrapper], if the penultimum element of [beginWrapper] is '\' it
+	is also prepanded to the [endWrapper]. The last argument [new_lines]
+	has two values 0/1 (default is 0): if 1 then the [beginWrapper] and
+	[endWrapper] are put in separate lines (the begin line and end line
+	are split), this is useful for putting text into an environment
+	\begin{}:\end{}. 
 
 	See |<f-args>| to know how to pass arguments. (They are separated with
-	spaces, white spaces in arguments should be escaped with backslash
+	spaces, white spaces in arguments should be escaped with a backslash
 	'\'.)
 
 	For the predefined maps which use WrapSelection see below
