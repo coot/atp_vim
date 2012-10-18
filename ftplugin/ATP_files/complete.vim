@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Sep 03, 2012 at 19:01:07  +0100
+" Last Change: Thu Oct 18, 2012 at 11:24:24  +0100
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -88,7 +88,7 @@ endif
 		    \ 'corollary' 	: 'cor',	'enumerate' 	: 'enum',
 		    \ 'example' 	: 'ex',		'itemize' 	: 'it',
 		    \ 'item'		: 'itm',	'algorithmic'	: 'alg',
-		    \ 'algorithm'	: 'alg',
+		    \ 'algorithm'	: 'alg',	'note'		: 'note',
 		    \ 'remark' 		: 'rem',	'notation' 	: 'not',
 		    \ 'center' 		: '', 		'flushright' 	: '',
 		    \ 'flushleft' 	: '', 		'quotation' 	: 'quot',
@@ -105,7 +105,8 @@ endif
 		    \ 'part'		: 'prt',	'chapter' 	: 'chap',
 		    \ 'section' 	: 'sec',	'subsection' 	: 'ssec',
 		    \ 'subsubsection' 	: 'sssec', 	'paragraph' 	: 'par',
-		    \ 'subparagraph' 	: 'spar',	'subequations'	: 'eq' }
+		    \ 'subparagraph' 	: 'spar',	'subequations'	: 'eq',
+		    \ }
 
 	" ToDo: Doc.
 	" Usage: \label{l:shorn_env_name . g:atp_separator
