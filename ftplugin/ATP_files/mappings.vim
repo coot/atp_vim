@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 17, 2012 at 15:26:53  +0100
+" Last Change: Thu Oct 18, 2012 at 12:32:36  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -380,6 +380,11 @@ function! ATP_LastWrap(type)
 endfunction
 if !empty(g:atp_vmap_text_font_leader)
 exe "nmap <buffer> ".g:atp_vmap_text_font_leader."w :set opfunc=ATP_LastWrap<CR>g@"
+function! ATP_WrapRoman(type)
+    if a:type == "block" | return | endif
+    call atplib#various#InteligentWrapSelection(['\textrm{'], ['\mathrm{'], 'end', 0, ["'[", "']"])
+endfunction
+exe "nmap <buffer> ".g:atp_vmap_text_font_leader."rm :set opfunc=ATP_WrapRoman<CR>g@"
 function! ATP_WrapBold(type)
     if a:type == "block" | return | endif
     call atplib#various#InteligentWrapSelection(['\textbf{'], ['\mathbf{'], 'end', 0, ["'[", "']"])
@@ -436,8 +441,6 @@ function! ATP_WrapUnderline(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\underline{', '}', 'end', 0, ["'[", "']"])
 endfunction
-" g:atp_vmap_text_font_leader is used instead of g:atp_imap_over_leader = "`"
-" which interferes with marks.
 exe "nmap <buffer> ".g:atp_vmap_text_font_leader."un :set opfunc=ATP_WrapUnderline<CR>g@"
 function! ATP_WrapOverline(type)
     if a:type == "block" | return | endif
@@ -451,12 +454,20 @@ function! ATP_WrapCal(type)
     endif
 endfunction
 exe "nmap <buffer> ".g:atp_vmap_text_font_leader."cal :set opfunc=ATP_WrapCal<CR>g@"
+function! ATP_WrapFrak(type)
+    if a:type == "block" | return | endif
+    call atplib#various#WrapSelection('\mathfrak{', '}', 'end', 0, ["'[", "']"])
+endfunction
+exe "nmap <buffer> ".g:atp_vmap_text_font_leader."fr :set opfunc=ATP_WrapFrak<CR>g@"
 endif
 
 " FONTS: {{{2
 if !empty(g:atp_vmap_text_font_leader)
 if !hasmapto(":Wrap {".s:backslash."usefont{".g:atp_font_encoding."}{}{}{}\\selectfont", 'v')
-    execute "vnoremap <silent> <buffer> ".g:atp_vmap_text_font_leader."f	:Wrap {".s:backslash."usefont{".g:atp_font_encoding."}{}{}{}\\selectfont\\  } ".(len(g:atp_font_encoding)+11)."<CR>"
+    execute "vnoremap <silent> <buffer> ".g:atp_vmap_text_font_leader."uf	:Wrap {".s:backslash."usefont{".g:atp_font_encoding."}{}{}{}\\selectfont\\  } ".(len(g:atp_font_encoding)+11)."<CR>"
+endif
+if !hasmapto(":Wrap {".s:backslash."mathfrak{", 'v')
+    execute "vnoremap <silent> <buffer> ".g:atp_vmap_text_font_leader."fr	:Wrap ".s:backslash."mathfrak{ }<CR>"
 endif
 if !hasmapto(":Wrap ".s:backslash."mbox{", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_text_font_leader."mb	:Wrap ".s:backslash."mbox{ } begin<CR>"

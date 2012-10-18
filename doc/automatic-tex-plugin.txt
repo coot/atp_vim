@@ -4659,6 +4659,12 @@ imap <LocalLeader>fr	\(\mathfrak{}<left>	\mathfrak{}<Left>
 These maps are also defined in normal mode. They requre a motion afterwards,
 i.e. <LocalLeader>rmw will wrap next word in \textrm{:} or \mathrm{:}.
 
+							*atp-nmap-fonts-operator*
+These maps are also available in as operators (|operator|, |g@|,
+'operatorfunc'). That means you can type _bf{motion} to turn the text into
+bold (\textbf or \mathbf depending if the motion starts in text or math). The
+map leader '_' is set by |g:atp_vmap_text_font_leader|.
+
 							
 GREEK LETTERS						*atp-imap-greek-letters*
 Note: You can list this mappings using the command |atp-:HelpMathIMaps|. You
@@ -5002,33 +5008,36 @@ LOG FILE MAPS						*atp-maps-log*
 	%		- searchpair for brackets: (:), [:], {:}, ... .
 <	You can use |n| and |N| Vim normal commands to repeat previous search [count] times.
 
-
+							*g:atp_vmap_text_font_leader*
 							*atp-vmap-WrapSelection*
 WRAP SELECTION VMAPS					*atp-vmap-InteligentWrapSelection*
 	These are the provided maps in visual mode: >
-	    vmap <buffer> \rm	:<C-U>IWrap ['\\textrm{'],	['\\mathrm{']<CR>
-	    vmap <buffer> \em	:<C-U>IWrap ['\\emph{'],	['\\mathit{']<CR>
-	    vmap <buffer> \it	:<C-U>IWrap ['\\textit{'],	['\\mathit{']<CR>
-	    vmap <buffer> \sf	:<C-U>IWrap ['\\textsf{'],	['\\mathsf{']<CR>
-	    vmap <buffer> \tt	:<C-U>IWrap ['\\texttt{'], 	['\\mathtt{']<CR>
-	    vmap <buffer> \bf	:<C-U>IWrap ['\\textbf{'],	['\\mathbf{']<CR>
-	    vmap <buffer> \bb	:<C-U>IWrap ['\\textbf{'],	['\\mathbb{']<CR>
-	    vmap <buffer> \tx	:<C-U>IWrap ['\\textrm{'],	['\\text{']<CR>
-	    vmap <buffer> \sl	:<C-U>IWrap \\textsl{<CR>
-	    vmap <buffer> \sc	:<C-U>Wrap \\textsc{<CR>
-	    vmap <buffer> \up	:<C-U>Wrap \\textup{<CR>
-	    vmap <buffer> \md	:<C-U>Wrap \\textmd{<CR>
-	    vmap <buffer> \u	:<C-U>Wrap \\underline{<CR>
-	    vmap <buffer> \o	:<C-U>Wrap \\overline{<CR>
-	    vmap <buffer> \n	:<C-U>IWrap ['\\textnormal{'],['\\mathnormal{']<CR>
-	    vmap <buffer> \cal	:<C-U>IWrap [''],['\\mathcal{']<CR>
+	    vmap <buffer> _rm	:<C-U>IWrap ['\\textrm{'],	['\\mathrm{']<CR>
+	    vmap <buffer> _em	:<C-U>IWrap ['\\emph{'],	['\\mathit{']<CR>
+	    vmap <buffer> _it	:<C-U>IWrap ['\\textit{'],	['\\mathit{']<CR>
+	    vmap <buffer> _sf	:<C-U>IWrap ['\\textsf{'],	['\\mathsf{']<CR>
+	    vmap <buffer> _tt	:<C-U>IWrap ['\\texttt{'], 	['\\mathtt{']<CR>
+	    vmap <buffer> _bf	:<C-U>IWrap ['\\textbf{'],	['\\mathbf{']<CR>
+	    vmap <buffer> _bb	:<C-U>IWrap ['\\textbf{'],	['\\mathbb{']<CR>
+	    vmap <buffer> _tx	:<C-U>IWrap ['\\textrm{'],	['\\text{']<CR>
+	    vmap <buffer> _sl	:<C-U>IWrap \\textsl{<CR>
+	    vmap <buffer> _sc	:<C-U>Wrap \\textsc{<CR>
+	    vmap <buffer> _up	:<C-U>Wrap \\textup{<CR>
+	    vmap <buffer> _md	:<C-U>Wrap \\textmd{<CR>
+	    vmap <buffer> _fr	:<C-U>Wrap \\mathfrak{<CR>
+	    vmap <buffer> _u	:<C-U>Wrap \\underline{<CR>
+	    vmap <buffer> _o	:<C-U>Wrap \\overline{<CR>
+	    vmap <buffer> _n	:<C-U>IWrap ['\\textnormal{'],['\\mathnormal{']<CR>
+	    vmap <buffer> _cal	:<C-U>IWrap [''],['\\mathcal{']<CR>
 
 	    vmap <LocalLeader>mb :Wrap \\mbox{ } begin<CR>
 <   	Suggested maps: >
-	    vmap <buffer> \tx	:<C-U>IWrap [''],['\\text{']<CR>
-	    vmap <buffer> \in	:<C-U>IWrap [''],['\\intertext{']<CR>"
-<	The leader '\' in above commands is configurable: the value of
-	g:atp_vmap_text_font_leader is used (the default value is <LocalLeader>).
+	    vmap <buffer> _tx	:<C-U>IWrap [''],['\\text{']<CR>
+	    vmap <buffer> _in	:<C-U>IWrap [''],['\\intertext{']<CR>"
+<	The leader '_' in above commands is configurable: the value of
+	|g:atp_vmap_text_font_leader| is used (the default value is <LocalLeader>).
+
+	Note: these maps are also available as operators, see |atp-nmap-fonts-operator|.
 
 							*atp-nmap-WrapSelection*
 							*atp-nmap-InteligentWrapSelection*
@@ -5047,9 +5056,8 @@ WRAP SELECTION VMAPS					*atp-vmap-InteligentWrapSelection*
 < 	which repeats last wrappers used by |atp-:Wrap| or |atp-:IWrap|
 	command or any other wrapping map.
 
-
 	Another provided font wrapper: >
-	    vmap <LocalLeader>f	:exe ':Wrap {\usefont{'.g:atp_font_encoding.'}{}{}{}\selectfont\  }'.(len(g:atp_font_encoding)+11).'<CR>'
+	    vmap <LocalLeader>fo	:exe ':Wrap {\usefont{'.g:atp_font_encoding.'}{}{}{}\selectfont\  }'.(len(g:atp_font_encoding)+11).'<CR>'
 <	Where the variable: 				*g:atp_font_encoding*
 >
 	    g:atp_font_encoding
