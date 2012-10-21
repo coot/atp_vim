@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 17, 2012 at 08:48:52  +0100
+" Last Change: Sun Oct 21, 2012 at 22:38:06  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -292,7 +292,7 @@ let s:optionsDict= {
 		\ "atp_XpdfServer" 		: fnamemodify(b:atp_MainFile,":t:r"), 
 		\ "atp_LocalXpdfServer" 	: expand("%:t:r"), 
 		\ "atp_okularOptions"		: ["--unique"],
-		\ "atp_TempDir"			: substitute(b:atp_OutDir . "/.tmp", '\/\/', '\/', 'g'),
+		\ "atp_TempDir"			: substitute(expand(b:atp_OutDir) . "/.tmp", '\/\/', '\/', 'g'),
 		\ "atp_OutDir"			: ( exists("b:atp_ProjectScriptFile") ? fnamemodify(b:atp_ProjectScriptFile, ":h") : fnamemodify(resolve(expand("%:p")), ":h") ),
 		\ "atp_TexCompiler" 		: <SID>TexCompiler(),
 		\ "atp_BibCompiler"		: ( getline(atplib#search#SearchPackage('biblatex')) =~ '\<backend\s*=\s*biber\>' ? 'biber' : "bibtex" ),
@@ -352,7 +352,7 @@ function! s:SetOptions()
     if string(get(s:optionsinuseDict,"atp_autex", 'optionnotset')) == string('optionnotset')
 	let atp_texinputs=split(substitute(substitute(system("kpsewhich -show-path tex"),'\/\/\+','\/','g'),'!\|\n','','g'),':')
 	call remove(atp_texinputs, index(atp_texinputs, '.'))
-	call filter(atp_texinputs, 'b:atp_OutDir =~# v:val')
+	call filter(atp_texinputs, 'expand(b:atp_OutDir) =~# v:val')
 	let b:atp_autex = ( len(atp_texinputs) ? 0 : s:optionsDict['atp_autex'])  
     endif
     let g:source_time_INPUTS=reltimestr(reltime(time))

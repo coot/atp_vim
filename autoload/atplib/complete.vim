@@ -2610,7 +2610,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ INPUTFILES
     elseif completion_method ==  'inputfiles'
 	let completion_list=[]
-	call extend(completion_list, atplib#search#KpsewhichGlobPath('tex', b:atp_OutDir . ',' . g:atp_texinputs, '*.tex', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\)'))
+	call extend(completion_list, atplib#search#KpsewhichGlobPath('tex', expand(b:atp_OutDir) . ',' . g:atp_texinputs, '*.tex', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\)'))
 	call sort(completion_list)
     " {{{3 ------------ TEX INCLUDEGRAPHICS
     elseif completion_method == 'includegraphics'
@@ -2644,7 +2644,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     " {{{3 ------------ BIBFILES
     elseif completion_method ==  'bibfiles'
 	let  completion_list=[]
-	call extend(completion_list, atplib#search#KpsewhichGlobPath('bib', b:atp_OutDir . ',' . g:atp_bibinputs, '*.bib', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\|miktex\)'))
+	call extend(completion_list, atplib#search#KpsewhichGlobPath('bib', expand(b:atp_OutDir) . ',' . g:atp_bibinputs, '*.bib', ':t:r', '^\%(\/home\|\.\|.*users\)', '\%(^\\usr\|texlive\|miktex\|kpsewhich\|generic\|miktex\)'))
 	call sort(completion_list)
     " {{{3 ------------ BIBSTYLES
     elseif completion_method == 'bibstyles'

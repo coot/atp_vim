@@ -597,8 +597,8 @@ function! atplib#ReadInputFile(ifile,check_texmf)
     elseif filereadable(a:ifile)
 	let l:input_file=readfile(a:ifile)
     " if not then try to read it from b:atp_OutDir
-    elseif filereadable(b:atp_OutDir . fnamemodify(a:ifile,":t"))
-	let l:input_file=readfile(filereadable(b:atp_OutDir . fnamemodify(a:ifile,":t")))
+    elseif filereadable(expand(b:atp_OutDir) . fnamemodify(a:ifile,":t"))
+	let l:input_file=readfile(filereadable(expand(b:atp_OutDir) . fnamemodify(a:ifile,":t")))
     " the last chance is to look for it in the g:texmf directory
     elseif a:check_texmf && filereadable(findfile(a:ifile,g:texmf . '**'))
 	let l:input_file=readfile(findfile(a:ifile,g:texmf . '**'))

@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Thu Oct 18, 2012 at 21:30:39  +0100
+" Last Change: Sun Oct 21, 2012 at 22:38:06  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -875,7 +875,7 @@ function! atplib#various#Delete(delete_output)
     " Be sure that we are not deleting outputs:
     for ext in atp_tex_extensions
 	if ext != "pdf" && ext != "dvi" && ext != "ps"
-	    let files=split(globpath(b:atp_OutDir, "*.".ext), "\n")
+	    let files=split(globpath(expand(b:atp_OutDir,) "*.".ext), "\n")
 	    if files != []
 		echo "Removing *.".ext
 		for f in files
@@ -884,7 +884,7 @@ function! atplib#various#Delete(delete_output)
 	    endif
 	else
 	    " Delete output file (pdf|dvi|ps) (though ps is not supported by ATP).
-	    let f=fnamemodify(b:atp_OutDir . "/" . fnamemodify(b:atp_MainFile), ":t:r").".".ext
+	    let f=fnamemodify(expand(b:atp_OutDir) . "/" . fnamemodify(b:atp_MainFile), ":t:r").".".ext
 	    echo "Removing ".f
 	    call delete(f)
 	endif
@@ -1251,7 +1251,7 @@ endfunction
     endif
 
     " set the file to print
-    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? b:atp_OutDir . fnamemodify(expand("%"),":t:r") . ext : a:1 )
+    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? expand(b:atp_OutDir) . fnamemodify(expand("%"),":t:r") . ext : a:1 )
 
     " set the printing command
     if a:0 >= 2
@@ -1306,7 +1306,7 @@ function! atplib#various#Lpr(...)
     endif
 
     " set the file to print
-    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? b:atp_OutDir . fnamemodify(expand("%"),":t:r") . ext : a:1 )
+    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? expand(b:atp_OutDir) . fnamemodify(expand("%"),":t:r") . ext : a:1 )
     
     " set the printing command
     if a:0 >= 1

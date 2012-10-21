@@ -1924,7 +1924,7 @@ endfunction
 "{{{1 atplib#search#GrepPreambule
 function! atplib#search#GrepPreambule(pattern, ...)
     let saved_loclist 	= getloclist(0)
-    let atp_MainFile	= ( a:0 >= 1 ? a:1 : b:atp_MainFile ) 
+    let atp_MainFile	= ( a:0 >= 1 ? a:1 : atplib#FullPath(b:atp_MainFile) ) 
     let winview = winsaveview()
     exe 'silent! 1lvimgrep /^[^%]*\\begin\s*{\s*document\s*}/j ' . fnameescape(atp_MainFile)
     let linenr = get(get(getloclist(0), 0, {}), 'lnum', 'nomatch')
@@ -2156,9 +2156,9 @@ function! atplib#search#TreeOfFiles_vim(main_file,...)
 		let saved_iname = iname
 		if iname != fnamemodify(iname, ":p")
 		    if type != "bib"
-			let iname	= atplib#search#KpsewhichFindFile('tex', iname, b:atp_OutDir . "," . g:atp_texinputs , 1, ':p', '^\%(\/home\|\.\)', '\(^\/usr\|texlive\|kpsewhich\|generic\|miktex\)')
+			let iname	= atplib#search#KpsewhichFindFile('tex', iname, expand(b:atp_OutDir) . "," . g:atp_texinputs , 1, ':p', '^\%(\/home\|\.\)', '\(^\/usr\|texlive\|kpsewhich\|generic\|miktex\)')
 		    else
-			let iname	= atplib#search#KpsewhichFindFile('bib', iname, b:atp_OutDir . "," . g:atp_bibinputs , 1, ':p')
+			let iname	= atplib#search#KpsewhichFindFile('bib', iname, expand(b:atp_OutDir) . "," . g:atp_bibinputs , 1, ':p')
 		    endif
 		endif
 
@@ -2282,7 +2282,7 @@ def bufnumber(file):
             os.chdir(cdir)
             return buf.number
     for buf in vim.buffers:
-        if os.path.basename(buf.name) == file:
+        if not buf.name is None and os.path.basename(buf.name) == file:
             os.chdir(cdir)
             return buf.number
     os.chdir(cdir)
