@@ -2283,8 +2283,8 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 	endfor
     endif
 endfunction
-nmap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
-nmap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
+nnoremap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
+nnoremap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
 
 " atplib#motion#StartVisualMode {{{1
 function! atplib#motion#StartVisualMode(mode)
@@ -2325,6 +2325,6 @@ function! atplib#motion#ParagraphVisualMotion(backward,count)
     exe "normal ".visualmode()
     call cursor(epos)
 endfunction
-vmap <buffer> <silent> <Plug>ParagraphVisualMotionForward 	:<C-U>call atplib#motion#ParagraphVisualMotion('',v:count1)<CR>
-vmap <buffer> <silent> <Plug>ParagraphVisualMotionBackward 	:<C-U>call atplib#motion#ParagraphVisualMotion('b',v:count1)<CR>
+vnoremap <buffer> <silent> <Plug>ParagraphVisualMotionForward 	:<C-U>call atplib#motion#ParagraphVisualMotion('',v:count1)<CR>
+vnoremap <buffer> <silent> <Plug>ParagraphVisualMotionBackward 	:<C-U>call atplib#motion#ParagraphVisualMotion('b',v:count1)<CR>
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
