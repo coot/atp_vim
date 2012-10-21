@@ -24,34 +24,41 @@ omap <buffer> <silent> am :normal vam<CR>
 " }}}
 
 " text objects {{{
+fun! <sid>Omap_Wrapper(map)
+    " if 'clipboard' contains autoselect, 
+    " this hack restores the "* value.
+    let star_reg = @*
+    exe ":normal v".v:count1.a:map
+    let @* = star_reg
+endfun
+
 vmap <buffer> <silent> i( <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i("<CR>
+omap <buffer> <silent> i( :<C-U>call <sid>Omap_Wrapper("i(")<CR>
 vmap <buffer> <silent> a( <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> a( :<C-U>exe ":normal v".v:count1."a("<CR>
+omap <buffer> <silent> a( :<C-U>call <sid>Omap_Wrapper("a(")<CR>
 vmap <buffer> <silent> ib <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> ib :<C-U>exe ":normal v".v:count1."i("<CR>
+omap <buffer> <silent> ib :<C-U>call <sid>Omap_Wrapper("i(")<CR>
 vmap <buffer> <silent> ab <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> ab :<C-U>exe ":normal v".v:count1."a("<CR>
+omap <buffer> <silent> ab :<C-U>call <sid>Omap_Wrapper("a(")<CR>
 vmap <buffer> <silent> i) <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> i( :<C-U>exe ":normal v".v:count1."i)"<CR>
+omap <buffer> <silent> i( :<C-U>call <sid>Omap_Wrapper("i)")<CR>
 vmap <buffer> <silent> a) <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> a( :<C-U>exe ":normal v".v:count1."a)"<CR>
+omap <buffer> <silent> a( :<C-U>call <sid>Omap_Wrapper("a)")<CR>
 
 vmap <buffer> <silent> i{ <Plug>LatexBox_SelectBracketInner_2
-omap <buffer> <silent> i{ :<C-U>exe ":normal v".v:count1."i{"<CR>
 vmap <buffer> <silent> a{ <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a{ :<C-U>exe ":normal v".v:count1."a{"<CR>
+omap <buffer> <silent> a{ :<C-U>call <sid>Omap_Wrapper()<CR>
 vmap <buffer> <silent> i} <Plug>LatexBox_SelectBracketInner_2
-omap <buffer> <silent> i} :<C-U>exe ":normal v".v:count1."i}"<CR>
+omap <buffer> <silent> i} :<C-U>call <sid>Omap_Wrapper("i}")<CR>
 vmap <buffer> <silent> a} <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a} :<C-U>exe ":normal v".v:count1."a{"<CR>
+omap <buffer> <silent> a} :<C-U>call <sid>Omap_Wrapper("a{")<CR>
 
 vmap <buffer> <silent> i[ <Plug>LatexBox_SelectBracketInner_3
-omap <buffer> <silent> i[ :<C-U>exe ":normal v".v:count1."i["<CR>
+omap <buffer> <silent> i[ :<C-U>call <sid>Omap_Wrapper("i[")<CR>
 vmap <buffer> <silent> a[ <Plug>LatexBox_SelectBracketOuter_3
-omap <buffer> <silent> a[ :<C-U>exe ":normal v".v:count1."a["<CR>
+omap <buffer> <silent> a[ :<C-U>call <sid>Omap_Wrapper("a[")<CR>
 vmap <buffer> <silent> i] <Plug>LatexBox_SelectBracketInner_3
-omap <buffer> <silent> i] :<C-U>exe ":normal v".v:count1."i]"<CR>
+omap <buffer> <silent> i] :<C-U>call <sid>Omap_Wrapper("i]")<CR>
 vmap <buffer> <silent> a] <Plug>LatexBox_SelectBracketOuter_3
-omap <buffer> <silent> a] :<C-U>exe ":normal v".v:count1."a]"<CR>
+omap <buffer> <silent> a] :<C-U>call <sid>Omap_Wrapper("a]")<CR>
 " }}}
