@@ -103,6 +103,8 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     if output_fname is None:
         output_fname = os.path.splitext(input_fname)[0]+"._log"
 
+    output_dir = os.path.dirname(output_fname)
+
     try:
         if sys.version_info < (3, 0):
             log_file = open(input_fname, 'r')
@@ -162,7 +164,8 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         except IOError:
             print("IOError: cannot open %s file for writting" % log_to_path)
         else:
-            log_fo.write(log_stream.encode(encoding, 'ignore'))
+            # log_fo.write(log_stream.encode(encoding, 'ignore'))
+            log_fo.write("PROJECT_DIR='%s'\n" % project_dir)
             log_fo.close()
 
     # File stack
@@ -223,10 +226,17 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
             line = log_lines[line_nr-1][col_nr:]
             fname_re = re.match('([^\(\)]*\.(?:tex|sty|cls|cfg|def|aux|fd|out|bbl|blg|bcf|lof|toc|lot|ind|idx|thm|synctex\.gz|pdfsync|clo|lbx|mkii|run\.xml|spl|snm|nav|brf|mpx|ilg|maf|glo|mtc[0-9]+))', line)
             if fname_re:
-                fname = os.path.abspath(fname_re.group(1))
-                if check_path and fnmatch.fnmatch(fname, project_tmpdir+"*"):
+                fname_ = fname_re.group(1)
+                fname = os.path.basename(fname_)
+                fname_dir = os.path.dirname(fname_)
+                if check_path:
                     # ATP specific path rewritting:
-                    fname = os.path.normpath(os.path.join(project_dir, os.path.relpath(fname, project_tmpdir)))
+                        if os.path.splitext(fname)[1] in [ '.tex', '.bib' ]:
+                            fname = os.path.normpath(os.path.join(project_dir, fname))
+                        else:
+                            fname = os.path.normpath(os.path.join(output_dir, fname))
+                with open(log_to_path, 'a') as fo:
+                    fo.write("fname='%s' '%s'\n" % (fname_,fname))
                 output_data.append(["Input File", fname, "0", "0", "Input File"])
                 file_stack.append(fname)
                 open_dict[fname]=0

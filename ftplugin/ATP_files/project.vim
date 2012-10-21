@@ -608,6 +608,12 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
 	endif
 	return 
     endtry
+    if !&l:modifiable
+	setl modifiable
+    endif
+    if &l:readonly
+	setl noreadonly
+    endif
     if has("persistent_undo")
 	setl noundofile
     endif

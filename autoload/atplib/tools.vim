@@ -99,7 +99,7 @@ endfunction
 function! atplib#tools#GrepAuxFile(...)
     " Aux file to read:
 
-    let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : b:atp_OutDir . "/" . fnamemodify(b:atp_MainFile, ":t:r") ) 
+    let base = ( a:0 >= 1 ? fnamemodify(a:1, ":r") : expand(b:atp_OutDir) . "/" . fnamemodify(b:atp_MainFile, ":t:r") ) 
     let aux_filename = base . "._aux"
     if !filereadable(aux_filename)
 	let aux_filename = base . ".aux"
@@ -305,7 +305,7 @@ function! atplib#tools#generatelabels(filename, ...)
     let time=reltime()
     let s:labels	= {}
     let bufname		= fnamemodify(a:filename, ':t')
-    let auxname		= fnamemodify(a:filename, ':r') . ".aux"
+    let auxname		= expand(b:atp_OutDir) . "/" . fnamemodify(a:filename, ':t:r') . ".aux"
     let return_ListOfFiles	= a:0 >= 1 ? a:1 : 1
 
     let true=1
