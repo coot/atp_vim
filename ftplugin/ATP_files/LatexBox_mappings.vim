@@ -28,7 +28,11 @@ fun! <sid>Omap_Wrapper(map)
     " if 'clipboard' contains autoselect, 
     " this hack restores the "* value.
     let star_reg = @*
+    let s = getpos("'<")
+    let e = getpos("'>")
     exe ":normal v".v:count1.a:map
+    call setpos("'<", s)
+    call setpos("'>", e)
     let @* = star_reg
 endfun
 
