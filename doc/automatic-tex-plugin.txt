@@ -1,6 +1,6 @@
-*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 01 October 2012
+*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 23 October 2012
 
-	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 12.1)
+	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 12.2)
 			by Marcin Szamotulski
 		    mszamot [AT] gmail [DOT] com
 -----------------------------------------------------------------------------
@@ -3274,8 +3274,8 @@ COMPLETION MODES		                       	*atp-completion-modes*
 
 		\ref{{pattern}<Tab> matches the label name for the {pattern}.
 		When pattern is matched for a number of a label '^' is added in
-		front of the pattern (see below). In this case both completion modes:
-		expert and non-expert works in the same way.
+		front of the pattern (see below).  In this case both
+		completion modes: expert and non-expert works in the same way.
 
 		You can also use Vim patterns after '\cite{'.
 
@@ -3283,14 +3283,14 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		the number of the counter, e.g. >
 					\ref{3.1<Tab>
 <		will complete into the label of the counter with value '3.1'.
-		As for now you can not specify which counter to complete. You
+		As for now you can not specify which counter to complete.  You
 		can also write '\ref{3.1$' then '^3.1$' is used as a pattern!
 
 		For this two work the aux file must be present.  As for now
 		the aux file, if it is not present, is not made.
 
 		This is working with the main document classes: article, book,
-		review, amsart, amsbook, memoir. If for some class it is not
+		review, amsart, amsbook, memoir.  If for some class it is not
 		working thanks for reporting me (it's enough to email me just
 		the document class).
 
@@ -3300,7 +3300,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		\[:\]). 
 		Relevant variables are: g:atp_bracket_dict a dictionary of
 		brackets by default it consists of pairs '(' : ')', '{' : '}',
-		'[' : ']'. There is a second dictionary g:atp_sizes_of_brackets
+		'[' : ']'.  There is a second dictionary g:atp_sizes_of_brackets
 		which contains all the sizes of brackets in latex plus a pair
 		'\' : '\', for closing the math modes: \(:\), \[:\] and the
 		brackets \{:\}.
@@ -3309,21 +3309,21 @@ COMPLETION MODES		                       	*atp-completion-modes*
 							*atp-completion-math*
 	math modes ~
 		\(:\), \[:\], $:$ and $$:$$ will be closed when all brackets
-		after the opening \(, \[, $ or $$ are closed. If \[ or $$ is
+		after the opening \(, \[, $ or $$ are closed.  If \[ or $$ is
 		in line which matches '^\s*\(\\[\|\$\$\)\s*$' it will be
 		closed in a following line.
 							*atp-closing-environments*
 							*atp-completion-env*
 	environments ~
-		Completes after '\begin{' and '\end{'. For example
+		Completes after '\begin{' and '\end{'.  For example
 		'\begin{cen<Tab>' will give '\begin{center}' 
 		But '\begin{theorem}<Tab>' or
 		'\begin{theorem}\label{thm:1}<Tab> will close the environment.
 		The algorithm tries to close environment in many natural
 		situations: for example when it did found less than one command
-		completion. It closes the right environment when they are
+		completion.  It closes the right environment when they are
 		nested (however not in right place!) and it preserves the
-		indention. When after \begin{center}\label{...} XXX there is
+		indention.  When after \begin{center}\label{...} XXX there is
 		something (in place of XXX) it will close the environment
 		after the cursor position otherwise in next line
 		(\hypertarget{...}{...} command is treated like \lebl{...}).
@@ -3334,7 +3334,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		want to have a definition which only opens an environment).
 
 		If you type \begin{envname}<Tab> the cursor position will not
-		change. You can use |i_CTRL-M| (|i_CTRL-J| is used by
+		change.  You can use |i_CTRL-M| (|i_CTRL-J| is used by
 		|atp-j_motion|) after <Tab> to open new line inside {envname}.
 		Otherwise the cursor position will be right after the closing
 		\end{envname}.
@@ -3405,7 +3405,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 				    \end{enumerate}<Tab>
 			    \end{theorem}<Tab>
 <			will put \end{minipage} just above
-			\begin{enumerate}. Furthermore, if:
+			\begin{enumerate}.  Furthermore, if:
 >
 			    \begin{theorem}
 				    \begin{enumerate}\label{enu:1}
@@ -3429,8 +3429,8 @@ COMPLETION MODES		                       	*atp-completion-modes*
 			......<Tab> XXXXX
 <	
 		That is, if you like to write \begin{}:\end{} in the beginning
-		and end of a line this will be preserved. However, there is no
-		support for nested environments then!
+		and end of a line this will be preserved.  However, there is
+		no support for nested environments then!
 
 							*atp-completion-abbreviations*
 	abbreviations ~
@@ -3469,12 +3469,12 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		
 							*atp-completion-bibstyle*
 	bibstyle ~
-		Completion for the command '\bibliographystyle{'. Finds all
+		Completion for the command '\bibliographystyle{'.  Finds all
 		"bst" files available in your tex distribution. 
 
 							*atp-completion-documentclass*
 	documentclass ~
-		Completion for the command '\documentclass'. Returns list of
+		Completion for the command '\documentclass'.  Returns list of
 		all classes available in your distribution.
 
 							*atp-completion-documentclass-options*
@@ -3485,26 +3485,26 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		You can write your own scrip which will add support for
 		documentclass or a package (see |atp-copmletion-new-package|).
 		Put it under 'ftplugin/ATP_files/packages/' directory in your
-		vim path. Supported variables:
+		vim path.  Supported variables:
 >
 	    g:atp_{dc_name}_options
 	    g:atp_{p_name}_options
 <		Note: ATP (if |+python|) scans package and documentclass files
-		for options, so in general this variables are not needed. The
-		values in this variables will be added to completion. They
+		for options, so in general this variables are not needed.  The
+		values in this variables will be added to completion.  They
 		might be used if there are options which atp cannot find.
 >
 	    g:atp_{p_name}_commands
 	    g:atp_{p_name}_math_commands
-<		These are just list of options/commands. math_commands will be
-		added to completion only in math mode.
+<		These are just list of options/commands.  The math_commands
+		will be added to completion only in math mode.
 >
 	    g:atp_{p_name}_command_values_dict
-<		This is a dictionary. It is used to find completion for values
+<		This is a dictionary.  It is used to find completion for values
 		of options of a given command: for example
 		    \command{option=value}
 		Each key is a pattern which will match against the command
-		name. The value is a dictionary which keys matchs for an
+		name.  The value is a dictionary which keys matchs for an
 		option name and the corresponding entry is a list of possible
 		values of the option. 
 		(see ftplugin/ATP_files/packages/listings.vim)
@@ -3512,8 +3512,8 @@ COMPLETION MODES		                       	*atp-completion-modes*
 	    g:atp_{p_name}_options_values
 <		This variable is a vim dictionary: keys are vim patterns which
 		should match a package option, values are lists of the option
-		values. See 'ftplugin/ATP_files/packages/caption.vim' for an
-		example. This was tested with the following option syntax: >
+		values.  See 'ftplugin/ATP_files/packages/caption.vim' for an
+		example.  This was tested with the following option syntax: >
 		    option1=value1,option2={value1,value2}
 <		In a similar way works the variable: >
 	    g:atp_{p_name}_command_values
@@ -3522,24 +3522,24 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		or 'ftplugin/ATP_files/packages/xcolors.vim' 
 		The value of a key in this dictionary might be a string, which
 		is supposed to be a name of a function to get list of
-		completions. Afterwards this list will be filtered to get
-		only matching completions. It should return a vim list. An
+		completions.  Afterwards this list will be filtered to get
+		only matching completions.  It should return a vim list.  An
 		example is in 'ftplugin/ATP_files/packages/xcolors.vim'.
 >
 	g:atp_{p_name}_loading = { "package" : "option", ... }
 <		This variable is a dictionary { "package" : "option" } which
 		loads xcolor package, when option is empty means that the
 		package is always loading.  Both "package" and "option" are
-		vim patterns. See xcolor for an example. Loading through
+		vim patterns.  See xcolor for an example.  Loading through
 		document class is not yet supported, but might be added on
 		request.
 >
 	    g:atp_{p_name}_environment_options_values
-<		This is a dictionary. It is used to find completion for values
+<		This is a dictionary.  It is used to find completion for values
 		of options of a given environment: for example
 		    \begin{environment}[option=value]
 		Each key is a pattern which will match against the environment
-		name. The value is a dictionary which keys matches for
+		name.  The value is a dictionary which keys matches for
 		an option name and the corresponding entry is a list of
 		possible values of the option.
 		(see ftplugin/ATP_files/packages/listings.vim)
@@ -3548,11 +3548,11 @@ COMPLETION MODES		                       	*atp-completion-modes*
 							*atp-completion-new-packages*
     ATP is scanning packages on the fly, i.e. there is a python script which
     scans package file for its options, commands and evironments that it
-    defines. This happens for packages that have a file under
-    ftplugin/ATP_files/packages directory. So if you want ATP to scan
+    defines.  This happens for packages that have a file under
+    ftplugin/ATP_files/packages directory.  So if you want ATP to scan
     a package that you use it is enough to make an empty file under this
     directory with a name package.vim (e.g. listings.vim for listings.sty
-    package). You can (see other files in that directories) define list of
+    package).  You can (see other files in that directories) define list of
     options, commands, environments, etc and ATP is will add only the entries
     that you have missed (the reason for this is that when the package is
     updated in might have a new option/command/environment).
@@ -3575,7 +3575,7 @@ put it here).
 	    the fourth	 	- for environments defined in
 				  the variable g:atp_long_environments
 	    the fifth		- for checking brackets defined in
-				  |g:atp_bracket_dict|. You can speed up Tab
+				  |g:atp_bracket_dict|.  You can speed up Tab
 				  Completion by removing brackets that you
 				  don't use from |g:atp_bracket_dict|.
 
@@ -3587,13 +3587,13 @@ put it here).
  	g:atp_long_environments 	= []
 <	
 	    If some of your environments are very long put their names in this
-	    list. Do not forget that is environment <env> is long and is put
+	    list.  Do not forget that is environment <env> is long and is put
 	    inside environment <center> then <center> is also long!
 				 
 	    However, this will not close long environments (for that you have
-	    to change the third argument of |g:atp_completion_limits| !). This
-	    just prevents closing environments which are closed and to long to
-	    see that.
+	    to change the third argument of |g:atp_completion_limits| !).
+	    This just prevents closing environments which are closed and to
+	    long to see that.
 							*g:atp_completion_modes*
 >
   	g:atp_completion_modes		= [ 
@@ -3610,14 +3610,14 @@ put it here).
 >
 	g:atp_completion_active_modes	= g:atp_completion_modes
 <		This is the list of completion modes which are active, by
-		default all modes are active. Remove a value from this list to
-		make it inactive (You can use remove() command, see ':h
+		default all modes are active.  Remove a value from this list
+		to make it inactive (You can use remove() command, see ':h
 		remove()'). 
 >
 	g:atp_sort_completion_list	= 12
 <		If the length of completion list for Tab Completion is longer
 		than this value, entries will be sorted alphabetically, else
-		they are provided in, I hope, useful order. If set to 0 the
+		they are provided in, I hope, useful order.  If set to 0 the
 		list will not be sorted (if set to 1 it will be always
 		sorted). >
     	g:atp_environments
@@ -3666,19 +3666,19 @@ put it here).
     	g:atp_tikz_commands
 	g:atp_completion_truncate	= 4
 		do not complete commands less than 4 characters (not counting
-		the leading '\' if present). If 0 then complete all the
+		the leading '\' if present).  If 0 then complete all the
 		defined commands. This only works in the expert mode.
 
 								*g:atp_MathOpened*
 >
      	g:atp_MathOpened		= 1
-<		the default value is 1. With the default value expert mode
+<		the default value is 1.  With the default value expert mode
 		completion will check if you are completing inside
-		mathematical environment or not. Inside math environment only
+		mathematical environment or not.  Inside math environment only
 		math commands are completed and outside math commands are
-		disabled. This makes the set of completions more accurate. If
-		you need non math command (like \textrm{}) inside math use non
-		expert mode (see |atp-completion-non-expert-mode|)
+		disabled.  This makes the set of completions more accurate.
+		If you need non math command (like \textrm{}) inside math use
+		non expert mode (see |atp-completion-non-expert-mode|)
 
 								*g:atp_MathZones*
 >
@@ -3724,13 +3724,13 @@ put it here).
 	The variables: >
 	g:atp_LatexPackages
 	g:atp_LatexClasses
-<	stores list of packages and classes in your tex distribution. They are
-	restored when you exit Vim from the global project script (see
-	|atp-ProjectScript_global|).  They are used for completion of the LaTeX
-	commands \usepackage and \documentclass.
+<	stores list of packages and classes in your tex distribution.  They
+	are restored when you exit Vim from the global project script (see
+	|atp-ProjectScript_global|).  They are used for completion of the
+	LaTeX commands \usepackage and \documentclass.
 
 	If you reinstall, add or remove tex classes/packages from your tex
-	distribution it is enough to unlet these variables. ATP will find new
+	distribution it is enough to unlet these variables.  ATP will find new
 	values when it will need them for the first time. 
 
 
@@ -3739,8 +3739,8 @@ HOW TO CONFIGURE ATP TO YOUR NEEDS                      *atp-configure*
 							*atp-variables*
 
 There are several options you can set, and they might be set in your Vimrc
-file. The default values are given below (except the completion setup and
-bibtex documented above). Note: not all variables are listed below.
+file.  The default values are given below (except the completion setup and
+bibtex documented above).  Note: not all variables are listed below.
 
 All the values of important variables with their values can be shown
 (grepped) by |atp-:ShowOptions| command.
@@ -3748,24 +3748,24 @@ All the values of important variables with their values can be shown
 							*atprc*
 $HOME/.atprc.vim (only on Unix and GNU/Linux) or 
 $VIMRUNTIME/ftplugin/ATP_files/atprc.vim					
-    A configuration file for ATP. You do not have to use autocommands to set
-    local-buffer variables, just place them here. The settings in |atprc| file
-    override the values in the project script (|atp-ProjectScript|). You can
-    also overwrite the plugin maps there it you want to have different
-    behaviour on the key map used by ATP. This file is source twice, before
+    A configuration file for ATP.  You do not have to use autocommands to set
+    local-buffer variables, just place them here.  The settings in |atprc|
+    file override the values in the project script (|atp-ProjectScript|).  You
+    can also overwrite the plugin maps there it you want to have different
+    behaviour on the key map used by ATP.  This file is source twice, before
     and after sourcing ATP.
 
 Tip: If you want to see (almost) all the variables, type ':let g:atp_<CTRL_D>',
 and ':let b:atp_CTRL-d'.
 
 All buffer variables (see |b:var|), i.e. these which name begins with "b:",
-should be set in your |vimrc| or |atprc| file. If you want to use your vimrc file
-then the best way to do that is by using an autocommand:
+should be set in your |vimrc| or |atprc| file.  If you want to use your vimrc
+file then the best way to do that is by using an autocommand:
 >
 	au BufReadPre *.tex let b:atp_TexCompiler="latex"
 <
 If you put just let |b:atp_TexCompiler|, this will also work but not always: for
-example when you open a new buffer in existing Vim session. However, if you
+example when you open a new buffer in existing Vim session.  However, if you
 put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_TexCompiler*
 >
@@ -3781,7 +3781,7 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_TexCompilerVariable*
 >
  let b:atp_TexCompilerVariable = "max_print_line=2000" 	
-<	You can use it to set an environment variables for the compiler. The
+<	You can use it to set an environment variables for the compiler.  The
 	"max_print_line" sets the maximal length of a line in the log file.
 	The value 2000 is high enough to prevent line breaking.
 
@@ -3790,26 +3790,26 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_BibCompiler*
 >
  let b:atp_BibCompiler	= "bibtex"			
-<	This variable sets the bibtex backend. There are other programs which
+<	This variable sets the bibtex backend.  There are other programs which
 	might be used, for example biber and pybib (not tested with ATP).
 	
 	The default value will be "biber" if the preamule contains
-	\usepackge[backend=biber]{biblatex}. If it is set to "biber" ATP will
+	\usepackge[backend=biber]{biblatex}.  If it is set to "biber" ATP will
 	adjust |g:atp_keep| variable (add run.xml, bcf extensions) when you use
 	|atp-:Tex|, |atp-:Bibtex|, or |atp-:MakeLatex| commands.
 
 	Biblatex package allows for putting \bibliography{} type commands only
-	in the preamble. Thus ATP will search for them only there. The
+	in the preamble.  Thus ATP will search for them only there.  The
 	|g:atp_inputfile_pattern| might not contain any pattern for
-	bibliographies (\addbibresource, \bibliography, etc.). The
+	bibliographies (\addbibresource, \bibliography, etc.).  The
 	|atp-:InputFiles| command will search for them in a special subroutine
-	which only searches in the preamble. This makes it slightly faster.
+	which only searches in the preamble.  This makes it slightly faster.
 
 							*b:atp_TexFlavor*
 >
  let b:atp_TexFlavor	= "tex"	
 <	If you are editing a plain tex file it is automatically set to
-	'plaintex', then you get highlighting for $$:$$. Some other features
+	'plaintex', then you get highlighting for $$:$$.  Some other features
 	are planned (you can also set this while editing a 'tex' file, i.e.
 	latex document but using $$:$$ is latex is not recommended it is know
 	to break some latex specific things).
@@ -3824,17 +3824,17 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*b:atp_OutDir*
 >
  let b:atp_OutDir	= fnameescape(fnamemodify(resolve(b:atp_MainFile,":h")) . "/"
-<	This is the directory in which tex will put the output files. If the
+<	This is the directory in which tex will put the output files.  If the
 	open file is not a symbolic link it is equal to the directory in which
-	the tex file is located. If the open file is a symbolic link it points
+	the tex file is located.  If the open file is a symbolic link it points
 	to the directory in which the real file is located. 
 	
 	If you set this variable to './' (or '.') and change the current
 	working directory for example to /tmp (|:cd| /tmp) then the latex output
-	will be placed in /tmp, i.e. it will move with with cd. However, the
+	will be placed in /tmp, i.e. it will move with with cd.  However, the
 	default value of |b:atp_OutDir| is not affected by the |:cd| command.
 
-	White spaces and other characters should not be escaped. It will be
+	White spaces and other characters should not be escaped.  It will be
 	quoted in '...' using the |shellescape()| function.
 
 	You can see the current output directory in the status (it is in the
@@ -3853,30 +3853,29 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 >
  let b:atp_auruns	= 1				
 <	This variable control how many times the automatic function calls tex
-	compiler (consecutively). It is useful if you are working with PDF
+	compiler (consecutively).  It is useful if you are working with PDF
 	files and you want to have bookmarks (you can get them using hyperref
-	package with the option: bookmarks. Then set b:atp_auruns to '2'.
+	package with the option: bookmarks.  Then set b:atp_auruns to '2'.
 
 							*b:atp_running*
 >
  b:atp_running						
 <	This variable stores the current number of running instances of latex.
-	When it is greater than 1 a message in the status line is shown. If :PID
-	command returns that no latex is running this variable this variable
-	is reset to 0. 
+	When it is greater than 1 a message in the status line is shown.  If
+	:PID command returns that no latex is running this variable this
+	variable is reset to 0. 
 							*g:atp_MathVimOptions*
 >
- g:atp_MathVimOptions	= { 'textwidth' : '0' }
-<	This variable is a dictionary of Vim settings and its values which
-	will be valid when you edit mathematics inside the pairs \(:\), $:$,
-	\[:\], $$:$$ (only in plain tex files or if g:atp_TexFlavour
-	= 'plaintex').  For example, the default value will toggle between
-	your 'textwidth' in non-math and 0 in math.  The dictionary may
-	contain short option names equally well as long names.
+ g:atp_MathVimOptions	= { 'textwidth' : [ 0, 78 ] }
+<	This variable is a dictionary of Vim settings.  The value for each
+	settings is a pair, where first value is the default used in math
+	mode, and the second one used outside math environments.  For example,
+	the default value will toggle between your 'textwidth' in non-math and
+	0 in math.  The dictionary may contain short option names equally well
+	as long names.
 
-	Note: the standard tex syntax file defines other zones: for example
-	for align and equation environments (and many others) but some how
-	they are not accessible using synstack() function. 
+	Note: if you change the value of a setting which is in
+	g:atp_MathVimOptions, only the non math value will be adopted.
 			
 							*g:atp_SetMathVimOptions*
 	This feature can be turned off setting variable >
