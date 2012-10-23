@@ -1191,8 +1191,7 @@ for (key, val) in vim.eval("g:atp_bracket_dict").items():
 
 begin_line = int(vim.eval("begin_line"))
 end_line = int(vim.eval("end_line"))
-bufnr = int(vim.eval("bufnr('%')"))-1
-buf = vim.buffers[bufnr]
+buf = vim.current.buffer
 text = ('\n'.join(buf[begin_line-1:end_line])).decode(encoding)
 
 bpos = map(lambda i: int(i), vim.eval('getpos(".")')[1:3])
