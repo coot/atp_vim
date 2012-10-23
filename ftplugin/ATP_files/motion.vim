@@ -172,6 +172,8 @@ inoremap <Plug>TexJMotionBackward	<Esc>:call atplib#motion#JMotion('b')<CR>a
 nnoremap <Plug>TexJMotionForward	:call atplib#motion#JMotion('')<CR>
 nnoremap <Plug>TexJMotionBackward	:call atplib#motion#JMotion('b')<CR>
 
+nnoremap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
+nnoremap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
 " command! -buffer -nargs=1 -complete=buffer MakeToc	:echo atplib#motion#maketoc(fnamemodify(<f-args>, ":p"))[fnamemodify(<f-args>, ":p")] 
 command! -buffer -bang -nargs=? Toc	:call atplib#motion#TOC(<q-bang>)
 command! -buffer Ctoc			:call CTOC()

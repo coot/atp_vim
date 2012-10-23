@@ -418,6 +418,9 @@ EOL
 endfunction "}}}
 "{{{ atplib#callback#ProgressBar
 function! atplib#callback#ProgressBar(value,pid,bufnr)
+    if !exists("g:atp_callback") || !g:atp_callback
+	return
+    endif
     if !exists("g:atp_ProgressBarValues")
 	let g:atp_ProgressBarValues = { a:bufnr : {} }
     endif

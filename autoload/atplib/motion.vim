@@ -2283,8 +2283,6 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 	endfor
     endif
 endfunction
-nnoremap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
-nnoremap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
 
 " atplib#motion#StartVisualMode {{{1
 function! atplib#motion#StartVisualMode(mode)

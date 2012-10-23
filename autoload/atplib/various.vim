@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Mon Oct 22, 2012 at 08:48:55  +0100
+" Last Change: Tue Oct 23, 2012 at 10:21:32  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -875,7 +875,7 @@ function! atplib#various#Delete(delete_output)
     " Be sure that we are not deleting outputs:
     for ext in atp_tex_extensions
 	if ext != "pdf" && ext != "dvi" && ext != "ps"
-	    let files=split(globpath(expand(b:atp_OutDir,) "*.".ext), "\n")
+	    let files=split(globpath(expand(b:atp_OutDir), "*.".ext), "\n")
 	    if files != []
 		echo "Removing *.".ext
 		for f in files
@@ -1713,13 +1713,13 @@ function! atplib#various#Dictionary(word)
     for line in entry_list
 	if i == 0
 	    echoh Title
-	elseif line =~ '\[see also:'
+	elseif line =~ '^\%(\d*\s*\)\?\['
 	    echohl WarningMsg
 	else
 	    let line=substitute(line, '^\s*', '', '')
 	endif
 	echo line
-	if line =~ '\[see also:' || i == 0
+	if line =~  '^\%(\d*\s*\)\?\[' || i == 0
 	    echohl None
 	endif
 	let i+=1
