@@ -87,7 +87,8 @@ function! <SID>TexLogSettings(fname) "{{{1
     " This function should also have the SyncTex section of
     " atplib#various#OpenLog, but since it requires b:atp_ProjectDir and
     " possibly b:atp_MainFile variables, it is not yet done.
-    if filereadable(fnamemodify(expand(a:fname), ":r").".tex")
+    let log = readfile(expand(a:fname), "", 1)
+    if log[0] =~? '^this is \(pdf\)\?\(lua\|xe\|xe\)\?tex'
 	setl nomodifiable
 	setl buftype=nowrite
 	setl nospell
