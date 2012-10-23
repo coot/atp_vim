@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Oct 21, 2012 at 22:38:06  +0100
+" Last Change: Mon Oct 22, 2012 at 23:30:39  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2446,7 +2446,11 @@ function! SetMathVimOptions(...)
 	    endfor
 	else
 	    for option_name in keys(MathVimOptions)
-		execute "let &l:".option_name. " = " . MathVimOptions[option_name][1]
+                if a:0
+                    execute "let &l:".option_name. " = " . MathVimOptions[option_name][1]
+                else
+                    execute "let g:atp_MathVimOptions[option_name][1] = &l:".option_name
+                endif
 	    endfor
 	endif
 
