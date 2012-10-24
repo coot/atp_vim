@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sun Sep 23, 2012 at 14:25:44  +0100
+" Last Change: Wed Oct 24, 2012 at 11:28:44  +0100
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -75,6 +75,16 @@ function! TreeOfFiles(main_file,...) "{{{1
     " Notes: vim script avrage is 0.38s, python avrage is 0.28
     return [ tree, list, types, levels ]
 endfunction "}}}1
+
+" SetOutDir 
+fun! <sid>SetOutDir(...) "{{{1
+    if a:0 && !empty(a:1)
+	let b:atp_OutDir = a:1
+	call atplib#common#SetErrorFile()
+    else
+	echo b:atp_OutDir
+    endif
+endfun "}}}1
 
 " All Status Line related things:
 "{{{ Status Line
@@ -379,8 +389,8 @@ endif "}}}1
 " Commands:
 "{{{1
 command! -buffer -bang SetProjectName	:call atplib#common#SetProjectName(<q-bang>, 0)
-command! -buffer SetErrorFile		:call atplib#common#SetErrorFile()
-command! -buffer SetOutDir		:call atplib#common#SetOutDir(1)
+command! -buffer SetErrorFile		:echo atplib#common#SetErrorFile()
+command! -buffer -nargs=? -complete=dir SetOutDir	:call <sid>SetOutDir(<f-args>)
 command! -buffer InputFiles 		:call atplib#search#UpdateMainFile() | :call atplib#search#FindInputFiles(atplib#FullPath(b:atp_MainFile)) | echo join([b:atp_MainFile]+b:ListOfFiles, "\n")
 
 " This should set the variables and run atplib#common#SetNotificationColor function

@@ -198,6 +198,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
     nnoremap <buffer> g<	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1)."<``", 't')<cr>
 <
 
+ You can set |b:atp_OutDir| with |atp-:SetOutDir| command (it also updates the
+ |errorfile| option.
+
 >
  ======================
  Changes in version 12.1
@@ -1235,9 +1238,10 @@ map <LocalLeader>b
 	completion).
 
 							*atp-:SetOutDir*
-:SetOutDir					
-	This is a command which sets the |b:atp_OutDir| variable and the
-	|'errorfile'| option.  See |b:atp_OutDir| for the default value.
+:SetOutDir [director]
+	This is a command which sets the |b:atp_OutDir| variable to
+	[directory] and updates the |'errorfile'| option.  If [directory] is
+	not given it prints the current value of |b:atp_OutDir|.
 
 							*atp-:Latexmk*
 :Latexmk[!]
