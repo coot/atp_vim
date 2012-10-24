@@ -360,7 +360,9 @@ function! atplib#ToggleIMaps(var, augroup, ...)
 	return
     endif
 
-    call SetMathVimOptions()
+    if a:augroup == 'CursorMovedI'
+	call SetMathVimOptions('CursorMovedI')
+    endif
 
     if atplib#IsInMath() 
 	call atplib#MakeMaps(a:var, a:augroup)

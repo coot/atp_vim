@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Oct 23, 2012 at 10:39:00  +0100
+" Last Change: Wed Oct 24, 2012 at 09:26:27  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -1399,6 +1399,7 @@ augroup ATP_MathIMaps
 augroup END
 
 augroup ATP_IMaps_CursorMovedI
+    " This also fires SetMathVimOptions() (options.vim)
     au CursorMovedI *.tex 	:call atplib#ToggleIMaps(g:atp_imap_greek_letters+g:atp_imap_math_misc
 		\ +g:atp_imap_math, 'CursorMovedI', g:atp_imap_diacritics, 1)
 augroup END

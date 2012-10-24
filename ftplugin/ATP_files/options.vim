@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Oct 22, 2012 at 23:30:39  +0100
+" Last Change: Wed Oct 24, 2012 at 09:38:55  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2393,8 +2393,7 @@ endif
 
 if !exists("g:atp_MathVimOptions")
 "     { 'option_name' : [ val_in_math, normal_val], ... }
-    let g:atp_MathVimOptions 		=  { 'textwidth' 	: [ 0, 	&textwidth],
-						\ }
+    let g:atp_MathVimOptions		= {}
 endif
 
 if !exists("g:atp_MathZones")
@@ -2421,9 +2420,9 @@ endif
 " a:0 	= 0 check if in math mode
 " a:1   = 0 assume cursor is not in math
 " a:1	= 1 assume cursor stands in math  
-function! SetMathVimOptions(...)
+function! SetMathVimOptions(event,...)
 
-	if !g:atp_SetMathVimOptions
+	if !g:atp_SetMathVimOptions || len(keys(g:atp_MathVimOptions)) == 0
 	    return "no setting to toggle" 
 	endif
 
@@ -2440,20 +2439,38 @@ function! SetMathVimOptions(...)
 " 	let check	= a:0 == 0 ? atplib#complete#CheckSyntaxGroups(MathZones) + atplib#complete#CheckSyntaxGroups(MathZones, line("."), max([ 1, col(".")-3])) : a:1
 	let check	= a:0 == 0 ? atplib#IsInMath() : a:1
 
-	if check
+	let when = -1
+	if a:event == 'InsertEnter' && check
+	    let when = 0
 	    for option_name in keys(MathVimOptions)
 		execute "let &l:".option_name. " = " . MathVimOptions[option_name][0]
 	    endfor
+	elseif a:event == 'CursorMovedI'
+	    if check
+		let when = 1
+		for option_name in keys(MathVimOptions)
+		    execute "let &l:".option_name. " = " . MathVimOptions[option_name][0]
+		endfor
+	    else
+		let when = 2
+		for option_name in keys(MathVimOptions)
+		    execute "let &l:".option_name. " = " . MathVimOptions[option_name][1]
+		endfor
+	    endif
 	else
 	    for option_name in keys(MathVimOptions)
-                if a:0
+                if a:event == 'InsertLeave'
+		    let when = 3
                     execute "let &l:".option_name. " = " . MathVimOptions[option_name][1]
-                else
-                    execute "let g:atp_MathVimOptions[option_name][1] = &l:".option_name
+                elseif a:event == 'InsertEnter'
+		    let when = 4
+		    execute "let g:atp_MathVimOptions[option_name][1] = &l:".option_name
                 endif
 	    endfor
 	endif
-
+	if exists("g:debug")
+	    call add(g:debug, [a:event, check, when, deepcopy(MathVimOptions)])
+	endif
 endfunction
 
 if !s:did_options
@@ -2461,13 +2478,13 @@ if !s:did_options
     augroup ATP_SetMathVimOptions
 	au!
 	" if leaving the insert mode set the non-math options
-	au InsertLeave 	*.tex 	:call SetMathVimOptions(0)
+	au InsertLeave 	*.tex 	:call SetMathVimOptions('InsertLeave', 0)
 	" if entering the insert mode or in the insert mode check if the cursor is in
 	" math or not and set the options acrodingly
-	au InsertEnter	*.tex 	:call SetMathVimOptions()
+	au InsertEnter	*.tex 	:call SetMathVimOptions('InsertEnter')
 " This is done by atplib#ToggleIMap() function, which is run only when cursor
 " enters/leaves LaTeX math mode:
-" 	au CursorMovedI *.tex 	:call s:SetMathVimOptions()
+	" au CursorMovedI *.tex 	:call s:SetMathVimOptions('CursorMovedI')
     augroup END
 
 endif
