@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Wed Oct 24, 2012 at 12:16:26  +0100
+" Last Change: Fri Oct 26, 2012 at 00:48:30  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -884,7 +884,7 @@ function! atplib#various#Delete(delete_output)
 	    endif
 	else
 	    " Delete output file (pdf|dvi|ps) (though ps is not supported by ATP).
-	    let f=fnamemodify(expand(b:atp_OutDir) . "/" . fnamemodify(b:atp_MainFile), ":t:r").".".ext
+	    let f=fnamemodify(expand(b:atp_OutDir) . "/" . fnamemodify(b:atp_MainFile, ":t:r").".".ext, ":p")
 	    echo "Removing ".f
 	    call delete(f)
 	endif
