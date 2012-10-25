@@ -258,7 +258,7 @@ try:
             p_line=line
 
     # From aux file:
-    ioerror=False
+    ioerror=None
     try:
         if sys.version_info.major < 3:
             with open(options.auxfile, "r") as file_obj:
@@ -286,9 +286,9 @@ try:
                     [linenr, file, tag_type, kind]=["no_label", "no_label", "", ""]
                 if linenr != "no_label" and counter != "":
                     tags.extend(["%s\t%s\t%s;\"\tinfo:%s\tkind:%s" % (counter, file, linenr, tag_type, kind)])
-    except IOError:
-        ioerror=True
-        pass
+    except IOError as e:
+        ioerror=e
+
 
     # SORT (vim works faster when tag file is sorted) AND WRITE TAGS
     time=strftime("%a, %d %b %Y %H:%M:%S +0000", localtime())
@@ -304,7 +304,7 @@ try:
         if options.servername != "":
             vim_remote_expr(options.servername, "atplib#callback#Echo(\"[LatexTags:] tags file written.\",'echo','')")
         if ioerror and options.servername:
-            vim_remote_expr(options.servername, "atplib#callback#Echo(\"[LatexTags:] no aux file.\",'echomsg', 'WarningMsg')")
+            vim_remote_expr(options.servername, "atplib#callback#Echo(\"[LatexTags:] no aux file: '%s'.\",'echomsg', 'WarningMsg')" % ioerror.filename)
 except Exception:
     # Send errors to vim is options.servername is non empty.
     error_str=re.sub("'", "''",re.sub('"', '\\"', traceback.format_exc()))
