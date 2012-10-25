@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Thu Oct 25, 2012 at 20:58:07  +0100
+" Last Change: Thu Oct 25, 2012 at 21:05:04  +0100
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -79,7 +79,7 @@ endfunction "}}}1
 " SetOutDir 
 fun! <sid>SetOutDir(...) "{{{1
     if a:0 && !empty(a:1)
-	let b:atp_OutDir = a:1
+	let b:atp_OutDir = fnamemodify(a:1, ':p')
 	call atplib#common#SetErrorFile()
     else
 	echo b:atp_OutDir
