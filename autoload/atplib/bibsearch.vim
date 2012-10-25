@@ -342,7 +342,7 @@ function! atplib#bibsearch#searchbib(pattern, bibdict, ...)
 endfunction
 "}}}
 " {{{ atplib#bibsearch#searchbib_py
-function! atplib#bibsearch#searchbib_py(pattern, bibfiles, ...)
+function! atplib#bibsearch#searchbib_py(bang,pattern, bibfiles, ...)
     call atplib#outdir()
     " for tex files this should be a flat search.
     let flat 	= &filetype == "plaintex" ? 1 : 0
@@ -350,6 +350,11 @@ function! atplib#bibsearch#searchbib_py(pattern, bibfiles, ...)
     let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
 
     let b:atp_BibFiles=a:bibfiles
+    if a:bang != "!"
+	let pattern = atplib#VimToPyPattern(a:pattern)
+    else
+	let pattern = a:pattern
+    endif
 python << END
 import vim
 import re
@@ -412,7 +417,7 @@ def parse_bibentry(bib_entry):
                     nr+=1
     return bib
 
-pattern=vim.eval("a:pattern")
+pattern=vim.eval("pattern")
 
 if pattern == "":
     pat=""
@@ -576,7 +581,7 @@ endfunction
 " i - institution
 " R - mrreviewer
 
-function! atplib#bibsearch#showresults(bibresults, flags, pattern, bibdict)
+function! atplib#bibsearch#showresults(bang, bibresults, flags, pattern, bibdict)
  
     "if nothing was found inform the user and return:
     if len(a:bibresults) == count(a:bibresults, {})
@@ -789,10 +794,8 @@ function! atplib#bibsearch#showresults(bibresults, flags, pattern, bibdict)
     if g:atp_debugBS
 	let g:pattern	= a:pattern
     endif
-    if has("python") || g:atp_bibsearch == "python"
-        let pattern_tomatch = substitute(a:pattern, '(', '\\(', 'g')
-        let pattern_tomatch = substitute(pattern_tomatch, ')', '\\)', 'g')
-        let pattern_tomatch = substitute(pattern_tomatch, '|', '\\|', 'g')
+    if (has("python") || g:atp_bibsearch == "python") && a:bang == "!"
+	let pattern_tomatch = atplib#VimToPyPattern(a:pattern)
     else
         let pattern_tomatch = a:pattern
     endif

@@ -1547,10 +1547,10 @@ function! atplib#search#BibSearch(bang,...)
 	let [ pattern, flag ] = [ "", ""] 
     endif
 
-    let b:atp_LastBibPattern 	= pattern
+    let b:atp_LastBibPattern = pattern
     "     This cannot be set here.  It is set later by atplib#bibsearch#showresults function.
     "     let b:atp_LastBibFlags	= flag
-    let @/			= pattern
+    let @/ = pattern
 
     if g:atp_debugBS
 	exe "redir! > ".g:atp_TempDir."/Bibsearch.log"
@@ -1564,7 +1564,7 @@ function! atplib#search#BibSearch(bang,...)
 	redir END
     endif
 
-    if !exists("s:bibdict") || a:bang == "!"
+    if !exists("s:bibdict")
 	let s:bibdict={}
 	if !exists("b:ListOfFiles") || !exists("b:TypeDict") || a:bang == "!"
 	    call TreeOfFiles(b:atp_MainFile)
@@ -1579,9 +1579,9 @@ function! atplib#search#BibSearch(bang,...)
 "     let g:bibdict=s:bibdict
 
     if has("python") && g:atp_bibsearch == "python"
-	call atplib#bibsearch#showresults( atplib#bibsearch#searchbib_py(pattern, keys(s:bibdict), a:bang), flag, pattern, s:bibdict)
+	call atplib#bibsearch#showresults(a:bang, atplib#bibsearch#searchbib_py(a:bang, pattern, keys(s:bibdict)), flag, pattern, s:bibdict)
     else
-	call atplib#bibsearch#showresults( atplib#bibsearch#searchbib(pattern, s:bibdict, a:bang), flag, pattern, s:bibdict)
+	call atplib#bibsearch#showresults("", atplib#bibsearch#searchbib(pattern, s:bibdict), flag, pattern, s:bibdict)
     endif
     let g:time_BibSearch=reltimestr(reltime(time))
 endfunction

@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Tue Oct 23, 2012 at 10:21:32  +0100
+" Last Change: Wed Oct 24, 2012 at 12:16:26  +0100
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1567,14 +1567,10 @@ function! atplib#various#GetAMSRef(what, bibfile)
 	let begin = min(linenumbers)
 	let end	= max(linenumbers)
 
-	let bufnr = bufnr(atpbib_WgetOutputFile)
-	" To use getbufline() buffer must be loaded. It is enough to use :buffer
-	" command because vimgrep loads buffer and then unloads it. 
-	execute "buffer " . bufnr
-	let bibdata = getbufline(bufnr, begin, end)
-	execute "bdelete " . bufnr 
+	let bibdata = readfile(atpbib_WgetOutputFile, '', end)[(begin-1):]
 	let type = matchstr(bibdata[0], '@\%(article\|book\%(let\)\=\|conference\|inbook\|incollection\|\%(in\)\=proceedings\|manual\|masterthesis\|misc\|phdthesis\|techreport\|unpublished\)\ze\s*\%("\|{\|(\)')
         " Suggest Key:
+	redraw!
 	let bibkey = input("Provide a key (Enter for the AMS bibkey): ")
 	if !empty(bibkey)
 	    let bibdata[0] = type . '{' . bibkey . ','

@@ -682,6 +682,22 @@ fun! atplib#append_ext(fname, ext)
 endfun
 " }}}1
 
+fu! atplib#VimToPyPattern(pattern) " {{{1
+    " \( -> ( and ( -> \(, 
+    " \) -> ) and ) -> \),
+    let pattern = substitute(a:pattern, '[()]', "\\\\&", "g")
+    let pattern = substitute(pattern, '\\\@<!\\\\\((\|)\||\)', '\1', "g")
+
+    " \| -> | and | -> \|
+    let pattern = substitute(pattern, '|', '\\|', 'g') 
+    let pattern = substitute(pattern, '\\\\|', '|', 'g')
+
+    " ( ... \& ... ) -> ( 
+    " See ":help /zero-width"
+
+    return pattern
+endfu
+
 " List Functions:
 " atplib#Extend {{{1
 " arguments are the same as for extend(), but it adds only the entries which

@@ -489,7 +489,7 @@ function! atplib#motion#RemoveFromToC(file)
     exe winnr."wincmd w"
 endfunction
 function! atplib#motion#RemoveFromToCComp(A, B, C)
-    return join(t:atp_toc_buflist,"\n")
+    return join(map(copy(t:atp_toc_buflist), 'fnamemodify(v:val, ":t")'),"\n")
 endfunction
 " {{{2 atplib#motion#showtoc
 function! atplib#motion#showtoc(toc)
@@ -1261,6 +1261,9 @@ endfunction
 " atplib#motion#LatexTags {{{1
 function! atplib#motion#LatexTags(bang,...)
     " a:1 == 1 :  silent
+    if stridx(expand("%"), 'fugitive://') == 0
+	return
+    endif
     let silent = ( ( a:0 ? a:1 : 0 ) ? ' --silent ' : ' ' )
     let hyperref_cmd = ( atplib#search#SearchPackage("hyperref") ? " --hyperref " : "" )
     if has("clientserver")
