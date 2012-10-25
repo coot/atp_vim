@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 24, 2012 at 09:38:55  +0100
+" Last Change: Thu Oct 25, 2012 at 21:00:57  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2317,21 +2317,6 @@ endif
 	au InsertEnter *.tex :call <SID>UpdateTime("Enter")
 	au InsertLeave *.tex :call <SID>UpdateTime("Leave")
     augroup END
-
-    if (exists("g:atp_StatusLine") && g:atp_StatusLine == '1') || !exists("g:atp_StatusLine")
-	" Note: ctoc doesn't work in include files (and it is slow there).
-	if b:atp_statusCurSection 
-	    if exists("b:TypeDict")
-		let b:atp_statusCurSection = !( len(filter(copy(b:TypeDict), 'v:val == "input"')) )
-	    else
-		let b:atp_statusCurSection = atplib#FullPath(b:atp_MainFile) != expand("%:p")
-	    endif
-	endif
-	augroup ATP_Status
-	    au!
-	    au BufEnter,BufWinEnter,TabEnter *.tex 	:call ATPStatus(0,b:atp_statusCurSection)
-	augroup END
-    endif
 
     if g:atp_local_completion == 2
 	augroup ATP_LocalCommands
