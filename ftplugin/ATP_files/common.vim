@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Wed Oct 24, 2012 at 11:28:44  +0100
+" Last Change: Thu Oct 25, 2012 at 20:58:07  +0100
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -56,8 +56,8 @@ endif
 " }}}
 
 augroup ATP_SetErrorFile
+    au!
     au BufEnter 	*.tex 		call atplib#common#SetErrorFile()
-"     au BufEnter 	$l:errorfile 	setl autoread 
 augroup END
 
 " TreeOfFiles
@@ -88,16 +88,15 @@ endfun "}}}1
 
 " All Status Line related things:
 "{{{ Status Line
-function! s:StatusOutDir() "{{{
-let status=""
+function! StatusOutDir() "{{{
 if exists("b:atp_OutDir")
     if b:atp_OutDir != "" 
-	let status= status . "Output dir: " . pathshorten(substitute(b:atp_OutDir,"\/\s*$","","")) 
+	let status= "Output dir: " . pathshorten(substitute(b:atp_OutDir,"\/\s*$","","")) 
     else
-	let status= status . "Please set the Output directory, b:atp_OutDir"
+	let status= "Output dir: not set"
     endif
 endif	
-    return status
+return status
 endfunction 
 "}}}
 
@@ -201,11 +200,6 @@ function! ATPRunning() "{{{
     return ""
 endfunction "}}}
 
-" augroup ATP_RedrawStatus
-"     au!
-"     au CursorHoldI,CursorHold *	:let &ro=&ro
-" augroup END
-
 " {{{ Syntax and Hilighting
 " ToDo:
 " syntax 	match 	atp_statustitle 	/.*/ 
@@ -303,7 +297,7 @@ function! ATPStatus(command,...) "{{{
     if a:command >= 1
 	" This is run be the command :Status (:ATPStatus)
 	if a:0 >= 1 && a:1
-	    let g:status_OutDir = s:StatusOutDir()
+	    let g:status_OutDir = StatusOutDir()
 	    let g:atp_statusOutDir = 1
 	else
 	    let g:status_OutDir = ""
@@ -313,7 +307,7 @@ function! ATPStatus(command,...) "{{{
     else
 	" This is run by the autocommand group ATP_Status
 	if g:atp_statusOutDir
-	    let g:status_OutDir = s:StatusOutDir()
+	    let g:status_OutDir = StatusOutDir()
 	else
 	    let g:status_OutDir = ""
 	endif
