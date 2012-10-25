@@ -6,7 +6,7 @@
 " Time Stamp: 23-10-12_21-44
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
-" Last Change: Sat Oct 06, 2012 at 12:27:10  +0100
+" Last Change: Fri Oct 26, 2012 at 00:35:49  +0100
 " GetLatestVimScripts: 2945 62 :AutoInstall: tex_atp.vim
 " GetLatestVimScripts: 884 1 :AutoInstall: AutoAlign.vim
 " Copyright: © Marcin Szamotulski, 2012
@@ -34,12 +34,15 @@ if exists("g:no_atp") && g:no_atp || exists("b:did_ftplugin")
 elseif  stridx(expand("%"), 'fugitive:') == 0
     " Minimal settings for Gdiff (fugitive plugin):
     " [these are setting needed for autocommands that are runnign with *.tex]
+    let b:atp_MainFile = expand("")
+    let b:atp_ProjectDir = expand("/tmp") " some files might be written: :LatexTags run through BufWrite autocommand.
     let b:atp_ProjectScript = 0
     let b:atp_XpdfServer = 'fugitive'
     let b:atp_statusCurSection = 0
     let b:TypeDict = {}
     let b:ListOfFiles = []
     let b:LevelDict = {}
+    let b:atp_autex = 0
     let b:atp_updatetime_normal = 0
     let b:atp_updatetime_insert = 0
     " Note: ATP could run, but in this way Gdiff is faster.
