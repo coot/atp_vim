@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Thu Oct 25, 2012 at 21:05:04  +0100
+" Last Change: Fri Oct 26, 2012 at 14:12:32  +0100
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -85,120 +85,6 @@ fun! <sid>SetOutDir(...) "{{{1
 	echo b:atp_OutDir
     endif
 endfun "}}}1
-
-" All Status Line related things:
-"{{{ Status Line
-function! StatusOutDir() "{{{
-if exists("b:atp_OutDir")
-    if b:atp_OutDir != "" 
-	let status= "Output dir: " . pathshorten(substitute(b:atp_OutDir,"\/\s*$","","")) 
-    else
-	let status= "Output dir: not set"
-    endif
-endif	
-return status
-endfunction 
-"}}}
-
-" There is a copy of this variable in compiler.vim
-function! ATPRunning() "{{{
-
-    if !g:atp_statusNotif
-	" Do not put any message if user dosn't want it. 
-	return ""
-    endif
-
-    if !exists("g:atp_DEV_no_check") || !g:atp_DEV_no_check
-    if g:atp_Compiler =~ '\<python' 
-        " For python compiler
-        for var in [ "Latex", "Bibtex", "Python" ] 
-	    if !exists("b:atp_".var."PIDs")
-		let b:atp_{var}PIDs = []
-	    endif
-	    call atplib#callback#PIDsRunning("b:atp_".var."PIDs")
-	endfor
-	if len(b:atp_LatexPIDs) > 0
-	    let atp_running= len(b:atp_LatexPIDs) 
-	elseif len(b:atp_BibtexPIDs) > 0
-	    let atp_running= len(b:atp_BibtexPIDs)
-	else
-	    return ''
-	endif
-    else
-	" for g:atp_Compiler='bash' 
-	let atp_running=b:atp_running
-
-	for cmd in keys(g:CompilerMsg_Dict) 
-	    if b:atp_TexCompiler =~ '^\s*' . cmd . '\s*$'
-		let Compiler = g:CompilerMsg_Dict[cmd]
-		break
-	    else
-		let Compiler = b:atp_TexCompiler
-	    endif
-	endfor
-	if atp_running >= 2
-	    return atp_running." ".Compiler
-	elseif atp_running >= 1
-	    return Compiler
-	else
-	    return ""
-	endif
-    endif
-    endif
-
-    for cmd in keys(g:CompilerMsg_Dict) 
-	if b:atp_TexCompiler =~ '^\s*' . cmd . '\s*$'
-	    let Compiler = g:CompilerMsg_Dict[cmd]
-	    break
-	else
-	    let Compiler = b:atp_TexCompiler
-	endif
-    endfor
-
-    " For g:atp_Compiler='python'
-    if exists("g:atp_callback") && g:atp_callback
-	if exists("b:atp_LatexPIDs") && len(b:atp_LatexPIDs)>0  
-
-
-	    if exists("g:atp_ProgressBarValues") && type(g:atp_ProgressBarValues) == 4 && get(g:atp_ProgressBarValues,bufnr("%"), {}) != {}
-		let max = max(values(get(g:atp_ProgressBarValues, bufnr("%"))))
-		let progress_bar="[".max."]".( g:atp_statusOutDir ? " " : "" )
-	    else
-		let progress_bar=""
-	    endif
-
-	    if atp_running >= 2
-		return atp_running." ".Compiler." ".progress_bar
-	    elseif atp_running >= 1
-		return Compiler." ".progress_bar
-	    else
-		return ""
-	    endif
-	elseif exists("b:atp_BibtexPIDs") && len(b:atp_BibtexPIDs)>0
-	    return b:atp_BibCompiler
-	elseif exists("b:atp_MakeindexPIDs") && len(b:atp_MakeindexPIDs)>0
-	    return "makeindex"
-	endif
-    else
-	if g:atp_ProgressBar
-	    try
-		let pb_file = readfile(g:atp_ProgressBarFile)
-	    catch /.*:/
-		let pb_file = []
-	    endtry
-	    if len(pb_file)
-		let progressbar = Compiler." [".get(pb_file, 0, "")."]"
-" 		let progressbar = Compiler
-	    else
-		let progressbar = ""
-	    endif
-	else
-	    let progressbar = ""
-	endif
-	return progressbar
-    endif
-    return ""
-endfunction "}}}
 
 " {{{ Syntax and Hilighting
 " ToDo:
@@ -297,7 +183,7 @@ function! ATPStatus(command,...) "{{{
     if a:command >= 1
 	" This is run be the command :Status (:ATPStatus)
 	if a:0 >= 1 && a:1
-	    let g:status_OutDir = StatusOutDir()
+	    let g:status_OutDir = atplib#StatusOutDir()
 	    let g:atp_statusOutDir = 1
 	else
 	    let g:status_OutDir = ""
@@ -307,16 +193,14 @@ function! ATPStatus(command,...) "{{{
     else
 	" This is run by the autocommand group ATP_Status
 	if g:atp_statusOutDir
-	    let g:status_OutDir = StatusOutDir()
+	    let g:status_OutDir = atplib#StatusOutDir()
 	else
 	    let g:status_OutDir = ""
 	endif
 	let b:atp_statusCurSection = ( a:0 >= 1 ? a:1 : 0 )
     endif
-    " There is a bug in CTOC() which prevents statusline option from being set right.
-    " This is a dirty workaround:
-"     silent echo CTOC("return")
-    let status_CTOC	= ( b:atp_statusCurSection && &l:filetype =~ '^\(ams\)\=tex' ? '%{CTOC("return")}' : '' )
+
+    let status_CurrentSection = ( b:atp_statusCurSection ? '%{atplib#CurrentSectionn()}' : '' )
     if g:atp_statusNotifHi > 9 || g:atp_statusNotifHi < 0
 	let g:atp_statusNotifHi = 9
 	if !s:errormsg
@@ -329,15 +213,15 @@ function! ATPStatus(command,...) "{{{
     let status_NotifHiPost =
 		\ ( g:atp_statusNotif && g:atp_statusNotifHi 	? '%*' 	: '' )
     let status_Notif	=
-		\ ( g:atp_statusNotif 			? '%{ATPRunning()}' 	: '' )
+		\ ( g:atp_statusNotif 			? '%{atplib#ProgressBar()}' 	: '' )
     let status_KeyMap	=
 		\ ( has("keymap") && g:atp_babel && exists("b:keymap_name") 	
 								\ ? b:keymap_name 	: '' )
-    let g:atp_StatusLine= '%<%f '.status_KeyMap.'%(%h%m%r%) '.status_NotifHi.status_Notif.status_NotifHiPost.'%= '.status_CTOC.' %{g:status_OutDir}'
+    let b:atp_StatusLine= '%<%f '.status_KeyMap.'%(%h%m%r%) '.status_NotifHi.status_Notif.status_NotifHiPost.'%= '.status_CurrentSection.' %{g:status_OutDir}'
     if &ruler
-	let g:atp_StatusLine.=' %-14.16(%l,%c%V%)%P'
+	let b:atp_StatusLine.=' %-14.16(%l,%c%V%)%P'
     endif
-    set statusline=%!g:atp_StatusLine
+    set statusline=%!b:atp_StatusLine
 endfunction
 try
     command -buffer -bang Status	:call ATPStatus(1,(<q-bang> == "")) 

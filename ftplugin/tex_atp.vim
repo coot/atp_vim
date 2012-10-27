@@ -6,7 +6,7 @@
 " Time Stamp: 23-10-12_21-44
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
-" Last Change: Fri Oct 26, 2012 at 00:35:49  +0100
+" Last Change: Sat Oct 27, 2012 at 11:16:57  +0100
 " GetLatestVimScripts: 2945 62 :AutoInstall: tex_atp.vim
 " GetLatestVimScripts: 884 1 :AutoInstall: AutoAlign.vim
 " Copyright: © Marcin Szamotulski, 2012
@@ -38,6 +38,7 @@ elseif  stridx(expand("%"), 'fugitive:') == 0
     let b:atp_ProjectDir = expand("/tmp") " some files might be written: :LatexTags run through BufWrite autocommand.
     let b:atp_ProjectScript = 0
     let b:atp_XpdfServer = 'fugitive'
+    let b:atp_StatusLine = ''
     let b:atp_statusCurSection = 0
     let b:TypeDict = {}
     let b:ListOfFiles = []

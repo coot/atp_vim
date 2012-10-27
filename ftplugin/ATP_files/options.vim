@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Oct 25, 2012 at 21:00:57  +0100
+" Last Change: Sat Oct 27, 2012 at 11:19:06  +0100
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -315,6 +315,7 @@ let s:optionsDict= {
 		\ "atp_MakeidxOutput"		: "",
 		\ "atp_DocumentClass"		: atplib#search#DocumentClass(b:atp_MainFile),
 		\ "atp_statusCurSection"	: 1,
+		\ "atp_StatusLine"		: '',
 		\ }
 
 " Note: the above atp_OutDir is not used! the function s:SetOutDir() is used, it is just to
@@ -1283,6 +1284,9 @@ if !exists("g:atp_SelectInlineMath_withSpace")
 endif
 if !exists("g:atp_splitright")
     let g:atp_splitright = &splitright
+endif
+if !exists("g:atp_StatusLine")
+    let g:atp_StatusLine = 1
 endif
 " }}}
 
@@ -2810,6 +2814,11 @@ command! -buffer HelpMathIMaps 	:echo atplib#helpfunctions#HelpMathIMaps()
 command! -buffer HelpEnvIMaps 	:echo atplib#helpfunctions#HelpEnvIMaps()
 command! -buffer HelpVMaps 	:echo atplib#helpfunctions#HelpVMaps()
 " }}}
+
+" Status Line:
+if g:atp_StatusLine
+    call ATPStatus(0)
+endif
 
 
 " Help:

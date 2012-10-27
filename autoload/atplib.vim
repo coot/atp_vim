@@ -133,6 +133,202 @@ function! atplib#pyeval(string) " {{{1
     endif
 endfunction "}}}1
 
+" Status Line:
+fun! atplib#ProgressBar() "{{{1
+
+    if !g:atp_statusNotif
+	" Do not put any message if user dosn't want it. 
+	return ""
+    endif
+
+    if !exists("g:atp_DEV_no_check") || !g:atp_DEV_no_check
+    if g:atp_Compiler =~ '\<python' 
+        " For python compiler
+        for var in [ "Latex", "Bibtex", "Python" ] 
+	    if !exists("b:atp_".var."PIDs")
+		let b:atp_{var}PIDs = []
+	    endif
+	    call atplib#callback#PIDsRunning("b:atp_".var."PIDs")
+	endfor
+	if len(b:atp_LatexPIDs) > 0
+	    let atp_running= len(b:atp_LatexPIDs) 
+	elseif len(b:atp_BibtexPIDs) > 0
+	    let atp_running= len(b:atp_BibtexPIDs)
+	else
+	    return ''
+	endif
+    else
+	" for g:atp_Compiler='bash' 
+	let atp_running=b:atp_running
+
+	for cmd in keys(g:CompilerMsg_Dict) 
+	    if b:atp_TexCompiler =~ '^\s*' . cmd . '\s*$'
+		let Compiler = g:CompilerMsg_Dict[cmd]
+		break
+	    else
+		let Compiler = b:atp_TexCompiler
+	    endif
+	endfor
+	if atp_running >= 2
+	    return atp_running." ".Compiler
+	elseif atp_running >= 1
+	    return Compiler
+	else
+	    return ""
+	endif
+    endif
+    endif
+
+    for cmd in keys(g:CompilerMsg_Dict) 
+	if b:atp_TexCompiler =~ '^\s*' . cmd . '\s*$'
+	    let Compiler = g:CompilerMsg_Dict[cmd]
+	    break
+	else
+	    let Compiler = b:atp_TexCompiler
+	endif
+    endfor
+
+    " For g:atp_Compiler='python'
+    if exists("g:atp_callback") && g:atp_callback
+	if exists("b:atp_LatexPIDs") && len(b:atp_LatexPIDs)>0  
+
+
+	    if exists("g:atp_ProgressBarValues") && type(g:atp_ProgressBarValues) == 4 && get(g:atp_ProgressBarValues,bufnr("%"), {}) != {}
+		let max = max(values(get(g:atp_ProgressBarValues, bufnr("%"))))
+		let progress_bar="[".max."]".( g:atp_statusOutDir ? " " : "" )
+	    else
+		let progress_bar=""
+	    endif
+
+	    if atp_running >= 2
+		return atp_running." ".Compiler." ".progress_bar
+	    elseif atp_running >= 1
+		return Compiler." ".progress_bar
+	    else
+		return ""
+	    endif
+	elseif exists("b:atp_BibtexPIDs") && len(b:atp_BibtexPIDs)>0
+	    return b:atp_BibCompiler
+	elseif exists("b:atp_MakeindexPIDs") && len(b:atp_MakeindexPIDs)>0
+	    return "makeindex"
+	endif
+    else
+	if g:atp_ProgressBar
+	    try
+		let pb_file = readfile(g:atp_ProgressBarFile)
+	    catch /.*:/
+		let pb_file = []
+	    endtry
+	    if len(pb_file)
+		let progressbar = Compiler." [".get(pb_file, 0, "")."]"
+" 		let progressbar = Compiler
+	    else
+		let progressbar = ""
+	    endif
+	else
+	    let progressbar = ""
+	endif
+	return progressbar
+    endif
+    return ""
+endf
+fun! atplib#StatusOutDir() "{{{1
+    if exists("b:atp_OutDir") 
+	if b:atp_OutDir != "" 
+	    let status= "Output dir: " . pathshorten(substitute(b:atp_OutDir,"\/\s*$","","")) 
+	else
+	    let status= "Output dir: not set"
+	endif
+    endif	
+return status
+endf
+fun! atplib#CurentSection() " {{{1 
+
+    if &l:filetype !~ 'tex$' || expand("%:e") != 'tex'
+	return ""
+    endif
+
+    let winsavedview = winsaveview()
+    try
+	if exists("b:atp_MainFile") && bufloaded(atplib#FullPath(b:atp_MainFile))
+	    let file = getbufline(bufnr(atplib#FullPath(b:atp_MainFile)), 0, "$")
+	elseif exists("b:atp_MainFile") && filereadable(atplib#FullPath(b:atp_MainFile))
+	    let file = readfile(atplib#FullPath(b:atp_MainFile))
+	else
+	    let s:document_class = ""
+	endif
+	for fline in file
+	    if fline =~# '^\([^%]\|\\%\)*\\documentclass\>'
+		break
+	    endif
+	endfor
+	let s:document_class = matchstr(fline, '\\documentclass\[.*\]{\s*\zs[^}]*\ze\s*}')
+    catch /E\(484\|121\):/
+	if !exists("s:document_class")
+	    let s:document_class = ""
+	endif
+    endtry
+    if s:document_class == "beamer"
+	let saved_pos = getpos(".")
+	if getline(line(".")) =~ '^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}' 
+	    call cursor(line(".")-1, len(getline(line("."))))
+	endif
+	keepjumps call searchpair('^\([^%]\|\\%\)*\\begin\s*{\s*frame\s*}', '', '^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}', 'cbW', '',
+		    \ search('^\([^%]\|\\%\)*\\begin\s*{\s*frame\s*}', 'bnW'))
+	let limit 	= search('^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}', 'nW')
+	let pos	= [ line("."), col(".") ]
+	keepjumps call search('^\([^%]\|\\%\)*\frametitle\>\zs{', 'W', limit)
+	if pos != getpos(".")[1:2]
+	    let a 	= @a
+	    if mode() ==# 'n'
+		" We can't use this normal mode command in visual mode.
+		keepjumps normal! "ayi}
+		let title	= substitute(@a, '\_s\+', ' ', 'g')
+		let @a 	= a
+	    else
+		let title	= matchstr(getline(line(".")), '\\frametitle\s*{\s*\zs[^}]*\ze\(}\|$\)')
+		let title	= substitute(title, '\s\+', ' ', 'g')
+		let title	= substitute(title, '\s\+$', '', 'g')
+		if getline(line(".")) =~ '\\frametitle\s*{[^}]*$'
+		    let title 	.= " ".matchstr(getline(line(".")+1), '\s*\zs[^}]*\ze\(}\|$\)')
+		endif
+	    endif
+	    call winrestview(winsavedview)
+	    return substitute(strpart(title,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
+	else
+	    call cursor(saved_pos[1:2])
+	    return ""
+	endif
+    endif
+
+    let names		= atplib#motion#ctoc()
+    let chapter_name	= get(names, 0, '')
+    let section_name	= get(names, 1, '')
+    let subsection_name	= get(names, 2, '')
+    let g:names = names
+
+
+    if chapter_name == "" && section_name == "" && subsection_name == ""
+
+	return ""
+	
+    elseif chapter_name != ""
+	if section_name != ""
+	    return substitute(strpart(chapter_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','') . "/" . substitute(strpart(section_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
+	else
+	    return substitute(strpart(chapter_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
+	endif
+    elseif chapter_name == "" && section_name != ""
+	if subsection_name != ""
+	    return substitute(strpart(section_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','') . "/" . substitute(strpart(subsection_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
+	else
+	    return substitute(strpart(section_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
+	endif
+    elseif chapter_name == "" && section_name == "" && subsection_name != ""
+	return substitute(strpart(subsection_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
+    endif
+endf "}}}1
+
 "Make g:atp_TempDir, where log files are stored.
 function! atplib#TempDir() "{{{1
     " Return temporary directory, unique for each user.
@@ -213,10 +409,10 @@ function! atplib#FullPath(file_name) "{{{1
 		" this will show not the right place:
 		if stridx(project_dir, 'fugitive:') == 0
 		    return a:file_name
-		else
-		    echohl ErrorMsg
-		    echomsg "E344: in atplib#FullPath(): b:atp_ProjectDir=".project_dir." from buffer ".bufname." does not exist."
-		    echohl Normal
+		" else
+		    " echohl ErrorMsg
+		    " echomsg "E344: in atplib#FullPath(): b:atp_ProjectDir=".project_dir." does not exist"
+		    " echohl Normal
 		endif
 		let file_path = fnamemodify(a:file_name, ":p")
 	    endtry
@@ -301,7 +497,6 @@ endfunction "}}}
 
 " IMap Functions:
 " {{{
-" These maps extend ideas from TeX_9 plugin:
 " With a:1 = "!" (bang) remove texMathZoneT (tikzpicture from MathZones).
 function! atplib#IsInMath(...)
     let line		= a:0 >= 2 ? a:2 : line(".")
@@ -341,7 +536,7 @@ function! atplib#DelMaps(maps)
 	endtry
     endfor
 endfunction
-" From TeX_nine plugin:
+" From TeX_9 plugin:
 function! atplib#IsLeft(lchar,...)
     let nr = ( a:0 >= 1 ? a:1 : 0 )
     let left = getline('.')[col('.')-2-nr]
@@ -351,7 +546,6 @@ function! atplib#IsLeft(lchar,...)
 	return 0
     endif
 endfunction
-" try
 function! atplib#ToggleIMaps(var, augroup, ...)
     if exists("s:isinmath") && 
 		\ ( atplib#IsInMath() == s:isinmath ) &&
@@ -374,8 +568,7 @@ function! atplib#ToggleIMaps(var, augroup, ...)
     endif
     let s:isinmath = atplib#IsInMath() 
 endfunction
-" catch E127
-" endtry "}}}
+"}}}
 
 " Toggle on/off Completion 
 " {{{1 atplib#OnOffComp

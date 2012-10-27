@@ -6,110 +6,7 @@
 
 let s:sourced = ( !exists("s:sourced") ? 0 : 1 )
 
-" CTOC Function:
-" {{{1 CTOC
-function! CTOC(...)
-
-    if &l:filetype !~ 'tex$' || expand("%:e") != 'tex'
-	return ""
-    endif
-
-    let winsavedview = winsaveview()
-    try
-	if exists("b:atp_MainFile") && bufloaded(atplib#FullPath(b:atp_MainFile))
-	    let file = getbufline(bufnr(atplib#FullPath(b:atp_MainFile)), 0, "$")
-	elseif exists("b:atp_MainFile") && filereadable(atplib#FullPath(b:atp_MainFile))
-	    let file = readfile(atplib#FullPath(b:atp_MainFile))
-	else
-	    let s:document_class = ""
-	endif
-	for fline in file
-	    if fline =~# '^\([^%]\|\\%\)*\\documentclass\>'
-		break
-	    endif
-	endfor
-	let s:document_class = matchstr(fline, '\\documentclass\[.*\]{\s*\zs[^}]*\ze\s*}')
-    catch /E\(484\|121\):/
-	if !exists("s:document_class")
-	    let s:document_class = ""
-	endif
-    endtry
-    if s:document_class == "beamer"
-	let saved_pos = getpos(".")
-	if getline(line(".")) =~ '^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}' 
-	    call cursor(line(".")-1, len(getline(line("."))))
-	endif
-	keepjumps call searchpair('^\([^%]\|\\%\)*\\begin\s*{\s*frame\s*}', '', '^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}', 'cbW', '',
-		    \ search('^\([^%]\|\\%\)*\\begin\s*{\s*frame\s*}', 'bnW'))
-	let limit 	= search('^\([^%]\|\\%\)*\\end\s*{\s*frame\s*}', 'nW')
-	let pos	= [ line("."), col(".") ]
-	keepjumps call search('^\([^%]\|\\%\)*\frametitle\>\zs{', 'W', limit)
-	if pos != getpos(".")[1:2]
-	    let a 	= @a
-	    if mode() ==# 'n'
-		" We can't use this normal mode command in visual mode.
-		keepjumps normal! "ayi}
-		let title	= substitute(@a, '\_s\+', ' ', 'g')
-		let @a 	= a
-	    else
-		let title	= matchstr(getline(line(".")), '\\frametitle\s*{\s*\zs[^}]*\ze\(}\|$\)')
-		let title	= substitute(title, '\s\+', ' ', 'g')
-		let title	= substitute(title, '\s\+$', '', 'g')
-		if getline(line(".")) =~ '\\frametitle\s*{[^}]*$'
-		    let title 	.= " ".matchstr(getline(line(".")+1), '\s*\zs[^}]*\ze\(}\|$\)')
-		endif
-	    endif
-	    call winrestview(winsavedview)
-	    return substitute(strpart(title,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
-	else
-	    call cursor(saved_pos[1:2])
-	    return ""
-	endif
-    endif
-
-    let names		= atplib#motion#ctoc()
-    let chapter_name	= get(names, 0, '')
-    let section_name	= get(names, 1, '')
-    let subsection_name	= get(names, 2, '')
-
-
-    if chapter_name == "" && section_name == "" && subsection_name == ""
-
-	if a:0 != 0
-	    return ""
-	else
-	    echo "" 
-	endif
-	
-    elseif chapter_name != ""
-	if section_name != ""
-	    if a:0 != 0
-		return substitute(strpart(chapter_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','') . "/" . substitute(strpart(section_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
-	    endif
-	else
-	    if a:0 != 0
-		return substitute(strpart(chapter_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
-	    endif
-	endif
-    elseif chapter_name == "" && section_name != ""
-	if subsection_name != ""
-	    if a:0 != 0
-		return substitute(strpart(section_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','') . "/" . substitute(strpart(subsection_name,0,b:atp_TruncateStatusSection/2), '\_s*$', '','')
-	    endif
-	else
-	    if a:0 != 0
-		return substitute(strpart(section_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
-	    endif
-	endif
-    elseif chapter_name == "" && section_name == "" && subsection_name != ""
-	if a:0 != 0
-	    return substitute(strpart(subsection_name,0,b:atp_TruncateStatusSection), '\_s*$', '','')
-	endif
-    endif
-endfunction "}}}1
-
 " AutoCommands:
-" {{{
 augroup ATP_BufList
     " Add opened files to t:atp_toc_buflist.
     au!
@@ -131,7 +28,6 @@ augroup ATP_TOC_onwrite
     au!
     au BufWritePost *.tex call <SID>toc_onwrite()
 augroup END
-" }}}
 
 " Commands And Maps:
 " {{{1

@@ -979,9 +979,8 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	compiled by LaTeX. If by some reason, you want to switch this off, set
 	g:atp_ProgressBar to 0 (use |let|).
 
-	You need |g:atp_statusNotif|=1 and |g:atp_statusline|=1 for this
-	feature to work (see also |laststatus| on how to activate status line
-	in Vim).
+	You need |g:atp_statusNotif|=1 for this feature to work (if you use
+	the status line provided by ATP).
 
 	If there are many background processes the number which is shown
 	belongs to the oldest process. (|g:atp_ProgressBarValues| is a dictionary
@@ -2446,28 +2445,40 @@ nmap gD
 	This command sets the status line, which include: the name of currently
 	edited chapter (or section) the value of |b:atp_OutDir| (unless used
 	with bang "!") and it will warn you if |b:atp_OutDir| variable is not
-	set. Note: this command will set the variable |g:atp_statusOutDir|.
+	set.  Note: this command will set the variable |g:atp_statusOutDir|.
 	The status line will also contain the information about processing
 	compilation: see |atp-status-line-notification|, |g:atp_ProgressBar|.
-	This function is called at startup unless the variable
-	'|g:atp_statusline|=0' is set. The status is set by the autocommand: >
-	    au BufWinEnter,BufWinEnter,TabEnter *.tex :call ATPStatus(0,b:atp_StatusCurSection)
-<	In this way every opened window with a '*.tex' file will get the correct
-	status line.
+							*g:atp_StatusLine*
+	This command is called at startup unless the variable
+	'|g:atp_StatusLine|=0' is set. 
+<	
 							*b:atp_StatusCurSection*
-	If |g:atp_StatusCurSection| is set to 1 (the default) the current section will be
+	If |b:atp_StatusCurSection| is set to 1 (the default) the current section will be
 	put in the status line. Some times it is slow though.
 
-	The command respects the |'ruler'| vim option.
-
-	If there was a command with name 'Status', atp is not overwriting it,
-	it uses ATPStatus name.
-
 							*g:atp_statusOutDir*
-	Note: if you set g:atp_statusOutDir=0 (the default is 1) then the
-	output directory will be not seen in the statusline. This variable
-	only controls the status line at startup. If you want to remove/add
-	output directory rather use |atp-:Status| command.
+	Note: if you set |g:atp_statusOutDir|=0 (the default is 1) then the
+	output directory will be added to the statusline.  This variable
+	only controls the status line at startup.  If you want to remove/add
+	output directory rather use |atp-:Status| command.  The command
+	respects the |'ruler'| vim option.
+
+	If there is a command with name 'Status', ATP is not overwriting it,
+	use :ATPStatus.
+
+	Note: You can write your own status line.  There are three status line
+	functions: >
+	    atplib#ProgressBar()
+	    atplib#StatusOutDir()
+	    atplib#CurrentSection()
+<	Note that you also need to set the variables |g:atp_ProgressBar|.  In
+	this way you can turn off the progress bar temprarly.  The default ATP
+	'statusline' value is something like this (so you can get inspired): >
+	    let &l:statusline = '%<%f %{atplib#ProgressBar()}%= %{atplib#CurrentSection()} %{atplib#StatusOutDir()} %-14.16(%l,%c%V%)%P'
+<	A good place to put your status line setting is
+	'~/.vim/after/ftplugin/tex.vim' file.  If you set your own value of
+	'statusline', don't forget to add |g:atp_StatusLine|=0 to your |vimrc|
+	or |atprc| file.
 
 ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 :ToDo[!] [bufname]					*atp-:ToDo*
@@ -4064,14 +4075,6 @@ s:notreadablebibfiles
 <	g:labels_window_width (by default not set, if set overrides
 	t:labels_window_width)
 	Configures the initial width of the window with labels.
->
- g:atp_statusline
-<	by default it is not set, put the line
->
-	let g:atp_statusline=0
-<
-	in your |vimrc| or |atprc| file if you do not want the status line provided by this
-	plugin. (See |atp-:Status|).
 >
  let b:atp_TruncateStatuSection=40
 <	This variable sets how many characters of the section/subsection title
@@ -5866,10 +5869,10 @@ links:
     the default). If it is set to positive value then the default values of
     these variables should give the same colour as the status line has.
 
-    							*g:atp_StatusLine*
-    The variable g:atp_StatusLine is stores the value of Vim option
+    							*b:atp_StatusLine*
+    The variable |b:atp_StatusLine| is stores the value of Vim option
     'statusline'; actually 'statusline' option is set by: >
-		set statusline=%!g:atp_StatusLine
+		set statusline=%!b:atp_StatusLine
 <
 
 ================================================================================
