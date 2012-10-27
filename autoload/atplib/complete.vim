@@ -2811,7 +2811,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 			endif
 		    endif
 		endfor
-		let bibitems_list=values(atplib#bibsearch#searchbib_py(pat, bibfiles))
+		let bibitems_list=values(atplib#bibsearch#searchbib_py("", pat, bibfiles))
 	    else
 		let bibdict={}
 		for f in b:ListOfFiles
