@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Oct 24, 2012 at 09:26:27  +0100
+" Last Change: Sat Oct 27, 2012 at 13:08:36  +0100
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -1052,7 +1052,8 @@ endif
     " Make Font Maps:
     call atplib#MakeMaps(g:atp_imap_fonts)
 " GREEK LETTERS: {{{1
-if (!empty(g:atp_imap_leader_1) && !exists("g:atp_imap_greek_letters")) || g:atp_reload_variables
+if !exists("g:atp_imap_greek_letters") || g:atp_reload_variables
+    if !empty(g:atp_imap_leader_1)
     let g:atp_imap_greek_letters= [
 	    \ [ 'inoremap', '<silent> <buffer> <expr>', g:atp_imap_leader_1, 'a', '(!atplib#IsLeft("\\")&& atplib#IsInMath() ? "'.s:bbackslash.'alpha" : g:atp_imap_leader_1."a" )' ,	 
 		    \ "g:atp_imap_define_greek_letters", '\alpha' ],
@@ -1133,8 +1134,9 @@ if (!empty(g:atp_imap_leader_1) && !exists("g:atp_imap_greek_letters")) || g:atp
 	    \ [ 'inoremap', '<silent> <buffer> <expr>', g:atp_imap_leader_1, 'W', '(!atplib#IsLeft("\\")&& atplib#IsInMath() ? "'.s:bbackslash.'Omega" : g:atp_imap_leader_1."W" )',	 
 		    \ "g:atp_imap_define_greek_letters", '\Omega' ],
 	    \ ]
-else
-    let g:atp_imap_greek_letters = []
+    else
+	let g:atp_imap_greek_letters = []
+    endif
 endif
 
     " Make Greek Letters:
@@ -1229,8 +1231,6 @@ endif
 
 " " 		\ [ 'inoremap', '<silent> <buffer>', g:atp_imap_leader_1, '~', s:backslash.'=(g:atp_imap_wide ? "wide" : "")<CR>tilde{}<Left>', 	"g:atp_imap_define_math_misc", '''\''.(g:atp_imap_wide ? "wide" : "")."tilde"' ],
 " 		\ [ 'inoremap', '<silent> <buffer>', g:atp_imap_leader_1, '^', s:backslash.'=(g:atp_imap_wide ? "wide" : "" )<CR>hat{}<Left>', 	"g:atp_imap_define_math_misc", '''\''.(g:atp_imap_wide ? "wide" : "")."hat"' ], 
-else
-    let g:atp_imap_math_misc = []
 endif
 
     " Make Miscellaneous Mathematical Maps:
@@ -1240,6 +1240,7 @@ endif
 	au InsertEnter	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_math_misc, 'InsertEnter', g:atp_imap_diacritics) 
     augroup END
 " DIACRITICSC IMAPS: {{{1
+if !exists("g:atp_imap_diacritics")
     if g:atp_diacritics == 1
 	let g:atp_imap_diacritics = [
 	    \ [ 'inoremap', '<silent> <buffer>', g:atp_imap_over_leader,  '''', s:backslash.'''{}<Left>',
@@ -1301,9 +1302,10 @@ endif
     else
 	let g:atp_imap_diacritics=[]
     endif
+endif
 " ENVIRONMENT MAPS: {{{1
-if g:atp_no_env_maps != 1 && !empty(g:atp_imap_leader_3)
-    if !exists("g:atp_imap_environments") || g:atp_reload_variables
+if !exists("g:atp_imap_environments") || g:atp_reload_variables
+    if g:atp_no_env_maps != 1 && !empty(g:atp_imap_leader_3)
     let g:atp_imap_environments = [
 	\ [ "inoremap", "<buffer> <silent>", 	g:atp_imap_leader_3, "m", 			s:backslash.'('.s:backslash.')<Left><Left>', 						"g:atp_imap_define_environments", 'inlince math' ],
 	\ [ "inoremap", "<buffer> <silent>", 	g:atp_imap_leader_3, "M", 			s:backslash.'['.s:backslash.']<Left><Left>', 						"g:atp_imap_define_environments", 'displayed math' ],
@@ -1335,11 +1337,11 @@ if g:atp_no_env_maps != 1 && !empty(g:atp_imap_leader_3)
 	\ [ 'inoremap', '<silent> <buffer>',	g:atp_imap_leader_3, g:atp_imap_equation, 	s:backslash.'begin{equation=(getline(".")[col(".")-2]=="*"?"":b:atp_StarMathEnvDefault)<CR>}<CR>'.s:backslash.'end{equation=(getline(".")[col(".")-2]=="*"?"":b:atp_StarMathEnvDefault)<CR>}<Esc>O', 	"g:atp_imap_define_environments", 'equation' ],
 	\ [ 'inoremap', '<silent> <buffer>',	g:atp_imap_leader_3, g:atp_imap_letter, 	s:backslash.'begin{letter}{}<CR>'.s:backslash.'opening{=g:atp_letter_opening<CR>}<CR>'.s:backslash.'closing{=g:atp_letter_closing<CR>}<CR>'.s:backslash.'end{letter}<Esc>?'.s:bbackslash.'begin{letter}{'.s:backslash.'zs<CR>i', 				"g:atp_imap_define_environments", 'letter' ],
 	\ ]
+    else
+	let g:atp_imap_environments = []
     endif
     " Make Environment Maps:
     call atplib#MakeMaps(g:atp_imap_environments)
-else
-    let g:atp_imap_environments = []
 endif
 " MATHEMATICAL MAPS: {{{1
 if !exists("g:atp_imap_math") || g:atp_reload_variables
@@ -1385,8 +1387,6 @@ if !exists("g:atp_imap_math") || g:atp_reload_variables
     if !empty(g:atp_imap_supscript)
 	call add(g:atp_imap_math, [ "inoremap", "<buffer> <silent> <expr>", "", g:atp_imap_supscript, "( g:atp_imap_supscript == '^' && !atplib#IsLeft('\\', 1) && atplib#IsLeft('^') <bar><bar> g:atp_imap_supscript != '^' ) && atplib#IsInMath() ? (g:atp_imap_supscript == '^' ? '<BS>' : '' ).'^{}<Left>' : (atplib#IsLeft('~') ? '<BS>".s:backslash."=(g:atp_imap_wide ? ''wide'' : '''' )<CR>hat{}<Left>' : '^')", "g:atp_imap_define_math", 	'^{}'] )
     endif
-else
-    let g:atp_imap_math = []
 endif
 " MAKE MATHEMATICAL MAPS: (autocommands) "{{{1
 augroup ATP_MathIMaps
