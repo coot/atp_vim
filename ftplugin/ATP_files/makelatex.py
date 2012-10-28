@@ -89,19 +89,10 @@ tmpdir  = tempfile.mkdtemp(dir=options.tempdir,prefix="")
 # List of pids runing.
 pids    = []
 # Cleanup on exit:
-def cleanup(debug_file, tmpdir, pids):
+def cleanup(debug_file):
     debug_file.close()
     shutil.rmtree(tmpdir)
-# Will this function be called when scripts get SIGKILL, if yes
-# then this code might be helpful:
-# THIS NEEDS sys MODULE AND SIGKILL from SIGNAL MODULE
-#     for pid in pids:
-#         try:
-#             os.kill(pid,SIGKILL)
-#         except OSError:
-#             # No such process error.
-#             pass
-# atexit.register(cleanup, debug_file, tmpdir, pids)
+atexit.register(cleanup, debug_file)
 
 # FILTER:
 nonempty = lambda x: (re.match('\s*$', x) is None)

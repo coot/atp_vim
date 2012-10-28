@@ -4038,6 +4038,7 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	file). The output files are copied back to b:atp_OutDir after
 	compilation. The temporary directory is passed to your TeX compiler
 	using '-output-directory' switch.  
+
 							*g:atp_TempDir*
 >
  g:atp_TempDir 
@@ -4045,6 +4046,8 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	is created by python in most secure way available (readable only by
 	the user) if not it is made using |mkdir()| vim function with 0700
 	permissions.
+
+	Important Note: this directory is removed when Vim exists.
 							*g:atp_CompilersDict*
 >
  let g:atp_CompilersDict 	= { 

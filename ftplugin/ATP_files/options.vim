@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Oct 27, 2012 at 11:19:06  +0100
+" Last Change: Sun Oct 28, 2012 at 01:40:17  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -292,7 +292,7 @@ let s:optionsDict= {
 		\ "atp_XpdfServer" 		: fnamemodify(b:atp_MainFile,":t:r"), 
 		\ "atp_LocalXpdfServer" 	: expand("%:t:r"), 
 		\ "atp_okularOptions"		: ["--unique"],
-		\ "atp_TempDir"			: substitute(expand(b:atp_OutDir) . "/.tmp", '\/\/', '\/', 'g'),
+		\ "atp_TempDir"			: substitute(fnamemodify(atplib#FullPath(b:atp_MainFile), ':h') . "/.tmp", '\/\/', '\/', 'g'),
 		\ "atp_OutDir"			: ( exists("b:atp_ProjectScriptFile") ? fnamemodify(b:atp_ProjectScriptFile, ":h") : fnamemodify(resolve(expand("%:p")), ":h") ),
 		\ "atp_TexCompiler" 		: <SID>TexCompiler(),
 		\ "atp_BibCompiler"		: ( getline(atplib#search#SearchPackage('biblatex')) =~ '\<backend\s*=\s*biber\>' ? 'biber' : "bibtex" ),
@@ -2197,14 +2197,15 @@ if !s:did_options
     augroup END
 
 function! <SID>Rmdir(dir)
+echom "Rmdir ".a:dir
 if executable("rmdir")
     call system("rmdir ".shellescape(a:dir))
 elseif has("python")
 python << EOF
-import shutil, errno
+import os, errno
 dir=vim.eval('a:dir')
 try:
-    shutil.rmtree(dir)
+    os.rmtree(dir)
 except OSError, e:
     if errno.errorcode[e.errno] == 'ENOENT':
         pass
@@ -2300,7 +2301,7 @@ endif
 
     augroup ATP_VimLeave
 	au!
-	" Remove b:atp_TempDir (where compelation is done).
+	" Remove b:atp_TempDir (where compilation is done).
 	au VimLeave *.tex :call <SID>Rmdir(b:atp_TempDir)
 	" Remove TempDir for debug files.
 	au VimLeave *     :call <SID>RmTempDir()

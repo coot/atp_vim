@@ -61,7 +61,7 @@ parser.add_option("--gui-running",      action="store_true",    default=False,  
 parser.add_option("--autex_wait",       action="store_true",    default=False,  dest="autex_wait"       )
 parser.add_option("--no-progress-bar",  action="store_false",   default=True,   dest="progress_bar"     )
 parser.add_option("--bibliographies",                           default="",     dest="bibliographies"   )
-parser.add_option("--tempdir",                                  default="",     dest="tempdir"        )
+parser.add_option("--tempdir",                                  default="",     dest="tempdir"          )
 
 (options, args) = parser.parse_args()
 

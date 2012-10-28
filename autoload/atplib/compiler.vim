@@ -625,6 +625,7 @@ function! atplib#compiler#MakeLatex(bang, mode, start)
 		\ " --viewer-options ".shellescape(viewer_options).
 		\ " --progname ".v:progname.
 		\ " --logdir ".shellescape(g:atp_TempDir).
+		\ " --tempdir ".shellescape(b:atp_TempDir).
 		\ (g:atp_callback ? "" : " --no-callback ").
 		\ (t:atp_DebugMode=='verbose'||mode=='verbose'?' --env ""': " --env ".shellescape(b:atp_TexCompilerVariable)).
 		\ reload_viewer . reload_on_error
