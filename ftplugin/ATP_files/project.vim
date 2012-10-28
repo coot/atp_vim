@@ -171,13 +171,20 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
 
     let b:atp_histloaded=1
     if a:type == "local"
-	let save_loclist = getloclist(0)
 	try
-	    silent exe 'lvimgrep /^[^"]*\Clet\s\+b:atp_ProjectScript\>\s*=/j ' . fnameescape(a:project_script)
-	catch /E480:/
+	    let ps_lines = readfile(a:project_script)
+	catch /E484:/
+	    let ps_lines = []
 	endtry
-	let loclist = getloclist(0)
-	execute get(get(loclist, 0, {}), 'text', "")
+	" let b:atp_vim_settings = []
+	for line in ps_lines
+	    if line =~ '^[^"]*\Clet\s\+b:atp_ProjectScript\>\s*='
+		execute line
+	    endif
+	    " if line =~ '^\s*\(set\?\|setl\%[ocal]\)\s'
+		" call add(b:atp_vim_settings, line)
+	    " endif
+	endfor
 	if exists("b:atp_ProjectScript") && !b:atp_ProjectScript
 	    if g:atp_debugProject
 		silent echomsg "[ATP:] ATP_ProjectScript: b:atp_ProjectScript == 0 in the project script."
@@ -185,17 +192,6 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
 	    endif
 	    return
 	endif
-	call setloclist(0,[])
-	try 
-	    silent exe 'lvimgrep /^\s*\(set\?\|setl\%[ocal]\)\s/j ' . fnameescape(a:project_script)
-	catch /E480:/
-	endtry
-
-	" Find all the vim options:
-	let b:atp_vim_settings = map(getloclist(0), "v:val['text']")
-	" This variable is used by ATP_LoadVimSettings() (augroup
-	" ATP_LoadVimSettings) where it is deleted.
-	call setloclist(0, save_loclist)
     endif
 
     " Load first b:atp_ProjectScript variable
@@ -259,27 +255,28 @@ function! GetProjectScript(project_files)
 	if g:atp_debugLPS
 	    echomsg "[ATP:] checking " . pfile 
 	endif
-	let save_loclist 	= getloclist(0)
 	let file_name 	= s:windows ? escape(expand("%:p"), '\') : escape(expand("%:p"), '/') 
 	let sfile_name 	= expand("%:t")
 	try
-	    if !g:atp_RelativePath
-		exe 'lvimgrep /^\s*let\s\+\%(b:atp_MainFile\s\+=\s*\%(''\|"\)\%(' . file_name . '\|' . sfile_name . '\)\>\%(''\|"\)\|b:ListOfFiles\s\+=.*\%(''\|"\)' . file_name . '\>\)/j ' . fnameescape(pfile)
-	    else
-		exe 'lvimgrep /^\s*let\s\+\%(b:atp_MainFile\s\+=\s*\%(''\|"\)[^''"]*\<\%(' . sfile_name . '\)\>\%(''\|"\)\|b:ListOfFiles\s\+=.*\%(''\|"\)[^''"]*\<' . sfile_name . '\>\)/j ' . fnameescape(pfile)
-	    endif
-	catch /E480:/ 
-	    if g:atp_debugProject
-		silent echomsg "[ATP:] script file " . pfile . " doesn't match."
-	    endif
+	    let pf_lines = readfile(pfile)
+	catch /E484:/
+	    let pf_lines = []
 	endtry
-	let loclist	= getloclist(0)
-	if len(loclist) 
-	    let bufnr 	= get(get(loclist, 0, {}), 'bufnr', 'no match')
-	    if bufnr != 'no match'
-		let project_script 	= fnamemodify(bufname(bufnr), ":p")
-	    endif
-	    return project_script
+	if !g:atp_RelativePath
+	    for line in pf_lines
+		if line =~ '^\s*let\s\+\%(b:atp_MainFile\s\+=\s*\%(''\|"\)\%(' . file_name . '\|' . sfile_name . '\)\>\%(''\|"\)\|b:ListOfFiles\s\+=.*\%(''\|"\)' . file_name . '\>\)'
+		    return pfile
+		endif
+	    endfor
+	else
+	    for line in pf_lines
+		if line =~ '^\s*let\s\+\%(b:atp_MainFile\s\+=\s*\%(''\|"\)[^''"]*\<\%(' . sfile_name . '\)\>\%(''\|"\)\|b:ListOfFiles\s\+=.*\%(''\|"\)[^''"]*\<' . sfile_name . '\>\)'
+		    return pfile
+		endif
+	    endfor
+	endif
+	if g:atp_debugProject
+	    silent echomsg "[ATP:] script file " . pfile . " doesn't match."
 	endif
     endfor
     return "no project script found"
@@ -313,7 +310,6 @@ function! <SID>LoadProjectScript(bang,...)
 
     if !exists("b:atp_ProjectScriptFile")
 	" Look for the project file
-" 	echo join(project_files, "\n")
 	let project_files = FindProjectScripts()
 
 	" Return if nothing was found
@@ -332,10 +328,6 @@ function! <SID>LoadProjectScript(bang,...)
 	    call remove(project_files, index)
 	    call extend(project_files, [ expand("%:p") . ".project.vim" ], 0) 
 	endif
-
-	let save_loclist = getloclist(0)
-	call setloclist(0, [])
-
 
 	let project_script = GetProjectScript(project_files)
 	if project_script != "no project script found"
@@ -545,16 +537,18 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     
     " Make a list of variables defined in project script
     let defined_variables	= []
-    let save_loclist		= getloclist(0)
+    let defined_variables = []
     try
-	silent! exe 'lvimgrep /^\s*\<let\>\s\+[bg]:/j ' . fnameescape(a:project_script)
-    catch /^Vim\%((\a\+)\)\=:E480/
-    catch /^Vim\%((\a\+)\)\=:E486/
-    catch /^Vim\%((\a\+)\)\=:E21/
+	let ps_lines = readfile(a:project_script)
+    catch /E484:/
+	let ps_lines = []
     endtry
-    let defined_variables	= getloclist(0) 
-    call map(defined_variables, 'matchstr(v:val["text"], ''^\s*let\s\+\zs[bg]:[^[:blank:]=]*'')') 
-    call setloclist(0, save_loclist) 
+    for line in ps_lines
+	if line =~ '^\s*\<let\>\s\+[bg]:'
+	    call add(defined_variables, line)
+	endif
+    endfor
+    call map(defined_variables, 'matchstr(v:val, ''^\s*let\s\+\zs[bg]:[^[:blank:]=]*'')') 
     if g:atp_debugProject
 	let g:defined_variables	= defined_variables
     endif

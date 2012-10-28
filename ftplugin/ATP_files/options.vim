@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Oct 28, 2012 at 01:40:17  +0000
+" Last Change: Sun Oct 28, 2012 at 20:50:01  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -263,12 +263,12 @@ function! <SID>TexCompiler()
     if exists("b:atp_TexCompiler")
 	return b:atp_TexCompiler
     elseif buflisted(atplib#FullPath(b:atp_MainFile))
-	let line = get(getbufline(atplib#FullPath(b:atp_MainFile), 1), 0, "")
+	let line = get(getbufline(atplib#FullPath(b:atp_MainFile), "", 1), 0, "")
 	if line =~ '^%&\w*tex\>'
 	    return matchstr(line, '^%&\zs\w\+')
 	endif
     elseif filereadable(atplib#FullPath(b:atp_MainFile))
-	let line = get(readfile(atplib#FullPath(b:atp_MainFile)), 0, "")
+	let line = get(readfile(atplib#FullPath(b:atp_MainFile), "", 1), 0, "")
 	if line =~ '^%&\w*tex\>'
 	    return matchstr(line, '^%&\zs\w\+')
 	endif
@@ -1453,19 +1453,21 @@ function! <SID>Babel()
     endif
     let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
 
-    let saved_loclist = getloclist(0)
     try
-	execute '1lvimgrep /^[^%]*\\usepackage.*{babel}/j ' . fnameescape(atp_MainFile)
-	" Find \usepackage[babel_options]{babel} - this is the only way that one can
-	" pass options to babel.
-    catch /E480:/
-	return
-    catch /E683:/ 
-	return
+	let mf_lines = readfile(atp_MainFile)
+    catch /E484:/
+	let mf_lines = []
     endtry
-    let babel_line 	= get(get(getloclist(0), 0, {}), 'text', '')
-    call setloclist(0, saved_loclist) 
-    let languages	= split(matchstr(babel_line, '\[\zs[^]]*\ze\]'), ',')
+    let babel_line = ""
+    for line in mf_lines
+	if line =~ '^[^%]*\\usepackage.*{babel}'
+	    let babel_line = line
+	    break
+	elseif line =~ '\\begin\s*{\s*document\s*}'
+	    break
+	endif
+    endfor
+    let languages = split(matchstr(babel_line, '\[\zs[^]]*\ze\]'), ',')
     if len(languages) == 0
 	return
     endif
@@ -1490,9 +1492,9 @@ function! <SID>Babel()
 endfunction
 command! -buffer Babel	:call <SID>Babel()
 " {{{1 start up
-if g:atp_babel
-    call <SID>Babel()
-endif
+" if g:atp_babel
+    " call <SID>Babel()
+" endif
 "  }}}1
 
 " These are two functions which sets options for Xpdf and Xdvi. 
@@ -1509,7 +1511,7 @@ function! <SID>SetXdvi()
 	    let compiler = ""
 	endif
     else
-	let line = readfile(atplib#FullPath(b:atp_MainFile))[0] 
+	let line = readfile(atplib#FullPath(b:atp_MainFile), "", 1)[0] 
 	if line =~ '^%&\w*tex\>'
 	    let compiler = matchstr(line, '^%&\zs\w\+')
 	else
@@ -1596,7 +1598,7 @@ function! <SID>SetPdf(viewer)
 	    let compiler = ""
 	endif
     else
-	let line = readfile(atplib#FullPath(b:atp_MainFile))[0] 
+	let line = readfile(atplib#FullPath(b:atp_MainFile), "", 1)[0] 
 	if line =~ '^%&\w*tex\>'
 	    let compiler = matchstr(line, '^%&\zs\w\+')
 	else
@@ -2197,7 +2199,6 @@ if !s:did_options
     augroup END
 
 function! <SID>Rmdir(dir)
-echom "Rmdir ".a:dir
 if executable("rmdir")
     call system("rmdir ".shellescape(a:dir))
 elseif has("python")
