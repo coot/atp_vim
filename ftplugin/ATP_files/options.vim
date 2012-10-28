@@ -697,6 +697,20 @@ if !exists("g:atp_imap_align")
 	let g:atp_imap_align="ali"
     endif
 endif
+if !exists("g:atp_imap_gather")
+    if g:atp_imap_ShortEnvIMaps
+	let g:atp_imap_gather="g"
+    else
+	let g:atp_imap_gather="gat"
+    endif
+endif
+if !exists("g:atp_imap_split")
+    if g:atp_imap_ShortEnvIMaps
+	let g:atp_imap_split="s"
+    else
+	let g:atp_imap_split="spl"
+    endif
+endif
 if !exists("g:atp_imap_multiline")
     " Is not defined by default: ]m, and ]M are used for \(:\) and \[:\].
     if g:atp_imap_ShortEnvIMaps
