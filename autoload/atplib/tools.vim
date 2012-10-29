@@ -265,7 +265,7 @@ function! atplib#tools#GrepAuxFile(...)
 	    let label	= "nolabel: " . line
 	endif
 
-	if label !~ '^nolabel:\>'
+	if stridx(label, 'nolabel: ') != 0
 	    let number = substitute(number, '{\|}', '', 'g')
 	    call add(labels, [ label, number, counter])
 	    if g:atp_debugGAF
