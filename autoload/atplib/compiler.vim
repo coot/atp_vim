@@ -212,7 +212,7 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
     let [ line, col ] 	= [ line("."), col(".") ]
     let main_file	= atplib#FullPath(a:main_file)
     let ext		= get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf")
-    let output_file	= expand(b:atp_OutDir)."/".fnamemodify(main_file,":t:r") . ext
+    let output_file	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(main_file,":t:r") . ext)
     if !filereadable(output_file) && output_check
 	" Here should be a test if viewer is running, this can be made with python.
 	" this is way viewer starts not well when using :SyncTex command while Viewer

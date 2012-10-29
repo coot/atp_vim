@@ -360,6 +360,21 @@ function! atplib#outdir() "{{{1
     return b:atp_OutDir
 endfunction
 "}}}1
+fun! atplib#joinpath(path1, path2)
+    let idx = match(a:path1, '\/\s*$')
+    if idx != -1
+	let path1 = a:path1[:(idx-1)]
+    else
+	let path1 = a:path1
+    endif
+    let idx = len(matchstr(a:path2, '\s*\/'))
+    if idx != 0
+	let path2 = a:path2[(idx):]
+    else
+	let path2 = a:path2
+    endif
+    return path1.'/'.path2
+endfun
 " Return {path} relative to {rel}, if not under {rel} return {path}
 function! atplib#RelativePath(path, rel) "{{{1
     let current_dir 	= getcwd()
