@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Oct 28, 2012 at 20:50:01  +0000
+" Last Change: Mon Oct 29, 2012 at 13:08:49  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2065,24 +2065,6 @@ nnoremap <silent> <buffer> 	<Plug>ToggleTab		:call ATP_ToggleTab()<CR>
 inoremap <silent> <buffer> 	<Plug>ToggleTab		<C-O>:call ATP_ToggleTab()<CR>
 "}}}
 
-" Read Package/Documentclass Files {{{
-" This is run by an autocommand group ATP_Packages which is after ATP_LocalCommands
-" b:atp_LocalColors are used in some package files.
-function! <SID>ReadPackageFiles()
-    let time=reltime()
-    let package_files = split(globpath(&rtp, "ftplugin/ATP_files/packages/*"), "\n")
-    let g:atp_packages = map(copy(package_files), 'fnamemodify(v:val, ":t:r")')
-    for file in package_files
-	" We cannot restrict here to not source some files - because the completion
-	" variables might be needed later. I need to find another way of using this files
-	" as additional scripts running syntax ... commands for example only if the
-	" packages are defined.
-	execute "source ".file
-    endfor
-    let g:source_time_package_files=reltimestr(reltime(time))
-endfunction
-
-" }}}
 
 " AUTOCOMMANDS:
 " Some of the autocommands (Status Line, LocalCommands, Log File):
@@ -2136,18 +2118,17 @@ if !s:did_options
 	if !( &l:filetype == 'tex' || &l:ef == s:ef  )
 	    " buftype option is not yet set when this function is executed,
 	    " but errorfile option is already set.
-" 	    echomsg "FILETYPE RETURN"
 	    return
 	endif
 " 	if exists("s:previous_file")
 	if exists("s:ef")
 	    let same_project= ( &l:ef == s:ef )
 	    if !same_project
-" 		echomsg "OTHER PROJECT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
+		" echomsg "OTHER PROJECT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
 		let errorflags = exists("b:atp_ErrorFormat") ? b:atp_ErrorFormat : g:atp_DefaultErrorFormat
 		call atplib#compiler#SetErrorFormat(1, errorflags)
 	    else
-" 		echomsg "SAME PROJECT ".s:error_format . " " . expand("%:p")
+		" echomsg "SAME PROJECT ".s:error_format . " " . expand("%:p")
 		if s:error_format != 'no_error_format'
 		    call atplib#compiler#SetErrorFormat(0, s:error_format)
 		else
@@ -2155,7 +2136,7 @@ if !s:did_options
 		endif
 	    endif
 	else
-" 	    echomsg "INIT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
+	    " echomsg "INIT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
 	    call atplib#compiler#SetErrorFormat(1, g:atp_DefaultErrorFormat)
 	    let &efm=&l:efm
 	endif
@@ -2336,18 +2317,6 @@ endif
 	au!
 	au InsertEnter *.tex :call <SID>UpdateTime("Enter")
 	au InsertLeave *.tex :call <SID>UpdateTime("Leave")
-    augroup END
-
-    if g:atp_local_completion == 2
-	augroup ATP_LocalCommands
-	    au!
-	    au BufEnter *.tex 	call LocalCommands(0)
-	augroup END
-    endif
-
-    augroup ATP_Packages
-	au!
-	au BufEnter *.tex call <SID>ReadPackageFiles()
     augroup END
 
     augroup ATP_TeXFlavor
