@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Oct 27, 2012 at 13:08:36  +0100
+" Last Change: Mon Oct 29, 2012 at 13:16:27  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -577,7 +577,7 @@ function! ATP_WrapKet_1_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('(', ')', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."( :set opfunc=ATP_WrapKet_1_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."( :set opfunc=ATP_WrapKet_1_begin<CR>g@"
 if !hasmapto(":Wrap ( ) end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader.") 	:Wrap ( ) end<CR>"
 endif
@@ -585,7 +585,7 @@ function! ATP_WrapKet_1_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('(', ')', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader.") :set opfunc=ATP_WrapKet_1_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader.") :set opfunc=ATP_WrapKet_1_end<CR>g@"
 if !hasmapto(":Wrap [ ] begin<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."[ 	:Wrap [ ] begin<CR>"
 endif
@@ -593,7 +593,7 @@ function! ATP_WrapKet_2_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('[', ']', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."[ :set opfunc=ATP_WrapKet_2_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."[ :set opfunc=ATP_WrapKet_2_begin<CR>g@"
 if !hasmapto(":Wrap [ ] end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."] 	:Wrap [ ] end<CR>"
 endif
@@ -601,7 +601,7 @@ function! ATP_WrapKet_2_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('[', ']', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."] :set opfunc=ATP_WrapKet_2_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."] :set opfunc=ATP_WrapKet_2_end<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."{ ".s:backslash."} begin<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader.s:backslash."{	:Wrap ".s:backslash."{ ".s:backslash."} begin<CR>"
 endif
@@ -609,7 +609,7 @@ function! ATP_WrapKet_3_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\{', '\}', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader.s:backslash."{ :set opfunc=ATP_WrapKet_3_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader.s:backslash."{ :set opfunc=ATP_WrapKet_3_begin<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."} ".s:backslash."} end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader.s:backslash."}	:Wrap ".s:backslash."{ ".s:backslash."} end<CR>"
 endif
@@ -617,7 +617,7 @@ function! ATP_WrapKet_3_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\{', '\}', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader.s:backslash."} :set opfunc=ATP_WrapKet_3_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader.s:backslash."} :set opfunc=ATP_WrapKet_3_end<CR>g@"
 " This is defined before:
 " if !hasmapto(":Wrap { } begin<cr>", 'v')
 "     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."{ 	:Wrap { } begin<CR>"
@@ -626,7 +626,7 @@ function! ATP_WrapKet_4_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('{', '}', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."{ :set opfunc=ATP_WrapKet_4_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."{ :set opfunc=ATP_WrapKet_4_begin<CR>g@"
 if !hasmapto(":Wrap { } end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."}	:Wrap { } end<CR>"
 endif
@@ -634,7 +634,7 @@ function! ATP_WrapKet_4_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('{', '}', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."} :set opfunc=ATP_WrapKet_4_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."} :set opfunc=ATP_WrapKet_4_end<CR>g@"
 if !hasmapto(":Wrap < > begin<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."< 	:Wrap < > begin<CR>"
 endif
@@ -642,7 +642,7 @@ function! ATP_WrapKet_5_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('<', '>', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."< :set opfunc=ATP_WrapKet_5_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."< :set opfunc=ATP_WrapKet_5_begin<CR>g@"
 if !hasmapto(":Wrap < > end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_bracket_leader."> 	:Wrap < > end<CR>"
 endif
@@ -650,7 +650,7 @@ function! ATP_WrapKet_5_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('<', '>', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_bracket_leader."> :set opfunc=ATP_WrapKet_5_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_bracket_leader."> :set opfunc=ATP_WrapKet_5_end<CR>g@"
 endif
 if !empty(g:atp_vmap_big_bracket_leader)
 if !hasmapto(":Wrap ".s:backslash."left( ".s:backslash."right) end<CR>", 'v')
@@ -660,7 +660,7 @@ function! ATP_WrapBigKet_1_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left(', '\right)', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader.") :set opfunc=ATP_WrapBigKet_1_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.") :set opfunc=ATP_WrapBigKet_1_end<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."left[ ".s:backslash."right] end<cr>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."]	:Wrap ".s:backslash."left[ ".s:backslash."right] end<cr>"
 endif
@@ -668,7 +668,7 @@ function! ATP_WrapBigKet_2_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left[', '\right]', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader."] :set opfunc=ATP_WrapBigKet_2_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."] :set opfunc=ATP_WrapBigKet_2_end<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} end<CR>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."}	:Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} end<CR>"
 endif
@@ -676,7 +676,7 @@ function! ATP_WrapBigKet_3_end(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left\{', '\right\}', 'end', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."} :set opfunc=ATP_WrapBigKet_3_end<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."} :set opfunc=ATP_WrapBigKet_3_end<CR>g@"
 " for compatibility:
 if !hasmapto(":Wrap ".s:backslash."left( ".s:backslash."right) begin<CR>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."(	:Wrap ".s:backslash."left( ".s:backslash."right) begin<CR>"
@@ -685,7 +685,7 @@ function! ATP_WrapBigKet_1_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left(', '\right)', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader."( :set opfunc=ATP_WrapBigKet_1_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."( :set opfunc=ATP_WrapBigKet_1_begin<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."left[ ".s:backslash."right] begin<CR>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."[	:Wrap ".s:backslash."left[ ".s:backslash."right] begin<CR>"
 endif
@@ -693,17 +693,20 @@ function! ATP_WrapBigKet_2_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left[', '\right]', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader."[ :set opfunc=ATP_WrapBigKet_2_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."[ :set opfunc=ATP_WrapBigKet_2_begin<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} begin<CR>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."{	:Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} begin<CR>"
+    execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."{	:Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} begin<CR>"
 endif
 function! ATP_WrapBigKet_3_begin(type)
     if a:type == "block" | return | endif
     call atplib#various#WrapSelection('\left\{', '\right\}', 'begin', 0, ["'[", "']"])
 endfunction
-exe "nmap <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."{ :set opfunc=ATP_WrapBigKet_3_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."{ :set opfunc=ATP_WrapBigKet_3_begin<CR>g@"
+exe "nmap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."{ :set opfunc=ATP_WrapBigKet_3_begin<CR>g@"
 if !hasmapto(":Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} end<CR>", 'v')
     execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader."}	:Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} end<CR>"
+    execute "vnoremap <silent> <buffer> ".g:atp_vmap_big_bracket_leader.s:backslash."}	:Wrap ".s:backslash."left".s:backslash."{ ".s:backslash."right".s:backslash."} end<CR>"
 endif
 endif
 
