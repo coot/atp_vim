@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Oct 26, 2012 at 14:12:32  +0100
+" Last Change: Mon Oct 29, 2012 at 16:33:59  +0000
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -217,11 +217,11 @@ function! ATPStatus(command,...) "{{{
     let status_KeyMap	=
 		\ ( has("keymap") && g:atp_babel && exists("b:keymap_name") 	
 								\ ? b:keymap_name 	: '' )
-    let b:atp_StatusLine= '%<%f '.status_KeyMap.'%(%h%m%r%) '.status_NotifHi.status_Notif.status_NotifHiPost.'%= '.status_CurrentSection.' %{g:status_OutDir}'
+    let g:atp_StatusLine= '%<%f '.status_KeyMap.'%(%h%m%r%) '.status_NotifHi.status_Notif.status_NotifHiPost.'%= '.status_CurrentSection.' %{g:status_OutDir}'
     if &ruler
-	let b:atp_StatusLine.=' %-14.16(%l,%c%V%)%P'
+	let g:atp_StatusLine.=' %-14.16(%l,%c%V%)%P'
     endif
-    set statusline=%!b:atp_StatusLine
+    setl statusline=%!g:atp_StatusLine
 endfunction
 try
     command -buffer -bang Status	:call ATPStatus(1,(<q-bang> == "")) 

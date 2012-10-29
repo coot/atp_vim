@@ -2450,7 +2450,7 @@ nmap gD
 	compilation: see |atp-status-line-notification|, |g:atp_ProgressBar|.
 							*g:atp_StatusLine*
 	This command is called at startup unless the variable
-	'|g:atp_StatusLine|=0' is set. 
+	'|g:atp_StatusLine|=0'. 
 <	
 							*b:atp_StatusCurSection*
 	If |b:atp_StatusCurSection| is set to 1 (the default) the current section will be
