@@ -2049,11 +2049,11 @@ nmap {O
 
             \begin{theorem} ◀――――――――――――┐
                 \begin{center}           |
-                    \begin{align}        | {o
+                    \begin{align}        | {O
                         \begin{split}    |
                            ....       ―――┤
                         \end{split}      |
-                    \end{align}          | }o
+                    \end{align}          | }O
                 \end{center}             |
             \end{theorem} ◀――――――――――――――┘
 	
@@ -2109,7 +2109,8 @@ vmap }p, vmap }c, vmap }s, vmap }S
 	operator to }}.
 
 	Note: if you set |g:atp_map_forward_motion_leader|="]" you might need
-	to remap |]s|.
+	to remap |]s| and |]c| (a good choice is to remap them to >S and >C,
+	don't forget about |[s| and |[c|).
 
 	Note: the maps work in visual mode and operator pending mode ('d\ns'
 	will delete till the end of the section). You can use |n| and |N| Vim
