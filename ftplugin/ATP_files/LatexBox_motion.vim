@@ -808,10 +808,10 @@ function! s:SelectCurrentParagraph(seltype)
 			    \ '\|\\end\s*{[^}]*}\s*' . 
 			    \ '\|\\begin\s*{[^}]*}\s*'.
 				\ '\%(\[[^]]*\]\|{[^}]*}\)\{0,2}\s*'.
-				\ '\%(\%(\\\%(label\|index\|hypertarget\s*{[^}]*}\s*\)\s*{[^}]*}\)\s*\%(\\footnote\s*\%(\n' . 
+				\ '\%(\%(\\\%(label\|index\|hypertarget\s*{[^}]*}\)\s*{[^}]*}\)\s*\%(\\footnote\s*\%(\n' . 
 					\ '\|[^}]\)*}\)\=' . 
 				    \ '\|\s*\%(\\footnote\s*\%(\n' . 
-				\ '\|[^}]\)*}\)\s*\%(\\\%(label\|index\|hypertarget\s*{[^}]*}\s*\)\s*{[^}]*}\)\=\)\{0,3}\)' . 
+				\ '\|[^}]\)*}\)\%(\s*\\\%(label\|index\|hypertarget\s*{[^}]*}\s*\)\s*{[^}]*}\)\=\)\{0,3}\)' . 
 			\ '\|\\item\%(\s*\[[^\]]*\]\)\=' . 
 			\ '\|\\\%(part\*\=' . 
 			\ '\|chapter\*\=' . 
