@@ -73,6 +73,10 @@ function! LaTeXBox_JumpToMatch(mode, ...)
 		normal! gv
 	endif
 
+	if getline(line("."))[:(col(".")-1)] =~ '\\\%(begin\|end\)\s*{[^}]*$' && getline(line("."))[(col(".")-1)] != '{'
+	    call search('\\\%(begin\|end\)', 'b', line("."))
+	endif
+
 	" open/close pairs (dollars signs are treated apart)
 	let open_pats 		= ['\\begin\>', '{', '\[', '(', '\\left\>', '\\lceil\>', '\\lgroup\>', '\\lfloor', '\\langle']
 	let close_pats 		= ['\\end\>', '}', '\]', ')', '\\right\>', '\\rceil', '\\rgroup\>', '\\rfloor', '\\rangle']
