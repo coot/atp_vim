@@ -345,22 +345,7 @@ else
     call mkdir(g:atp_TempDir, "p", 0700)
 endif
 endfunction
-"}}}1
-" Outdir: append to '/' to b:atp_OutDir if it is not present. 
-function! atplib#outdir() "{{{1
-    if has("win16") || has("win32") || has("win64") || has("win95")
-	if b:atp_OutDir !~ "\/$"
-	    let b:atp_OutDir=b:atp_OutDir . "\\"
-	endif
-    else
-	if b:atp_OutDir !~ "\/$"
-	    let b:atp_OutDir=b:atp_OutDir . "/"
-	endif
-    endif
-    return b:atp_OutDir
-endfunction
-"}}}1
-fun! atplib#joinpath(path1, path2)
+fun! atplib#joinpath(path1, path2) " {{{1
     let idx = match(a:path1, '\/\s*$')
     if idx != -1
 	let path1 = a:path1[:(idx-1)]
@@ -375,8 +360,8 @@ fun! atplib#joinpath(path1, path2)
     endif
     return path1.'/'.path2
 endfun
-" Return {path} relative to {rel}, if not under {rel} return {path}
 function! atplib#RelativePath(path, rel) "{{{1
+    " Return {path} relative to {rel}, if not under {rel} return {path}
     let current_dir 	= getcwd()
     exe "lcd " . fnameescape(a:rel)
     let rel_path	= fnamemodify(a:path, ':.')
@@ -384,8 +369,8 @@ function! atplib#RelativePath(path, rel) "{{{1
     return rel_path
 endfunction
 "}}}1
-" Return fullpath
 function! atplib#FullPath(file_name) "{{{1
+    " Return fullpath
     let cwd = getcwd()
     if a:file_name == fnamemodify(fnamemodify(a:file_name, ":t"), ":p") 
 	" if a:file_name is already a full path
@@ -797,24 +782,25 @@ endfunction
 " directory. The last argument if equal to 1, then look also
 " under g:texmf.
 function! atplib#ReadInputFile(ifile,check_texmf)
-
-    let l:input_file = []
+    let input_file = []
 
     " read the buffer or read file if the buffer is not listed.
     if buflisted(fnamemodify(a:ifile,":t"))
-	let l:input_file=getbufline(fnamemodify(a:ifile,":t"),1,'$')
+	let input_file=getbufline(fnamemodify(a:ifile,":t"),1,'$')
     " if the ifile is given with a path it should be tried to read from there
     elseif filereadable(a:ifile)
-	let l:input_file=readfile(a:ifile)
+	let input_file=readfile(a:ifile)
+    elseif filereadable(atplib#joinpath(expand(b:atp_ProjectDir), fnamemodify(a:ifile,":t")))
+	let input_file=readfile(atplib#joinpath(expand(b:atp_ProjectDir), fnamemodify(a:ifile,":t")))
     " if not then try to read it from b:atp_OutDir
-    elseif filereadable(expand(b:atp_OutDir) . fnamemodify(a:ifile,":t"))
-	let l:input_file=readfile(filereadable(expand(b:atp_OutDir) . fnamemodify(a:ifile,":t")))
+    elseif filereadable(atplib#joinpath(expand(b:atp_OutDir), fnamemodify(a:ifile,":t")))
+	let input_file=readfile(atplib#joinpath(expand(b:atp_OutDir), fnamemodify(a:ifile,":t")))
     " the last chance is to look for it in the g:texmf directory
     elseif a:check_texmf && filereadable(findfile(a:ifile,g:texmf . '**'))
-	let l:input_file=readfile(findfile(a:ifile,g:texmf . '**'))
+	let input_file=readfile(findfile(a:ifile,g:texmf . '**'))
     endif
 
-    return l:input_file
+    return input_file
 endfunction
 "}}}1
 

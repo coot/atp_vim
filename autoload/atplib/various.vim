@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Oct 26, 2012 at 00:48:30  +0100
+" Last Change: Tue Oct 30, 2012 at 19:12:35  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -858,7 +858,6 @@ endfunction
 function! atplib#various#Delete(delete_output)
 
     let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
-    call atplib#outdir()
 
     let atp_tex_extensions=deepcopy(g:atp_tex_extensions)
 
@@ -884,7 +883,7 @@ function! atplib#various#Delete(delete_output)
 	    endif
 	else
 	    " Delete output file (pdf|dvi|ps) (though ps is not supported by ATP).
-	    let f=fnamemodify(expand(b:atp_OutDir) . "/" . fnamemodify(b:atp_MainFile, ":t:r").".".ext, ":p")
+	    let f=fnamemodify(atplib#joinpath(expand(b:atp_OutDir), fnamemodify(b:atp_MainFile, ":t:r").".".ext), ":p")
 	    echo "Removing ".f
 	    call delete(f)
 	endif
@@ -1229,8 +1228,6 @@ endfunction
 " 				the variable g:printingoptions)
  function! atplib#various#SshPrint(...)
 
-    call atplib#outdir()
-
     " set the extension of the file to print
     " if prining the tex output file.
     if a:0 == 0 || a:0 >= 1 && a:1 == ""
@@ -1251,7 +1248,7 @@ endfunction
     endif
 
     " set the file to print
-    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? expand(b:atp_OutDir) . fnamemodify(expand("%"),":t:r") . ext : a:1 )
+    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? atplib#joinpath(expand(b:atp_OutDir), expand("%:t:r") . ext) : a:1 )
 
     " set the printing command
     if a:0 >= 2
@@ -1284,8 +1281,6 @@ endfunction
 endfunction
 
 function! atplib#various#Lpr(...)
-    call atplib#outdir()
-
     " set the extension of the file to print
     " if prining the tex output file.
     if a:0 == 0 || a:0 >= 1 && a:1 == ""
@@ -1306,7 +1301,7 @@ function! atplib#various#Lpr(...)
     endif
 
     " set the file to print
-    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? expand(b:atp_OutDir) . fnamemodify(expand("%"),":t:r") . ext : a:1 )
+    let pfile		= ( a:0 == 0 || (a:0 >= 1 && a:1 == "" ) ? atplib#joinpath(expand(b:atp_OutDir), expand("%:t:r") . ext) : a:1 )
     
     " set the printing command
     if a:0 >= 1

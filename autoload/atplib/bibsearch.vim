@@ -35,7 +35,6 @@ let atplib#bibsearch#bibflagsdict={
 " let s:bibfiles=FindBibFiles(bufname('%'))
 function! atplib#bibsearch#searchbib(pattern, bibdict, ...) 
 
-    call atplib#outdir()
     " for tex files this should be a flat search.
     let flat 	= &filetype == "plaintex" ? 1 : 0
     let bang	= a:0 >=1 ? a:1 : ""
@@ -343,7 +342,6 @@ endfunction
 "}}}
 " {{{ atplib#bibsearch#searchbib_py
 function! atplib#bibsearch#searchbib_py(bang,pattern, bibfiles, ...)
-    call atplib#outdir()
     " for tex files this should be a flat search.
     let flat 	= &filetype == "plaintex" ? 1 : 0
     let bang	= a:0 >=1 ? a:1 : ""

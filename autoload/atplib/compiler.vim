@@ -22,8 +22,6 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
 
     let fwd_search	= ( a:bang == "!" ? 1 : 0 )
 
-    call atplib#outdir()
-
     " Set the correct output extension (if nothing matches set the default '.pdf')
     let ext		= get(g:atp_CompilersDict, matchstr(b:atp_TexCompiler, '^\s*\zs\S\+\ze'), ".pdf") 
 
@@ -36,7 +34,7 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
     if link != tex_file
 	let outfile	= fnamemodify(link, ":r") . ext
     else
-	let outfile	= expand(b:atp_OutDir) . "/" . fnamemodify(a:tex_file, ':t:r') . ext
+	let outfile	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(a:tex_file, ':t:r') . ext)
     endif
 
     if b:atp_Viewer == "xpdf"	
@@ -108,7 +106,7 @@ endfunction
 " {{{ atplib#compiler#GetSyncData
 function! atplib#compiler#GetSyncData(line, col, file)
 
-     	if !filereadable(expand(b:atp_OutDir) . "/" . fnamemodify(a:file, ":t:r").'.synctex.gz') 
+     	if !filereadable(atplib#joinpath(expand(b:atp_OutDir), fnamemodify(a:file, ":t:r").'.synctex.gz'))
 	    redraw!
 	    " We use "system(cmd)" rather than ATP :Tex command, since we
 	    " don't want to background.
@@ -123,7 +121,7 @@ function! atplib#compiler#GetSyncData(line, col, file)
  	endif
 	" Note: synctex view -i line:col:tex_file -o output_file
 	" tex_file must be full path.
-	let synctex_cmd="synctex view -i ".a:line.":".a:col.":'".expand("%:p")."' -o '".expand(b:atp_OutDir)."/".fnamemodify(a:file,":r").".pdf'"
+	let synctex_cmd="synctex view -i ".a:line.":".a:col.":'".expand("%:p")."' -o '".atplib#joinpath(expand(b:atp_OutDir), fnamemodify(a:file,":r").".pdf'")
 
 	" SyncTex is fragile for the file name: if it is file name or full path, it
 	" must agree literally with what is written in .synctex.gz file
@@ -574,8 +572,8 @@ endfunction
 " Function Arguments:
 function! atplib#compiler#MakeLatex(bang, mode, start)
 
-    if fnamemodify(&l:errorfile, ":p") != expand(b:atp_OutDir)."/".fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
-	exe "setl errorfile=".expand(b:atp_OutDir)."/".fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
+    if fnamemodify(&l:errorfile, ":p") != atplib#joinpath(expand(b:atp_OutDir),fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
+	exe "setl errorfile=".atplib#joinpath(expand(b:atp_OutDir),fnamemodify(b:atp_MainFile, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
     endif
 
     if a:mode =~# '^s\%[ilent]$'
@@ -654,8 +652,8 @@ endfunction
 function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, filename, bang, ...)
     " a:1	= b:atp_XpdfServer (default value)
 
-    if fnamemodify(&l:errorfile, ":p") != expand(b:atp_OutDir)."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
-	exe "setl errorfile=".fnameescape(expand(b:atp_OutDir)."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
+    if fnamemodify(&l:errorfile, ":p") != atplib#joinpath(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
+	exe "setl errorfile=".atplib#joinpath(fnameescape(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
     endif
 
     " Kill comiple.py scripts if there are too many of them.
@@ -902,8 +900,8 @@ endfunction
 function! atplib#compiler#Compiler(bibtex, start, runs, verbose, command, filename, bang, ...)
 	" a:1	= b:atp_XpdfServer (default value)
 	let XpdfServer = ( a:0 >= 1 ? a:1 : b:atp_XpdfServer )
-	if fnamemodify(&l:errorfile, ":p") != expand(b:atp_OutDir)."/".fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"
-	    exe "setl errorfile=".fnameescape(expand(b:atp_OutDir)."/".fnamemodify(a:filenamt, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
+	if fnamemodify(&l:errorfile, ":p") != atplib#joinpath(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
+	    exe "setl errorfile=".atplib#joinpath(fnameescape(expand(b:atp_OutDir),fnamemodify(a:filenamt, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
 	endif
     
 	" Set biber setting on the fly
@@ -926,7 +924,6 @@ function! atplib#compiler#Compiler(bibtex, start, runs, verbose, command, filena
 	if has('clientserver') && !empty(v:servername) && g:atp_callback && a:verbose != 'verbose'
 	    let b:atp_running+=1
 	endif
-	call atplib#outdir()
     	" IF b:atp_TexCompiler is not compatible with the viewer
 	" ToDo: (move this in a better place). (luatex can produce both pdf and dvi
 	" files according to options so this is not the right approach.) 
@@ -980,22 +977,22 @@ function! atplib#compiler#Compiler(bibtex, start, runs, verbose, command, filena
 	endif
 
 	" finally, set the output file names. 
-	let outfile 	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ext
-	let outaux  	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ".aux"
-	let outbbl  	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ".bbl"
+	let outfile 	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ext)
+	let outaux  	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ".aux")
+	let outbbl  	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ".bbl")
 	let tmpaux  	= fnamemodify(tmpfile, ":r") . ".aux"
 	let tmpbbl  	= fnamemodify(tmpfile, ":r") . ".bbl"
 	let tmptex  	= fnamemodify(tmpfile, ":r") . ".tex"
-	let outlog  	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ".log"
-	let syncgzfile 	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ".synctex.gz"
-	let syncfile 	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . ".synctex"
+	let outlog  	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ".log")
+	let syncgzfile 	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ".synctex.gz")
+	let syncfile 	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . ".synctex")
 
 "	COPY IMPORTANT FILES TO TEMP DIRECTORY WITH CORRECT NAME 
 "	except log and aux files.
 	let list	= copy(g:atp_keep)
 	call filter(list, 'v:val != "log"')
 	for i in list
-	    let ftc	= expand(b:atp_OutDir) . fnamemodify(basename,":t:r") . "." . i
+	    let ftc	= atplib#joinpath(expand(b:atp_OutDir), fnamemodify(basename,":t:r") . "." . i)
 	    if filereadable(ftc)
 		call atplib#compiler#copy(ftc,tmpfile . "." . i)
 	    endif
@@ -2544,7 +2541,7 @@ function! atplib#compiler#ShowErrors(bang,...)
 	if !exists("errorfile")
 	    let errorfile = &l:errorfile
 	endif
-	let &l:errorfile = expand(b:atp_OutDir) . "/" . expand("%:t:r")."._log"
+	let &l:errorfile = atplib#joinpath(expand(b:atp_OutDir), expand("%:t:r")."._log")
     else
 	if exists("errorfile")
 	    let &l:errorfile = errorfile

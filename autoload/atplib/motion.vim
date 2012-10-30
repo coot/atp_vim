@@ -1299,7 +1299,7 @@ function! atplib#motion#LatexTags(bang,...)
 
     let cmd=g:atp_Python." ".shellescape(latextags).
 		\ " --files ".shellescape(files).
-		\ " --auxfile ".shellescape(expand(b:atp_OutDir)."/".fnamemodify(b:atp_MainFile, ":t:r").".aux").
+		\ " --auxfile ".shellescape(atplib#joinpath(expand(b:atp_OutDir), fnamemodify(b:atp_MainFile, ":t:r").".aux")).
 		\ " --dir ".shellescape(dir).
 		\ bib . cite . silent .
 		\ hyperref_cmd . servername . progname . bibtags . " &"
