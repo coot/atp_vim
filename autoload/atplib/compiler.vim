@@ -653,7 +653,7 @@ function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, 
     " a:1	= b:atp_XpdfServer (default value)
 
     if fnamemodify(&l:errorfile, ":p") != atplib#joinpath(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
-	exe "setl errorfile=".atplib#joinpath(fnameescape(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
+	exe "setl errorfile=".fnameescape(atplib#joinpath(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
     endif
 
     " Kill comiple.py scripts if there are too many of them.
