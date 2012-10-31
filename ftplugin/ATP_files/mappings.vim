@@ -169,9 +169,9 @@ if !hasmapto("<Plug>ParagraphNormalMotion")
     nmap <buffer> <silent> }	<Plug>ParagraphNormalMotionForward
     nmap <buffer> <silent> {	<Plug>ParagraphNormalMotionBackward
 endif
-nnoremap <buffer> <silent> v :call atplib#motion#StartVisualMode('v')<CR>
-nnoremap <buffer> <silent> V :call atplib#motion#StartVisualMode('V')<CR>
-nnoremap <buffer> <silent> <C-v> :call atplib#motion#StartVisualMode('cv')<CR>
+nnoremap <buffer> <silent> v :<c-u>call atplib#motion#StartVisualMode('v', v:count)<CR>
+nnoremap <buffer> <silent> V :<c-u>call atplib#motion#StartVisualMode('V', v:count)<CR>
+nnoremap <buffer> <silent> <C-v> :<c-u>call atplib#motion#StartVisualMode('cv', v:count)<CR>
 if !hasmapto("<Plug>ParagraphVisualMotion")
     vmap <buffer> <silent> } 	<Plug>ParagraphVisualMotionForward
     vmap <buffer> <silent> { 	<Plug>ParagraphVisualMotionBackward

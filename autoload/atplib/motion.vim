@@ -2288,14 +2288,15 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 endfunction
 
 " atplib#motion#StartVisualMode {{{1
-function! atplib#motion#StartVisualMode(mode)
+function! atplib#motion#StartVisualMode(mode, count)
     let g:atp_visualstartpos = getpos(".")
+    let l:count = ( a:count ? a:count : "" )
     if a:mode ==# 'v'
-	normal! v
+	exe "normal! ".l:count."v"
     elseif a:mode ==# 'V'
-	normal! V
+	exe "normal! ".l:count."V"
     elseif a:mode ==# 'cv'
-	exe "normal! \<c-v>"
+	exe "normal! ".l:count."\<c-v>"
     endif
 endfunction
 " atplib#motion#ParagraphVisualMotion {{{1
