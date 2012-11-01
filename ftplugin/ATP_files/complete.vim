@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Oct 18, 2012 at 11:24:24  +0100
+" Last Change: Thu Nov 01, 2012 at 12:05:02  +0000
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -558,7 +558,7 @@ option_pat = re.compile('\\\\(?:KOMA@|X)?Declare(?:Void|Local|(?:Bi)?Bool(?:ean)
 # /usr/local/texlive/2011/texmf-dist/tex/latex/koma-script/scrbook.cls
 
 # Pattern to find command name without the leading '\':
-command_pat = re.compile('(?:^\s*\\\\e\?def|\\\\(?:newcommand|Declare(?:Document|Uni|(?:Multi)?Cite|Page|Url|Robust|Text(?:Font|Composite)?|OldFont|)Command(?:Default)?\*?))\s*(?:{\\\\([^}]*)|\\\\([^#\[{]*))', re.MULTILINE)
+command_pat = re.compile(r'(?:^\s*\\e?def|\\(?:newcommand|Declare(?:Document|Uni|(?:Multi)?Cite|Page|Url|Robust|Text(?:Font|Composite)?|OldFont|)Command(?:Default)?\*?))\s*(?:{\\([^}]*)|\\([^#\[{]*))', re.MULTILINE)
 # only accept \def and \edef statements at the begining of a line. This excludes internal variables (inside groups: {...}).
 
 # How to work with this :
@@ -612,9 +612,8 @@ def ScanPackage(package, o=True, c=True):
     # check the variable: @classoptionslist
     if package_file != '':
         vim.command("let path='%s'" % str(package_file))
-        package_fo = open(package_file, 'r')
-        package_f  = package_fo.read()
-        package_fo.close()
+        with open(package_file, 'r') as fo:
+	    package_f  = fo.read()
         if o:
             # We can cut the package_f variable at \ProcessOptions:
             o_match = re.match('((?:.|\n)*)\\\\ProcessOptions', package_f)
@@ -633,12 +632,12 @@ def ScanPackage(package, o=True, c=True):
             matches = re.findall(command_pat, package_f)
             for match in matches:
                 for m in match:
-                    if not re.search('@', m) and not re.search('\\\\', m) and \
-			not re.match('Declare\w*(?:Command|Option)', m) and m != '':
+                    if (not '@' in m and not '\\' in m and
+			not re.match('Declare\w*(?:Command|Option)', m) and m != ''):
                         commands.append(re.match('(\S*)', m).group(1))
     return [options, remove_duplicates(commands)]
 
-require_package_pat = re.compile('\\\\RequirePackage\s*{([^}]*)}')
+require_package_pat = re.compile(r'\\RequirePackage\s*{([^}]*)}')
 def RequiredPackage(package):
     #scan package for input files
     package_file = Kpsewhich(package)
