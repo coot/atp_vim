@@ -770,7 +770,7 @@ if !hasmapto(" vap<CR>", "o")
 endif
 " FORMATING: {{{1
 if !hasmapto("<Plug>FormatLines", "n")
-    nmap <silent> <buffer> gW		<Plug>FormatLines
+    nmap <buffer> gW		<Plug>FormatLines
 endif
 " SELECT SYNTAX: {{{1
 if !hasmapto("<Plug>SelectOuterSyntax", "v")
