@@ -498,7 +498,11 @@ function! s:SelectCurrentEnv(seltype)
 		if env =~ '^\'
 			call search('\\.\_\s*\S', 'eW')
 		else
-			call search('}\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\_\s*\S', 'eW')
+		    if lnum2 <= lnum+2
+			call search('}\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\_s*\S', 'eW')
+		    else
+			call search('}\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\(\s*\n\)\?.', 'eW')
+		    endif
 		endif
 	endif
 	if visualmode() ==# 'V'
