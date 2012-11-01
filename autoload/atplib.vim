@@ -920,8 +920,10 @@ endfunction
 function! atplib#TexKeyword() " {{{
     let isk = &isk
     let &isk = g:atp_iskeyword
-    let word = expand("<cword>")
+    let line = getline(line("."))
+    let beg = matchstr(line[:(col(".")-1)], '\\\?\k*$')
+    let end = matchstr(line[col("."):], '^\k*')
     let &isk = isk
-    return split(word, '\ze\')[0]
+    return beg.end
 endfunction " }}}
 " vim:fdm=marker:ff=unix:noet:ts=8:sw=4:fdc=1
