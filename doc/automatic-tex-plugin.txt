@@ -233,7 +233,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  and use the command |atp-:Status| (or |atp-:ATPStatus|).
 
  |atp-:Texl| and the \\l map supports count.
- There are two maps to |atp-:SyncTexL|: \\f (like \\l) and \F.
+ There are two maps to |atp-:SyncTexl|: \\f (like \\l) and \F.
 
  completion: if you use subfiles packages the completion for \ref{} and
  \eqref{} also looks inside the subfile .aux file.
@@ -322,7 +322,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  Support for subfiles.sty package:~
  Compilation of parts of a project (using subfiles package).
- |atp-:Texl|, |atp-:ViewL|, |atp-:SyncTexL|, see also |b:atp_autex| (when set
+ |atp-:Texl|, |atp-:Viewl|, |atp-:SyncTexl|, see also |b:atp_autex| (when set
  to 2 automatic compilations of subfiles is turned on).
 
  |atp-:S| command has additional flag 'x', when used the
@@ -1147,7 +1147,7 @@ map [count]<LocalLeader>k
         command.
 
 	Note: the advantage of using subfiles package is that you
-	can use |atp-:SyncTexL| command for forward searching in the local
+	can use |atp-:SyncTexl| command for forward searching in the local
 	output.
 
 
@@ -1431,9 +1431,9 @@ map <LocalLeader>v, map <F3>, imap <F3>
 							*g:atp_OpenAndSyncSleepTime*
 let |g:atp_OpenAndSyncSleepTime|="500m"
 	Give 500 milliseconds for the viewer to read the file, before
-	|atp-:View|! and |atp-:ViewL|! commands will do a forward search.
+	|atp-:View|! and |atp-:Viewl|! commands will do a forward search.
 
-:ViewL[!]						*atp-:ViewL*
+:ViewL[!]						*atp-:Viewl*
 map <LocalLeader>V, map <S-F3>, imap <S-F3>  
 	With this command you can view the subfile comiled by |atp-:Texl|
 	command (or with |b:atp_autex|=2). "L" comes from "local".
@@ -1465,13 +1465,13 @@ map <LocalLeader>f, map <S-LeftMouse>
 
 	Read |atp-:SyncTex_with_Okular| if you use Okular.
 
-:SyncTexL[!]						*atp-:SyncTexL* *atp-\\f* *atp-\F*
+:SyncTexL[!]						*atp-:SyncTexl* *atp-\\f* *atp-\F*
 map <LocalLeader>F
 map <LocalLeader><LocalLeader>f
 	Forward search from the subfile to its output (as compiled with
 	|atp-:Texl| or |b:atp_autex|=2).
 
-	With bang |atp-:SyncTexL| will not check if the viewer is running.
+	With bang |atp-:SyncTexl| will not check if the viewer is running.
 
 
 
@@ -3969,8 +3969,8 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 <	This variables stores the name of Xpdf server which will host compiled 
 	subfiles.	
 	
-	Used by the command |atp-:ViewL| (map <LocalLeader>V, map <S-F3>, 
-	imap <S-F3>) and also |atp-:SyncTexL| (map <LocalLeader>F).
+	Used by the command |atp-:Viewl| (map <LocalLeader>V, map <S-F3>, 
+	imap <S-F3>) and also |atp-:SyncTexl| (map <LocalLeader>F).
 
 	You do not need escape spaces in the name (shellescape() function is
 	used before it is send to the shell).
@@ -4154,8 +4154,8 @@ WRITING PROJECTS					*atp-ProjectFiles*
 	files /but |:ijump| is much faster/. 
 
 	If you write a project you might want to use subfiles package. Then
-	you can compile with |atp-:TexL|, view with |atp-:ViewL| and forward
-	search with |atp-:SyncTexL|. Furthermore, you can still use completion
+	you can compile with |atp-:Texl|, view with |atp-:Viewl| and forward
+	search with |atp-:SyncTexl|. Furthermore, you can still use completion
 	of labels by numbers if you add to the preambule of the subfile the
 	following command (requires ifthen package): >
 	    \ifthenelse{\value{chapter}=0}{\setcounter{chapter}{CHAPTER_NR}}{}
