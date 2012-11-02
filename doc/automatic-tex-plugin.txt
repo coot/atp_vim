@@ -4808,6 +4808,8 @@ imap ]R   ]rig 		\begin{flushright}<Cr>\end{flushright}<Esc>O
 imap ]T   ]tik 		\begin{center}<CR>\begin{tikzpicture}<CR><CR>\end{tikzpicture}<CR>\end{center}<Up><Up>
 imap ]f   ]fra 		\begin{frame}<Cr>\end{frame}<Esc>O
 
+imap ]u	  ]tab		\begin{tabular}{}<CR>\end{tabular}
+
 imap      ]let		\begin{letter}{<cursor>}
 			    \opening{g:atp_letter_opening} 
 			    \closing{g:atp_letter_closing}

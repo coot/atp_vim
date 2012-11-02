@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Oct 29, 2012 at 16:38:52  +0000
+" Last Change: Thu Nov 01, 2012 at 21:03:05  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -663,7 +663,7 @@ if !exists("g:atp_imap_enumerate")
 endif
 if !exists("g:atp_imap_tabular")
     if g:atp_imap_ShortEnvIMaps
-	let g:atp_imap_tabular="T"
+	let g:atp_imap_tabular="u"
     else
 	let g:atp_imap_tabular="tab"
     endif
