@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Nov 02, 2012 at 00:02:12  +0000
+" Last Change: Fri Nov 02, 2012 at 21:11:41  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1440,6 +1440,9 @@ EOF
 	endif
     else
 	" Reload all functions and variables, 
+	if exists("b:did_ftplugin")
+	    unlet b:did_ftplugin
+	endif
 	let tex_atp_file = split(globpath(&rtp, 'ftplugin/tex_atp.vim'), "\n")[0]
 	execute "source " . tex_atp_file
 
