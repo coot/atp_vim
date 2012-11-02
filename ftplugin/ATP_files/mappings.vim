@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Oct 29, 2012 at 13:16:27  +0000
+" Last Change: Fri Nov 02, 2012 at 18:23:59  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -30,7 +30,7 @@ endif
 " REPLACE: {{{1 
 " Replace map (is not working -> use :Repace command)
 " if !g:atp_VimCompatible && !hasmapto("<Plug>Replace")
-"     nnoremap <buffer> <silent> r <Plug>Replace
+"     nmap <buffer> <silent> r <Plug>Replace
 " endif
 nn <buffer> <silent> r :<C-U>call <SID>Replace("<SID>")<CR>
 nn <buffer> <silent> <SID>InputRestore  :call inputrestore()<CR>
@@ -818,9 +818,10 @@ if !empty(g:atp_MapSelectComment)
 if !hasmapto("v<Plug>vSelectComment", "n")
     exe "nmap <silent> <buffer> ".g:atp_MapSelectComment." v<Plug>vSelectComment"
 endif
-if !hasmapto(g:atp_MapSelectComment, "o")
-    exe "omap <silent> <buffer>".g:atp_MapSelectComment." :normal ".g:atp_MapSelectComment."<CR>"
-endif
+" if !hasmapto(g:atp_MapSelectComment, "o")
+    " It is turned off since it interferes with == operator
+    " exe "omap <silent> <buffer>".g:atp_MapSelectComment." :normal ".g:atp_MapSelectComment."<CR>"
+" endif
 endif
 " SELECT FRAME: (beamer) {{{1
 " This is done by a function, because it has to be run through an autocommand
@@ -1144,12 +1145,12 @@ endif
     " Make Greek Letters:
     augroup ATP_MathIMaps_GreekLetters
 	au!
-" 	au CursorMovedI	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_greek_letters, 'CursorMovedI', [], 1)
+	" au CursorMovedI	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_greek_letters, 'CursorMovedI', [], 1)
 	au CursorHoldI 	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_greek_letters, 'CursorHoldI')
 	au InsertEnter	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_greek_letters, 'InsertEnter') 
 	" Make imaps visible with :imap /this will not work with i_CTRL-C/
-" 	au InsertLeave	*.tex 	:call atplib#MakeMaps(g:atp_imap_greek_letters, 'InsertLeave')
-	au BufEnter	*.tex 	:call atplib#MakeMaps(g:atp_imap_greek_letters, 'BufEnter')
+	" au InsertLeave	*.tex 	:call atplib#MakeMaps(g:atp_imap_greek_letters, 'InsertLeave')
+	" au BufEnter	*.tex 	:call atplib#MakeMaps(g:atp_imap_greek_letters, 'BufEnter')
     augroup END
 " MISCELLANEOUS MATHEMATICAL MAPS: {{{1
 if !exists("g:atp_imap_math_misc") || g:atp_reload_variables
@@ -1398,8 +1399,8 @@ augroup ATP_MathIMaps
     au CursorHoldI 	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_math, 'CursorHoldI')
     au InsertEnter	*.tex 	:call atplib#ToggleIMaps(g:atp_imap_math, 'InsertEnter')
     " Make imaps visible with :imap  /this will not work with i_CTRL-C/
-"     au InsertLeave	*.tex 	:call atplib#MakeMaps(g:atp_imap_math, 'InsertLeave')
-    au BufEnter		*.tex 	:call atplib#MakeMaps(g:atp_imap_math, 'BufEnter')
+    " au InsertLeave	*.tex 	:call atplib#MakeMaps(g:atp_imap_math, 'InsertLeave')
+    " au BufEnter		*.tex 	:call atplib#MakeMaps(g:atp_imap_math, 'BufEnter')
 augroup END
 
 augroup ATP_IMaps_CursorMovedI
