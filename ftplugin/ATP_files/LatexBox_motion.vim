@@ -499,11 +499,16 @@ function! s:SelectCurrentEnv(seltype)
 			call search('\\.\_\s*\S', 'eW')
 		else
 		    if lnum2 <= lnum+2
-			call search('}\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\_s*\S', 'eW')
+			call search('}\%(\s*{[^}]*}\)\?\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\_s*\S', 'eW')
 		    else
-			call search('}\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\(\s*\n\)\?.', 'eW')
+			call search('}\%(\s*{[^}]*}\)\?\%(\s*\\\%(label\|index\|hypertartet\s*{[^}]*}\)\s*{[^}]*}\)\{0,3}\%(\_\s*\[\_[^]]*\]\)\?\(\s*\n\)\?.', 'eW')
 		    endif
 		endif
+	else
+	    " This might depend on the vim settings.
+	    if getline(lnum)[:(cnum-2)] =~ '^\s*$'
+		call cursor(lnum, 1)
+	    endif
 	endif
 	if visualmode() ==# 'V'
 		normal! V
