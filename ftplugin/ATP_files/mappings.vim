@@ -782,7 +782,6 @@ endif
 " ENVIRONMENT MOVES: {{{1
 " From vim.vim plugin (by Bram Mooleaner)
 " Move around functions.
-exe "nnoremap <silent> <buffer> <Plug>BegPrevEnvironment m`:call search('".s:bbackslash."begin".s:backslash."s*{".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash.s:bbackslash."[".s:bbackslash."|".s:backslash.s:bbackslash."@<!".s:backslash."$".s:backslash."$', 'bW')<CR>"
 if !hasmapto("<Plug>GotoPreviousEnvironment", "n")
     nmap <silent> <buffer> [[ <Plug>GotoPreviousEnvironment
 endif
