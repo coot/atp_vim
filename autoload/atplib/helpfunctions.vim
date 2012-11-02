@@ -12,36 +12,58 @@ function! atplib#helpfunctions#HelpMathIMaps()
 	return ''
     endif
 
-    let g:help_mathimaps = ''
-	\."\n MATH IMAPS"
-	\."\n <maplocalleader> has value g:atp_imap_leader_1"
-	\."\n ".g:atp_imap_leader_1."a \\alpha            ".g:atp_imap_leader_1."b \\beta"
-	\."\n ".g:atp_imap_leader_1."g \\gamma            ".g:atp_imap_leader_1."d \\delta"
-	\."\n ".g:atp_imap_leader_1."e \\epsilon          ".g:atp_imap_leader_1."ve \\varepsilon"
-	\."\n ".g:atp_imap_leader_1."z \\zeta             ".g:atp_imap_leader_1."h \\eta"
-	\."\n ".g:atp_imap_leader_1."o \\theta            ".g:atp_imap_leader_1."vo \\vartheta"
-	\."\n ".g:atp_imap_leader_1."i \\iota             ".g:atp_imap_leader_1."k \\kappa"
-	\."\n ".g:atp_imap_leader_1."l \\lambda           ".g:atp_imap_leader_1."m \\mu"
-	\."\n ".g:atp_imap_leader_1."n \\nu               ".g:atp_imap_leader_1."x \\xi"
-	\."\n ".g:atp_imap_leader_1."p \\pi               ".g:atp_imap_leader_1."r \\rho"
-	\."\n ".g:atp_imap_leader_1."s \\sigma            ".g:atp_imap_leader_1."vs \\varsigma" 
-	\."\n ".g:atp_imap_leader_1."t \\tau              ".g:atp_imap_leader_1."u \\upsilon"
-	\."\n ".g:atp_imap_leader_1."f \\phi              ".g:atp_imap_leader_1."c \\chi"
-	\."\n ".g:atp_imap_leader_1."y \\psi              ".g:atp_imap_leader_1."w \\omega"
-	\."\n"
-	\."\n ".g:atp_imap_leader_1."G \\Gamma            ".g:atp_imap_leader_1."D \\Delta"
-	\."\n ".g:atp_imap_leader_1."Z \\mathrm{Z}        ".g:atp_imap_leader_1."O \\Theta"
-	\."\n ".g:atp_imap_leader_1."L \\Lambda           ".g:atp_imap_leader_1."M \\Mu"
-	\."\n ".g:atp_imap_leader_1."N \\Nu               ".g:atp_imap_leader_1."P \\Pi"
-	\."\n ".g:atp_imap_leader_1."S \\Sigma            ".g:atp_imap_leader_1."U \\Upsilon"
-	\."\n ".g:atp_imap_leader_1."F \\Phi              ".g:atp_imap_leader_1."Y \\Psi"
-	\."\n ".g:atp_imap_leader_1."W \\Omega"
-	\."\n"
-	\."\n ".g:atp_imap_leader_1."+ \\bigcup           ".g:atp_imap_leader_1."- \\setminus" 
-	\."\n ".g:atp_infty_leader."8 \\infty            ".g:atp_imap_leader_1."& \\wedge"
-	\."\n ".                        "^^ ^{}               ".                        "__ _{}"
-	\."\n ".g:atp_imap_leader_3."m \\(\\)              ".g:atp_imap_leader_3."M \\[\\]           <maplocalleader> has value g:atp_imap_leader_3" 
-    return g:help_mathimaps
+    echohl Title
+    echo "MATH IMAPS"
+    echohl WarningMsg
+    echo "<maplocalleader> has value g:atp_imap_leader_1"
+    echohl Normal
+    echohl WarningMsg|echo g:atp_imap_leader_1."a"|echohl Normal|echon " \\alpha            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."b"| echohl Normal|echon " \\beta"
+    " echo g:help_mathimaps
+    echohl WarningMsg|echo g:atp_imap_leader_1."g"|echohl Normal|echon " \\gamma            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."d"| echohl Normal|echon " \\delta"
+    echohl WarningMsg|echo g:atp_imap_leader_1."e"|echohl Normal|echon " \\epsilon          "
+    echohl WarningMsg|echon g:atp_imap_leader_1."v"| echohl Normal|echon " \\varepsilon"
+    echohl WarningMsg|echo g:atp_imap_leader_1."z"|echohl Normal|echon " \\zeta             "
+    echohl WarningMsg|echon g:atp_imap_leader_1."h"| echohl Normal|echon " \\eta"
+    echohl WarningMsg|echo g:atp_imap_leader_1."o"|echohl Normal|echon " \\theta            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."v"| echohl Normal|echon " \\vartheta"
+    echohl WarningMsg|echo g:atp_imap_leader_1."i"|echohl Normal|echon " \\iota             "
+    echohl WarningMsg|echon g:atp_imap_leader_1."k"| echohl Normal|echon " \\kappa"
+    echohl WarningMsg|echo g:atp_imap_leader_1."l"|echohl Normal|echon " \\lambda           "
+    echohl WarningMsg|echon g:atp_imap_leader_1."m"| echohl Normal|echon " \\mu"
+    echohl WarningMsg|echo g:atp_imap_leader_1."n"|echohl Normal|echon " \\nu               "
+    echohl WarningMsg|echon g:atp_imap_leader_1."x"| echohl Normal|echon " \\xi"
+    echohl WarningMsg|echo g:atp_imap_leader_1."p"|echohl Normal|echon " \\pi               "
+    echohl WarningMsg|echon g:atp_imap_leader_1."r"| echohl Normal|echon " \\rho"
+    echohl WarningMsg|echo g:atp_imap_leader_1."s"|echohl Normal|echon " \\sigma            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."v"| echohl Normal|echon " \\varsigma"
+    echohl WarningMsg|echo g:atp_imap_leader_1."t"|echohl Normal|echon " \\tau              "
+    echohl WarningMsg|echon g:atp_imap_leader_1."u"| echohl Normal|echon " \\upsilon"
+    echohl WarningMsg|echo g:atp_imap_leader_1."f"|echohl Normal|echon " \\phi              "
+    echohl WarningMsg|echon g:atp_imap_leader_1."c"| echohl Normal|echon " \\chi"
+    echohl WarningMsg|echo g:atp_imap_leader_1."y"|echohl Normal|echon " \\psi              "
+    echohl WarningMsg|echon g:atp_imap_leader_1."w"| echohl Normal|echon " \\omega"
+    echohl WarningMsg|echo g:atp_imap_leader_1."G"|echohl Normal|echon " \\Gamma            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."D"| echohl Normal|echon " \\Delta"
+    echohl WarningMsg|echo g:atp_imap_leader_1."Z"|echohl Normal|echon " \\mathrm{Z}        "
+    echohl WarningMsg|echon g:atp_imap_leader_1."O"| echohl Normal|echon " \\Theta"
+    echohl WarningMsg|echo g:atp_imap_leader_1."L"|echohl Normal|echon " \\Lambda           "
+    echohl WarningMsg|echon g:atp_imap_leader_1."M"| echohl Normal|echon " \\Mu"
+    echohl WarningMsg|echo g:atp_imap_leader_1."N"|echohl Normal|echon " \\Nu               "
+    echohl WarningMsg|echon g:atp_imap_leader_1."P"| echohl Normal|echon " \\Pi"
+    echohl WarningMsg|echo g:atp_imap_leader_1."S"|echohl Normal|echon " \\Sigma            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."U"| echohl Normal|echon " \\Upsilon"
+    echohl WarningMsg|echo g:atp_imap_leader_1."F"|echohl Normal|echon " \\Phi              "
+    echohl WarningMsg|echon g:atp_imap_leader_1."Y"| echohl Normal|echon " \\Psi"
+    echohl WarningMsg|echo g:atp_imap_leader_1."w"|echohl Normal|echon " \\Omega            "
+
+    echohl WarningMsg|echo g:atp_imap_leader_1."+"|echohl Normal|echon " \\bigcup           "
+    echohl WarningMsg|echon g:atp_imap_leader_1."-"| echohl Normal|echon " \\setminus"
+    echohl WarningMsg|echo g:atp_imap_leader_1."8"|echohl Normal|echon " \\infty            "
+    echohl WarningMsg|echon g:atp_imap_leader_1."&"| echohl Normal|echon " \\wedge"
+    echohl WarningMsg|echo g:atp_imap_leader_1."m"|echohl Normal|echon " \\(\\)              "
+    echohl WarningMsg|echon g:atp_imap_leader_1."M"| echohl Normal|echon " \\[\\]           <maplocalleader> has value g:atp_imap_leader_3"
 endfunction
 silent call atplib#helpfunctions#HelpMathIMaps()
 
@@ -53,10 +75,8 @@ function! atplib#helpfunctions#HelpEnvIMaps()
 	return ''
     endif
 
-    let g:help_envimaps = ''
-		\."\n ENVIRONMENT IMAPS" 
-		\."\n <maplocalleader> has value g:atp_imap_leader_3"
-		\."\n ".(g:atp_imap_begin != "" ? g:atp_imap_leader_3.g:atp_imap_begin." \\begin{}             " : "" ).(g:atp_imap_end != "" ? g:atp_imap_leader_3.g:atp_imap_end." \\end{}" : "")
+    let help_envimaps = ''
+		\." ".(g:atp_imap_begin != "" ? g:atp_imap_leader_3.g:atp_imap_begin." \\begin{}             " : "" ).(g:atp_imap_end != "" ? g:atp_imap_leader_3.g:atp_imap_end." \\end{}" : "")
 		\."\n ".(g:atp_imap_theorem != "" ? g:atp_imap_leader_3.g:atp_imap_theorem." theorem              " : "" ).(g:atp_imap_definition != "" ? g:atp_imap_leader_3.g:atp_imap_definition." definition" : "")
 		\."\n ".(g:atp_imap_proposition != "" ? g:atp_imap_leader_3.g:atp_imap_proposition." proposition          " : "").(g:atp_imap_lemma != "" ? g:atp_imap_leader_3.g:atp_imap_lemma." lemma" : "")
 		\."\n ".(g:atp_imap_remark != "" ? g:atp_imap_leader_3.g:atp_imap_remark." remark               " : "").(g:atp_imap_corollary != "" ? g:atp_imap_leader_3.g:atp_imap_corollary." corollary" : "")
@@ -71,10 +91,15 @@ function! atplib#helpfunctions#HelpEnvIMaps()
 		\."\n ".(g:atp_imap_flushleft != "" ? g:atp_imap_leader_3.g:atp_imap_flushleft." flushleft            " : "").(g:atp_imap_flushright != "" ? g:atp_imap_leader_3.g:atp_imap_flushright." flushright" : "")
 		\."\n ".(g:atp_imap_center != "" ? g:atp_imap_leader_3.g:atp_imap_center." center" : "")
 		\."\n"
-		\.(g:atp_imap_tikzpicture != "" ? "\n ".g:atp_imap_leader_3.g:atp_imap_tikzpicture." tikzpicture" : "")
+		\.(g:atp_imap_tikzpicture != "" ? "\n ".g:atp_imap_leader_3.g:atp_imap_tikzpicture." tikzpicture          " : "").(g:atp_imap_tabular != "" ? g:atp_imap_leader_3.g:atp_imap_tabular." tabular" : "")
 		\."\n"
 		\."\n ".(g:atp_imap_frame != "" ? g:atp_imap_leader_3.g:atp_imap_frame." frame                " : "").(g:atp_imap_letter != "" ?  g:atp_imap_leader_3.g:atp_imap_letter." letter" : "" )
-    return g:help_envimaps
+    echohl Title
+    echo "ENVIRONMENT IMAPS" 
+    echohl WarningMsg
+    echo "<maplocalleader> has value g:atp_imap_leader_3"
+    echohl Normal
+    echo help_envimaps
 endfunction
 
 " {{{1 Help VMaps
@@ -90,10 +115,8 @@ function! atplib#helpfunctions#HelpVMaps()
     let l:atp_vmap_bracket_leader 	= ( exists("maplocalleader") && g:atp_vmap_bracket_leader 	== "<LocalLeader>" ? maplocalleader : g:atp_vmap_bracket_leader )
     let l:atp_vmap_big_bracket_leader 	= ( exists("maplocalleader") && g:atp_vmap_big_bracket_leader 	=~ "<LocalLeader>" ? substitute(g:atp_vmap_big_bracket_leader, '<LocalLeader>', maplocalleader, '')  : g:atp_vmap_big_bracket_leader )
 
-    let g:help_vmaps = ''
-	    \."\n <maplocalleader> has value g:atp_vmap_text_font_leader"
-	    \."\n KEYMAP            TEXT MODE            MATH MODE"
-	    \."\n ".l:atp_vmap_text_font_leader."rm               \\textrm{}            \\mathrm{}"
+    let help_vmaps_1 =
+	    \ " ".l:atp_vmap_text_font_leader."rm               \\textrm{}            \\mathrm{}"
 	    \."\n ".l:atp_vmap_text_font_leader."em               \\emph{}              \\mathit{}"
 	    \."\n ".l:atp_vmap_text_font_leader."it               \\textit{}            \\mathit{}"
 	    \."\n ".l:atp_vmap_text_font_leader."sf               \\textsf{}            \\mathsf{}"
@@ -109,30 +132,46 @@ function! atplib#helpfunctions#HelpVMaps()
 	    \."\n ".l:atp_vmap_text_font_leader."ov               \\overline{}          \\overline{}"
 	    \."\n ".l:atp_vmap_text_font_leader."no               \\textnormal{}        \\mathnormal{}"
 	    \."\n ".l:atp_vmap_text_font_leader."cal                                   \\mathcal{}"
-	    \."\n "
-	    \."\n MODE INDEPENDENT VMAPS:"
-	    \."\n <maplocalleader> has value g:atp_vmap_environment_leader"
-	    \."\n ".l:atp_vmap_environment_leader."C		   wrap in center environment"
+    let help_vmaps_2 = 
+	    \ " ".l:atp_vmap_environment_leader."C		   wrap in center environment"
 	    \."\n ".l:atp_vmap_environment_leader."L		   wrap in flushleft environment"
 	    \."\n ".l:atp_vmap_environment_leader."R		   wrap in flushright environment"
 	    \."\n ".l:atp_vmap_environment_leader."E		   wrap in equation environment"
 	    \."\n ".l:atp_vmap_environment_leader."A		   wrap in align environment"
-	    \."\n "
-	    \."\n <maplocalleader> has value g:atp_vmap_bracket_leader"
-	    \."\n ".l:atp_vmap_bracket_leader."(                (:)            ".l:atp_vmap_bracket_leader.")           (:)" 
+    let help_vmaps_3 =
+	    \ " ".l:atp_vmap_bracket_leader."(                (:)            ".l:atp_vmap_bracket_leader.")           (:)" 
 	    \."\n ".l:atp_vmap_bracket_leader."[                [:]            ".l:atp_vmap_bracket_leader."]           [:]" 
 	    \."\n ".l:atp_vmap_bracket_leader."{                {:}            ".l:atp_vmap_bracket_leader."}           {:}" 
 	    \."\n ".l:atp_vmap_bracket_leader."\\{              \\{:\\}           ".l:atp_vmap_bracket_leader."\\}         \\{:\\}" 
-	    \."\n m                \\(:\\)           M           \\[:\\] "
-	    \."\n "
-	    \."\n <maplocalleader> has value g:atp_vmap_big_bracket_leader"
-	    \."\n ".l:atp_vmap_big_bracket_leader."(          \\left(:\\right)      ".l:atp_vmap_big_bracket_leader.")     \\left(:\\right)" 
+	    \."\n m ".repeat(" ",len(l:atp_vmap_bracket_leader))."              \\(:\\)           M ".repeat(" ",len(l:atp_vmap_bracket_leader))."         \\[:\\]"
+    let help_vmaps_4 =
+	    \ " ".l:atp_vmap_big_bracket_leader."(          \\left(:\\right)      ".l:atp_vmap_big_bracket_leader.")     \\left(:\\right)" 
 	    \."\n ".l:atp_vmap_big_bracket_leader."[          \\left[:\\right]      ".l:atp_vmap_big_bracket_leader."]     \\left[:\\right]" 
 	    \."\n ".l:atp_vmap_big_bracket_leader."{          \\left{:\\right}      ".l:atp_vmap_big_bracket_leader."}     \\left{:\\right}" 
 	    \."\n ".l:atp_vmap_big_bracket_leader."\\{        \\left\\{:\\right\\}     ".l:atp_vmap_big_bracket_leader."\\}   \\left\\{:\\right\\}" 
 	    \."\n "
-	    \."\n ".l:atp_vmap_text_font_leader."f                \\usefont{".g:atp_font_encoding."}{}{}{}\\selectfont" 
-    return g:help_vmaps 
+	    \."\n ".l:atp_vmap_text_font_leader."f ".repeat(" ",len(l:atp_vmap_big_bracket_leader))."        \\usefont{".g:atp_font_encoding."}{}{}{}\\selectfont" 
+
+    echohl WarningMsg
+    echo " <maplocalleader> has value g:atp_vmap_text_font_leader"
+    echohl Title
+    echo " KEYMAP            TEXT MODE            MATH MODE"
+    echohl Normal
+    echo help_vmaps_1
+    echohl Title
+    echo "MODE INDEPENDENT VMAPS:"
+    echohl WarningMsg
+    echo " <maplocalleader> has value g:atp_vmap_text_font_leader"
+    echohl Normal
+    echo help_vmaps_2
+    echohl WarningMsg
+    echo " <maplocalleader> has value g:atp_vmap_bracket_leader"
+    echohl Normal
+    echo help_vmaps_3
+    echohl WarningMsg
+    echo " <maplocalleader> has value g:atp_vmap_big_bracket_leader"
+    echohl Normal
+    echo help_vmaps_4
 endfunction
 " {{{1 Help IMaps
 " function! atplib#helpfunctions#HelpIMaps()

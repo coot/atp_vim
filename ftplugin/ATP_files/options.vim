@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Nov 01, 2012 at 21:03:05  +0000
+" Last Change: Fri Nov 02, 2012 at 09:26:24  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2796,9 +2796,9 @@ exe "setlocal path+=".substitute(g:texmf."/tex,".join(filter(split(globpath(b:at
 
 " Some Commands:
 " {{{
-command! -buffer HelpMathIMaps 	:echo atplib#helpfunctions#HelpMathIMaps()
-command! -buffer HelpEnvIMaps 	:echo atplib#helpfunctions#HelpEnvIMaps()
-command! -buffer HelpVMaps 	:echo atplib#helpfunctions#HelpVMaps()
+command! -buffer HelpMathIMaps 	:call atplib#helpfunctions#HelpMathIMaps()
+command! -buffer HelpEnvIMaps 	:call atplib#helpfunctions#HelpEnvIMaps()
+command! -buffer HelpVMaps 	:call atplib#helpfunctions#HelpVMaps()
 " }}}
 
 " Status Line:
