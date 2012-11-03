@@ -87,6 +87,7 @@ function! atplib#helpfunctions#HelpEnvIMaps()
 		\."\n ".(g:atp_imap_item != "" ? g:atp_imap_leader_3.g:atp_imap_item." \\item" : "")
 		\."\n"
 		\.(g:atp_imap_align != "" ? "\n ".g:atp_imap_leader_3.g:atp_imap_align." align                " : "").(g:atp_imap_equation != "" ? g:atp_imap_leader_3.g:atp_imap_equation." equation" : "")
+		\.(g:atp_imap_gather != "" ? "\n ".g:atp_imap_leader_3.g:atp_imap_gather." gather               " : "").(g:atp_imap_split != "" ? g:atp_imap_leader_3.g:atp_imap_split." split" : "")
 		\."\n"
 		\."\n ".(g:atp_imap_flushleft != "" ? g:atp_imap_leader_3.g:atp_imap_flushleft." flushleft            " : "").(g:atp_imap_flushright != "" ? g:atp_imap_leader_3.g:atp_imap_flushright." flushright" : "")
 		\."\n ".(g:atp_imap_center != "" ? g:atp_imap_leader_3.g:atp_imap_center." center" : "")
