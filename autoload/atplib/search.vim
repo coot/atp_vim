@@ -1941,9 +1941,45 @@ endfunction
 " atplib#search#DocumentClass {{{1
 function! atplib#search#DocumentClass(file)
     let file = readfile(a:file, 50)
+    let lnr = -1
+    let documentclass = ''
     for line in file
+	let lnr += 1
 	if line =~ '^[^%]*\\documentclass'
-	    return substitute(line,'.*\\documentclass\_s*\%(\[\%([^\]]\|\n\)*\]\)\?\_s*{\(.*\)}.*','\1','')
+	    let stream = matchstr(line, '^[^%]*\\documentclass\zs.*').join(file[(lnr+1):], "\n")
+	    let idx = -1
+	    while idx < len(stream)
+		let idx += 1
+		let chr = stream[idx]
+		if chr == '['
+		    " jump to ']'
+		    while idx < len(stream)
+			let idx += 1
+			let chr = stream[idx]
+			if chr == ']'
+			    break
+			endif
+		    endwhile
+		elseif chr == '%'
+		    while idx < len(stream)
+			let idx += 1
+			let chr = stream[idx]
+			if chr == "\n"
+			    break
+			endif
+		    endwhile
+		elseif chr == '{'
+		    while idx < len(stream)
+			let idx += 1
+			let chr = stream[idx]
+			if chr == '}'
+			    return matchstr(documentclass, '\s*\zs\S*')
+			else
+			    let documentclass .= chr
+			endif
+		    endwhile
+		endif
+	    endwhile
 	endif
     endfor
     return 0
