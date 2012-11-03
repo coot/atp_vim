@@ -116,16 +116,11 @@ function! atplib#common#SetErrorFile()
 	call atplib#common#SetProjectName()
     endif
 
-    let main_file	= atplib#FullPath(b:atp_MainFile)
+    let main_file = atplib#FullPath(b:atp_MainFile)
 
     " vim doesn't like escaped spaces in file names ( cg, filereadable(),
     " writefile(), readfile() - all acepts a non-escaped white spaces)
-    if has("win16") || has("win32") || has("win64") || has("win95")
-	let errorfile	= substitute(atplib#append(expand(b:atp_OutDir), '\') . fnamemodify(main_file,":t:r") . ".".(g:atp_ParseLog ? "_" : "")."log", '\\\s', ' ', 'g') 
-    else
-	let errorfile	= substitute(atplib#append(expand(b:atp_OutDir), '/') . fnamemodify(main_file,":t:r") . ".".(g:atp_ParseLog ? "_" : "")."log", '\\\s', ' ', 'g') 
-    endif
-    let &l:errorfile	= errorfile
+    let &l:errorfile = atplib#joinpath(expand(b:atp_OutDir), fnamemodify(main_file,":t:r") . ".".(g:atp_ParseLog ? "_" : "")."log")
     return &l:errorfile
 endfunction
 "}}}
