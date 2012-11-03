@@ -123,7 +123,6 @@ install:
 
 clean:		
 	rm ${PLUGIN}_[0-9.]*.*
-	rm msg
 
 test:
 	tar -tzf ${PLUGIN}${VERSION}.tar.gz
