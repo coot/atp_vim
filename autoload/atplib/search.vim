@@ -1940,28 +1940,12 @@ endfunction
 
 " atplib#search#DocumentClass {{{1
 function! atplib#search#DocumentClass(file)
-
-    let saved_loclist	= getloclist(0)
-    " Note: lvimgrep command loads the buffer (as unlisted one),
-    " but doesn't warn if there is a swap file (this is not the only place where
-    " files are loaded on startup).
-    try
-	silent execute '1lvimgrep /^[^%]*\\documentclass/j ' . fnameescape(a:file)
-    catch /E480:/
-	return 0
-    catch /E680:/
-	return 0
-    catch /E683:/
-	return 0
-    endtry
-    let line		= get(get(getloclist(0), 0, { 'text' : "no_document_class"}), 'text')
-    call setloclist(0, saved_loclist)
-
-
-    if line != 'no_document_class'
-	return substitute(l:line,'.*\\documentclass\s*\%(\[.*\]\)\?{\(.*\)}.*','\1','')
-    endif
- 
+    let file = readfile(a:file, 50)
+    for line in file
+	if line =~ '^[^%]*\\documentclass'
+	    return substitute(line,'.*\\documentclass\_s*\%(\[\%([^\]]\|\n\)*\]\)\?\_s*{\(.*\)}.*','\1','')
+	endif
+    endfor
     return 0
 endfunction
 " }}}1
