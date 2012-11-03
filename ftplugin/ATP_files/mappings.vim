@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Nov 03, 2012 at 09:59:27  +0000
+" Last Change: Sat Nov 03, 2012 at 17:34:25  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -827,7 +827,7 @@ endif
 " This is done by a function, because it has to be run through an autocommand
 " otherwise atplib#search#DocumentClass is not working.
 function! <SID>BeamerOptions()
-    if atplib#search#DocumentClass(b:atp_MainFile) == "beamer"
+    if atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == "beamer"
 	
 	" _f
 	if !exists("g:atp_MapSelectFrame")

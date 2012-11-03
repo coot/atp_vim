@@ -2054,7 +2054,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 
 	if end !~ '\s*}'
 	    let completion_list = []
-" 	    if atplib#search#DocumentClass(b:atp_MainFile) == 'beamer'
+" 	    if atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == 'beamer'
 " 		call extend(completion_list, g:atp_BeamerEnvironments)
 " 	    endif
 	    call extend(completion_list,deepcopy(g:atp_Environments))
@@ -2072,7 +2072,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    let completion_list=atplib#Add(completion_list,'}')
 	else
 	    let completion_list = []
-" 	    if atplib#search#DocumentClass(b:atp_MainFile) == 'beamer'
+" 	    if atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == 'beamer'
 " 		call extend(completion_list, g:atp_BeamerEnvironments)
 " 	    endif
 	    call extend(completion_list,deepcopy(g:atp_Environments))
@@ -2098,7 +2098,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 	endif
 	" AMSMATH
-	if atplib#search#SearchPackage('amsmath', stop_line) || g:atp_amsmath != 0 || atplib#search#DocumentClass(b:atp_MainFile) =~ '^ams'
+	if atplib#search#SearchPackage('amsmath', stop_line) || g:atp_amsmath != 0 || atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) =~ '^ams'
 	    if end !~ '\s*}'
 		call extend(completion_list,atplib#Add(g:atp_amsmath_environments,'}'),0)
 	    else
@@ -2160,7 +2160,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	let completion_list=[]
 	for package in g:atp_packages
 	    if exists("g:atp_".package."_environment_options") && 
-			\ (atplib#search#SearchPackage(package) || atplib#search#DocumentClass(b:atp_MainFile) == package)
+			\ (atplib#search#SearchPackage(package) || atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == package)
 		for key in keys({"g:atp_".package."_environment_options"})
 		    if env_name =~ key
 			call extend(completion_list, {"g:atp_".package."_environment_options"}[key])
@@ -2314,7 +2314,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    call extend(completion_list, g:atp_math_commands)
 	    " ----------------------- amsmath && amssymb {{{5
 	    " if g:atp_amsmath is set or the document class is ams...
-	    if (g:atp_amsmath != 0 || atplib#search#DocumentClass(b:atp_MainFile) =~ '^ams')
+	    if (g:atp_amsmath != 0 || atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) =~ '^ams')
 		call extend(completion_list, g:atp_amsmath_commands)
 		call extend(completion_list, g:atp_ams_negations)
 		call extend(completion_list, g:atp_amsfonts)
@@ -2355,7 +2355,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 	endif
 	" {{{4 -------------------- BEAMER commands
-" 	if atplib#search#DocumentClass(b:atp_MainFile) == 'beamer'
+" 	if atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == 'beamer'
 " 	    call extend(completion_list, g:atp_BeamerCommands)
 " 	endif
 	" {{{4 -------------------- TIKZ commands
@@ -2448,7 +2448,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 	endif
    	"{{{4 -------------------- CLASS
-	let documentclass=atplib#search#DocumentClass(b:atp_MainFile)
+	let documentclass=atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile))
 	if exists("g:atp_".documentclass."_commands")
 	    call extend(completion_list, {"g:atp_".documentclass."_commands"})
 	endif
@@ -2524,7 +2524,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    if exists("g:atp_".package."_command_values") && 
 		\ ( 
 		    \ atplib#search#SearchPackage(package) || test || 
-		    \ atplib#search#DocumentClass(b:atp_MainFile) == package || package == "common" 
+		    \ atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == package || package == "common" 
 		\ )
 		for key in keys({"g:atp_".package."_command_values"})
 		    " uncomment this to debug in which package file there is a mistake.

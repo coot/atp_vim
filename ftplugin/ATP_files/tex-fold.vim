@@ -20,7 +20,7 @@ if !exists("g:atp_fold_environments")
     let g:atp_fold_environments = 0
 endif
 
-let s:class = atplib#search#DocumentClass(b:atp_MainFile)
+let s:class = atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile))
 fun! TexFoldContextWithDepth(line)
     if s:class =~ '^\(ams\)\=art\(icle\)\=$'
 	if a:line =~ '\\section\>'		| return 1

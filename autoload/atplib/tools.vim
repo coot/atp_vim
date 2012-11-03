@@ -242,7 +242,7 @@ function! atplib#tools#GrepAuxFile(...)
 	    endif
 
 	" aamas2010 class
-	elseif line =~ '\\newlabel{[^}]*}{{\d\%(\d\|.\)*{\d\%(\d\|.\)*}{[^}]*}}' && atplib#search#DocumentClass(b:atp_MainFile) =~? 'aamas20\d\d'
+	elseif line =~ '\\newlabel{[^}]*}{{\d\%(\d\|.\)*{\d\%(\d\|.\)*}{[^}]*}}' && atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) =~? 'aamas20\d\d'
 	    let label 	= matchstr(line, '\\newlabel{\zs[^}]*\ze}{{\d\%(\d\|.\)*{\d\%(\d\|.\)*}{[^}]*}}')
 	    let number 	= matchstr(line, '\\newlabel{\zs[^}]*\ze}{{\zs\d\%(\d\|.\)*{\d\%(\d\|.\)*\ze}{[^}]*}}')
 	    let number	= substitute(number, '{\|}', '', 'g')

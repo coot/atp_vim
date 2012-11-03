@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Nov 03, 2012 at 09:37:18  +0000
+" Last Change: Sat Nov 03, 2012 at 17:38:56  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -313,7 +313,7 @@ let s:optionsDict= {
 		\ "atp_MakeidxReturnCode"	: 0,
 		\ "atp_BibtexOutput"		: "",
 		\ "atp_MakeidxOutput"		: "",
-		\ "atp_DocumentClass"		: atplib#search#DocumentClass(b:atp_MainFile),
+		\ "atp_DocumentClass"		: atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)),
 		\ "atp_statusCurSection"	: 1,
 		\ }
 
@@ -1175,7 +1175,7 @@ endif
 if !exists("g:atp_amsmath")
     let g:atp_amsmath=atplib#search#SearchPackage('ams')
 endif
-if atplib#search#SearchPackage('amsmath') || g:atp_amsmath != 0 || atplib#search#DocumentClass(b:atp_MainFile) =~ '^ams'
+if atplib#search#SearchPackage('amsmath') || g:atp_amsmath != 0 || atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) =~ '^ams'
     exe "setl complete+=k".split(globpath(&rtp, "ftplugin/ATP_files/dictionaries/ams_dictionary"), "\n")[0]
 endif
 if !exists("g:atp_no_math_command_completion")

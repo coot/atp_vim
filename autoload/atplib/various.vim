@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Nov 02, 2012 at 21:11:41  +0000
+" Last Change: Sat Nov 03, 2012 at 17:38:55  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -228,7 +228,7 @@ function! atplib#various#WrapSelection_compl(ArgLead, CmdLine, CursorPos)
 " 	    call add(variables, "g:atp_tikz_commands")
 " 	endif
 "     endif
-    if atplib#search#DocumentClass(b:atp_MainFile) == "beamer"
+    if atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == "beamer"
 	call add(variables, "g:atp_package_beamer_commands")
     endif
     if atplib#search#SearchPackage("mathtools")
