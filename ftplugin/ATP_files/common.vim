@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Mon Oct 29, 2012 at 16:33:59  +0000
+" Last Change: Sat Nov 03, 2012 at 16:59:20  +0000
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -96,78 +96,6 @@ endfun "}}}1
 " hi 	link 	atp_statusoutdir 	String
 " }}}
 
-function! s:SetNotificationColor() "{{{
-    " use the value of the variable g:atp_notification_{g:colors_name}_guibg
-    " if it doesn't exists use the default value (the same as the value of StatusLine
-    " (it handles also the reverse option!)
-    let colors_name = exists("g:colors_name") ? g:colors_name : "default"
-"     let g:cname	= colors_name
-" 	Note: the names of variable uses gui but equally well it could be cterm. As
-" 	they work in gui and vim. 
-    if has("gui_running")
-	let notification_guibg = exists("g:atp_notification_".colors_name."_guibg") ?
-		    \ g:atp_notification_{colors_name}_guibg :
-		    \ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") :
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") )
-	let notification_guifg = exists("g:atp_notification_".colors_name."_guifg") ?
-		    \ g:atp_notification_{colors_name}_guifg :
-		    \ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") :
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") )
-	let notification_gui = exists("g:atp_notification_".colors_name."_gui") ?
-		    \ g:atp_notification_{colors_name}_gui :
-		    \ ( (synIDattr(synIDtrans(hlID("StatusLine")), "bold") ? "bold" : "" ) . 
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "underline") ? ",underline" : "" ) .
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "underculr") ? ",undercurl" : "" ) .
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "italic") ? ",italic" : "" ) )
-    else
-	let notification_guibg = exists("g:atp_notification_".colors_name."_ctermbg") ?
-		    \ g:atp_notification_{colors_name}_ctermbg :
-		    \ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") :
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") )
-	let notification_guifg = exists("g:atp_notification_".colors_name."_ctermfg") ?
-		    \ g:atp_notification_{colors_name}_ctermfg :
-		    \ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") :
-			\ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") )
-	let notification_gui = exists("g:atp_notification_".colors_name."_cterm") ?
-		    \ g:atp_notification_{colors_name}_cterm :
-		    \ ( (synIDattr(synIDtrans(hlID("StatusLine")), "bold") ? "bold" : "" ) . 
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "underline") ? ",underline" : "" ) .
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "underculr") ? ",undercurl" : "" ) .
-			\ (synIDattr(synIDtrans(hlID("StatusLine")), "italic") ? ",italic" : "" ) )
-    endif
-
-    if has("gui_running")
-	let g:notification_gui		= notification_gui
-	let g:notification_guibg	= notification_guibg
-	let g:notification_guifg	= notification_guifg
-    else
-	let g:notification_cterm	= notification_gui
-	let g:notification_ctermbg	= notification_guibg
-	let g:notification_ctermfg	= notification_guifg
-    endif
-    if has("gui_running")
-	let prefix = "gui"
-    else
-	let prefix = "cterm"
-    endif
-    let hi_gui	 = ( notification_gui   !=  "" && notification_gui   	!= -1 ? " ".prefix."="   . notification_gui   : "" )
-    let hi_guifg = ( notification_guifg !=  "" && notification_guifg 	!= -1 ? " ".prefix."fg=" . notification_guifg : "" )
-    let hi_guibg = ( notification_guibg !=  "" && notification_guibg 	!= -1 ? " ".prefix."bg=" . notification_guibg : "" )
-
-    if (notification_gui == -1 || notification_guifg == -1 || notification_guibg == -1)
-	return
-    endif
-    " Highlight command:
-    try
-    execute "hi User".g:atp_statusNotifHi ." ". hi_gui . hi_guifg . hi_guibg
-    catch /E418:/
-    endtry
-
-endfunction
 "}}}
 
 " The main status function, it is called via autocommand defined in 'options.vim'.
@@ -273,11 +201,5 @@ command! -buffer InputFiles 		:call atplib#search#UpdateMainFile() | :call atpli
 
 " This should set the variables and run atplib#common#SetNotificationColor function
 command! -buffer SetNotificationColor :call atplib#common#SetNotificationColor()
-augroup ATP_SetStatusLineNotificationColor
-    au!
-    au VimEnter 		*.tex 	:call s:SetNotificationColor()
-    au BufEnter 		*.tex 	:call s:SetNotificationColor()
-    au ColorScheme 		* 	:call s:SetNotificationColor()
-augroup END
 "}}}
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1

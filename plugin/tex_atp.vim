@@ -200,6 +200,81 @@ augroup ATP_texlog "{{{1
     au!
     au BufEnter *.log call <SID>TexLogSettings(expand("<afile>:p"))
 augroup END
+fun! s:SetNotificationColor() "{{{1
+    if !exists("g:atp_statusNotifHi")
+	return
+    endif
+    let colors_name = exists("g:colors_name") ? g:colors_name : "default"
+    " Use the value of the variable g:atp_notification_{g:colors_name}_guibg
+    " if it doesn't exists use the default value (the same as the value of StatusLine
+    " (it handles also the reverse option)
+    if has("gui_running")
+	let notification_guibg = exists("g:atp_notification_".colors_name."_guibg") ?
+		\ g:atp_notification_{colors_name}_guibg :
+		\ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") :
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") )
+	let notification_guifg = exists("g:atp_notification_".colors_name."_guifg") ?
+		\ g:atp_notification_{colors_name}_guifg :
+		\ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") :
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") )
+	let notification_gui = exists("g:atp_notification_".colors_name."_gui") ?
+		\ g:atp_notification_{colors_name}_gui :
+		\ ( (synIDattr(synIDtrans(hlID("StatusLine")), "bold") ? "bold" : "" ) . 
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "underline") ? ",underline" : "" ) .
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "underculr") ? ",undercurl" : "" ) .
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "italic") ? ",italic" : "" ) )
+    else
+	let notification_guibg = exists("g:atp_notification_".colors_name."_ctermbg") ?
+		\ g:atp_notification_{colors_name}_ctermbg :
+		\ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") :
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") )
+	let notification_guifg = exists("g:atp_notification_".colors_name."_ctermfg") ?
+		\ g:atp_notification_{colors_name}_ctermfg :
+		\ ( synIDattr(synIDtrans(hlID("StatusLine")), "reverse") ?
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "bg#") :
+		    \ synIDattr(synIDtrans(hlID("StatusLine")), "fg#") )
+	let notification_gui = exists("g:atp_notification_".colors_name."_cterm") ?
+		\ g:atp_notification_{colors_name}_cterm :
+		\ ( (synIDattr(synIDtrans(hlID("StatusLine")), "bold") ? "bold" : "" ) . 
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "underline") ? ",underline" : "" ) .
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "underculr") ? ",undercurl" : "" ) .
+		    \ (synIDattr(synIDtrans(hlID("StatusLine")), "italic") ? ",italic" : "" ) )
+    endif
+    if has("gui_running")
+	let g:notification_gui		= notification_gui
+	let g:notification_guibg	= notification_guibg
+	let g:notification_guifg	= notification_guifg
+    else
+	let g:notification_cterm	= notification_gui
+	let g:notification_ctermbg	= notification_guibg
+	let g:notification_ctermfg	= notification_guifg
+    endif
+    if has("gui_running")
+	let prefix = "gui"
+    else
+	let prefix = "cterm"
+    endif
+    let hi_gui	 = ( notification_gui   !=  "" && notification_gui   	!= -1 ? " ".prefix."="   . notification_gui   : "" )
+    let hi_guifg = ( notification_guifg !=  "" && notification_guifg 	!= -1 ? " ".prefix."fg=" . notification_guifg : "" )
+    let hi_guibg = ( notification_guibg !=  "" && notification_guibg 	!= -1 ? " ".prefix."bg=" . notification_guibg : "" )
+
+    if (notification_gui == -1 || notification_guifg == -1 || notification_guibg == -1)
+	return
+    endif
+    " Highlight command:
+    try
+	execute "hi User".g:atp_statusNotifHi ." ". hi_gui . hi_guifg . hi_guibg
+	catch /E418:/
+    endtry
+endfun
+augroup ATP_SetStatusLineNotificationColor
+    au!
+    au BufAdd *.tex :call s:SetNotificationColor()
+    au ColorScheme * :call s:SetNotificationColor()
+augroup END
 " Commands: "{{{1
 command! -nargs=* -complete=customlist,atplib#various#TeXdoc_complete 
 	    \  Texdoc					:call atplib#various#TexDoc(<f-args>)
