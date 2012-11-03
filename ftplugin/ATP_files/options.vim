@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Fri Nov 02, 2012 at 09:26:24  +0000
+" Last Change: Sat Nov 03, 2012 at 09:37:18  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2121,15 +2121,14 @@ if !s:did_options
 	    " but errorfile option is already set.
 	    return
 	endif
-" 	if exists("s:previous_file")
 	if exists("s:ef")
 	    let same_project= ( &l:ef == s:ef )
 	    if !same_project
-		" echomsg "OTHER PROJECT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
+		" other project:
 		let errorflags = exists("b:atp_ErrorFormat") ? b:atp_ErrorFormat : g:atp_DefaultErrorFormat
 		call atplib#compiler#SetErrorFormat(1, errorflags)
 	    else
-		" echomsg "SAME PROJECT ".s:error_format . " " . expand("%:p")
+		" the same project:
 		if s:error_format != 'no_error_format'
 		    call atplib#compiler#SetErrorFormat(0, s:error_format)
 		else
@@ -2137,7 +2136,7 @@ if !s:did_options
 		endif
 	    endif
 	else
-	    " echomsg "INIT ".g:atp_DefaultErrorFormat . " " . expand("%:p")
+	    " init:
 	    call atplib#compiler#SetErrorFormat(1, g:atp_DefaultErrorFormat)
 	    let &efm=&l:efm
 	endif
@@ -2492,7 +2491,6 @@ function! <SID>ATP_SyntaxGroups()
 	endtry
     endif
 endfunction
-
 augroup ATP_SyntaxGroups
     au!
     au BufEnter *.tex :call <SID>ATP_SyntaxGroups()
