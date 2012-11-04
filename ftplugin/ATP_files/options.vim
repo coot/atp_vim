@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Nov 03, 2012 at 17:38:56  +0000
+" Last Change: Sun Nov 04, 2012 at 09:55:28  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -786,16 +786,14 @@ endif
 if !exists("g:texmf")
     let g:texmf = substitute(system("kpsewhich -expand-var='$TEXMFHOME'"), '\n', '', 'g')
 endif
-if exists("g:atp_LatexPackages")
+if !exists("g:atp_LatexPackages")
     " Rescan the $TEXMFHOME directory for sty and tex files.
-    let time = reltime()
     let sty_files = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.\(sty\|tex\)', ':p')
     for file in sty_files
 	if index(g:atp_LatexPackages, file) == -1
 	    call add(g:atp_LatexPackages, file)
 	endif
     endfor
-    let g:time_UpdateStyFiles = reltimestr(reltime(time))
 endif
 if exists("g:atp_LatexClasses")
     " Rescan the $TEXMFHOME directory for cls files.
