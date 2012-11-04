@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Nov 03, 2012 at 17:34:25  +0000
+" Last Change: Sun Nov 04, 2012 at 00:00:59  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -833,9 +833,10 @@ function! <SID>BeamerOptions()
 	if !exists("g:atp_MapSelectFrame")
 	    let g:atp_MapSelectFrame = "=f"
 	endif
-	if !hasmapto("v<Plug>vSelectFrameEnvironment", "n")
+
+	" =f
+	if !hasmapto("<Plug>SelectFrameEnvironment", "n")
 	    exe "nmap <silent> <buffer> ".g:atp_MapSelectFrame." <Plug>SelectFrameEnvironment"
-	    " exe "vmap <silent> <buffer> ".g:atp_MapSelectFrame." <Plug>vSelectFrameEnvironment"
 	endif
 
 	" >f, <f
