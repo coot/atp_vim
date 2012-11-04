@@ -93,6 +93,10 @@ nnoremap <silent> <buffer> <Plug>GotoNextDisplayedMath	 	:<C-U>call atplib#motio
 nnoremap <silent> <buffer> <Plug>GotoPreviousDisplayedMath	:<C-U>call atplib#motion#GotoEnvironment('bsW',v:count1,'displayedmath')<CR>
 
 if &l:cpoptions =~# 'B'
+    nnoremap <silent> <Plug>GotoNextParagraph		:<C-U>call atplib#motion#GotoSection("", v:count1, "s", "\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', '')<CR>
+    onoremap <silent> <Plug>GotoNextParagraph		:<C-U>call atplib#motion#GotoSection("", v:count1, "s","\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", 'vim')<CR>
+    vnoremap <silent> <Plug>vGotoNextParagraph		m':<C-U>exe "normal! gv"<Bar>exe "normal! w"<Bar>call search('^\([^%]\\|\\\@<!\\%\)*\\\%(paragraph\\|subsection\\|section\\|chapter\\|part\)\*\=\>\\|\\end\s*{\s*document\s*}', 'W')<Bar>exe "normal! b"<CR>
+
     nnoremap <silent> <Plug>GotoNextSubSection		:<C-U>call atplib#motion#GotoSection("", v:count1, "s", "\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', '')<CR>
     onoremap <silent> <Plug>GotoNextSubSection		:<C-U>call atplib#motion#GotoSection("", v:count1, "s","\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", 'vim')<CR>
     vnoremap <silent> <Plug>vGotoNextSubSection		m':<C-U>exe "normal! gv"<Bar>exe "normal! w"<Bar>call search('^\([^%]\\|\\\@<!\\%\)*\\\%(subsection\\|section\\|chapter\\|part\)\*\=\>\\|\\end\s*{\s*document\s*}', 'W')<Bar>exe "normal! b"<CR>
@@ -109,6 +113,10 @@ if &l:cpoptions =~# 'B'
     onoremap <silent> <Plug>GotoNextPart		:<C-U>call atplib#motion#GotoSection("", v:count1, "s", "\\\\part\\*\\=\\>", 'vim', 'n')<CR>
     vnoremap <silent> <Plug>vGotoNextPart		m':<C-U>exe "normal! gv"<Bar>exe "normal! w"<Bar>call search('^\([^%]\\|\\\@<!\\%\)*\\\%(part\*\=\>\\|\\end\s*{\s*document\s*}\)', 'W')<Bar>exe "normal! b"<CR>
 else
+    nnoremap <silent> <Plug>GotoNextParagraph		:<C-U>call atplib#motion#GotoSection("", v:count1, "s", '\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', '')<CR>
+    onoremap <silent> <Plug>GotoNextParagraph		:<C-U>call atplib#motion#GotoSection("", v:count1, "s",'\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', 'vim')<CR>
+    vnoremap <silent> <Plug>vGotoNextParagraph		m':<C-U>exe "normal! gv"<Bar>exe "normal! w"<Bar>call search('^\\([^%]\\\\|\\\\\\@<!\\\\%\\)*\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>\\\\|\\\\end\\s*{\\s*document\\s*}', 'W')<Bar>exe "normal! b"<CR>
+
     nnoremap <silent> <Plug>GotoNextSubSection		:<C-U>call atplib#motion#GotoSection("", v:count1, "s", '\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', '')<CR>
     onoremap <silent> <Plug>GotoNextSubSection		:<C-U>call atplib#motion#GotoSection("", v:count1, "s",'\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', 'vim')<CR>
     vnoremap <silent> <Plug>vGotoNextSubSection		m':<C-U>exe "normal! gv"<Bar>exe "normal! w"<Bar>call search('^\\([^%]\\\\|\\\\\\@<!\\\\%\\)*\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>\\\\|\\\\end\\s*{\\s*document\\s*}', 'W')<Bar>exe "normal! b"<CR>
@@ -133,6 +141,10 @@ command! -buffer -bang -count=1 -nargs=? -complete=customlist,atplib#motion#Env_
 command! -buffer -bang -count=1 -nargs=? -complete=customlist,atplib#motion#Env_compl NPart		:call atplib#motion#GotoSection(<q-bang>, <q-count>, "s", '\\part\*\=\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', <q-args>)
 
 if &l:cpoptions =~# 'B'
+    nnoremap <silent> <Plug>GotoPreviousParagraph	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", "\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", ( g:atp_mapNn ? 'atp' : 'vim' ), 'n')<CR>
+    onoremap <silent> <Plug>GotoPreviousParagraph	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", "\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", 'vim')<CR>
+    vnoremap <silent> <Plug>vGotoPreviousParagraph	m':<C-U>exe "normal! gv"<Bar>call search('\\\%(paragraph\\\\|subsection\\|section\\|chapter\\|part\)\*\=\>\\|\\begin\s*{\s*document\s*}', 'bW')<CR>
+
     nnoremap <silent> <Plug>GotoPreviousSubSection	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", "\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", ( g:atp_mapNn ? 'atp' : 'vim' ), 'n')<CR>
     onoremap <silent> <Plug>GotoPreviousSubSection	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", "\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>", 'vim')<CR>
     vnoremap <silent> <Plug>vGotoPreviousSubSection	m':<C-U>exe "normal! gv"<Bar>call search('\\\%(subsection\\|section\\|chapter\\|part\)\*\=\>\\|\\begin\s*{\s*document\s*}', 'bW')<CR>
@@ -149,6 +161,10 @@ if &l:cpoptions =~# 'B'
     onoremap <silent> <Plug>GotoPreviousPart	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", "\\\\part\\*\\=\\>", 'vim')<CR>
     vnoremap <silent> <Plug>vGotoPreviousPart	m':<C-U>exe "normal! gv"<Bar>call search('\\\%(part\*\=\)\>', 'bW')<CR>
 else
+    nnoremap <silent> <Plug>GotoPreviousParagraph	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", '\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n')<CR>
+    onoremap <silent> <Plug>GotoPreviousParagraph	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", '\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', 'vim')<CR>
+    vnoremap <silent> <Plug>vGotoPreviousParagraph	m':<C-U>exe "normal! gv"<Bar>call search('\\\\\\%(paragraph\\\\|subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>\\\\|\\\\begin\\s*{\\s*document\\s*}', 'bW')<CR>
+
     nnoremap <silent> <Plug>GotoPreviousSubSection	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", '\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n')<CR>
     onoremap <silent> <Plug>GotoPreviousSubSection	:<C-U>call atplib#motion#GotoSection("", v:count1, "sb", '\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>', 'vim')<CR>
     vnoremap <silent> <Plug>vGotoPreviousSubSection	m':<C-U>exe "normal! gv"<Bar>call search('\\\\\\%(subsection\\\\|section\\\\|chapter\\\\|part\\)\\*\\=\\>\\\\|\\\\begin\\s*{\\s*document\\s*}', 'bW')<CR>

@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Nov 04, 2012 at 00:00:59  +0000
+" Last Change: Sun Nov 04, 2012 at 15:21:47  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -259,6 +259,12 @@ if g:atp_map_backward_motion_leader == "<"
 endif
 
 if !empty(g:atp_map_forward_motion_leader)
+if !hasmapto("<Plug>GotoNextParagraph", 'n')
+    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."P 	<Plug>GotoNextParagraph"
+endif
+if !hasmapto("<Plug>vGotoNextParagraph", 'v')
+    execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."P	<Plug>vGotoNextParagraph"
+endif
 if !hasmapto("<Plug>GotoNextSubSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."S 	<Plug>GotoNextSubSection"
 endif
@@ -305,6 +311,12 @@ if !hasmapto("<Plug>vGotoNextPart", 'v')
 endif
 endif
 if !empty(g:atp_map_backward_motion_leader)
+if !hasmapto("<Plug>GotoPreviousParagraph", 'n')
+    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."P 	<Plug>GotoPreviousParagraph"
+endif
+if !hasmapto("<Plug>vGotoPreviousParagraph", 'v')
+    execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."P 	<Plug>vGotoPreviousParagraph"
+endif
 if !hasmapto("<Plug>GotoPreviousSubSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."S 	<Plug>GotoPreviousSubSection"
 endif
