@@ -1940,7 +1940,14 @@ endfunction
 
 " atplib#search#DocumentClass {{{1
 function! atplib#search#DocumentClass(file)
-    let file = readfile(a:file, 50)
+    if bufloaded(a:file)
+	let bufnr = bufnr(a:file)
+	let file = getbufline(bufnr, 1, 50)
+    elseif filereadable(a:file)
+	let file = readfile(a:file, 50)
+    else
+	return ''
+    endif
     let lnr = -1
     let documentclass = ''
     for line in file
