@@ -517,7 +517,7 @@ function! s:SelectCurrentEnv(seltype)
 	endif
 	call cursor(lnum2, cnum2)
 	if a:seltype == 'inner'
-		call search('\S\_\s*', 'bW')
+		call search('\S\s*\n\?', 'ebW')
 	else
 		if env =~ '^\'
 			normal! l
