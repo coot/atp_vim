@@ -4103,7 +4103,10 @@ s:notreadablebibfiles
 	the behaviour of '%'. In nocomatible mode it goes to matching pair
 	in a different line in compatible mode it finds the matching pair only
 	if the ending bracket is in the same line.
+
 	See also how it changes the behaviour of |atp-]%| and |atp-[%|.
+
+	When the value is positive also do not remap the |r| (see |atp-r|)
 
 							*g:atp_indent*
 >

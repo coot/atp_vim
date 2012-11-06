@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Nov 04, 2012 at 15:21:47  +0000
+" Last Change: Tue Nov 06, 2012 at 00:30:45  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -28,13 +28,7 @@ if !hasmapto("<Plug>Dictionray")
     nmap <buffer> <silent> =d <Plug>Dictionary
 endif
 " REPLACE: {{{1 
-" Replace map (is not working -> use :Repace command)
-" if !g:atp_VimCompatible && !hasmapto("<Plug>Replace")
-"     nmap <buffer> <silent> r <Plug>Replace
-" endif
-nn <buffer> <silent> r :<C-U>call <SID>Replace("<SID>")<CR>
-nn <buffer> <silent> <SID>InputRestore  :call inputrestore()<CR>
-function! <SID>Replace(sid,...) "{{{2
+function! <SID>Replace(sid,...)
     " It will not work with <:> since with the default settings "normal %" is not
     " working with <:>, possibly because g:atp_bracket_dict doesn't contain this
     " pair.
@@ -87,7 +81,12 @@ function! <SID>Replace(sid,...) "{{{2
 	call feedkeys(sid."ReplaceCmd". sid."InputRestore")
 	call cursor(line("."), col("."))
     endif
-endfunction "}}}2
+endfunction
+nn <buffer> <silent> <SID>InputRestore  :call inputrestore()<CR>
+nnoremap <buffer> <Plug>Replace :<C-U>call <SID>Replace("<SID>")<CR>
+if !g:atp_VimCompatible && !hasmapto("<Plug>Replace", "n")
+    nmap <buffer> <silent> r <Plug>Replace
+endif
 " UNWRAP MAP: {{{1
 if !hasmapto("<Plug>Unwrap")
     nmap <buffer> <silent> <LocalLeader>u <Plug>Unwrap
