@@ -717,7 +717,7 @@ let l:eindent=atplib#complete#CopyIndentation(l:line)
     if l:close == 'environment'
 	" Info message
 	redraw
-" 	silent echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0]
+	" echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0]
 
 	" Rules:
 	" env & \[ \]: close in the same line 
@@ -926,17 +926,17 @@ let l:eindent=atplib#complete#CopyIndentation(l:line)
 				if line(".") <= l:max
 				    if line(".") <= l:end
 					call append(l:max, l:eindent . l:str)
-					echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . l:end+1  
+					echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (l:end+1)
 					call setpos(".",[0,l:max+1,len(l:eindent.l:str)+1,0])
 				    else
 					call append(l:end-1, l:eindent . l:str)
-					echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . l:end+1 
+					echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (l:end+1)
 					call setpos(".",[0,l:end,len(l:eindent.l:str)+1,0])
 				    endif
 				elseif line(".") < l:end
 				    let [ lineNr, pos_lineNr ]	= getline(".") =~ '^\s*$' ? [ line(".")-1, line(".")] : [ line("."), line(".")+1 ]
 				    call append(lineNr, l:eindent . l:str)
-				    echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . line(".")+1  
+				    echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (line(".")+1)
 				    call setpos(".",[0, pos_lineNr,len(l:eindent.l:str)+1,0])
 				elseif line(".") >= l:end
 				    call append(l:end-1, l:eindent . l:str)
@@ -947,11 +947,11 @@ let l:eindent=atplib#complete#CopyIndentation(l:line)
 			    if line(".") >= l:max
 				call append(l:pos_saved[1], l:eindent . l:str)
 				keepjumps call setpos(".",l:pos_saved)
-				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . line(".")+1
+				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (line(".")+1)
 				call setpos(".",[0,l:pos_saved[1]+1,len(l:eindent.l:str)+1,0])
 			    elseif line(".") < l:max
 				call append(l:max, l:eindent . l:str)
-				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . l:max+1
+				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (l:max+1)
 				call setpos(".",[0,l:max+1,len(l:eindent.l:str)+1,0])
 			    endif
 			endif
@@ -986,7 +986,7 @@ let l:eindent=atplib#complete#CopyIndentation(l:line)
 				call setpos(".",[0,l:pos_saved[1]+1,len(l:eindent.l:str)+1,0])
 			    else
 				call append(l:pos_saved[1], l:eindent . l:str)
-				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . l:pos_saved[1]+1
+				echomsg "[ATP:] closing " . l:env_name . " from line " . l:bpos_env[0] . " at line " . (l:pos_saved[1]+1)
 				" Do not move corsor if: '\begin{env_name}<Tab>'
 				if l:cline !~  '\\begin\s*{\s*\%('.l:uenv.'\)\s*}'
 				    let l:pos_saved[2]+=len(l:str)
