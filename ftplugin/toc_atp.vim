@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Sat Oct 13, 2012 at 11:21:28  +0100
+" Last Change: Mon Nov 12, 2012 at 10:16:46  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -892,6 +892,7 @@ if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
     map <silent> <buffer> <CR> 		:call GotoLine(1)<CR>
     map <silent> <buffer> <space> 	:call GotoLine(0)<CR>
     map <silent> <buffer> <LeftRelease>   <LeftMouse><bar>:call GotoLine(0)<CR>
+    vmap <silent> <buffer> <LeftRelease>  <Esc><LeftMouse><bar>:call GotoLine(0)<CR>
     if expand("%") == "__ToC__"
 	map <silent> <buffer> _		:call GotoLine(0)<bar>wincmd w<CR>
     else
