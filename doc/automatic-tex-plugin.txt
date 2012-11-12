@@ -207,6 +207,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  You can set |b:atp_OutDir| with |atp-:SetOutDir| command (it also updates the
  |errorfile| option.
 
+ USE AT-YOUR-OWN-RISK - added to the license ;)
 >
  ======================
  Changes in version 12.1
@@ -5930,9 +5931,9 @@ FINAL REMARKS                               		*atp-remarks*
 COPY RIGHTS						*atp-copy-rights*
 
 
-    Copyright (C) 2010 Marcin Szamotulski Permission is hereby granted to use
-    and distribute this code, with or without modifications, provided that
-    this copyright notice is copied with it. 
+    Copyright (C) 2010, 2011, 2012, Marcin Szamotulski Permission is hereby
+    granted to use and distribute this code, with or without modifications,
+    provided that this copyright notice is copied with it. 
 
     Automatic Tex Plugin for Vim is free software: you can redistribute it
     and/or modify it under the terms of the GNU General Public License as
@@ -5951,6 +5952,8 @@ COPY RIGHTS						*atp-copy-rights*
     excluding the following two dictionary files: >
 	"ftplugin/ATP_files/dictionaries/dictionary",
 	"ftplugin/ATP_files/dictionaries/SIunits" 
-<   where taken from latex-suite Vim plugin and are under Vim charity
+<   where taken from latex-suite Vim plugin and are under Vim charity license.
+
+    USE AT-YOUR-OWN-RISK.
 
  vim:tw=78:ts=8:ft=help:norl:
