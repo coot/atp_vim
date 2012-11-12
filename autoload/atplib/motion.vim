@@ -2329,4 +2329,18 @@ function! atplib#motion#ParagraphVisualMotion(backward,count)
 endfunction
 vnoremap <buffer> <silent> <Plug>ParagraphVisualMotionForward 	:<C-U>call atplib#motion#ParagraphVisualMotion('',v:count1)<CR>
 vnoremap <buffer> <silent> <Plug>ParagraphVisualMotionBackward 	:<C-U>call atplib#motion#ParagraphVisualMotion('b',v:count1)<CR>
+fun! atplib#motion#TexKeywordObject() " {{{1
+    let line = getline(line("."))
+    let beg = len(matchstr(line[:(col(".")-1)], '\\\?\k*$'))
+    let end = len(matchstr(line[col("."):], '^\k*'))
+    if beg-1 >= 1
+	exe "normal! ".(beg-1)."h"
+    endif
+    normal v
+    if end+beg-1 >= 1
+	exe "normal! ".(beg+end-1)."l"
+    endif
+endfun
+vnoremap <buffer> <silent> <Plug>TexWordObject :<c-u>call atplib#motion#TexKeywordObject()<CR>
+" Modeliens: {{{1
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1

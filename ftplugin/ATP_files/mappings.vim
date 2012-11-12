@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Nov 06, 2012 at 00:30:45  +0000
+" Last Change: Wed Nov 07, 2012 at 22:58:24  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -86,6 +86,15 @@ nn <buffer> <silent> <SID>InputRestore  :call inputrestore()<CR>
 nnoremap <buffer> <Plug>Replace :<C-U>call <SID>Replace("<SID>")<CR>
 if !g:atp_VimCompatible && !hasmapto("<Plug>Replace", "n")
     nmap <buffer> <silent> r <Plug>Replace
+endif
+" INNER WORD: {{{1
+if stridx(g:atp_cpoptions, 'w') != -1
+    if !hasmapto('<Plug>TexWordObject', 'v')
+	vmap <silent> iw <Plug>TexWordObject
+    endif
+    if !hasmapto(':normal viw<CR>', 'o')
+	omap <silent> iw :normal viw<CR>
+    endif
 endif
 " UNWRAP MAP: {{{1
 if !hasmapto("<Plug>Unwrap")

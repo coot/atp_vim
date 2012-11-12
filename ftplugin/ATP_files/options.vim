@@ -797,14 +797,14 @@ if !exists("g:atp_LatexPackages")
 endif
 if exists("g:atp_LatexClasses")
     " Rescan the $TEXMFHOME directory for cls files.
-    let time = reltime()
+    " let s:time = reltime()
     let cls_files = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.cls', ':p')
     for file in cls_files
 	if index(g:atp_LatexClasses, file) == -1
 	    call add(g:atp_LatexClasses, file)
 	endif
     endfor
-    let g:time_UpdateClsFiles = reltimestr(reltime(time))
+    " let g:time_UpdateClsFiles = reltimestr(reltime(s:time))
 endif
 if exists("g:atp_latexclasses")
     " Transition to nicer name:
@@ -1300,6 +1300,11 @@ if !exists("g:atp_StatusLine")
     " If non 0, a new value will be assigned and used fot the statusline
     " option (common.vim)
     let g:atp_StatusLine = 1
+endif
+if !exists("g:atp_cpoptions")
+    " Possible entries:
+    " w - remap iw in visual and operator mode
+    let g:atp_cpoptions = ""
 endif
 " }}}
 
