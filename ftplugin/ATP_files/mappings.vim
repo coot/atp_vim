@@ -763,8 +763,11 @@ execute "vnoremap <silent> <buffer> <expr>".g:atp_imap_over_leader."~		':<C-U>Wr
 endif
 
 " TEX ALIGN: {{{1
-if !hasmapto(":TexAlign<CR>", 'n')
+if !hasmapto("<Plug>TexAlign", 'n')
     nmap <silent> <buffer> <Localleader>a	<Plug>TexAlign
+endif
+if !hasmapto("<Plug>TexAlign", 'v')
+    vmap <silent> <buffer> <localleader>a	<Plug>vTexAlign
 endif
 " PARAGRAPH SELECTION: {{{1
 if !hasmapto("<Plug>ATP_SelectCurrentParagraphInner", 'v')

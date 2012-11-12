@@ -162,6 +162,12 @@ NEWS							*atp-news*
 
 >
  ======================
+ Changes in version 12.3
+<
+ |atp-:TexAlign| with range (and new vmap <LocalLeader>a).
+
+>
+ ======================
  Changes in version 12.2
 <
 >
@@ -1777,8 +1783,9 @@ nmap <LocalLeader>u
 	use this command (but not the maps)!
 
 							*atp-:TexAlign*
-:TexAlign[!]
-map <LocalLeader>a 
+:[range]TexAlign[!]
+nmap <LocalLeader>a 
+vmap <LocalLeader>a 
 	This is a wrapper around Align command of the great AutoAlign Vim plugin:
 	    http://www.vim.org/scripts/script.php?script_id=884. 
 	This command sets correct align options and aligns the environment.
@@ -1797,6 +1804,10 @@ map <LocalLeader>a
 	With bang "!", |atp-:TexAlign| will join lines which do not ends with
 	'\\'. If *g:atp_TexAlign_join_lines* =1 then the map <LocalLeader>a
 	will use the bang.
+
+	When the [range] the lines in the range are aligned.  When [range] is
+	specified then bang is not used (lines are not joined).  This also
+	applies to the visual map.
     							*atp-:LatexTags*
 							*atp-:Tags*
 :Tags[!]

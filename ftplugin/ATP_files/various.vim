@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Fri Nov 02, 2012 at 21:12:53  +0000
+" Last Change: Wed Nov 07, 2012 at 23:02:22  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 "{{{ ATP_strlen()
@@ -405,7 +405,8 @@ map 	<buffer> 		<Plug>UnCommentLines 	:call atplib#various#Comment(0)<CR>
 vmap 	<buffer> 		<Plug>WrapSelection	:<C-U>call atplib#various#WrapSelection('')<CR>i
 vmap	<buffer> <silent> 	<Plug>WrapEnvironment	:<C-U>call atplib#various#WrapEnvironment('', 1)<CR>
 vmap 	<buffer> 	<Plug>InteligentWrapSelection	:<C-U>call atplib#various#InteligentWrapSelection('')<CR>i
-nmap 				<Plug>TexAlign		:call atplib#various#TexAlign(( g:atp_TexAlign_join_lines ? "!" : "" ))<CR>
+nmap 				<Plug>TexAlign		:call atplib#various#TexAlign(( g:atp_TexAlign_join_lines ? "!" : "" ),1,1)<CR>
+vmap 				<Plug>vTexAlign		:<C-U>call atplib#various#TexAlign(( g:atp_TexAlign_join_lines ? "!" : "" ), getpos("'<")[1],getpos("'>")[1])<CR>
 nnoremap 			<Plug>Replace		:call atplib#various#Replace()<CR>
 nnoremap <silent> <buffer> 	<Plug>ToggleStar	:call atplib#various#ToggleStar()<CR>
 nnoremap <silent> <buffer> 	<Plug>ToggleEnvForward	:call atplib#various#ToggleEnvironment(0, 1)<CR>
@@ -422,7 +423,7 @@ command! -buffer -nargs=* -complete=file Wdiff			:call atplib#various#Wdiff(<f-a
 command! -buffer -nargs=* -complete=custom,atplib#various#WrapSelection_compl -range Wrap :call atplib#various#WrapSelection(<f-args>)
 command! -buffer -nargs=? -complete=customlist,atplib#various#EnvCompletion -range WrapEnvironment :call atplib#various#WrapEnvironment(<f-args>)
 command! -buffer -nargs=? -range IWrap				:call atplib#various#InteligentWrapSelection(<args>)
-command! -buffer -bang	TexAlign				:call atplib#various#TexAlign(<q-bang>)
+command! -buffer -bang -range TexAlign				:call atplib#various#TexAlign(<q-bang>, <line1>, <line2>)
 command! -buffer ToggleStar					:call atplib#various#ToggleStar()<CR>
 command! -buffer -nargs=? ToggleEnv	   			:call atplib#various#ToggleEnvironment(0, <f-args>)
 command! -buffer -nargs=* -complete=customlist,atplib#various#EnvCompletion ChangeEnv				:call atplib#various#ToggleEnvironment(1, <f-args>)

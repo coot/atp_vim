@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sat Nov 03, 2012 at 17:38:55  +0000
+" Last Change: Thu Nov 08, 2012 at 20:49:45  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -382,7 +382,7 @@ endfunction "}}}
 " Inteligent Aling
 " TexAlign {{{
 " This needs Aling vim plugin.
-function! atplib#various#TexAlign(bang)
+function! atplib#various#TexAlign(bang, s_line, e_line)
     let save_pos = getpos(".")
     let winsaveview = winsaveview()
     let synstack = map(synstack(line("."), col(".")), 'synIDattr( v:val, "name")')
@@ -476,19 +476,24 @@ function! atplib#various#TexAlign(bang)
 	return
     endif
 
-    if !exists("bline")
-	let bline = search(bpat, 'cnb') + 1
-    endif
-    if env != "matrix"
-	let eline = searchpair(bpat, '', epat, 'cn')  - 1
+    if a:s_line == a:e_line
+	if !exists("bline")
+	    let bline = search(bpat, 'cnb') + 1
+	endif
+	if env != "matrix"
+	    let eline = searchpair(bpat, '', epat, 'cn')  - 1
+	else
+	    let saved_pos = getpos(".")
+	    call cursor(bmatrix, bmatrix_col)
+	    let eline = searchpair('{', '', '}', 'n')  - 1
+	    call cursor(saved_pos[1], saved_pos[2])
+	endif
     else
-	let saved_pos = getpos(".")
-	call cursor(bmatrix, bmatrix_col)
-	let eline = searchpair('{', '', '}', 'n')  - 1
-	call cursor(saved_pos[1], saved_pos[2])
+	let bline = a:s_line
+	let eline = a:e_line
     endif
 
-    if a:bang == "!" && eline-1 > bline
+    if a:bang == "!" && eline-1 > bline && a:s_line == a:e_line
 	" Join lines (g:atp_TexAlign_join_lines)
 	execute 'keepjumps silent! '.(bline).','.(eline-1).'g/\%(\\\\\s*\%(\[[^\]]*\]\|\\hline\|\\\w\+rule\)*\s*\|\\intertext.*\)\@<!\n/s/\n//'
 	call histdel("search", -1)
@@ -509,6 +514,7 @@ function! atplib#various#TexAlign(bang)
 	    call Align#AlignCtrl('v '.AlignCtrV)
 	endif
 	execute bline . ',' . eline . 'Align ' .AlignSep
+	let g:cmd = bline . ',' . eline . 'Align ' .AlignSep
 	if exists("AlignCtrV")
 	    AlignCtrl v
 	endif
