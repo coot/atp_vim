@@ -1449,7 +1449,6 @@ function! atplib#complete#GetBracket(append,bracket_dict,...)
 	    endif
 
 	    let g:time_GetBrackets_B=reltimestr(reltime(time))
-	    let g:pattern = pattern
 	    if !empty(pattern)
 		let begMathZone = searchpos(pattern, 'bnW')
 		let closed_math = atplib#complete#CheckClosed_math(syntax)
@@ -1990,53 +1989,43 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 
 " 	let g:time_A=reltimestr(reltime(time))
 
-	" Close one line math
-	if atplib#complete#CheckClosed_math('texMathZoneV') || 
-		\ atplib#complete#CheckClosed_math('texMathZoneW') ||
-		\ atplib#complete#CheckClosed_math('texMathZoneX') ||
-		\ b:atp_TexFlavor == 'plaintex' && atplib#complete#CheckClosed_math('texMathZoneY')
-	    let b:tc_return = "close_env math"
-	    call atplib#complete#CloseLastEnvironment(append, 'math')
-	" Close environments
-	else
-	    let b:tc_return = "close_env environment"
-	    let stopline_forward	= line(".") + g:atp_completion_limits[2]
-	    let stopline_backward	= max([ 1, line(".") - g:atp_completion_limits[2]])
+	let b:tc_return = "close_env environment"
+	let stopline_forward	= line(".") + g:atp_completion_limits[2]
+	let stopline_backward	= max([ 1, line(".") - g:atp_completion_limits[2]])
 
-	    let line_nr=line(".")
-	    let pos_saved=getpos(".")
-	    while line_nr >= stopline_backward
-		let [ line_nr, col_nr ] = searchpairpos('\\begin\s*{', '', '\\end\s*{', 'bW', 'strpart(getline("."), 0, col(".")-1) =~ "\\\\\\@<!%"', stopline_backward)
-		if line_nr >= stopline_backward
-		    let env_name	= matchstr(strpart(getline(line_nr), col_nr-1), '\\begin\s*{\zs[^}]*\ze}')
-		    if env_name		=~# '^\s*document\s*$' 
-			break
-		    endif
-		    let line_forward 	= searchpair('\\begin\s*{'.env_name.'}', '', '\\end\s*{'.env_name.'}', 
-							\ 'nW', '', stopline_forward)
-		    if line_forward == 0
-			break
-		    endif
-		else
-		    let line_nr = 0
+	let line_nr=line(".")
+	let pos_saved=getpos(".")
+	while line_nr >= stopline_backward
+	    let [ line_nr, col_nr ] = searchpairpos('\\begin\s*{', '', '\\end\s*{', 'bW', 'strpart(getline("."), 0, col(".")-1) =~ "\\\\\\@<!%"', stopline_backward)
+	    if line_nr >= stopline_backward
+		let env_name	= matchstr(strpart(getline(line_nr), col_nr-1), '\\begin\s*{\zs[^}]*\ze}')
+		if env_name		=~# '^\s*document\s*$' 
 		    break
 		endif
-	    endwhile
-	    call cursor(pos_saved[1], pos_saved[2])
-
-	    if line_nr
-	    " the env_name variable might have wrong value as it is
-	    " looking using '\\begin' and '\\end' this might be not enough, 
-		" however the function atplib#CloseLastEnv works perfectly and this
-		" should be save:
-
-		let g:time_TabCompletion=reltimestr(reltime(time))
-		if env_name !~# '^\s*document\s*$'
-		    call atplib#complete#CloseLastEnvironment(append, 'environment', '', [line_nr, 0])
-		    return ""
-		else
-		    return ""
+		let line_forward 	= searchpair('\\begin\s*{'.env_name.'}', '', '\\end\s*{'.env_name.'}', 
+						    \ 'nW', '', stopline_forward)
+		if line_forward == 0
+		    break
 		endif
+	    else
+		let line_nr = 0
+		break
+	    endif
+	endwhile
+	call cursor(pos_saved[1], pos_saved[2])
+
+	if line_nr
+	" the env_name variable might have wrong value as it is
+	" looking using '\\begin' and '\\end' this might be not enough, 
+	    " however the function atplib#CloseLastEnv works perfectly and this
+	    " should be save:
+
+	    let g:time_TabCompletion=reltimestr(reltime(time))
+	    if env_name !~# '^\s*document\s*$'
+		call atplib#complete#CloseLastEnvironment(append, 'environment', '', [line_nr, 0])
+		return ""
+	    else
+		return ""
 	    endif
 	endif
 	let g:time_TabCompletion=reltimestr(reltime(time))
@@ -3224,22 +3213,12 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		return cl_return
 	    endif
 
-	    " Check inline math:
-	    if atplib#complete#CheckClosed_math('texMathZoneV') || 
-			\ atplib#complete#CheckClosed_math('texMathZoneW') ||
-			\ atplib#complete#CheckClosed_math('texMathZoneX') ||
-			\ b:atp_TexFlavor == 'plaintex' && atplib#complete#CheckClosed_math('texMathZoneY')
-		let zone = 'texMathZoneVWXY' 	" DEBUG
-		call atplib#complete#CloseLastEnvironment(append, 'math')
-
 	    " Check environments:
-	    else
-		let env_opened= searchpairpos('\\begin','','\\end','bnW','searchpair("\\\\begin{".matchstr(getline("."),"\\\\begin{\\zs[^}]*\\ze}"),"","\\\\end{".matchstr(getline("."),"\\\\begin{\\zs[^}]*\\ze}"),"nW")',max([1,(line(".")-g:atp_completion_limits[2])]))
-		let env_name 	= matchstr(strpart(getline(env_opened[0]), env_opened[1]-1), '\\begin\s*{\zs[^}]*\ze}')
-		let zone	= env_name 	" DEBUG
-		if env_opened != [0, 0]
-		    call atplib#complete#CloseLastEnvironment('a', 'environment', env_name, env_opened)
-		endif
+	    let env_opened= searchpairpos('\\begin','','\\end','bnW','searchpair("\\\\begin{".matchstr(getline("."),"\\\\begin{\\zs[^}]*\\ze}"),"","\\\\end{".matchstr(getline("."),"\\\\begin{\\zs[^}]*\\ze}"),"nW")',max([1,(line(".")-g:atp_completion_limits[2])]))
+	    let env_name 	= matchstr(strpart(getline(env_opened[0]), env_opened[1]-1), '\\begin\s*{\zs[^}]*\ze}')
+	    let zone	= env_name 	" DEBUG
+	    if env_opened != [0, 0]
+		call atplib#complete#CloseLastEnvironment('a', 'environment', env_name, env_opened)
 	    endif
 	    " DEBUG
 	    if exists("zone")
