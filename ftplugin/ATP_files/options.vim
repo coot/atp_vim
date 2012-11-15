@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Nov 14, 2012 at 23:32:14  +0000
+" Last Change: Thu Nov 15, 2012 at 19:23:34  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2496,7 +2496,7 @@ function! <SID>ATP_SyntaxGroups()
 endfunction
 augroup ATP_SyntaxGroups
     au!
-    au BufEnter *.tex :call <SID>ATP_SyntaxGroups()
+    au Syntax tex :call <SID>ATP_SyntaxGroups()
 augroup END
 
 augroup ATP_Devel
