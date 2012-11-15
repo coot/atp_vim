@@ -148,8 +148,5 @@ if len(server_list):
                 "atplib#callback#Echo(\"[SyncTex:] synctex return with exit code: %d\",'echo','WarninMsg', '1')" % synctex.returncode
                 )
 # Debug:
-if len(server_list):
-    f.write(">>> file: %s\n>>> line: %s\n>>> column: %s\n>>> cmd: %s\n" % (file, line, column, cmd))
-else:
-    f.write(">>> file: %s\n>>> line: %s\n>>> column: %s\n>>> cmd: %s\n" % (file, line, column, cmd))
+f.write(">>> file: %s\n>>> line: %s\n>>> column: %s\n>>> cmd: %s\n" % (file, line, column, cmd))
 f.close()
