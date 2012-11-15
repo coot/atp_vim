@@ -24,7 +24,7 @@ hi link atp_FileName 	Title
 hi link atp_LineNr 	LineNr
 hi link atp_Number 	Number
 hi link atp_Abstract 	Label
-hi link atp_Chapter 	Label
+hi link atp_Chapter 	Title
 hi link atp_Section 	Label 
 hi link atp_SubSection 	Label
 hi link atp_Help	String
