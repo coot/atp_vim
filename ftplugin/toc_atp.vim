@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Mon Nov 12, 2012 at 10:16:46  +0000
+" Last Change: Thu Nov 15, 2012 at 20:05:48  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -836,7 +836,8 @@ function! FoldClose(...) " {{{1
 	    let [end_file,end_line] = <SID>GetLineNr(line(".")+1)
 	    let end_line = get(line_list, 1, "")
 	else
-	    let toc = deepcopy(t:atp_pytoc)[file] 
+	    let mainfile = get(b:atp_Toc, line("."), ["", "", ""])[2]
+	    let toc = deepcopy(t:atp_pytoc)[mainfile] 
 	    let type = -1
 	    let toc_entry = ['', '', '', '', '', '', ''] 
 	    let ind = 0
@@ -846,7 +847,7 @@ function! FoldClose(...) " {{{1
 		    break
 		endif
 	    endfor
-	    let line_list = get(deepcopy(atp_toc), beg_file, [])
+	    let line_list = filter(get(deepcopy(atp_toc), mainfile, []), 'v:val[0] == file')
 	    call filter(map(line_list, '[v:val[1], <sid>Section2Nr(v:val[2]), v:val[0]]'), 'v:val[0] > beg_line && str2nr(v:val[1]) <= str2nr(type)')
 	    let end_line = get(line_list, 0, "")[0]
 	    let end_file = get(line_list, 0, "")[2]
@@ -911,5 +912,8 @@ if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
     map <silent> <buffer> s 		:<C-U>call ShowLabelContext(v:count)<CR> 
     map <silent> <buffer> e 		:call EchoLine()<CR>
     map <silent> <buffer> <F1>		:call Help()<CR>
+
+    nnoremap <silent> <buffer> ]]	:call search('^\s*\zs\d\s', 'W')<cr>
+    nnoremap <silent> <buffer> [[	:call search('^\s*\zs\d\s', 'Wb')<cr>
 endif
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
