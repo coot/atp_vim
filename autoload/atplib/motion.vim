@@ -764,7 +764,6 @@ function! atplib#motion#show_pytoc(toc)
 	else
 	    let split_cmd = "vsplit"
 	endif
-	let g:split_cmd = split_cmd
 	let toc_winnr=bufwinnr(bufnr("__ToC__"))
 	if toc_winnr == -1
 	    let openbuffer="keepalt " . (labels_winnr == -1 ? t:toc_window_width : ''). split_cmd." +setl\\ buftype=nofile\\ modifiable\\ noreadonly\\ noswapfile\\ bufhidden=delete\\ nobuflisted\\ tabstop=1\\ filetype=toc_atp\\ nowrap\\ nonumber\\ norelativenumber\\ winfixwidth\\ nospell\\ cursorline __ToC__"
