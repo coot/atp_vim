@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Nov 15, 2012 at 19:23:34  +0000
+" Last Change: Wed Nov 21, 2012 at 00:45:40  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1156,7 +1156,8 @@ if !exists("g:atp_algorithmic_dict")
     let g:atp_algorithmic_dict = { 'IF' : 'ENDIF', 'FOR' : 'ENDFOR', 'WHILE' : 'ENDWHILE' }
 endif
 if !exists("g:atp_bracket_dict")
-    let g:atp_bracket_dict = { '(' : ')', '{' : '}', '[' : ']', '\(': '\)', '\{': '\}', '\[': '\]', '\lceil' : '\rceil', '\lfloor' : '\rfloor', '\langle' : '\rangle', '\lgroup' : '\rgroup', '<' : '>', '\begin' : '\end' }
+    let g:atp_bracket_dict = { '(' : ')', '{' : '}', '[' : ']', '\(': '\)', '\{': '\}', '\[': '\]', '\lceil' : '\rceil', '\lfloor' : '\rfloor', '\langle' : '\rangle', '\lgroup' : '\rgroup', '\begin' : '\end' }
+    " <:> is not present since < (and >) are used in math.
 endif
 if !exists("g:atp_LatexBox")
     let g:atp_LatexBox		= 1
