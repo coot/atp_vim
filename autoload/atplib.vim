@@ -921,7 +921,10 @@ function! atplib#TexKeyword() " {{{
     let isk = &isk
     let &isk = g:atp_iskeyword
     let line = getline(line("."))
-    let beg = matchstr(line[:(col(".")-1)], '\\\?\k*$')
+    let beg = matchstr(line[:(col(".")-1)], '\\\k*$')
+    if empty(beg)
+	let beg = matchstr(line[:(col(".")-1)], '\k*$')
+    endif
     let end = matchstr(line[col("."):], '^\k*')
     let &isk = isk
     return beg.end
