@@ -197,8 +197,8 @@ else
     command! -buffer -bang -count=1 -nargs=? -complete=customlist,atplib#motion#Env_compl PPart		:call atplib#motion#GotoSection(<q-bang>, <q-count>, 'sb', '\\\\part\\*\\=\\>', ( g:atp_mapNn ? 'atp' : 'vim' ), 'n', <q-args>)
 endif
 
-command! -buffer NInput				:call atplib#motion#Input("w") 	| let v:searchforward = 1
-command! -buffer PInput 			:call atplib#motion#Input("bw")	| let v:searchforward = 0
+command! -buffer -count=1 NInput			:call atplib#motion#Input("w", <q-count>)| let v:searchforward = 1
+command! -buffer -count=1 PInput 			:call atplib#motion#Input("bw", <q-count>)| let v:searchforward = 0
 command! -buffer -nargs=? -bang -complete=customlist,atplib#motion#GotoFileComplete GotoFile	:call atplib#motion#GotoFile(<q-bang>,<q-args>, 0)
 command! -buffer -nargs=? -bang -complete=customlist,atplib#motion#GotoFileComplete Edit 	:call atplib#motion#GotoFile(<q-bang>,<q-args>, 0)
 command! -bang -nargs=? -complete=customlist,atplib#motion#GotoLabelCompletion GotoLabel  		:call atplib#motion#GotoLabel(<q-bang>, <q-args>)

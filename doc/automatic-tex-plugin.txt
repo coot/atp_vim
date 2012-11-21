@@ -4482,13 +4482,15 @@ PROJECT SCRIPT						*atp-ProjectScript*
 							*atp-:PInput* 	*atp-<i*   *atp-<gf*
 	Now it also doesn't search inside commented input files. There two
 	commands:
-:NInput, nmap ]gf, nmap >i
-:PInput, nmap [gf, nmap <i
-	which finds the next/previous input line (also commented). See
+:[count]NInput, nmap [count]>gf, nmap [count]>i
+:[count]PInput, nmap [count]<gf, nmap [count]<i
+	which finds the [count]next/previous input line (also commented). See
 	|atp-:S_input| to find how it works. They depend on |g:atp_mapNn|, if
 	1 |atp-S:| is used if 0 Vim |search()| function. To repeat search you
 	can use |n| and |N| Vim normal commands. These commands omit comment
 	lines.
+
+	If 'wrapscan' is on it will wrap around the file/project.
 
 ================================================================================
 MAPS 		                     			*atp-mappings* 

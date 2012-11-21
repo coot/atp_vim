@@ -1718,14 +1718,22 @@ function! atplib#motion#ggGotoSection(count,section)
 endfunction
 
 " atplib#motion#Input {{{1 
-function! atplib#motion#Input(flag)
+function! atplib#motion#Input(flag, count)
     let pat 	= ( &l:filetype == "plaintex" ? '\\input\s*{' : '\%(\\input\s*{\=\>'.(atplib#search#SearchPackage('subfiles') ?  '\|\\subfile\s*{' : '' ).'\|\\include\s*{\)' )
     let @/	= '^\([^%]\|\\\@<!\\%\)*' . pat
-    if g:atp_mapNn
-	exe ':S /^\([^%]\|\\\@<!\\%\)*' .  pat . '/ ' . a:flag
-    else
-	call search('^\([^%]\|\\\@<!\\%\)*' . pat, a:flag)
+    if stridx(a:flag, 'b') != -1
+	let ww=&ww
+	set ww+=h
+	normal h
+	let &ww=ww
     endif
+    for i in range(a:count)
+	if g:atp_mapNn
+	    exe ':S /^\([^%]\|\\\@<!\\%\)*' .  pat . '/ ' . a:flag
+	else
+	    call search('^\([^%]\|\\\@<!\\%\)*' . pat, a:flag)
+	endif
+    endfor
     call atplib#motion#UpdateToCLine()
     "     This pattern is quite simple and it might be not neccesary to add it to
     "     search history.

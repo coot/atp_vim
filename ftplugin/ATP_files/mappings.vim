@@ -221,13 +221,13 @@ endif
 
 if !empty(g:atp_map_forward_motion_leader)
 if !hasmapto(":NInput<CR>")
-    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."i	:NInput<CR>"
-    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."gf	:NInput<CR>"
+    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."i	:<c-u>call atplib#motion#Input((&wrapscan ? 'w' : ''),v:count1)<CR>"
+    execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."gf	:<c-u>call atplib#motion#Input((&wrapscan ? 'w' : ''), v:count1)<CR>"
 endif
 
 if !hasmapto(":PInput<CR>")
-    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."i	:PInput<CR>"
-    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."gf	:PInput<CR>"
+    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."i	:<c-u>call atplib#motion#Input((&wrapscan ? 'wb' : 'b'), v:count1)<CR>"
+    execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."gf	:<c-u>call atplib#motion#Input((&wrapscan ? 'wb' : 'b'), v:count1)<CR>"
 endif
 endif
 " MOTIONS: {{{1
