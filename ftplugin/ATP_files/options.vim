@@ -1285,7 +1285,7 @@ if !exists("g:atp_ProgressBarFile")
     let g:atp_ProgressBarFile = tempname()
 endif
 if !exists("g:atp_iskeyword")
-    let g:atp_iskeyword = '65-90,97-122,\'
+    let g:atp_iskeyword = '65-90,97-122'
 endif
 if !exists("g:atp_HighlightMatchingPair")
     let g:atp_HighlightMatchingPair = 1
