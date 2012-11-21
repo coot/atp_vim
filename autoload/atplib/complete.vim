@@ -1172,7 +1172,14 @@ endfunction
 "
 " a:bracket_dict is a dictionary of brackets to use: 
 " 	 	{ open_bracket : close_bracket } 
-function! atplib#complete#CheckBracket(bracket_dict) "{{{2
+fun! atplib#complete#CheckBracket(bracket_dict) "{{{2
+    if has("python")
+	return atplib#complete#CheckBracket_py(a:bracket_dict)
+    else
+	return atplib#complete#CheckBracket_vim(a:bracket_dict)
+    endif
+endfun
+fun! atplib#complete#CheckBracket_py(bracket_dict) "{{{2
 let time = reltime()
 let limit_line = max([1,(line(".")-g:atp_completion_limits[4])])
 let pos	= getpos(".")
@@ -1226,7 +1233,196 @@ if getline(e_pos[0]) =~ '\\begin\s*{\s*document\s*}'
 else
     return e_pos
 endif
-endfunction
+endfun
+fun! atplib#complete#CheckBracket_vim(bracket_dict) "{{{2
+
+    let time		= reltime()
+    let limit_line	= max([1,(line(".")-g:atp_completion_limits[4])])
+    let pos		= getpos(".")
+    if pos[2] == 1
+	let check_pos = [0, pos[1], len(getline(line(".")-1)), 0]
+    else
+	let check_pos = copy(pos)
+	let check_pos[2] -= 1
+    endif
+    call search('\S', 'bW')
+    if !atplib#IsInMath()
+	let begin_line	= max([search('\%(\\part\|\\chapter\|\\section\|\\subsection\|\\par\>\|^\s*$\|\\]\|\\end{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\)', 'bnW'), limit_line])
+	let end_line	= min([search('\%(\\part\|\\chapter\|\\section\|\\subsection\|\\par\>\|^\s*$\|\\[\|\\begin{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\)', 'nW'), min([line('$'), line(".")+g:atp_completion_limits[4]])]) 
+    else
+	let begin_line	= max([search('\%(\\begin\s*{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\|\\(\|\$\$\|\\[\|\\par\>\|^\s*$\)', 'bnW'), limit_line])
+	let end_line	= min([search('\%(\\end\s*{\s*\%(equation\|align\|alignat\|flalign\|gather\|multline\)\*\=\s*}\|\\)\|\$\$\|\\]\|\\par\>\|^\s*$\)', 'nW'), min([line('$'), line(".")+g:atp_completion_limits[4]])]) 
+	if end_line == begin_line
+	    let end_line += 1
+	endif
+    endif
+    call cursor(pos[1:2])
+    let length 		= end_line-begin_line
+
+
+    if g:atp_debugCheckBracket
+	let g:begin_line	= begin_line
+	let g:end_line		= end_line
+	let g:limit_line	= limit_line
+	let g:length		= length
+    endif
+    let pos_saved 	= getpos(".")
+
+    " Bracket sizes:
+    let ket_pattern	= '\%(' . join(values(filter(copy(g:atp_sizes_of_brackets), "v:val != '\\'")), '\|') . '\)'
+
+
+   " But maybe we shouldn't check if the bracket is closed sometimes one can
+   " want to close closed bracket and delete the old one.
+   
+   let check_list = []
+   if g:atp_debugCheckBracket
+       call atplib#Log("CheckBracket.log","", "init")
+       let g:check_list	= check_list
+   endif
+
+    "    change the position! and then: 
+    "    check the flag 'r' in searchpair!!!
+
+    "Note: this can be much faster to first to check if the line is matching
+    " \({\|...<all_brackets>\)[^}...<all brackets>]*, etc., but this would not
+    " break which bracket to close.
+    let i=0
+    let bracket_list= keys(a:bracket_dict)
+    for ket in bracket_list
+	let pos		= deepcopy(pos_saved)
+	let pos[2]	-=1
+	let time_{i}	= reltime()
+	if ket != '{' && ket != '(' && ket != '['
+	    if search('\\\@<!'.escape(ket,'\[]'), 'bnW', begin_line)
+		let bslash = ( ket != '{' ? '\\\@<!' : '' )
+		if ket != '\begin'
+		    let pair_{i}	= searchpairpos(bslash.escape(ket,'\[]').'\zs','', bslash.escape(a:bracket_dict[ket], '\[]'). 
+			    \ ( ket_pattern != "" ? '\|'.ket_pattern.'\.' : '' ) , 'bnW', "", begin_line)
+		else
+		    let pair_{i}	= searchpairpos(bslash.'\zs'.escape(ket,'\[]'),'', bslash.escape(a:bracket_dict[ket], '\[]'). 
+			    \ ( ket_pattern != "" ? '\|'.ket_pattern.'\.' : '' ) , 'bnW', "", begin_line)
+		endif
+	    else
+		let pair_{i}	= [0, 0]
+	    endif
+	else
+" 	    This is only for brackets: (:), {:} and [:].
+
+" 	    if search('\\\@<!'.escape(ket,'\[]'), 'bnW', limit_line)
+" 	    Without this if ~17s with ~19s (100 times), when this code is used
+" 	    also for '[' the time was ~16.5s with '<' : ~17s (this bracket is
+" 	    not that common, at the place where I was testing it was not
+" 	    appearing)
+		let ob=0
+		let cb=0
+		for lnr in range(begin_line, line("."))
+		    if lnr == line(".")
+			let line_str=strpart(getline(lnr), 0, pos_saved[2]-1)
+		    else
+			let line_str=getline(lnr)
+		    endif
+		    " Remove comments:
+		    let line_str	= substitute(line_str, '\(\\\@<!\|\\\@<!\%(\\\\\)*\)\zs%.*$', '', '')
+		    " Remove \input[...] and \(:\), \[:\]:
+		    let line_str 	= substitute(line_str, '\\input\s*\[[^\]]*\]\|\\\@<!\\\%((\|)\|\[\|\]\)', '', 'g') 
+		    let line_list 	= split(line_str, '\zs')
+
+		    let ob+=count(line_list, ket)
+		    let cb+=count(line_list, a:bracket_dict[ket])
+		endfor
+		call cursor(limit_line, 1)
+		let first_ket_pos	= searchpos(escape(ket,'\[]').'\|'.escape(a:bracket_dict[ket],'\[]'), 'cW', pos_saved[1])
+		call cursor(pos_saved[1], pos_saved[2]-1)
+		let first_ket		= ( first_ket_pos[1] ? getline(first_ket_pos[0])[first_ket_pos[1]-1] : '{' )
+
+	        if g:atp_debugCheckBracket
+		    call atplib#Log("CheckBracket.log",ket." ob=".ob." cb=".cb." first_ket=".first_ket." cond=".(( ob != cb && first_ket == ket ) || ( ob != cb-1 && first_ket != ket )))
+		    call atplib#Log("CheckBracket.log",ket." first_ket_pos=".string(first_ket_pos))
+		    call atplib#Log("CheckBracket.log",ket." pos=".string(getpos(".")))
+		endif
+		if ( ob != cb && first_ket == ket ) || ( ob != cb-1 && first_ket != ket )
+		    let bslash = ( ket != '{' ? '\\\@<!' : '' )
+		    call atplib#Log("CheckBracket.log",ket." searchpairpos args=".bslash.escape(ket,'\[]')." ".bslash.escape(a:bracket_dict[ket], '\[]'). " begin_line=".begin_line)
+		    let pair_{i}	= searchpairpos(bslash.escape(ket,'\[]'),'', bslash.escape(a:bracket_dict[ket], '\[]') , 'bcnW', "", begin_line)
+		else
+		    let pair_{i}	= [0, 0]
+		endif
+	endif
+	let g:time_A_{i}  = reltimestr(reltime(time_{i}))
+
+	if g:atp_debugCheckBracket >= 2
+	    echomsg escape(ket,'\[]') . " pair_".i."=".string(pair_{i}) . " limit_line=" . limit_line
+	endif
+	if g:atp_debugCheckBracket >= 1
+	    call atplib#Log("CheckBracket.log", ket." time_A_".i."=".string(g:time_A_{i}))
+	    call atplib#Log("CheckBracket.log", ket." pair_".i."=".string(pair_{i}))
+	endif
+	let pos[1]	= pair_{i}[0]
+	let pos[2]	= pair_{i}[1]
+
+	let no_backslash = ( i == 0 || i == 2 ? '\\\@<!' : '' )
+	if i == 3
+	    let g:atp_debugCheckClosed = 1
+	else
+	    let g:atp_debugCheckClosed = 0
+	endif
+	if pos[1] != 0
+" 	    let check_{i} = atplib#complete#CheckClosed(no_backslash.escape(ket,'\[]'),
+" 			\ '\%('.no_backslash.escape(a:bracket_dict[ket],'\[]').'\|\\\.\)', 
+" 			\ max([0,pos[1]-g:atp_completion_limits[4]]), 1, 2*g:atp_completion_limits[4],2)
+	    if  i == 2
+		let g:atp_debugCheckClosed = 1
+	    endif
+	    let check_{i} = atplib#complete#CheckClosed(no_backslash.escape(ket,'\[]'),
+			\ '\%('.no_backslash.escape(a:bracket_dict[ket],'\[]').'\|\\\.\)', 
+			\ begin_line, 1, length, 2)
+	    let g:atp_debugCheckClosed = 0
+	    let check_{i} = ( check_{i} == 0 )
+	else
+	    let check_{i} = 0
+	endif
+
+	if g:atp_debugCheckBracket >= 1
+	    call atplib#Log("CheckBracket.log", ket." check_".i."=".string(check_{i}))
+	    let g:check_{i} = check_{i}
+	    let g:arg_{i}=[escape(ket,'\[]'), '\%('.escape(a:bracket_dict[ket],'\[]').'\|\\\.\)', begin_line, 1, 2*g:atp_completion_limits[4],2]
+	endif
+	" check_dot_{i} is 1 if the bracket is closed with a dot (\right.) . 
+" 	let check_dot_{i} = atplib#complete#CheckClosed('\\\@<!'.escape(ket, '\[]'), '\\\.', line("."), pos[1], g:atp_completion_limits[4], 1) == '0'
+	let check_dot_{i} = 1
+	if g:atp_debugCheckBracket >= 1
+	    call atplib#Log("CheckBracket.log", ket." check_dot_".i."=".string(check_{i}))
+	endif
+	if g:atp_debugCheckBracket >= 2
+	    echomsg escape(ket,'\[]') . " check_".i."=".string(check_{i}) . " check_dot_".i."=".string(check_dot_{i})
+	endif
+	let check_{i}	= min([check_{i}, check_dot_{i}])
+	call add(check_list, [ pair_{i}[0], ((check_{i})*pair_{i}[1]), i ] ) 
+	keepjumps call setpos(".",pos_saved)
+	let g:time_B_{i}  = reltimestr(reltime(time_{i}))
+	call atplib#Log("CheckBracket.log", ket." time_B_".i."=".string(g:time_B_{i}))
+	let i+=1
+    endfor
+"     let g:time_CheckBracket_A=reltimestr(reltime(time))
+    keepjumps call setpos(".", pos_saved)
+   
+    " Find opening line and column numbers
+    call sort(check_list, "atplib#CompareCoordinates")
+    let g:check_list = check_list
+    let [ open_line, open_col, open_bracket_nr ] 	= check_list[0]
+    let [ s:open_line, s:open_col, s:opening_bracket ] 	= [ open_line, open_col, bracket_list[open_bracket_nr] ]
+    if g:atp_debugCheckBracket
+	let [ g:open_lineCB, g:open_colCB, g:opening_bracketCB ] = [ open_line, open_col, bracket_list[open_bracket_nr] ]
+	call atplib#Log("CheckBracket.log", "return:")
+	call atplib#Log("CheckBracket.log", "open_line=".open_line)
+	call atplib#Log("CheckBracket.log", "open_col=".open_col)
+	call atplib#Log("CheckBracket.log", "opening_bracketCB=".g:opening_bracketCB)
+    endif
+    let g:time_CheckBracket=reltimestr(reltime(time))
+"     let g:time=g:time+str2float(substitute(g:time_CheckBracket, '\.', ',', ''))
+    return [ open_line, open_col, bracket_list[open_bracket_nr] ]
+endf
 " }}}1
 " {{{1 atplib#complete#CloseLastBracket
 "
