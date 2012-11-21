@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Nov 07, 2012 at 22:58:24  +0000
+" Last Change: Tue Nov 20, 2012 at 22:35:57  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -1076,8 +1076,8 @@ if (!empty(g:atp_imap_leader_2) && !exists("g:atp_imap_fonts")) || g:atp_reload_
 		\ s:backslash.'usefont{'.g:atp_font_encoding.'}{}{}{}<Left><Left><Left><Left><Left>', "g:atp_imap_define_fonts", 'usefont command']
 	\ ])
 endif
-    " Make Font Maps:
-    call atplib#MakeMaps(g:atp_imap_fonts)
+" Make Font Maps:
+call atplib#MakeMaps(g:atp_imap_fonts)
 " GREEK LETTERS: {{{1
 if !exists("g:atp_imap_greek_letters") || g:atp_reload_variables
     if !empty(g:atp_imap_leader_1)
@@ -1369,9 +1369,9 @@ if !exists("g:atp_imap_environments") || g:atp_reload_variables
     else
 	let g:atp_imap_environments = []
     endif
-    " Make Environment Maps:
-    call atplib#MakeMaps(g:atp_imap_environments)
 endif
+" Make Environment Maps:
+call atplib#MakeMaps(g:atp_imap_environments)
 " MATHEMATICAL MAPS: {{{1
 if !exists("g:atp_imap_math") || g:atp_reload_variables
     let g:atp_imap_math	= [ 
