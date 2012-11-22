@@ -11,7 +11,7 @@ syntax match atp_Chapter /^\s*\%(\d\+\|\*\|-\)\s.*/ contains=atp_Number,atp_Chap
 syntax match atp_Section /^\s*\(\d\+\.\d\+\|\s\{3,}\|\*\|-\)\s.\+/ contains=atp_LineNr,atp_Number,atp_SectionTitle 
 syntax match atp_SubSection /^\s*\(\d\+\.\d\+\.\d\+\|\s\{5,}\|\*\|-\)\s.\+/ contains=atp_Number,atp_SubSectionTitle 
 
-hi link atp_FileName 	Title
+hi link atp_FileName 	Directory
 hi link atp_LineNr 	LineNr
 hi link atp_Number 	Number
 hi link atp_Abstract 	Label
