@@ -166,6 +166,8 @@ NEWS							*atp-news*
 <
  |atp-:TexAlign| with range (and new vmap <LocalLeader>a).
 
+ |g:atp_fold_environments| is a list of environments which will be folded.
+ (To enable folding you have to set |g:atp_folding| on start-up).
 >
  ======================
  Changes in version 12.2
@@ -2759,9 +2761,11 @@ FOLDING							*atp-folding*
 	 files. if you reset the value on the fly you need to issue
 	 '|:filetype| detect' command in order for changes to take place.
 
- g:atp_fold_environments = 0				*g:atp_fold_environments*
+ g:atp_fold_environments = []			*g:atp_fold_environments*
 	 enables/disables folding of environments. By default folding is
-	 disabled since it slows down vim.
+	 disabled since it slows down vim.  The variable is a list of
+	 environments which you want to be folded.  If you want to fold all
+	 environments just set it to "['_all_']".
 ================================================================================
 SEARCHING IN BIB FILES					*atp-bibsearch*
 
