@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Nov 21, 2012 at 00:45:40  +0000
+" Last Change: Wed Nov 21, 2012 at 19:59:53  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2109,8 +2109,6 @@ if !s:did_options
     " to g:atp_DefaultErrorFormat (done with
     " atplib#compiler#SetErrorFormat()).
     "
-    " Todo: still :copen changes &efm to sth from tex.vim.
-    "
     " For sty and cls files, always pretend they belong to the same project.
     function! ATP_BufLeave()
 	let s:error_format = ( exists("b:atp_ErrorFormat") ? b:atp_ErrorFormat : 'no_error_format' )
@@ -2142,7 +2140,6 @@ if !s:did_options
 	else
 	    " init:
 	    call atplib#compiler#SetErrorFormat(1, g:atp_DefaultErrorFormat)
-	    let &efm=&l:efm
 	endif
     endfunction
 
