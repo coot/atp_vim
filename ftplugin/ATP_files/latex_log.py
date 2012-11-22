@@ -29,7 +29,7 @@
 # following format:
 # WARNING_TYPE::FILE::INPUT_LINE::INPUT_COL::MESSAGE (ADDITIONAL_INFO)
 # this was intendent to be used for vim quick fix:
-# set errorformat=LaTeX\ %tarning::%f::%l::%c::%m,Citation\ %tarning::%f::%l::%c::%m,Reference\ %tarning::%f::%l::%c::%m,Package\ %tarning::%f::%l::%c::%m,hbox\ %tarning::%f::%l::%c::%m,LaTeX\ %tnfo::%f::%l::%c::%m,LaTeX\ %trror::%f::%l::%c::%m
+# setl errorformat=LaTeX\ %tarning::%f::%l::%c::%m,Citation\ %tarning::%f::%l::%c::%m,Reference\ %tarning::%f::%l::%c::%m,Package\ %tarning::%f::%l::%c::%m,hbox\ %tarning::%f::%l::%c::%m,LaTeX\ %tnfo::%f::%l::%c::%m,LaTeX\ %trror::%f::%l::%c::%m
 #
 # The fowllowing WARNING_TYPEs are available:
 # LaTeX Warning

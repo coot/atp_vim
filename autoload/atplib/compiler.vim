@@ -2576,8 +2576,6 @@ function! atplib#compiler#ShowErrors(bang,...)
 	call writefile(log, errorfile)
     endif
     
-    " set errorformat 
-
     if l:arg =~# 'o'
 	OpenLog
 	return
