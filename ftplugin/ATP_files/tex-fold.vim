@@ -147,17 +147,41 @@ fun! TexFoldText()
 	    let foldtext = v:folddashes."comment"
 	endif
     elseif line =~ '\\section'
-	let foldtext = v:folddashes."section: ".matchstr(line, '\\section\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\section\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\section\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."section: ".title
     elseif line =~ '\\chapter'
-	let foldtext = v:folddashes."chapter: ".matchstr(line, '\\chapter\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\chapter\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\chapter\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."chapter: ".title
     elseif line =~ '\\subsection'
-	let foldtext = v:folddashes."subsection: ".matchstr(line, '\\subsection\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\subsection\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\subsection\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."subsection: ".title
     elseif line =~ '\\paragraph'
-	let foldtext = v:folddashes."paragraph ".matchstr(line, '\\paragraph\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\paragraph\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\paragraph\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."paragraph ".title
     elseif line =~ '\\part'
-	let foldtext = v:folddashes."part: ".matchstr(line, '\\part\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\part\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\part\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."part: ".title
     elseif line =~ '\\subparagraph'
-	let foldtext = v:folddashes."subparagraph ".matchstr(line, '\\subparagraph\*\=\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*')
+	let title = matchstr(line, '\\subparagraph\*\=\s*\[\zs.*\ze\s*\]')
+	if empty(title)
+	    let title = matchstr(line, '\\subparagraph\*\=\%(\s*\[.*\]\)\=\s*{\s*\zs.\{-}\ze\s*}')
+	endif
+	let foldtext = v:folddashes."subparagraph ".title
     elseif line =~ '\\documentclass'
 	let foldtext = v:folddashes."preamble: ".matchstr(line,  '\\documentclass\%(\s*\[[^\]]*\]*\)\=\s*{\s*\zs[^}]*').".cls"
     else
