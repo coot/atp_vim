@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Thu Nov 15, 2012 at 20:05:48  +0000
+" Last Change: Wed Nov 21, 2012 at 15:02:43  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -816,6 +816,9 @@ function! <sid>file() "{{{
 endfunction
 "}}}
 function! FoldClose(...) " {{{1
+    if g:atp_folding
+	return
+    endif
     if g:atp_python_toc
 	let atp_toc	= deepcopy(t:atp_pytoc)
     else
