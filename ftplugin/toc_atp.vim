@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Wed Nov 21, 2012 at 15:02:43  +0000
+" Last Change: Fri Nov 23, 2012 at 18:06:00  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -815,83 +815,36 @@ function! <sid>file() "{{{
     endif
 endfunction
 "}}}
-function! FoldClose(...) " {{{1
-    if g:atp_folding
+function! <sid>Fold(cmd) " {{{1
+    if !g:atp_folding || (expand("%") != "__ToC__" ? 1 : 0)
 	return
     endif
-    if g:atp_python_toc
-	let atp_toc	= deepcopy(t:atp_pytoc)
-    else
-	let atp_toc	= deepcopy(t:atp_toc)
+    let [file,nr] = atplib#tools#getlinenr(line("."), 0)
+    let winnr = s:gotowinnr()
+    let toc_winnr = winnr()
+    exe winnr."wincmd w"
+    let pos_saved = getpos(".")
+    if a:cmd != 'zv'
+	call cursor(nr,1)
     endif
-    let f_line = (a:0 >= 1 ? a:1 : line(".") )
-    let l_line = (a:0 >= 2 ? a:2 : line(".") )
-    " This function is not working well with sections put into chapters. Then
-    " chapters are not folded with greater fold level.
-    for line in range(f_line, l_line)
-	let [beg_file,beg_line] = <sid>GetLineNr(line)
-	let file = <sid>file()
-	if !g:atp_python_toc
-	    let type = <sid>Section2Nr(get(get(deepcopy(atp_toc), file, {}), beg_line, [''])[0])
-	    let type_dict = get(deepcopy(atp_toc), beg_file, {})
-	    call filter(map(type_dict, "<sid>Section2Nr(v:val[0])"), "str2nr(v:val) <= str2nr(type)")
-	    let line_list = sort(filter(keys(type_dict), "str2nr(v:val) >= str2nr(beg_line)"), "<sid>CompareNumbers")
-	    let [end_file,end_line] = <SID>GetLineNr(line(".")+1)
-	    let end_line = get(line_list, 1, "")
-	else
-	    let mainfile = get(b:atp_Toc, line("."), ["", "", ""])[2]
-	    let toc = deepcopy(t:atp_pytoc)[mainfile] 
-	    let type = -1
-	    let toc_entry = ['', '', '', '', '', '', ''] 
-	    let ind = 0
-	    for toc_entry in toc
-		if toc_entry[0:1] == [beg_file, beg_line]
-		    let type	= <sid>Section2Nr(toc_entry[2])
-		    break
-		endif
-	    endfor
-	    let line_list = filter(get(deepcopy(atp_toc), mainfile, []), 'v:val[0] == file')
-	    call filter(map(line_list, '[v:val[1], <sid>Section2Nr(v:val[2]), v:val[0]]'), 'v:val[0] > beg_line && str2nr(v:val[1]) <= str2nr(type)')
-	    let end_line = get(line_list, 0, "")[0]
-	    let end_file = get(line_list, 0, "")[2]
-	endif
-	" Goto file
-	let winnr = s:gotowinnr()
-	let toc_winnr = winnr()
-	exe winnr."wincmd w"
-	if end_line != ""
-	    let end_line = end_line-1
-	else
-	    let end_line = line("$")
-	endif
-
-	let fc = foldclosed(beg_line)
-	if fc != -1
-	    " Preserve folding the same range over and over again.
-	    " - one cannot fold subsection in a folded section,
-	    "   but vim is not working well when trying to do that.
-	    exe toc_winnr."wincmd w"
-	    continue
-	endif
-	if !foldlevel(beg_line) || foldlevel(beg_line) == foldlevel(beg_line-1)
-	    echomsg beg_line." ".end_line
-	    execute beg_line.",".end_line."fold"
-	else
-	    let saved_pos = getpos(".")[1:2]
-	    call cursor(beg_line, 0)
-	    normal! zc
-	    call cursor(saved_pos)
-	endif
-	exe toc_winnr."wincmd w"
-    endfor
+    exe "normal! ".a:cmd
+    if a:cmd != 'zv'
+	call cursor(pos_saved[1:2])
+    endif
+    exe toc_winnr."wincmd w"
 endfunction " }}}1
 
 " Mappings:
 " MAPPINGS {{{1
 if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
-    command! -range Fold		:call FoldClose(<q-line1>,<q-line2>)
-    nmap <silent> <buffer> zc		:call FoldClose()<CR>
-    vmap <silent> <buffer> zc		:<C-U>call FoldClose(line("'<"), line("'>"))<CR>
+
+    if (expand("%") == "__ToC__" ? 1 : 0)
+	nmap <silent> <buffer> zv		:call <sid>Fold('zv')<CR>
+	nmap <silent> <buffer> zc		:call <sid>Fold('zc')<CR>
+	nmap <silent> <buffer> zC		:call <sid>Fold('zC')<CR>
+	nmap <silent> <buffer> zo		:call <sid>Fold('zo')<CR>
+	nmap <silent> <buffer> zO		:call <sid>Fold('zO')<CR>
+    endif
     map <silent> <buffer> q 		:bdelete<CR>
     map <silent> <buffer> <CR> 		:call GotoLine(1)<CR>
     map <silent> <buffer> <space> 	:call GotoLine(0)<CR>
