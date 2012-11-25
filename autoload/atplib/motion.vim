@@ -2293,16 +2293,16 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 	endfor
     endif
 endfunction
-" atplib#motion#ParagraphNormalMotion {{{1
+" atplib#motion#SentenceNormalMotion {{{1
 fun! atplib#motion#SentenceNormalMotion(backward,count)
     normal! m`
     if a:backward != "b"
 	for i in range(1,a:count)
-	    call search('\%(\.\|\\\%(begin\|end\)\(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\\begin\|\\end\)\@!.', 'W')
+	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'W')
 	endfor
     else
 	for i in range(1,a:count)
-	    call search('\%(\.\|\\\%(begin\|end\)\(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\\begin\|\\end\)\@!.', 'Wb')
+	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'Wb')
 	endfor
     endif
 endfun
