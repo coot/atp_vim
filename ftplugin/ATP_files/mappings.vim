@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Tue Nov 20, 2012 at 22:35:57  +0000
+" Last Change: Sun Nov 25, 2012 at 11:55:37  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -175,7 +175,15 @@ endif
 " MOVE AROUND COMMENTS: {{{1
 if !hasmapto("<Plug>ParagraphNormalMotion")
     nmap <buffer> <silent> }	<Plug>ParagraphNormalMotionForward
+endif
+if !hasmapto("<Plug>ParagraphNormalMotionBackward")
     nmap <buffer> <silent> {	<Plug>ParagraphNormalMotionBackward
+endif
+if !hasmapto("<Plug>SentenceNormalMotion")
+    nmap <buffer> <silent> )	<Plug>SentenceNormalMotionForward
+endif
+if !hasmapto("<Plug>SentenceNormalMotionBackward")
+    nmap <buffer> <silent> (	<Plug>SentenceNormalMotionBackward
 endif
 nnoremap <buffer> <silent> v :<c-u>call atplib#motion#StartVisualMode('v', v:count)<CR>
 nnoremap <buffer> <silent> V :<c-u>call atplib#motion#StartVisualMode('V', v:count)<CR>

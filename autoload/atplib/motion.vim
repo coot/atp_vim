@@ -2293,7 +2293,19 @@ function! atplib#motion#ParagraphNormalMotion(backward,count)
 	endfor
     endif
 endfunction
-
+" atplib#motion#ParagraphNormalMotion {{{1
+fun! atplib#motion#SentenceNormalMotion(backward,count)
+    normal! m`
+    if a:backward != "b"
+	for i in range(1,a:count)
+	    call search('\%(\.\|\\\%(begin\|end\)\(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\\begin\|\\end\)\@!.', 'W')
+	endfor
+    else
+	for i in range(1,a:count)
+	    call search('\%(\.\|\\\%(begin\|end\)\(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\\begin\|\\end\)\@!.', 'Wb')
+	endfor
+    endif
+endfun
 " atplib#motion#StartVisualMode {{{1
 function! atplib#motion#StartVisualMode(mode, count)
     let g:atp_visualstartpos = getpos(".")
