@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Nov 26, 2012 at 16:12:21  +0000
+" Last Change: Mon Nov 26, 2012 at 21:14:18  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2451,7 +2451,7 @@ endif
 " SYNTAX GROUPS:
 " {{{1 ATP_SyntaxGroups
 function! <SID>ATP_SyntaxGroups()
-    if &filetype == ""
+    if &filetype != "tex" || &syntax != "tex"
 	" this is important for :Dsearch window
 	return
     endif
@@ -2477,7 +2477,9 @@ function! <SID>ATP_SyntaxGroups()
 endfunction
 augroup ATP_SyntaxGroups
     au!
-    au Syntax tex :call <SID>ATP_SyntaxGroups()
+    " This should be run on Syntax, but it needs setting done in FileType
+    " (Syntax group runs first).
+    au FileType tex :call <SID>ATP_SyntaxGroups()
 augroup END
 
 augroup ATP_Devel
