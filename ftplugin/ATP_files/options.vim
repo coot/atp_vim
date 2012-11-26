@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Nov 21, 2012 at 19:59:53  +0000
+" Last Change: Mon Nov 26, 2012 at 16:12:21  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -788,28 +788,11 @@ if !exists("g:texmf")
 endif
 if !exists("g:atp_LatexPackages")
     " Rescan the $TEXMFHOME directory for sty and tex files.
-    let sty_files = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.\(sty\|tex\)', ':p')
-    for file in sty_files
-	if index(g:atp_LatexPackages, file) == -1
-	    call add(g:atp_LatexPackages, file)
-	endif
-    endfor
+    let g:atp_LatexPackages = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.\(sty\|tex\)', ':p')
 endif
-if exists("g:atp_LatexClasses")
+if !exists("g:atp_LatexClasses")
     " Rescan the $TEXMFHOME directory for cls files.
-    " let s:time = reltime()
-    let cls_files = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.cls', ':p')
-    for file in cls_files
-	if index(g:atp_LatexClasses, file) == -1
-	    call add(g:atp_LatexClasses, file)
-	endif
-    endfor
-    " let g:time_UpdateClsFiles = reltimestr(reltime(s:time))
-endif
-if exists("g:atp_latexclasses")
-    " Transition to nicer name:
-    let g:atp_LatexClasses = g:atp_latexclasses
-    unlet g:atp_latexclasses
+    let g:atp_LatexClasses = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.cls', ':p')
 endif
 if !exists("g:atp_Python")
     " Also set in atplib#various#GetLatestSnapshot() and atplib#various#UpdateATP()
