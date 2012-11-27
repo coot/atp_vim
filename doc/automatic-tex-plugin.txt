@@ -1,4 +1,4 @@
-*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 03 November 2012
+*automatic-tex-plugin.txt* LaTeX filetype plugin	Last change: 27 November 2012
 
 	    An Introduction to AUTOMATIC (La)TeX PLUGIN (ver. 12.2)
 			by Marcin Szamotulski
@@ -168,6 +168,9 @@ NEWS							*atp-news*
 
  |g:atp_fold_environments| is a list of environments which will be folded.
  (To enable folding you have to set |g:atp_folding| on start-up).
+
+ You can use |atplib#motion#ctoc()| function to show the current section in
+ the status line.
 >
  ======================
  Changes in version 12.2
@@ -1881,12 +1884,10 @@ nmap <LocalLeader>t
 	Remove the project with main file {name} from ToC. There is
 	a completion for {name}s.
 
-							*atp-:CTOC*
-:CTOC	
-	This function returns the name of the currently edited chapter/
-	section/subsection/subsubsection. Use ':echo CTOC()' or just ':CTOC' to
-	see the returned value. If you added a section unit the function will
-	not update the database, run ':TOC' to do that (map <LocalLeader>t).
+*atplib#motion#ctoc()*
+	This is a function which returns a list of section titles: >
+	    [ chapter_title, section_title, subsection_title]
+>	You can use it to show the current section in the statusline.
 
 :Labels[!]						*atp-:Labels*
 map <LocalLeader>L 

@@ -1122,18 +1122,21 @@ function! atplib#motion#ctoc()
     let section_name=substitute(atplib#motion#NearestSection(section)[0],'\$\|\\(\|\\)','','g')
     let section_line=atplib#motion#NearestSection(section)[1]
     let section_nline=atplib#motion#NearestSection(section)[2]
-"     let b:section=atplib#motion#NearestSection(section)		" DEBUG
 
     let subsection_name=substitute(atplib#motion#NearestSection(subsection)[0],'\$\|\\(\|\\)','','g')
     let subsection_line=atplib#motion#NearestSection(subsection)[1]
     let subsection_nline=atplib#motion#NearestSection(subsection)[2]
-"     let b:ssection=atplib#motion#NearestSection(subsection)		" DEBUG
 
     let names	= [ chapter_name ]
-    if (section_line+0 >= chapter_line+0 && section_line+0 <= chapter_nline+0) || chapter_name == '' 
+    if (section_line+0 >= chapter_line+0 && section_line+0 <= chapter_nline+0)
 	call add(names, section_name) 
-    elseif subsection_line+0 >= section_line+0 && subsection_line+0 <= section_nline+0
+    else
+	call add(names, '')
+    endif
+    if subsection_line+0 >= section_line+0 && subsection_line+0 <= section_nline+0
 	call add(names, subsection_name)
+    else
+	call add(names, '')
     endif
     return names
 endfunction
