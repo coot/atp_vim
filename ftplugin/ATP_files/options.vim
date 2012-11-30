@@ -2183,7 +2183,7 @@ if !s:did_options
 
     function! <SID>Rmdir(dir) "{{{2
     if executable("rmdir")
-    call system("rmdir ".shellescape(a:dir))
+	call system("rmdir ".shellescape(a:dir))
     elseif has("python")
 python << EOF
 import os, errno
@@ -2195,9 +2195,9 @@ except OSError, e:
         pass
 EOF
     else
-    echohl ErrorMsg
-    echo "[ATP:] the directory ".a:dir." is not removed."
-    echohl None
+	echohl ErrorMsg
+	echo "[ATP:] the directory ".a:dir." is not removed."
+	echohl None
     endif
     endfunction "}}}2
     function! ErrorMsg(type) "{{{2
@@ -2280,7 +2280,7 @@ else
 	au QuickFixCmdPre cgetfile,cfile,cfileadd 	:call <SID>Latex_Log()
 	au QuickFixCmdPost cgetfile,cfile,cfileadd 	:call atplib#compiler#FilterQuickFix()
     augroup END
-endif
+endif 
 
     augroup ATP_VimLeave " {{{2
 	au!
@@ -2343,7 +2343,27 @@ endif
 "     au CursorMoved  *.tex let g:atp_synstack	= map(synstack(line('.'), col('.')), "synIDattr(v:val, 'name')")
     
 endif
-" }}}
+
+    " Quit {{{2
+    fun! <sid>ATP_Quit() 
+	let blist = tabpagebuflist()
+	let cbufnr = bufnr("%")
+	call remove(blist, index(blist, cbufnr))
+	call map(blist, 'bufname(v:val)')
+	let l=0
+	let l+= (index(blist, '__ToC__') != -1)
+	let l+= (index(blist, '__Labels__') != -1)
+	call filter(blist, 'v:val != "__ToC__" && v:val != "__Labels__"')
+	if empty(blist)
+	    for i in range(l)
+		quit
+	    endfor
+	endif
+    endfun
+    augroup ATP_Quit
+	au!
+	au QuitPre * :call <sid>ATP_Quit()
+    augroup END
 " }}}1
 
 " This function and the following autocommand toggles the textwidth option if
