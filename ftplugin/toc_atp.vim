@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Wed Nov 28, 2012 at 09:41:33  +0000
+" Last Change: Fri Nov 30, 2012 at 19:56:12  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -834,16 +834,39 @@ function! <sid>Fold(cmd) " {{{1
     exe toc_winnr."wincmd w"
 endfunction " }}}1
 
+" Folding:
+fun! ATP_TocFold(linenr) " {{{1
+    " let pos = getpos(".")
+    " call cursor(a:linenr, 0)
+    " let help = searchpos('>> Help', 'nbW')[0]
+    " call cursor(pos[1], pos[2])
+    " if help
+        " return 0
+    " else
+    let line = getline(a:linenr)
+    if stridx(line, '>>') == 0
+        return '>1'
+    elseif line =~ '^"'
+	return 0
+    else
+        return 1
+    endif
+endfun
+setl foldexpr=ATP_TocFold(v:lnum)
 " Mappings:
+fun! ATP_ToCFoldText() " {{{1
+    return getline(v:foldstart)[3:]
+endfun
+setl fdt=ATP_ToCFoldText()
 " MAPPINGS {{{1
 if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
 
     if (expand("%") == "__ToC__" ? 1 : 0)
-	nmap <silent> <buffer> zv		:call <sid>Fold('zv')<CR>
-	nmap <silent> <buffer> zc		:call <sid>Fold('zc')<CR>
-	nmap <silent> <buffer> zC		:call <sid>Fold('zC')<CR>
-	nmap <silent> <buffer> zo		:call <sid>Fold('zo')<CR>
-	nmap <silent> <buffer> zO		:call <sid>Fold('zO')<CR>
+	nmap <silent> <buffer> Zv		:call <sid>Fold('zv')<CR>
+	nmap <silent> <buffer> Zc		:call <sid>Fold('zc')<CR>
+	nmap <silent> <buffer> ZC		:call <sid>Fold('zC')<CR>
+	nmap <silent> <buffer> Zo		:call <sid>Fold('zo')<CR>
+	nmap <silent> <buffer> ZO		:call <sid>Fold('zO')<CR>
     endif
     map <silent> <buffer> q 		:bdelete<CR>
     map <silent> <buffer> <CR> 		:call GotoLine(1)<CR>

@@ -305,7 +305,7 @@ def find_in_brackets(string, bra='{', ket='}'):
                 return match[:index]
 
 def scan_project(fname):
-# scan file for section units starting after line start_line,
+    # scan file for section units starting after line start_line,
 
     try:
         flines = readlines(file_path(fname))
@@ -561,7 +561,7 @@ function! atplib#motion#showtoc(toc)
 	let sorted	= sort(keys(a:toc[openfile]), "atplib#CompareNumbers")
 	let len		= len(sorted)
 	" write the file name in ToC (with a full path in paranthesis)
-	call setline(number,fnamemodify(openfile,":t") . " (" . fnamemodify(openfile,":p:h") . ")")
+	call setline(number, ">> ".fnamemodify(openfile,":t")." (".fnamemodify(openfile,":p:h").")")
 	call extend(b:atp_Toc, { number : [ openfile, 1 ]}) 
 	let number+=1
 	let showline = " "
@@ -789,7 +789,7 @@ function! atplib#motion#show_pytoc(toc)
     for openfile in keys(a:toc)
 	call extend(numberdict, { openfile : number })
 	" write the file name in ToC (with a full path in paranthesis)
-	call setline(number,fnamemodify(openfile,":t") . " (" . fnamemodify(openfile,":p:h") . ")")
+	call setline(number, ">> ".fnamemodify(openfile,":t")." (".fnamemodify(openfile,":p:h").")")
         " openfile is the project name
 	call extend(b:atp_Toc, { number : [ openfile, 1, openfile ]}) 
 	let number+=1
@@ -857,8 +857,8 @@ function! atplib#motion#show_pytoc(toc)
     if g:atp_python_toc
 	let num = max(num_list)+1
 	keepjumps call setpos('.', [0,0,0,0])
-	keepjumps call search('^'.escape(fnamemodify(MainFile, ":t"), '.\/').'\s\+(.*)\s*$', 'cW')
-	exe "normal! ".(num-1)."j"
+	keepjumps call search('^>> '.escape(fnamemodify(MainFile, ":t"), '.\/').'\s\+(.*)\s*$', 'cW')
+	call cursor(line(".")+(num-1),1)
     else
 	keepjumps call setpos('.',[bufnr(""),num,1,0])
     endif
@@ -882,6 +882,8 @@ function! atplib#motion#show_pytoc(toc)
 " 		\ '" :[range]Fold',
     endif
     setl nomodifiable
+    setl fdm=expr
+    normal! zMzv
     lockvar 3 b:atp_Toc
 endfunction
 " {{{2 atplib#motion#ToCbufnr()
@@ -895,11 +897,24 @@ function! atplib#motion#ToCbufnr()
 	endif
     endfor
     if index(keys(tabpagebufdict), "__ToC__") != -1
-	let tocbufnr = tabpagebufdict["__ToC__"]
+	return tabpagebufdict["__ToC__"]
     else
-	let tocbufnr = -1
+	let bufnames = []
+	for bufnr in range(1,bufnr('$'))
+	    if bufexists(bufnr)
+		let bname = bufname(bufnr)
+		if !empty(bname)
+		    call add(bufnames, [fnamemodify(bname, ":t"), bufnr])
+		endif
+	    endif
+	endfor
+	call filter(bufnames, 'v:val[0] == "__ToC__"')
+	if !empty(bufnames)
+	    return bufnames[0][1]
+	else
+	    return -1
+	endif
     endif
-    return tocbufnr
 endfunction
 " atplib#motion#UpdateToCLine {{{2
 function! atplib#motion#UpdateToCLine(...)
@@ -965,7 +980,7 @@ function! atplib#motion#UpdateToCLine(...)
 	let num = max(num_list)+1
 	keepjumps call setpos('.', [0,0,0,0])
 	keepjumps call search('^'.escape(fnamemodify(MainFile, ":t"), '.\/').'\s\+(.*)\s*$', 'cW')
-	exe "normal! ".(num-1)."j"
+	call cursor(line(".")+(num-1),1)
     else
 	keepjumps call setpos('.',[bufnr(""),num,1,0])
     endif
@@ -1047,14 +1062,6 @@ endfunction
 " {{{2 atplib#motion#ctoc
 function! atplib#motion#ctoc()
     if &l:filetype != 'tex' || expand("%:e") != 'tex'
-" TO DO:
-" 	if  exists(g:tex_flavor)
-" 	    if g:tex_flavor != "latex"
-" 		echomsg "CTOC: Wrong 'filetype'. This function works only for latex documents."
-" 	    endif
-" 	endif
-	" Set the status line once more, to remove the CTOC() function.
-	call ATPStatus(0,0)
 	return []
     endif
     " resolve the full path:

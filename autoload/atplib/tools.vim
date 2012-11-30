@@ -534,12 +534,12 @@ function! atplib#tools#getlinenr(...) "{{{
     let labels 	=  a:0 >= 2 ? a:2 : expand("%") == "__Labels__" ? 1 : 0
 
     if labels == 0
-	let bnr = bufnr("__ToC__")
+	let bnr = ( bufname("%") == "__ToC__" ? bufnr("%") : bufnr("__ToC__"))
 	if len(getbufvar(bnr, "atp_Toc"))
 	    return get(getbufvar(bnr, "atp_Toc"), line, ["", ""])[0:1]
 	endif
     else
-	let bnr = bufnr("__Labels__")
+	let bnr = (bufname("%") == "__Labels__" ? bufnr("%") : bufnr("__Labels__"))
 	let dict=getbufvar(bnr, "atp_Labels")
 	if len(dict)
 	    return get(dict, line, ["", ""])[0:1]

@@ -4,7 +4,7 @@
 " URL:		https://launchpad.net/automatictexplugin
 
 syntax match atp_Help /^".*$/
-syntax match atp_FileName /^[^0-9"\s]\f.*(.*)$/
+syntax match atp_FileName /^>> .*$/
 syntax match atp_Number /\%(\d\+\.\?\|\*\|-\)\+/ms=b,me=e contained nextgroup=atp_SectionTitle,atp_SubSectionTitle 
 syntax match atp_Abstract /\s\s\(\S\&\D\).*$/ 
 syntax match atp_Chapter /^\s*\%(\d\+\|\*\|-\)\s.*/ contains=atp_Number,atp_ChapterTitle
