@@ -171,6 +171,11 @@ NEWS							*atp-news*
 
  You can use |atplib#motion#ctoc()| function to show the current section in
  the status line.
+
+ If you close window with |:quit| command, and there are at most two window
+ left: the label window or the table of contents window, they will be closed
+ with the |:quit| command too.  This will close the current tab or quit vim if
+ you have only one tab.
 >
  ======================
  Changes in version 12.2
