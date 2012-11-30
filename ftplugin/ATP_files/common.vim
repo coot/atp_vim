@@ -2,7 +2,7 @@
 " Description: This script has functions which have to be called before ATP_files/options.vim 
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sat Nov 03, 2012 at 16:59:20  +0000
+" Last Change: Wed Nov 28, 2012 at 13:46:30  +0000
 
 " This file contains set of functions which are needed to set to set the atp
 " options and some common tools.
@@ -100,8 +100,6 @@ endfun "}}}1
 
 " The main status function, it is called via autocommand defined in 'options.vim'.
 let s:errormsg = 0
-" a:command = 1/0: 1 if run by a command, then a:1=bang, a:2=ctoc, 
-" if a:command = 0, then a:1=ctoc.
 function! ATPStatus(command,...) "{{{
     if expand("%") == "[Command Line]" || &l:filetype == "qf" || expand("%:e") != "tex"
 	" If one uses q/ or q? this status function should not be used.

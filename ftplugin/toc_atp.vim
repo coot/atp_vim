@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Fri Nov 23, 2012 at 18:06:00  +0000
+" Last Change: Wed Nov 28, 2012 at 09:41:33  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -42,14 +42,15 @@ endfunction
 " 		(1) choose window with matching buffer name
 " 		(2) choose among those which were edited last
 " Solution:
-"        			       --N-> choose this window
+"        			       +-N-> choose this window
 "			 	       |
-"			     --N-> ----|
-"			     | 	       --Y-> choose that window		
-" --go from where you come-->|         Does there exist another open window 
-"  			     |	       with the right buffer name?
+"			     +-N-> ----+
+"			     | 	       |
+" -go from where you come-->-+         +-Y-> choose that window		     
+"  			     |	       Does there exist another open window  
+"			     |	       with the right buffer name?           
 "			     |	
-"  			     --Y-> use this window
+"  			     +-Y-> use this window
 "			   Does the window have
 "			   a correct name?
 "
@@ -64,7 +65,6 @@ function! s:gotowinnr()
 	" Find labels window to go in Labels window
 	let l:gotowinnr=bufwinnr(l:bufname)
     else
-	" Find labels window to go in ToC window
 	if t:atp_bufname == l:bufname
 	    " if t:atp_bufname agree with that found in ToC
 	    " if the t:atp_winnr is still open
