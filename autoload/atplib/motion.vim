@@ -914,9 +914,9 @@ function! atplib#motion#UpdateToCLine(...)
 	return
     endif
     let cline  	= line(".")
-    let cbufnr 	= bufnr("")
-    let cwinnr	= bufwinnr("")
-    exe bufwinnr(toc_bufnr)."wincmd w"
+    let cbufnr 	= bufnr("%")
+    let cwinnr	= winnr()
+    exe "keepalt" bufwinnr(toc_bufnr)."wincmd w"
     let MainFile    = atplib#FullPath(getbufvar(bufnr(t:atp_bufname), "atp_MainFile"))
     if g:atp_python_toc
         let num 	= get(s:numberdict, MainFile, 'no_number')
