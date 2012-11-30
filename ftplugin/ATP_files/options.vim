@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Mon Nov 26, 2012 at 21:14:18  +0000
+" Last Change: Fri Nov 30, 2012 at 00:39:07  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -2056,11 +2056,12 @@ inoremap <silent> <buffer> 	<Plug>ToggleTab		<C-O>:call ATP_ToggleTab()<CR>
 
 " AUTOCOMMANDS:
 " Some of the autocommands (Status Line, LocalCommands, Log File):
-" {{{ Autocommands:
+" {{{1 Autocommands:
 
 if !s:did_options
     
 
+    " {{{2 SwapExists (not used)
     let g:atp_DoSwapExists = 0
     fun! <SID>SwapExists(swapfile)
 	if g:atp_DoSwapExists
@@ -2071,21 +2072,22 @@ if !s:did_options
 	endif
     endfun
 
-"     augroup ATP_SwapExists
-" 	au!
-" 	au SwapExists	:call <SID>SwapExists(v:swapname)
-"     augroup END
-    augroup ATP_changedtick
+    " augroup ATP_SwapExists
+	" au!
+	" au SwapExists	:call <SID>SwapExists(v:swapname)
+    " augroup END
+
+    augroup ATP_changedtick " {{{2
 	au!
 	au BufEnter,BufWritePost 	*.tex 	:let b:atp_changedtick = b:changedtick
     augroup END 
 
-    augroup ATP_auTeX
+    augroup ATP_auTeX " {{{2
 	au!
 	au CursorHold 	*.tex call atplib#compiler#auTeX()
 	au CursorHoldI 	*.tex call atplib#compiler#auTeX()
     augroup END 
-    " {{{ Setting ErrorFormat
+    " {{{2 Setting ErrorFormat
     " Is done using autocommands, if the opened file belongs to the same
     " project as the previous file, then just copy the variables
     " b:atp_ErrorFormat, other wise read the error file and set error format
@@ -2132,13 +2134,14 @@ if !s:did_options
 	au BufLeave * :call ATP_BufLeave()
 	au BufEnter * :call <SID>BufEnter()
     augroup END
-    "}}}
+    "}}}2
 
-    augroup ATP_UpdateToCLine
+    augroup ATP_UpdateToCLine " {{{2
 	au!
 	au CursorHold *.tex nested :call atplib#motion#UpdateToCLine()
     augroup END
 
+    " Redraw ToC {{{2
     function! RedrawToC()
 	if bufwinnr(bufnr("__ToC__")) != -1
 	    let winnr = winnr()
@@ -2152,6 +2155,7 @@ if !s:did_options
 	au TabEnter *.tex	:call RedrawToC()
     augroup END
 
+    " InsertLeave_InsertEnter {{{2
     let g:atp_eventignore		= &l:eventignore
     let g:atp_eventignoreInsertEnter 	= 0
     function! <SID>InsertLeave_InsertEnter()
@@ -2165,22 +2169,22 @@ if !s:did_options
 	au InsertLeave *.tex 	:call <SID>InsertLeave_InsertEnter()
     augroup END
 
-"     augroup ATP_Cmdwin
-" 	au!
-" 	au CmdwinLeave / if expand("<afile>") == "/"|:call ATP_CmdwinToggleSpace(0)|:endif
-" 	au CmdwinLeave ? if expand("<afile>") == "/"|:call ATP_CmdwinToggleSpace(0)|:endif
-"     augroup END
+    " augroup ATP_Cmdwin " {{{2
+	" au!
+	" au CmdwinLeave / if expand("<afile>") == "/"|:call ATP_CmdwinToggleSpace(0)|:endif
+	" au CmdwinLeave ? if expand("<afile>") == "/"|:call ATP_CmdwinToggleSpace(0)|:endif
+    " augroup END
 
-    augroup ATP_cmdheight
+    augroup ATP_cmdheight " {{{2
 	" update g:atp_cmdheight when user writes the buffer
 	au!
 	au BufWrite *.tex :let g:atp_cmdheight = &l:cmdheight
     augroup END
 
-function! <SID>Rmdir(dir)
-if executable("rmdir")
+    function! <SID>Rmdir(dir) "{{{2
+    if executable("rmdir")
     call system("rmdir ".shellescape(a:dir))
-elseif has("python")
+    elseif has("python")
 python << EOF
 import os, errno
 dir=vim.eval('a:dir')
@@ -2190,14 +2194,13 @@ except OSError, e:
     if errno.errorcode[e.errno] == 'ENOENT':
         pass
 EOF
-else
+    else
     echohl ErrorMsg
     echo "[ATP:] the directory ".a:dir." is not removed."
     echohl None
-endif
-endfunction
-
-    function! ErrorMsg(type)
+    endif
+    endfunction "}}}2
+    function! ErrorMsg(type) "{{{2
 	let errors		= len(filter(getqflist(),"v:val['type']==a:type"))
 	if errors > 1
 	    let type		= (a:type == 'E' ? 'errors' : 'warnings')
@@ -2209,9 +2212,8 @@ endfunction
 	    let msg.=" ".errors." ".type
 	endif
 	return msg
-    endfunction
-
-    augroup ATP_QuickFix_2
+    endfunction " }}}2
+    augroup ATP_QuickFix_2 " {{{2
 	au!
 	au FileType qf command! -bang -buffer -nargs=? -complete=custom,DebugComp DebugMode	:call <SID>SetDebugMode(<q-bang>,<f-args>)
 	au FileType qf let w:atp_qf_errorfile=&l:errorfile
@@ -2219,7 +2221,7 @@ endfunction
 	au FileType qf exe "resize ".min([atplib#qflength(), g:atp_DebugModeQuickFixHeight])
     augroup END
 
-    function! <SID>BufEnterCgetfile()
+    function! <SID>BufEnterCgetfile() "{{{2
 	if !exists("b:atp_ErrorFormat")
 	    return
 	endif
@@ -2241,14 +2243,15 @@ endfunction
 	    catch /E40:/ 
 	    endtry
 	endif
-    endfunction
-    function! <SID>BufLeave()
+    endfunction " }}}2
+    function! <SID>BufLeave() " {{{2
 	if &buftype == 'quickfix'
 	    let s:leaving_buffer='quickfix'
 	else
 	    let s:leaving_buffer=expand("%:p")
 	endif
-    endfunction
+    endfunction "}}}2
+    " {{{2
 if (v:version < 703 || v:version == 703 && !has("patch468"))
     augroup ATP_QuickFix_cgetfile
 "     When using cgetfile the position in quickfix-window is lost, which is
@@ -2258,7 +2261,7 @@ if (v:version < 703 || v:version == 703 && !has("patch468"))
 	au BufEnter *.tex 	:call <SID>BufEnterCgetfile()
     augroup END
 else
-    function! <SID>Latex_Log() 
+    function! <SID>Latex_Log() " {{{3
 	if exists("b:atp_MainFile")
 	    let log_file  = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"
 	    let _log_file = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r")."._log"
@@ -2272,14 +2275,14 @@ else
 		call system("python ".shellescape(split(globpath(&rtp, "ftplugin/ATP_files/latex_log.py"), "\n")[0])." ".shellescape(fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"))
 	    endif
 	endif
-    endfunction
+    endfunction " }}}3
     augroup ATP_QuickFix_cgetfile
 	au QuickFixCmdPre cgetfile,cfile,cfileadd 	:call <SID>Latex_Log()
 	au QuickFixCmdPost cgetfile,cfile,cfileadd 	:call atplib#compiler#FilterQuickFix()
     augroup END
 endif
 
-    augroup ATP_VimLeave
+    augroup ATP_VimLeave " {{{2
 	au!
 	" Remove b:atp_TempDir (where compilation is done).
 	au VimLeave *.tex :call <SID>Rmdir(b:atp_TempDir)
@@ -2289,6 +2292,7 @@ endif
 	au VimLeave *.tex :Kill!
     augroup END
 
+    " UpdateTime {{{2
     function! <SID>UpdateTime(enter)
 	if a:enter	== "Enter" && b:atp_updatetime_insert != 0
 	    let &l:updatetime	= b:atp_updatetime_insert
@@ -2303,10 +2307,10 @@ endif
 	au InsertLeave *.tex :call <SID>UpdateTime("Leave")
     augroup END
 
-    augroup ATP_TeXFlavor
+    augroup ATP_TeXFlavor " {{{2
 	au!
 	au FileType *tex 	let b:atp_TexFlavor = &filetype
-    augroup END
+    augroup END "}}}2
 
     " Idea:
     " au 		*.log if LogBufferFileDiffer | silent execute '%g/^\s*$/d' | w! | endif
@@ -2340,6 +2344,7 @@ endif
     
 endif
 " }}}
+" }}}1
 
 " This function and the following autocommand toggles the textwidth option if
 " editing a math mode. Currently, supported are $:$, \(:\), \[:\] and $$:$$.
