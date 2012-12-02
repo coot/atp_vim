@@ -922,7 +922,10 @@ function! atplib#motion#UpdateToCLine(...)
     if !g:atp_UpdateToCLine
 	return
     endif
-    let toc_bufnr	= atplib#motion#ToCbufnr()
+    let toc_bufnr = atplib#motion#ToCbufnr()
+    if index(tabpagebuflist(), toc_bufnr) == -1
+	return
+    endif
     let check_line 	= (a:0>=1 ? a:1 : -1) 
     if toc_bufnr == -1 || check_line != -1 && 
 		\ getline(line(".")+check_line) !~# '\\\%(part\|chapter\|\%(sub\)\{0,2}section\)\s*{'
@@ -934,9 +937,9 @@ function! atplib#motion#UpdateToCLine(...)
     exe "keepalt" bufwinnr(toc_bufnr)."wincmd w"
     let MainFile    = atplib#FullPath(getbufvar(bufnr(t:atp_bufname), "atp_MainFile"))
     if g:atp_python_toc
-        let num 	= get(s:numberdict, MainFile, 'no_number')
+        let num = get(s:numberdict, MainFile, 'no_number')
     else
-        let num 	= get(s:numberdict, t:atp_bufname, 'no_number')
+        let num = get(s:numberdict, t:atp_bufname, 'no_number')
     endif
     if num == 'no_number'
 	exe cwinnr."wincmd w"
@@ -947,9 +950,9 @@ function! atplib#motion#UpdateToCLine(...)
     set lazyredraw
     set eventignore=all
     if g:atp_python_toc
-        let sorted	= t:atp_pytoc[MainFile]
+        let sorted = t:atp_pytoc[MainFile]
     else
-        let sorted	= sort(keys(t:atp_toc[t:atp_bufname]), "atplib#CompareNumbers")
+        let sorted = sort(keys(t:atp_toc[t:atp_bufname]), "atplib#CompareNumbers")
     endif
     let num_list = [0]
     let f_test = ( t:atp_bufname == atplib#FullPath(getbufvar(bufnr(t:atp_bufname), "atp_MainFile")) )
