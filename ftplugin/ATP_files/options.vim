@@ -251,7 +251,10 @@ endif
     " AlignPlugin settings
     if !exists("g:Align_xstrlen") && v:version >= 703 && &conceallevel 
 	let g:Align_xstrlen="ATP_strlen"
-    endif
+endif
+setl formatlistpat=^\\s*\\\\item\\s*\\[.\\{-}\\]\\s*
+setl formatoptions+=n
+setl formatexpr=TexFormat
 " }}}
 
 " BUFFER LOCAL VARIABLES:
