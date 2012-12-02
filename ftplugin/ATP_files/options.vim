@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Fri Nov 30, 2012 at 11:19:02  +0000
+" Last Change: Sun Dec 02, 2012 at 22:45:32  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -175,7 +175,7 @@ if !exists("g:atp_debugBabel")
 endif
 "}}}
 
-" vim options
+" Vim Options:
 " {{{ Vim options
 
 " undo_ftplugin
@@ -183,7 +183,7 @@ let b:undo_ftplugin = "setlocal nrformats< complete< keywordprg< suffixes< comme
 
 " Make CTRL-A, CTRL-X work over alphabetic characters:
 setl nrformats=alpha
-setl  backupskip+=*.tex.project.vim
+setl backupskip+=*.tex.project.vim
 
 " The vim option 'iskeyword' is adjust just after g:atp_separator and
 " g:atp_no_separator variables are defined.
@@ -215,42 +215,42 @@ endif
 " The suffixes option is also set after g:atp_tex_extensions is set.
 
 " Borrowed from tex.vim written by Benji Fisher:
-    " Set 'comments' to format dashed lists in comments
-    setl comments=sO:%\ -,mO:%\ \ ,eO:%%,:%
+" Set 'comments' to format dashed lists in comments
+setl comments=sO:%\ -,mO:%\ \ ,eO:%%,:%
 
-    " Set 'commentstring' to recognize the % comment character:
-    " (Thanks to Ajit Thakkar.)
-    setl commentstring=%%s
+" Set 'commentstring' to recognize the % comment character:
+" (Thanks to Ajit Thakkar.)
+setl commentstring=%%s
 
-    " Allow "[d" to be used to find a macro definition:
-    " Recognize plain TeX \def as well as LaTeX \newcommand and \renewcommand .
-    " I may as well add the AMS-LaTeX DeclareMathOperator as well.
-    let &l:define='\\\([egx]\|char\|mathchar\|count\|dimen\|muskip\|skip\|toks\)\=def'
-	    \ .	'\|\\font\|\\\(future\)\=let'
-	    \ . '\|\\new\(count\|dimen\|skip\|muskip\|box\|toks\|read\|write\|fam\|insert\)'
-	    \ .	'\|\\definecolor{'
-	    \ . '\|\\\(re\)\=new\(boolean\|command\|counter\|environment\|font'
-	    \ . '\|if\|length\|savebox\|theorem\(style\)\=\)\s*\*\=\s*{\='
-	    \ . '\|DeclareMathOperator\s*{\=\s*'
-	    \ . '\|DeclareFixedFont\s*{\s*'
-    if &l:filetype != "plaintex"
-	if atplib#search#SearchPackage('subfiles')
-	    setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\\\|\\\\subfile\\s*{\\)
-	else
-	    setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\)
-	endif
+" Allow "[d" to be used to find a macro definition:
+" Recognize plain TeX \def as well as LaTeX \newcommand and \renewcommand .
+" I may as well add the AMS-LaTeX DeclareMathOperator as well.
+let &l:define='\\\([egx]\|char\|mathchar\|count\|dimen\|muskip\|skip\|toks\)\=def'
+	\ .	'\|\\font\|\\\(future\)\=let'
+	\ . '\|\\new\(count\|dimen\|skip\|muskip\|box\|toks\|read\|write\|fam\|insert\)'
+	\ .	'\|\\definecolor{'
+	\ . '\|\\\(re\)\=new\(boolean\|command\|counter\|environment\|font'
+	\ . '\|if\|length\|savebox\|theorem\(style\)\=\)\s*\*\=\s*{\='
+	\ . '\|DeclareMathOperator\s*{\=\s*'
+	\ . '\|DeclareFixedFont\s*{\s*'
+if &l:filetype != "plaintex"
+    if atplib#search#SearchPackage('subfiles')
+	setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\\\|\\\\subfile\\s*{\\)
     else
-	setlocal include=^[^%]*\\\\input
+	setl include=^[^%]*\\%(\\\\input\\(\\s*{\\)\\=\\\\|\\\\include\\s*{\\)
     endif
-    setl suffixesadd=.tex
+else
+    setlocal include=^[^%]*\\\\input
+endif
+setl suffixesadd=.tex
 
-    setl includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
-    " TODO set define and work on the above settings, these settings work with [i
-    " command but not with [d, [D and [+CTRL D (jump to first macro definition)
-    
-    " AlignPlugin settings
-    if !exists("g:Align_xstrlen") && v:version >= 703 && &conceallevel 
-	let g:Align_xstrlen="ATP_strlen"
+setl includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
+" TODO set define and work on the above settings, these settings work with [i
+" command but not with [d, [D and [+CTRL D (jump to first macro definition)
+
+" AlignPlugin settings
+if !exists("g:Align_xstrlen") && v:version >= 703 && &conceallevel 
+    let g:Align_xstrlen="ATP_strlen"
 endif
 setl formatlistpat=^\\s*\\\\item\\s*\\[.\\{-}\\]\\s*
 setl formatoptions+=n

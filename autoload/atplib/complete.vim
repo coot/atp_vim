@@ -2198,9 +2198,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 "}}}2
 " {{{2 close environments
     if completion_method=='close_env'
-
-" 	let g:time_A=reltimestr(reltime(time))
-
 	" Close one line math
 	if !has("python") && (atplib#complete#CheckClosed_math('texMathZoneV') || 
 		\ atplib#complete#CheckClosed_math('texMathZoneW') ||
@@ -2211,19 +2208,19 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	" Close environments
 	else
 	    let b:tc_return = "close_env environment"
-	    let stopline_forward	= line(".") + g:atp_completion_limits[2]
-	    let stopline_backward	= max([ 1, line(".") - g:atp_completion_limits[2]])
+	    let stopline_forward = line(".") + g:atp_completion_limits[2]
+	    let stopline_backward = max([ 1, line(".") - g:atp_completion_limits[2]])
 
 	    let line_nr=line(".")
 	    let pos_saved=getpos(".")
 	    while line_nr >= stopline_backward
 		let [ line_nr, col_nr ] = searchpairpos('\\begin\s*{', '', '\\end\s*{', 'bW', 'strpart(getline("."), 0, col(".")-1) =~ "\\\\\\@<!%"', stopline_backward)
 		if line_nr >= stopline_backward
-		    let env_name	= matchstr(strpart(getline(line_nr), col_nr-1), '\\begin\s*{\zs[^}]*\ze}')
-		    if env_name		=~# '^\s*document\s*$' 
+		    let env_name = matchstr(strpart(getline(line_nr), col_nr-1), '\\begin\s*{\zs[^}]*\ze}')
+		    if env_name =~# '^\s*document\s*$' 
 			break
 		    endif
-		    let line_forward 	= searchpair('\\begin\s*{'.env_name.'}', '', '\\end\s*{'.env_name.'}', 
+		    let line_forward = searchpair('\\begin\s*{'.env_name.'}', '', '\\end\s*{'.env_name.'}', 
 							\ 'nW', '', stopline_forward)
 		    if line_forward == 0
 			break
