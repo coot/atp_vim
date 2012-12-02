@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Nov 25, 2012 at 11:55:37  +0000
+" Last Change: Sun Dec 02, 2012 at 11:27:11  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -879,7 +879,10 @@ function! <SID>BeamerOptions()
 	exe "nmap <buffer> <silent> ".g:atp_map_backward_motion_leader."F <Plug>PreviousFrame"
     endif
 endfunction
-au BufEnter *.tex 	call <SID>BeamerOptions()
+augroup ATP_BeamerOptions
+    au!
+    au BufEnter *.tex 	call <SID>BeamerOptions()
+augroup END
 " NORMAL MODE MAPS: (most of them) {{{1
 
 " Enabling this requires uncommenting augroup ATP_Cmdwin in options.vim
