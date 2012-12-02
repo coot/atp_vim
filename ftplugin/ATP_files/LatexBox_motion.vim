@@ -815,12 +815,11 @@ function! s:SelectCurrentParagraph(seltype)
 	   let bcol		= 1
 	   let no_motion   	= 1
 	elseif getline(bline) !~ '^\s*$' && bline_str !~ '^\%(\\\[\|\\item\>\)'
-" 	if getline(bline) !~ '^\s*$' && getline(bline) !~ '\\begin\s*{\s*\(equation\|align\|inlinemath\|dispayedmath\)\s*}' && bline_str !~ '^\%(\\\[\|\\item\>\)'
 	    let pattern = '\%(^\s*$' . 
 			\ '\|^[^%]*\%(\\\zepar\>' . 
 			    \ '\|\\\zenewline\>' . 
 			    \ '\|\\end\s*{[^}]*}\s*' . 
-			    \ '\|\\begin\s*{[^}]*}\s*'.
+			    \ '\|\\begin\%(\s*{[^}]*}\)\{1,2}\s*'.
 				\ '\%(\[[^]]*\]\|{[^}]*}\)\{0,2}\s*'.
 				\ '\%(\%(\\\%(label\|index\|hypertarget\s*{[^}]*}\)\s*{[^}]*}\)\s*\%(\\footnote\s*\%(\n' . 
 					\ '\|[^}]\)*}\)\=' . 
@@ -859,8 +858,7 @@ function! s:SelectCurrentParagraph(seltype)
 	    call atplib#Log("SelectCurrentParagraph.log", "eline=".eline." ecol=".ecol)
 	endif
 	let line = strpart(getline(eline), ecol-1)
-	let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol) && line !~ '^\s*\\\]\|^\s*\\end\>\|^\s*\\begin\>\>'
-" 	let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol) && line !~ '^\s*\\\]\|^\s*\\end\>'
+	let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol) && line !~ '^\s*\\\]\|^\s*\\end\>\|^\s*\\begin\>'
 	let i = 2
 	if g:atp_debugSelectCurrentParagraph
 	    call atplib#Log("SelectCurrentParagraph.log", " E pos:" . string([line("."), col(".")]) . " e-pos:" . string([eline, ecol]) . " true: " . true)
@@ -877,8 +875,7 @@ function! s:SelectCurrentParagraph(seltype)
 		break
 	    endif
 	    let [ eline, ecol ] = s:InnerSearchPos(0, eline, ecol, i)
-	    let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol) && line !~ '^\s*\\\]\|^\s*\\end\>\|^\s*\\begin\>\>'
-" 	    let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol)
+	    let true = atplib#complete#CheckSyntaxGroups(g:atp_MathZones, eline, ecol) && line !~ '^\s*\\\]\|^\s*\\end\>\|^\s*\\begin\>'
 	    if g:atp_debugSelectCurrentParagraph
 		call atplib#Log("SelectCurrentParagraph.log", i . ") " . string([eline, ecol]) . " pos:" . string([line("."), col(".")]) . " true: " . true)
 	    endif
