@@ -3041,7 +3041,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		endfor
 		let bibitems_list=values(atplib#bibsearch#searchbib(pat, bibdict))
 	    endif
-	    let g:bibitems_list=bibitems_list
 	    let g:time_searchbib_py=reltimestr(reltime(searchbib_time))
 	    if g:atp_debugTabCompletion
 		let g:pat = pat
@@ -3057,7 +3056,13 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		    " present!
 		    call add(pre_completion_list, dict[key]['bibfield_key']) 
 		    let bibkey=dict[key]['bibfield_key']
-		    let bibkey=substitute(strpart(bibkey,max([stridx(bibkey,'{'),stridx(bibkey,'(')])+1),',\s*','','')
+		    if stridx(bibkey, '{') != -1 && stridx(bibkey, '(') != -1
+			let bibkey=substitute(strpart(bibkey,min([stridx(bibkey,'{'),stridx(bibkey,'(')])+1),',\s*','','')
+		    elseif stridx(bibkey, '(') == -1
+			let bibkey=substitute(strpart(bibkey,stridx(bibkey,'{')+1),',\s*','','')
+		    else
+			let bibkey=substitute(strpart(bibkey,stridx(bibkey,'(')+1),',\s*','','')
+		    endif
 		    if nchar != ',' && nchar != '}'
 			let bibkey.="}"
 		    endif
