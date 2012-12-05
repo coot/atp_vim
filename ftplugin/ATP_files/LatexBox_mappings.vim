@@ -45,17 +45,18 @@ omap <buffer> <silent> ib :<C-U>call <sid>Omap_Wrapper("i(")<CR>
 vmap <buffer> <silent> ab <Plug>LatexBox_SelectBracketOuter_1
 omap <buffer> <silent> ab :<C-U>call <sid>Omap_Wrapper("a(")<CR>
 vmap <buffer> <silent> i) <Plug>LatexBox_SelectBracketInner_1
-omap <buffer> <silent> i( :<C-U>call <sid>Omap_Wrapper("i)")<CR>
+omap <buffer> <silent> i) :<C-U>call <sid>Omap_Wrapper("i)")<CR>
 vmap <buffer> <silent> a) <Plug>LatexBox_SelectBracketOuter_1
-omap <buffer> <silent> a( :<C-U>call <sid>Omap_Wrapper("a)")<CR>
+omap <buffer> <silent> a) :<C-U>call <sid>Omap_Wrapper("a)")<CR>
 
 vmap <buffer> <silent> i{ <Plug>LatexBox_SelectBracketInner_2
+omap <buffer> <silent> i{ :<C-U>call <sid>Omap_Wrapper("i{")<CR>
 vmap <buffer> <silent> a{ <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a{ :<C-U>call <sid>Omap_Wrapper()<CR>
+omap <buffer> <silent> a{ :<C-U>call <sid>Omap_Wrapper("a{")<CR>
 vmap <buffer> <silent> i} <Plug>LatexBox_SelectBracketInner_2
 omap <buffer> <silent> i} :<C-U>call <sid>Omap_Wrapper("i}")<CR>
 vmap <buffer> <silent> a} <Plug>LatexBox_SelectBracketOuter_2
-omap <buffer> <silent> a} :<C-U>call <sid>Omap_Wrapper("a{")<CR>
+omap <buffer> <silent> a} :<C-U>call <sid>Omap_Wrapper("a}")<CR>
 
 vmap <buffer> <silent> i[ <Plug>LatexBox_SelectBracketInner_3
 omap <buffer> <silent> i[ :<C-U>call <sid>Omap_Wrapper("i[")<CR>
