@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Dec 02, 2012 at 22:45:32  +0000
+" Last Change: Wed Dec 05, 2012 at 15:54:49  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -252,9 +252,10 @@ setl includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
 if !exists("g:Align_xstrlen") && v:version >= 703 && &conceallevel 
     let g:Align_xstrlen="ATP_strlen"
 endif
-setl formatlistpat=^\\s*\\\\item\\s*\\[.\\{-}\\]\\s*
+setl formatlistpat=^\\s*\\\\item\\s*
 setl formatoptions+=n
-setl formatexpr=TexFormat
+" setl formatexpr=TexFormat
+setl cinwords=
 " }}}
 
 " BUFFER LOCAL VARIABLES:
@@ -2352,7 +2353,7 @@ endif
 	let blist = tabpagebuflist()
 	let cbufnr = bufnr("%")
 	if index(['__ToC__', '__Labels__'],bufname(cbufnr)) == -1
-	call remove(blist, index(blist, cbufnr))
+	    call remove(blist, index(blist, cbufnr))
 	endif
 	let bdict = {}
 	for buf in blist
@@ -2365,7 +2366,7 @@ endif
 	if !empty(bdict)
 	    for i in keys(bdict)
 		if a:cmd == 'quit'
-		quit
+		    quit
 		else
 		    exe a:cmd i
 		endif
