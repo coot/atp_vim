@@ -2206,11 +2206,7 @@ function! atplib#compiler#Bibtex(bang, ...)
     endif
 
     if g:atp_Compiler == 'python'
-"         if g:atp_devversion == 0
-            call atplib#compiler#PythonCompiler(1, 0, 0, mode, "COM", atp_MainFile, "")
-"         else
-"             call atplib#compiler#ThreadedCompiler(1, 0, 0, mode, "COM", atp_MainFile, "")
-"         endif
+	call atplib#compiler#PythonCompiler(1, 0, 0, mode, "COM", atp_MainFile, "")
     else
 	call atplib#compiler#Compiler(1, 0, 0, mode, "COM", atp_MainFile, "")
     endif
