@@ -2348,24 +2348,34 @@ endif
 endif
 
     " Quit {{{2
-    fun! <sid>ATP_Quit() 
+    fun! <sid>ATP_Quit(cmd) 
 	let blist = tabpagebuflist()
 	let cbufnr = bufnr("%")
+	if index(['__ToC__', '__Labels__'],bufname(cbufnr)) == -1
 	call remove(blist, index(blist, cbufnr))
-	call map(blist, 'bufname(v:val)')
+	endif
+	let bdict = {}
+	for buf in blist
+	    let bdict[buf]=bufname(buf)
+	endfor
 	let l=0
-	let l+= (index(blist, '__ToC__') != -1)
-	let l+= (index(blist, '__Labels__') != -1)
-	call filter(blist, 'v:val != "__ToC__" && v:val != "__Labels__"')
-	if empty(blist)
-	    for i in range(l)
+	let l+= (index(values(bdict), '__ToC__') != -1)
+	let l+= (index(values(bdict), '__Labels__') != -1)
+	call filter(bdict, 'bdict[v:key] == "__ToC__" || bdict[v:key] == "__Labels__"')
+	if !empty(bdict)
+	    for i in keys(bdict)
+		if a:cmd == 'quit'
 		quit
+		else
+		    exe a:cmd i
+		endif
 	    endfor
 	endif
     endfun
     augroup ATP_Quit
 	au!
-	au QuitPre * :call <sid>ATP_Quit()
+	au QuitPre * :call <sid>ATP_Quit('quit')
+	au BufUnload * :call <sid>ATP_Quit('bw')
     augroup END
 " }}}1
 
