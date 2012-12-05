@@ -2311,11 +2311,11 @@ fun! atplib#motion#SentenceNormalMotion(backward,count)
     normal! m`
     if a:backward != "b"
 	for i in range(1,a:count)
-	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'W')
+	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\|\\\%(part\|chapter\|\%(sub\)\{0,2}section\|\%(sub\)\?paragraph\)\%(\s*[.\{-}]\)\?{.*}\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'W')
 	endfor
     else
 	for i in range(1,a:count)
-	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'Wb')
+	    call search('\%(\.\|\\par\|\\]\|\\noindent\|\\\%(begin\|end\)\%(\s*{.*}\|\s*\[.*\]\)*\|\\\%(part\|chapter\|\%(sub\)\{0,2}section\|\%(sub\)\?paragraph\)\%(\s*[.\{-}]\)\?{.*}\)\_s\+\zs\%(\s*\\begin\|\s*\\end\)\@![A-Z]', 'Wb')
 	endfor
     endif
 endfun
