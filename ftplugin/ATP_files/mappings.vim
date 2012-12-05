@@ -2,7 +2,7 @@
 " Description:  This file contains mappings defined by ATP.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sun Dec 02, 2012 at 11:27:11  +0000
+" Last Change: Mon Dec 03, 2012 at 22:24:47  +0000
 
 " Add maps, unless the user didn't want them.
 if exists("g:no_plugin_maps") && g:no_plugin_maps ||
@@ -278,17 +278,26 @@ if !empty(g:atp_map_forward_motion_leader)
 if !hasmapto("<Plug>GotoNextParagraph", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."P 	<Plug>GotoNextParagraph"
 endif
+if !hasmapto("<Plug>GotoNextParagraph", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."P 	<Plug>GotoNextParagraph"
+endif
 if !hasmapto("<Plug>vGotoNextParagraph", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."P	<Plug>vGotoNextParagraph"
 endif
 if !hasmapto("<Plug>GotoNextSubSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."S 	<Plug>GotoNextSubSection"
 endif
+if !hasmapto("<Plug>GotoNextSubSection", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."S 	<Plug>GotoNextSubSection"
+endif
 if !hasmapto("<Plug>vGotoNextSubSection", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."S	<Plug>vGotoNextSubSection"
 endif
 if !hasmapto("<Plug>GotoNextSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."s 	<Plug>GotoNextSection"
+endif
+if !hasmapto("<Plug>GotoNextSection", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."s 	<Plug>GotoNextSection"
 endif
 if !hasmapto("<Plug>vGotoNextSection", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."s	<Plug>vGotoNextSection"
@@ -297,6 +306,9 @@ if !( g:atp_map_forward_motion_leader == "]" && &l:diff )
     if !hasmapto("<Plug>GotoNextChapter", 'n')
 	execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."c 	<Plug>GotoNextChapter"
     endif
+    if !hasmapto("<Plug>GotoNextChapter", 'o')
+	execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."c 	<Plug>GotoNextChapter"
+    endif
     if !hasmapto("<Plug>vGotoNextChapter", 'v')
 	execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."c 	<Plug>vGotoNextChapter"
     endif
@@ -304,23 +316,44 @@ endif
 if !hasmapto("<Plug>JumptoNextEnvironment", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."e	<Plug>JumptoNextEnvironment"
 endif
+if !hasmapto("<Plug>JumptoNextEnvironment", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."e	<Plug>JumptoNextEnvironment"
+endif
 if !hasmapto("<Plug>FastJumptoNextEnvironment", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."E	<Plug>FastJumptoNextEnvironment"
+endif
+if !hasmapto("<Plug>FastJumptoNextEnvironment", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."E	<Plug>FastJumptoNextEnvironment"
 endif
 if !hasmapto("<Plug>JumpOutForward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."o	<Plug>JumpOutForward"
 endif
+if !hasmapto("<Plug>JumpOutForward", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."o	<Plug>JumpOutForward"
+endif
 if !hasmapto("<Plug>FastJumpOutForward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."O	<Plug>FastJumpOutForward"
+endif
+if !hasmapto("<Plug>FastJumpOutForward", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."O	<Plug>FastJumpOutForward"
 endif
 if !hasmapto("<Plug>GotoNextMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."m	<Plug>GotoNextMath"
 endif
+if !hasmapto("<Plug>GotoNextMath", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."m	<Plug>GotoNextMath"
+endif
 if !hasmapto("<Plug>GotoNextDisplayedMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."M	<Plug>GotoNextDisplayedMath"
 endif
+if !hasmapto("<Plug>GotoNextDisplayedMath", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."M	<Plug>GotoNextDisplayedMath"
+endif
 if !hasmapto("<Plug>GotoNextPart", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_forward_motion_leader."p 	<Plug>GotoNextPart"
+endif
+if !hasmapto("<Plug>GotoNextPart", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_forward_motion_leader."p 	<Plug>GotoNextPart"
 endif
 if !hasmapto("<Plug>vGotoNextPart", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_forward_motion_leader."p 	<Plug>vGotoNextPart"
@@ -330,17 +363,26 @@ if !empty(g:atp_map_backward_motion_leader)
 if !hasmapto("<Plug>GotoPreviousParagraph", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."P 	<Plug>GotoPreviousParagraph"
 endif
+if !hasmapto("<Plug>GotoPreviousParagraph", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."P 	<Plug>GotoPreviousParagraph"
+endif
 if !hasmapto("<Plug>vGotoPreviousParagraph", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."P 	<Plug>vGotoPreviousParagraph"
 endif
 if !hasmapto("<Plug>GotoPreviousSubSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."S 	<Plug>GotoPreviousSubSection"
 endif
+if !hasmapto("<Plug>GotoPreviousSubSection", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."S 	<Plug>GotoPreviousSubSection"
+endif
 if !hasmapto("<Plug>vGotoPreviousSubSection", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."S 	<Plug>vGotoPreviousSubSection"
 endif
 if !hasmapto("<Plug>GotoPreviousSection", 'n')
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."s 	<Plug>GotoPreviousSection"
+endif
+if !hasmapto("<Plug>GotoPreviousSection", 'o')
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."s 	<Plug>GotoPreviousSection"
 endif
 if !hasmapto("<Plug>vGotoPreviousSection", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."s 	<Plug>vGotoPreviousSection"
@@ -349,6 +391,9 @@ if !( g:atp_map_backward_motion_leader == "]" && &l:diff )
     if !hasmapto("<Plug>GotoPreviousChapter", 'n')
 	execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."c 	<Plug>GotoPreviousChapter"
     endif
+    if !hasmapto("<Plug>GotoPreviousChapter", 'o')
+	execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."c 	<Plug>GotoPreviousChapter"
+    endif
     if !hasmapto("<Plug>vGotoPreviousChapter", 'v')
 	execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."c 	<Plug>vGotoPreviousChapter"
     endif
@@ -356,23 +401,44 @@ endif
 if !hasmapto("<Plug>JumptoPreviousEnvironment", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."e 	<Plug>JumptoPreviousEnvironment"
 endif
+if !hasmapto("<Plug>JumptoPreviousEnvironment", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."e 	<Plug>JumptoPreviousEnvironment"
+endif
 if !hasmapto("<Plug>FastJumptoPreviousEnvironment", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."E 	<Plug>FastJumptoPreviousEnvironment"
+endif
+if !hasmapto("<Plug>FastJumptoPreviousEnvironment", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."E 	<Plug>FastJumptoPreviousEnvironment"
 endif
 if !hasmapto("<Plug>JumpOutBackward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."o 	<Plug>JumpOutBackward"
 endif
+if !hasmapto("<Plug>JumpOutBackward", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."o 	<Plug>JumpOutBackward"
+endif
 if !hasmapto("<Plug>FastJumpOutBackward", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."O 	<Plug>FastJumpOutBackward"
+endif
+if !hasmapto("<Plug>FastJumpOutBackward", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."O 	<Plug>FastJumpOutBackward"
 endif
 if !hasmapto("<Plug>GotoPreviousMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."m	<Plug>GotoPreviousMath"
 endif
+if !hasmapto("<Plug>GotoPreviousMath", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."m	<Plug>GotoPreviousMath"
+endif
 if !hasmapto("<Plug>GotoPreviousDisplayedMath", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."M	<Plug>GotoPreviousDisplayedMath"
 endif
+if !hasmapto("<Plug>GotoPreviousDisplayedMath", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."M	<Plug>GotoPreviousDisplayedMath"
+endif
 if !hasmapto("<Plug>GotoPreviousPart", "n")
     execute "nmap <silent> <buffer> ".g:atp_map_backward_motion_leader."p 	<Plug>GotoPreviousPart"
+endif
+if !hasmapto("<Plug>GotoPreviousPart", "o")
+    execute "omap <silent> <buffer> ".g:atp_map_backward_motion_leader."p 	<Plug>GotoPreviousPart"
 endif
 if !hasmapto("<Plug>vGotoPreviousPart", 'v')
     execute "vmap <silent> <buffer> ".g:atp_map_backward_motion_leader."p 	<Plug>vGotoPreviousPart"
