@@ -289,6 +289,10 @@ try:
     tmplog  = os.path.join(tmpdir,basename+".log")
     debug_file.write("TMPLOG="+tmplog+"\n")
     tmpaux  = os.path.join(tmpdir,basename+".aux")
+    dirs = filter(lambda d: os.path.isdir(d), os.listdir(texfile_dir))
+    dirs = map(lambda d: os.path.basename(d),dirs)
+    for d in dirs:
+        os.mkdir(os.path.join(tmpdir, d))
 
     cdir = os.curdir
     os.chdir(outdir)

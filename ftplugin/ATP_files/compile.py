@@ -342,6 +342,10 @@ try:
     tmpdir  = tempfile.mkdtemp(dir=options.tempdir,prefix="")
     debug_file.write("TMPDIR: "+tmpdir+"\n")
     tmpaux  = os.path.join(tmpdir,basename+".aux")
+    dirs = filter(lambda d: os.path.isdir(d), os.listdir(os.path.dirname(mainfile_fp)))
+    dirs = map(lambda d: os.path.basename(d),dirs)
+    for d in dirs:
+        os.mkdir(os.path.join(tmpdir, d))
 
     command_opt.append('-output-directory='+tmpdir)
     latex_cmd      = [command]+command_opt+[mainfile_fp]
