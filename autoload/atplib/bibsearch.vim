@@ -504,17 +504,17 @@ function! atplib#bibsearch#SearchBibItems()
 	endif
     endfor
     call add(l:includefile_list, atp_MainFile) 
+    call map(l:includefile_list, 'atplib#FullPath(v:val)')
 
     if has("python")
 python << PEND
 import vim
 import re
+import atplib.atpvim as atp
 files=vim.eval("l:includefile_list")
 citekey_label_dict={}
 for f in files:
-    f_o=open(f, 'r')
-    f_l=f_o.read().split("\n")
-    f_o.close()
+    f_l=atp.read(f).split("\n")
     for line in f_l:
         if re.match('[^%]*\\\\bibitem', line):
             match=re.search('\\\\bibitem\s*(?:\[([^\]]*)\])?\s*{([^}]*)}\s*(.*)', line)
