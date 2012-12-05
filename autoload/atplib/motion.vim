@@ -522,7 +522,7 @@ function! atplib#motion#showtoc(toc)
 	endif
 	let toc_winnr=bufwinnr(bufnr("__ToC__"))
 	if toc_winnr == -1
-	    let openbuffer="keepalt " . (labels_winnr == -1 ? t:toc_window_width : ''). split_cmd." +setl\\ buftype=nofile\\ modifiable\\ noreadonly\\ noswapfile\\ bufhidden=delete\\ nobuflisted\\ tabstop=1\\ filetype=toc_atp\\ nowrap\\ nonumber\\ norelativenumber\\ winfixwidth\\ nobuflisted\\ nospell\\ cursorline __ToC__"
+	    let openbuffer="keepalt " . (labels_winnr == -1 ? t:toc_window_width : ''). split_cmd." +setl\\ buftype=nofile\\ modifiable\\ noreadonly\\ noswapfile\\ bufhidden=delete\\ nobuflisted\\ tabstop=1\\ filetype=toc_atp\\ nowrap\\ nonumber\\ norelativenumber\\ winfixwidth\\ nospell\\ cursorline __ToC__"
 	    let splitright = &splitright
 	    let &splitright = g:atp_splitright
 	    keepalt silent exe openbuffer
