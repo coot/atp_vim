@@ -2334,25 +2334,34 @@ endfunction
 " atplib#motion#ParagraphVisualMotion {{{1
 function! atplib#motion#ParagraphVisualMotion(backward,count)
     let bpos = g:atp_visualstartpos
-    let cond = !atplib#CompareCoordinates(bpos[1:2],getpos("'>")[1:2])
     normal! m`
     if a:backward != "b"
+	let cond = (bpos[1] >= getpos("'>")[1])
 	if cond
 	    call cursor(getpos("'<")[1:2])
 	else
 	    call cursor(getpos("'>")[1:2])
 	endif
 	for i in range(1,a:count)
-	    let epos = searchpos('\(^\(\n\|\s\)*\n\ze\|\(\_s*\)\=\\par\>\|\%'.line("$").'l$\)', 'Wn')
+	    call search('.', 'cW')
+	    let epos = searchpos('\(^\(\n\|\s\)*\n\ze\|\(\_s*\)\=\\par\>\|\%'.line("$").'l$\)', 'W')
+	    if epos == [0, 0]
+		let epos = getpos(".")[1:2]
+	    endif
 	endfor
     else 
+	let cond = (bpos[1] < getpos("'>")[1])
 	if cond
-	    call cursor(getpos("'<")[1:2])
-	else
 	    call cursor(getpos("'>")[1:2])
+	else
+	    call cursor(getpos("'<")[1:2])
 	endif
 	for i in range(1,a:count)
-	    let epos = searchpos('\(^\(\n\|\s\)*\n\ze\|\(\_s*\)\=\\par\>\|^\%1l\ze\)', 'Wnb')
+	    call search('.', 'cbW')
+	    let epos = searchpos('\(^\(\n\|\s\)*\n\ze\|\(\_s*\)\=\\par\>\|^\%1l\ze\)', 'Wb')
+	    if epos == [0, 0]
+		let epos = getpos(".")[1:2]
+	    endif
 	endfor
     endif
     call cursor(bpos[1:2])
