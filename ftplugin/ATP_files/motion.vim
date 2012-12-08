@@ -58,6 +58,8 @@ command! -buffer -count=1 SkipCommentBackward 	:call atplib#motion#SkipComment('
 vmap <buffer> <Plug>SkipCommentForward	:call atplib#motion#SkipComment('fs', 'v', v:count1)<CR>
 vmap <buffer> <Plug>SkipCommentBackward	:call atplib#motion#SkipComment('bs', 'v', v:count1)<CR>
 
+vnoremap <buffer> <silent> <Plug>TexWordObject :<c-u>call atplib#motion#TexKeywordObject()<CR>
+
 imap <Plug>TexSyntaxMotionForward	<Esc>:call atplib#motion#TexSyntaxMotion(1,1,1)<CR>a
 imap <Plug>TexSyntaxMotionBackward	<Esc>:call atplib#motion#TexSyntaxMotion(0,1,1)<CR>a
 nmap <Plug>TexSyntaxMotionForward	:call atplib#motion#TexSyntaxMotion(1,1)<CR>
@@ -70,6 +72,8 @@ nnoremap <Plug>TexJMotionBackward	:call atplib#motion#JMotion('b')<CR>
 
 nnoremap <buffer> <Plug>ParagraphNormalMotionForward 	:<C-U>call atplib#motion#ParagraphNormalMotion('', v:count1)<CR>
 nnoremap <buffer> <Plug>ParagraphNormalMotionBackward	:<C-U>call atplib#motion#ParagraphNormalMotion('b', v:count1)<CR>
+vnoremap <buffer> <Plug>ParagraphVisualMotionForward 	:<C-U>call atplib#motion#ParagraphVisualMotion('',v:count1)<CR>
+vnoremap <buffer> <Plug>ParagraphVisualMotionBackward 	:<C-U>call atplib#motion#ParagraphVisualMotion('b',v:count1)<CR>
 nnoremap <buffer> <Plug>SentenceNormalMotionForward 	:<C-U>call atplib#motion#SentenceNormalMotion('', v:count1)<CR>
 nnoremap <buffer> <Plug>SentenceNormalMotionBackward	:<C-U>call atplib#motion#SentenceNormalMotion('b', v:count1)<CR>
 " command! -buffer -nargs=1 -complete=buffer MakeToc	:echo atplib#motion#maketoc(fnamemodify(<f-args>, ":p"))[fnamemodify(<f-args>, ":p")] 
