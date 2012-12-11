@@ -1,7 +1,7 @@
 " Vim filetype plugin file
 " Language:    tex
 " Maintainer:  Marcin Szamotulski
-" Last Change: Fri Nov 30, 2012 at 19:56:12  +0000
+" Last Change: Tue Dec 11, 2012 at 18:53:41  +0000
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 
 " if exists("b:did_ftplugin") | finish | endif
@@ -834,6 +834,15 @@ function! <sid>Fold(cmd) " {{{1
     exe toc_winnr."wincmd w"
 endfunction " }}}1
 
+" TocMotion
+fun! <sid>TocMotion(up)
+    if a:up
+	call search('^\%(\s\%(\d\+\|\*\|-\)\s\|>>\)', 'bW')
+    else
+	call search('^\%(\s\%(\d\+\|\*\|-\)\s\|>>\)', 'W')
+    endif
+endfun
+
 " Folding:
 fun! ATP_TocFold(linenr) " {{{1
     " let pos = getpos(".")
@@ -869,8 +878,8 @@ if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
 	nmap <silent> <buffer> ZO		:call <sid>Fold('zO')<CR>
     endif
     map <silent> <buffer> q 		:bdelete<CR>
-    map <silent> <buffer> <CR> 		:call GotoLine(1)<CR>
-    map <silent> <buffer> <space> 	:call GotoLine(0)<CR>
+    map <silent> <buffer> <CR> 		:call GotoLine(0)<CR>
+    map <silent> <buffer> <space> 	:call GotoLine(1)<CR>
     map <silent> <buffer> <LeftRelease>   <LeftMouse><bar>:call GotoLine(0)<CR>
     vmap <silent> <buffer> <LeftRelease>  <Esc><LeftMouse><bar>:call GotoLine(0)<CR>
     if expand("%") == "__ToC__"
@@ -894,5 +903,24 @@ if !exists("no_plugin_maps") && !exists("no_atp_toc_maps")
 
     nnoremap <silent> <buffer> ]]	:call search('^\s*\zs\d\s', 'W')<cr>
     nnoremap <silent> <buffer> [[	:call search('^\s*\zs\d\s', 'Wb')<cr>
+    nnoremap <silent> <buffer> <c-k> :call <sid>TocMotion(1)<cr>
+    nnoremap <silent> <buffer> <c-j> :call <sid>TocMotion(0)<cr>
+    nnoremap <silent> <buffer> K :call search('^>>', 'bW')<cr>
+    nnoremap <silent> <buffer> J :call search('^>>', 'W')<cr>
+
+    nnoremap <silent> <buffer> I <nop>
+    nnoremap <silent> <buffer> x <nop>
+    nnoremap <silent> <buffer> X <nop>
+    nnoremap <silent> <buffer> dd <nop>
+    nnoremap <silent> <buffer> d <nop>
+    nnoremap <silent> <buffer> D <nop>
+    nnoremap <silent> <buffer> A <nop>
+    nnoremap <silent> <buffer> a <nop>
+    nnoremap <silent> <buffer> S <nop>
+    nnoremap <silent> <buffer> u <nop>
+    nnoremap <silent> <buffer> U <nop>
+    nnoremap <silent> <buffer> o <nop>
+    nnoremap <silent> <buffer> O <nop>
+    nnoremap <silent> <buffer> P <nop>
 endif
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
