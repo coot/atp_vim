@@ -629,7 +629,12 @@ function! atplib#FindAndOpen(file, output_file, line, ...)
     let server_list	= split(serverlist(), "\n")
     exe "redir! > /tmp/FindAndOpen.log"
     if len(server_list) == 0
-	return 1
+	" No server is hosting the file
+	exe "edit ".fnameescape(a:file)
+	call cursor(a:line, col)
+	redraw
+	redir END
+	return 0
     endif
     let open		= "buffer"
     let use_server	= ""
@@ -699,7 +704,15 @@ function! atplib#FindAndOpen(file, output_file, line, ...)
 	    " Set the ' mark (jump list), cursor position and redraw:
 	    call remote_send(use_server, "<Esc>:call cursor(".a:line.",".col.")<CR>:redraw<CR>")
 	endif
+    else
+	" No server is hosting the file
+	exe "edit ".fnameescape(a:file)
+	call cursor(a:line, col)
+	redraw
+	redir END
+	return v:servername
     endif
+    redir END
     return use_server
 endfunction
 "}}}1
