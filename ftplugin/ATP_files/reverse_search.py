@@ -108,8 +108,8 @@ else:
         line    = "-1"
         column  = "-1"
 
-f.write(">>> args: %s:%s:%s\n" % (file, line, column))
-
+f.write(">>> args: '%s':%s:%s\n" % (file, line, column))
+cmd = ''
 if len(server_list):
     server = server_list[0]
 
@@ -124,19 +124,19 @@ if len(server_list):
                     # this function is only available on Unix, 
                     # signal.alarm() works only with seconds.  
 
-    f.write(">>> server: %s\n" % server)
+    f.write(">>> server: '%s'\n" % server)
     # Call atplib#FindAndOpen()     
     cmd="%s --servername %s --remote-expr \"atplib#FindAndOpen('%s','%s','%s','%s')\"" % (progname, server, file, output_file, line, column)
     findandopen=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     try:
-        f.write(finaandopen.stdout.read())
+        f.write(findandopen.stdout.read())
     except TimeOutException:
         vim_server=None
         # Echo a message (this can also be done in the Exception. 
         # How to do that?
     else:
         vim_server=re.split("\n",findandopen.stdout.read())[0]
-    f.write(">>> vim server: %s\n" % vim_server)
+    f.write(">>> vim server: '%s'\n" % vim_server)
     if synctex_returncode and vim_server:
         cmd=""
         if error != "":
@@ -147,6 +147,23 @@ if len(server_list):
             vim_remote_expr(vim_server,
                 "atplib#callback#Echo(\"[SyncTex:] synctex return with exit code: %d\",'echo','WarninMsg', '1')" % synctex.returncode
                 )
-# Debug:
-f.write(">>> file: %s\n>>> line: %s\n>>> column: %s\n>>> cmd: %s\n" % (file, line, column, cmd))
-f.close()
+    # Debug:
+    f.write("""\
+    >>> file: '%s'
+    >>> line: '%s'
+    >>> column: '%s'
+    >>> cmd: '%s'
+    """ % (file, line, column, cmd))
+    f.close()
+else:
+    # no running vim:
+    cmd="%s +%s '%s'" % (progname, line, file)
+    f.write("""\
+    >>> file: '%s'
+    >>> line: '%s'
+    >>> column: '%s'
+    >>> cmd: '%s'
+    """ % (file, line, column, cmd))
+    f.close()
+    p=subprocess.Popen(cmd, shell=True, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+    p.wait()
