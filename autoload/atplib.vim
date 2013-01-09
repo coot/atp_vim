@@ -603,12 +603,12 @@ function! atplib#ServerListOfFiles()
 	if exists("main_file")
 	    unlet main_file
 	endif
-	let main_file 	= getbufvar(nr, "atp_MainFile")
-	let log_file	= ( expand("%:e") =~# '^_\?log$' )
+	let main_file = getbufvar(nr, "atp_MainFile")
+	let log_file = ( expand("%:e") =~# '^_\?log$' )
 	if exists("files")
 	    unlet files
 	endif
-	let files 	= getbufvar(nr, "ListOfFiles")
+	let files = getbufvar(nr, "ListOfFiles")
 	if string(main_file) != "" && !log_file
 	    call add(file_list, main_file)
 	endif
@@ -655,19 +655,38 @@ function! atplib#FindAndOpen(file, output_file, line, ...)
     let open		= "buffer"
     let use_server	= ""
     let use_servers	= []
+    let server_filedict = {}
     for server in server_list
 	let file_list=split(remote_expr(server, 'atplib#ServerListOfFiles()'), "\n")
+        let server_filedict[server]=file_list
 	" Note: atplib#ServerListOfFiles returns all the files loaded by the
 	" server plus all corresponding values of b:ListOfFiles
 	let cond_1 = (index(file_list, file) != "-1")
 	let cond_2 = (index(file_list, file_t) != "-1")
 	if cond_1
-	    let use_server	= server
+	    let use_server = server
 	    break
 	elseif cond_2
 	    call add(use_servers, server)
 	endif
     endfor
+    if use_server == ""
+        " If b:ListOfFiles was not defined, the previous for would not return
+        " a server, run again, but now looking for the main file.
+        for server in keys(server_filedict)
+            let file_list=aserver_filedict[server]
+            " Note: atplib#ServerListOfFiles returns all the files loaded by the
+            " server plus all corresponding values of b:ListOfFiles
+            let cond_1 = (index(file_list, main_file) != "-1")
+            let cond_2 = (index(file_list, main_file_t) != "-1")
+            if cond_1
+                let use_server = server
+                break
+            elseif cond_2
+                call add(use_servers, server)
+            endif
+        endfor
+    endif
     " If we could not find file name with full path in server list use the
     " first server where is fnamemodify(file, ":t"). 
     if use_server == ""
