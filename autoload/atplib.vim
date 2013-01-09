@@ -620,6 +620,22 @@ function! atplib#ServerListOfFiles()
     redir end
     return file_list
 endfunction
+fun! atplib#PyLog(file, message,...)
+if !has("python")
+    return
+endif
+let mode = a:0 ? a:1 : 'a'
+python << EOF
+import vim
+fname = vim.eval('a:file')
+message = vim.eval('a:message')
+mode = vim.eval('mode')
+if not message.endswith('\n'):
+    message += '\n'
+with open(fname, mode) as fo:
+    fo.write(message)
+EOF
+endfun
 function! atplib#FindAndOpen(file, output_file, line, ...)
     let col		= ( a:0 >= 1 && a:1 > 0 ? a:1 : 1 )
     let file		= ( fnamemodify(simplify(a:file), ":e") == "tex" ? simplify(a:file) : fnamemodify(simplify(a:file), ":p:r") . ".tex" )
