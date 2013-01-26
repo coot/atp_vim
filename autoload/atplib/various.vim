@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sat Jan 26, 2013 at 21:08:08  +0000
+" Last Change: Sat Jan 26, 2013 at 21:32:31  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -1494,17 +1494,27 @@ function! atplib#various#Preamble(...)
 
 	    exe "keepalt edit " . b:atp_MainFile 
 	endif
-	if !return_preamble
-	    exe "1," . (linenr-1) . "print"
-	else
-	    let preamble = getbufline(bufnr("%"), 1, linenr-1)
-	endif
+	let preamble = getbufline(bufnr("%"), 1, linenr-1)
 	if exists("cfile")
 	    exe "keepalt edit " . cfile
 	endif
 	call winrestview(winview)
 	if return_preamble
 	    return preamble
+	else
+	    if exists('*ViewPort')
+		let projectVarDict 	= SaveProjectVariables()
+		exe 'split '.fnameescape(b:atp_MainFile)
+		call ViewPort('edit', 1, linenr-1)
+		call RestoreProjectVariables(projectVarDict)
+	    else
+		exe 'split +set\ buftype=nofile\ bufhidden=delete [scratch:\ preamble]'
+		setl syntax=tex
+		setl ma noro
+		call append(0, preamble)
+		normal ddgg
+		setl ma! ro!
+	    endif
 	endif
     else	
 	echomsg "[ATP:] not found \begin{document}."
