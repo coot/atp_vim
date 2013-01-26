@@ -238,11 +238,11 @@ These commands define (or redefine) a command.
 		not be already defined and must not begin with |\end|; for
 		|\renewcommand| it must already be defined.
 
-{args}		An integer from 1 to 9 denoting the number of arguments of the
+[args]		An integer from 1 to 9 denoting the number of arguments of the
 		command being defined. The default is for the command to have
 		no arguments.
 
-{default}	If this optional parameter is present, it means that the
+[default]	If this optional parameter is present, it means that the
 		command's first argument is optional. The default value of the
 		optional argument is default.
 
@@ -262,10 +262,10 @@ These commands define or redefine an environment.
 		command \nam must be undefined.  For |\renewenvironment| the
 		environment must already be defined.
 
-{args}		An integer from 1 to 9 denoting the number of arguments of
+[args]		An integer from 1 to 9 denoting the number of arguments of
 		the newly-defined environment. The default is no arguments.
 
-{default} 	If this is specified, the first argument is optional, and
+[default] 	If this is specified, the first argument is optional, and
 		default gives the default value for that argument.
 
 {begdef} 	The text substituted for every occurrence of \begin{nam}; a
