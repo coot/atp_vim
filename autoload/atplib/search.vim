@@ -1571,12 +1571,15 @@ function! atplib#search#BibSearch(bang,...)
 	endif
 	for file in b:ListOfFiles
 	    if b:TypeDict[file] == "bib"
-		let s:bibdict[file]=readfile(file)
+		if atplib#FullPath(file) != file
+		    let s:bibdict[file]=readfile(atplib#search#KpsewhichFindFile('bib', file))
+		else
+		    let s:bibdict[file]=readfile(file)
+		endif
 	    endif
 	endfor
     endif
     let b:atp_BibFiles=keys(s:bibdict)
-"     let g:bibdict=s:bibdict
 
     if has("python") && g:atp_bibsearch == "python"
 	call atplib#bibsearch#showresults(a:bang, atplib#bibsearch#searchbib_py(a:bang, pattern, keys(s:bibdict)), flag, pattern, s:bibdict)
