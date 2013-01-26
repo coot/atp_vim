@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Thu Nov 08, 2012 at 20:49:45  +0000
+" Last Change: Sat Jan 26, 2013 at 21:08:08  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 

@@ -179,6 +179,10 @@ NEWS							*atp-news*
 
  "n" is added to 'foromatoptions' is set and the 'formatlistpat' is set to
  recognize the \item LaTeX command.
+
+ |atp-:Preamble| shows preamble in a scratch buffer.  If 
+    http://www.vim.org/scripts/script.php?script_id=4296
+ is installed, the buffer is editable.
 >
  ======================
  Changes in version 12.2
@@ -2607,8 +2611,10 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 							*atp-:ShowPackages*
 :ShowPackages	lists LaTeX packages defined in the preamble.
 							*atp-:Preamble*
-:Preamble	echoes the preamble to vim pager.							
-
+:Preamble	opens a scratch buffer with a preamble.  The buffer is not
+		editable, unless the ViewPort plugin:
+		    http://www.vim.org/scripts/script.php?script_id=4296
+		is installed.
   							*atp-:ReloadATP*
 :ReloadATP 
     Reloads ATP plugin: variables, functions, and maps. Note that maps are not

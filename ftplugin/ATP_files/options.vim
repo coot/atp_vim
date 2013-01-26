@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Wed Dec 05, 2012 at 15:54:49  +0000
+" Last Change: Sat Jan 26, 2013 at 21:01:06  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1316,16 +1316,17 @@ if !exists("g:atp_ProjectLocalVariables")
 endif
 " This variable is used by atplib#motion#GotoFile (atp-:Edit command):c
 let g:atp_SavedProjectLocalVariables = [
-		\ "b:atp_MainFile", 	"g:atp_mapNn", 		"b:atp_autex",
-		\ "b:atp_TexCompiler", 	"b:atp_TexOptions", 	"b:atp_TexFlavor", 
-		\ "b:atp_ProjectDir", 	"b:atp_auruns", 	"b:atp_ReloadOnError",
-		\ "b:atp_OutDir",	"b:atp_OpenViewer", 	"b:atp_XpdfServer",
-		\ "b:atp_Viewer", 	"b:TreeOfFiles",	"b:ListOfFiles",
-		\ "b:TypeDict", 	"b:LevelDict", 		"b:atp_BibCompiler",
-		\ "b:atp_StarEnvDefault", 	"b:atp_StarMathEnvDefault",
-		\ "b:atp_updatetime_insert", 	"b:atp_updatetime_normal", 
-		\ "b:atp_ErrorFormat", 	"b:atp_LastLatexPID",	"b:atp_LatexPIDs",
-		\ "b:atp_LatexPIDs",	"b:atp_BibtexPIDs",	"b:atp_MakeindexPIDs",
+                \ "b:atp_MainFile",          "g:atp_mapNn",             "b:atp_autex",
+                \ "b:atp_TexCompiler",       "b:atp_TexOptions",        "b:atp_TexFlavor", 
+                \ "b:atp_ProjectDir",        "b:atp_auruns",            "b:atp_ReloadOnError",
+                \ "b:atp_OutDir",            "b:atp_OpenViewer",        "b:atp_XpdfServer",
+                \ "b:atp_Viewer",            "b:TreeOfFiles",           "b:ListOfFiles",
+                \ "b:TypeDict",              "b:LevelDict",             "b:atp_BibCompiler",
+                \ "b:atp_StarEnvDefault",    "b:atp_StarMathEnvDefault",
+                \ "b:atp_updatetime_insert", "b:atp_updatetime_normal", 
+                \ "b:atp_ErrorFormat",       "b:atp_LastLatexPID",      "b:atp_LatexPIDs",
+                \ "b:atp_LatexPIDs",         "b:atp_BibtexPIDs",        "b:atp_MakeindexPIDs",
+                \ "b:atp_LocalCommands",     "b:atp_LocalEnvironments", "b:atp_LocalColors",
 		\ ]
 
 " }}}1
