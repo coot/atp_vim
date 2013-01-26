@@ -1991,19 +1991,19 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 	endif
     "{{{3 --------- package options values
-    elseif l =~ '\\usepackage\[[^\]]*=\%([^\],]*\|{\([^}]\+,\)\?[^}]*\)$' &&
-		\ !( l =~ '\\usepackage\[[^\]]*=\%(.*\]\|{.*}\),$' ) && 
+    elseif l =~ '\\\%(usepackage\|RequirePackage\)\[[^\]]*=\%([^\],]*\|{\([^}]\+,\)\?[^}]*\)$' &&
+		\ !( l =~ '\\\%(usepackage\|RequirePackage\)\[[^\]]*=\%(.*\]\|{.*}\),$' ) && 
 		\ !normal_mode &&
 		\  index(g:atp_completion_active_modes, 'package options values') != -1
 	    let completion_method='package options values'
 	    let b:comp_method=completion_method
     "{{{3 --------- package options
-    elseif l =~ '\\usepackage\[[^\]]*$' && !normal_mode &&
+    elseif l =~ '\\\%(usepackage\|RequirePackage\)\[[^\]]*$' && !normal_mode &&
 		\  index(g:atp_completion_active_modes, 'package options') != -1
 	    let completion_method='package options'
 	    let b:comp_method=completion_method
     "{{{3 --------- package
-    elseif pline =~ '\\usepackage\%([.*]\)\?\s*' && !normal_mode &&
+    elseif pline =~ '\\\%(usepackage\|RequirePackage\)\%([.*]\)\?\s*' && !normal_mode &&
 		\  index(g:atp_completion_active_modes, 'package names') != -1
 	    let completion_method='package'
 	    " DEBUG:
@@ -2378,7 +2378,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	endfor
     "{{{3 ------------ PACKAGE OPTIONS VALUES
     elseif completion_method == 'package options values'
-	let package = matchstr(line, '\\usepackage\[.*{\zs[^}]*\ze}')
+	let package = matchstr(line, '\\\%(usepackage\|RequirePackage\)\[.*{\zs[^}]*\ze}')
 	let option  = matchstr(l,'\zs\<\w\+\ze=[^=]*$')
 	let completion_list=[]
 	if exists("g:atp_".package."_options_values")
@@ -2405,8 +2405,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
        endif
     "{{{3 ------------ PACKAGE OPTIONS
     elseif completion_method == 'package options'
-	let package = matchstr(line, '\\usepackage.*{\zs[^}]*\ze}')
-	let options = split(matchstr(line, '\\usepackage\[\s*\zs[^\]{]*\ze\s*[\]{]'), '\s*,\s*')
+	let package = matchstr(line, '\\\%(usepackage\|RequirePackage\).*{\zs[^}]*\ze}')
+	let options = split(matchstr(line, '\\\%(usepackage\|RequirePackage\)\[\s*\zs[^\]{]*\ze\s*[\]{]'), '\s*,\s*')
 	if has("python") || has("python3")
 	    let completion_list = get(get(g:atp_package_dict.ScanPackage(package.'.sty', ['options!']) ,package.'.sty',{}) , 'options', [])
 	else
@@ -2418,7 +2418,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	endif
 	" Note: if the completed phrase is in completion pool then we don't
 	" want to remove it:
-	let phrase = matchstr(l, '\\usepackage\[\(.*,\)\?\zs.*')
+	let phrase = matchstr(l, '\\\%(usepackage\|RequirePackage\)\[\(.*,\)\?\zs.*')
 	let g:phrase = phrase
 	call filter(completion_list, 'index(options, v:val) == -1')
     "{{{3 ------------ PACKAGES
@@ -2721,7 +2721,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 			let test = package_line_nr
 		    else
 			let package_line = getline(package_line_nr)
-			let test = (package_line=~'\\usepackage\[[^\]]*,\='.g:atp_{package}_loading[key].'[,\]]')
+			let test = (package_line=~'\\\%(usepackage\|RequirePackage\)\[[^\]]*,\='.g:atp_{package}_loading[key].'[,\]]')
 		    endif
 		    if test
 			break
