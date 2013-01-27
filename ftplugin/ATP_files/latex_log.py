@@ -190,7 +190,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     package_info_pat = re.compile('Package (\w+) Info: ')
     package_info = "Package Info"
 
-    hbox_info_pat = re.compile('(Over|Under)full \\\\hbox ')
+    hbox_info_pat = re.compile(r'(Over|Under)full \\hbox ')
     hbox_info = "hbox Warning"
 
     latex_info_pat = re.compile('LaTeX Info: ')
@@ -280,7 +280,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
                 # Log Message: 'LaTeX Font Warning: '
                 input_line = re.search('on input line (\d+)', line)
                 if not input_line and line_nr < len(log_lines) and re.match('\(Font\)', log_lines[line_nr]):
-                    input_line = re.search('on input line (\d+)', line)
+                    input_line = re.search('on input line (\d+)', log_lines[line_nr])
                 if not input_line and line_nr+1 < len(log_lines) and re.match('\(Font\)', log_lines[line_nr+1]):
                     input_line = re.search('on input line (\d+)', log_lines[line_nr+1])
                 msg = re.sub(' on input line \d+', '', re.sub(font_warning_pat,'', line))
