@@ -7,21 +7,21 @@
 
 If you found this plugin useful or you have any kind of problems with running
 it or some ideas to share, you are cordially invited to write to me:
-mszamot@gmail.com. Voting at Vim site is also welcome ;) .
+mszamot@gmail.com.  Voting at Vim site is also welcome ;) .
 
 -----------------------------------------------------------------------------
 			    ABSTRACT ~
 
 This is a filetype plugin for Vim to comfortably write [TeX], [LaTeX],
  [PdfLaTeX],...  documents, which provides functionality not met in other
-plugins. It makes you [FREE] from compiling procedure, making this process
-automatic using autocommands. It also provides useful mappings and other
+plugins.  It makes you [FREE] from compiling procedure, making this process
+automatic using autocommands.  It also provides useful mappings and other
 many other commands: to analyse your .log file, to see the table contents, to
 search for a label, to search in bib files or to find a macro definition
 matching a pattern, or even to find and preview fonts in your tex
-distribution. The features include a multi-functional tab completion for:
+distribution.  The features include a multi-functional tab completion for:
 commands, environment names, packages, input files, bib files, bst files,
-colours, closing brackets and environments (preserves nesting),... etc. To
+colours, closing brackets and environments (preserves nesting),... etc.  To
 have full functionality you need: python (with nonstandard psutil library, see
 |atp-requirements-python| how to get it), pdffonts available in the package
 'app-text/poppler' (at least in Gentoo).  Another good tool is texdoc, which
@@ -35,7 +35,7 @@ MikTeX on Windows.
 * command to make the document (cross references, references, index, tables
   of contents) |atp-:MakeLatex|,
 * completion for commands, closing environments (even nested), package names,
-  citations and labels. Support for some latex packages,
+  citations and labels.  Support for some latex packages,
 	see |atp-completion|, 
 * forward/inverse searching:
   	see |atp-:SyncTex|, |atp_inverse_search|,
@@ -65,9 +65,9 @@ SOURCEFORGE						*atp-sourceforge*
 SUPPORT     						*atp-support*
 >
     You can [DONATE] for this project through your [PayPal] account (my email
-    is <mszamot [AT] gmail [dot] com>). This will be highly appreciated.
+    is <mszamot [AT] gmail [dot] com>).  This will be highly appreciated.
     I have a problem with my hardware now, and the donations will help to
-    solve it. This is quite_an_issue for me now so thanks a lot for you
+    solve it.  This is quite_an_issue for me now so thanks a lot for you
     support.
 							Thank You. ~
     You can use this link:							
@@ -75,7 +75,7 @@ SUPPORT     						*atp-support*
 <
   							*atp-mailing-list*
   - There is a mailing list which will serve for: feature requests, bug
-    reports, suggestions. You can subscribe at:
+    reports, suggestions.  You can subscribe at:
     https://lists.sourceforge.net/lists/listinfo/atp-vim-list
 
   - There is also a new wiki page: (as for now it only includes features of
@@ -89,7 +89,7 @@ SUPPORT     						*atp-support*
     sourecforge account)
 
   - SourceForge hosts stable releases (also available on Vim web page) but
-    also snapshots of unstable developed new version. The snapshots might
+    also snapshots of unstable developed new version.  The snapshots might
     contains fixes and new features which might not yet work well, or might
     change (commands, maps, etc ...).
     
@@ -125,7 +125,7 @@ TABLE OF CONTENTS 					*atp*
 		|atp-:S|		search in projects.
 
 	|atp-toc-window|		Commands/maps defined in Table of Contents window 
-				      and Labels window. Includes folding from toc.
+				      and Labels window.  Includes folding from toc.
 	|atp-folding|			Folding.
 	|atp-bibtex|			File type plugin for bibtex.
 	|atp-bibsearch|			Searching in bib files.
@@ -154,7 +154,7 @@ TABLE OF CONTENTS 					*atp*
 	|atp-copy-rights|		Copy Rights.
 
 	
-Note on usage: type :help atpCTRL-d to see all the helptags. To see help tags
+Note on usage: type :help atpCTRL-d to see all the helptags.  To see help tags
 for all the defined functions :help atp*()CTRL-d, mappings: :help atp-mapCTRL-d
 
 ================================================================================
@@ -200,22 +200,22 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 <
 
  |atp-}e|, |atp-{e|,  |atp-}E|, |atp-{E| rewritten from scratch (see the nice
- graphical explanation therein). Furthermore, the default value of
+ graphical explanation therein).  Furthermore, the default value of
  |g:atp_map_forward_motion_leader| is '}' (|g:atp_map_backward_motion_leader|
- is '{'). Setting it to ']', '[' colides with |]s| and |[s| which are quite
+ is '{').  Setting it to ']', '[' colides with |]s| and |[s| which are quite
  useful.
 
  New motions |atp-}o|, |atp-{o|.
 
  |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :TEX, :TEXL,
- :DTEX, :PID. I think it is easier to type.
+ :DTEX, :PID.  I think it is easier to type.
 
  |atp-gW| instead of gw (if you prefer the previous map you can redefine in
  your |atprc| file with: >
     nmap gw <Plug>FormatLines
 < (in |vimrc| file you have to use an autocommand).
 
- The map g< and g> are removed (indenting inner paragraph). If you still want
+ The map g< and g> are removed (indenting inner paragraph).  If you still want
  to use them put this in your |atprc| file: >
     nnoremap <buffer> g>	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1).">``", 't')<cr>
     nnoremap <buffer> g<	:<c-u>call feedkeys("m`vip".(v:count1 <= 1 ? "" : v:count1)."<``", 't')<cr>
@@ -270,7 +270,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  file.
 
  The motions { and } are adding entries to the jump list, by setting the
- ` mark. This is the default behaviour in vim (see |jump-motions|) The same
+ ` mark.  This is the default behaviour in vim (see |jump-motions|) The same
  aplies to the |atp-:S| command.
 
  Read this note: |atp-completion-new-packages|.
@@ -283,7 +283,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
     http://www.fundageek.com/project/detail/353/LaTeX-plugin-for-Vim
 
     I am forced to do that, since my laptop is not working properly and I need
-    a replacement. Please share the link among people who would like to
+    a replacement.  Please share the link among people who would like to
     support this project.
 
  Best regards,
@@ -291,7 +291,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
 
  Note: ~/.vim/ftplugin/ATP_files/atp_RevSearch.py was moved to
- ~/.vim/ftplugin/ATP_files/reverse_search.py. You might need to udpat the
+ ~/.vim/ftplugin/ATP_files/reverse_search.py.  You might need to udpat the
  config file of your browser (Okular, Xpdf, etc.)
 
  gf	    - works faster if vim is compiled with |+python| interface.
@@ -312,7 +312,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  NOTE: I change the name of the script at vim.org to AutomaticLaTeXPlugin
  (with capital X), if you install ATP via Vim-Addon-Manager (or other vim
  plugin manager) this might affect path were the atp_RevSearch.py script is
- located. In this case you might need to adjust the setting of reverse search
+ located.  In this case you might need to adjust the setting of reverse search
  in your viewer (Okular, Xpdf, ...).
 
  NOTE: It was found that 'relativenumber' option slows down vim when edditing
@@ -325,9 +325,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  If you set |g:atp_ParseLog| and |g:atp_Compiler|="python", then ATP will
  rewrite the log file so that the output is readable for vim |quickfix| using
- |errorformat|. The advantage is for project files, where it is important to
- correctly read the file position of the error. In addition there is one more
- |atp-:ShowErrors| flag 'O' which shows 'overfull \hbox' messages. Also note
+ |errorformat|.  The advantage is for project files, where it is important to
+ correctly read the file position of the error.  In addition there is one more
+ |atp-:ShowErrors| flag 'O' which shows 'overfull \hbox' messages.  Also note
  that the flag 'w' (for warnings) excludes font warning messages.  
  NOTE: See also |atp-:Cgetfile| (!!! This command is only defined for vim version
  < 7.3.468, my patch 468 introduces a new autocommand which is used to rewrite
@@ -381,7 +381,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  CHANGE IN MAPS: ~
  As suggested by F.Heiderich: #< and #> are now maps for \langle and \rangle.
 
- New commands: |atp-:Texdef|, |atp-:KpsewhichEdit|. They are defined in
+ New commands: |atp-:Texdef|, |atp-:KpsewhichEdit|.  They are defined in
  plugin/tex_atp.vim script, so you can use them not only inside tex files.
 >
  ======================
@@ -416,7 +416,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  |g:atp_tab_map| to 1 in your |vimrc| or |atprc| file.
 
  For some reasons it is better to map completion to <C-X><C-O> than to use
- 'omnicomplete' option (as it was done in 10.6.2). Using the option sometimes
+ 'omnicomplete' option (as it was done in 10.6.2).  Using the option sometimes
  issues errors (when modifying text) also setting cursor position to the right
  place is impossible (in more advanced completions, like closing
  environments).
@@ -428,9 +428,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 <
  Omni completion	-- ATP Tab completion now works as Omni Completion, see
 			   |compl-omni|, the non expert mode completion is
-			   mapped to <F7> key. The <Tab> key is not mapped. If
-			   you want to use <Tab> and <S-Tab> for completion,
-			   as it was done before, just put 'let
+			   mapped to <F7> key.  The <Tab> key is not mapped.
+			   If you want to use <Tab> and <S-Tab> for
+			   completion, as it was done before, just put 'let
 			   |g:atp_tab_map|=0' in your |vimrc| or |atprc|
 			   files.
 
@@ -446,10 +446,10 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  % motion		-- changes the jump list (this is vim compatible
 			   behaviour (see |jump-motions|)
-			-- omap % added. Now to delete an environment just put
-			   the cursor over \begin or \end command and use 'd%'.
-			   The same will work if you want to delete (:), [:],
-			   {:} or $:$ pairs.
+			-- omap % added.  Now to delete an environment just
+			   put the cursor over \begin or \end command and use
+			   'd%'.  The same will work if you want to delete
+			   (:), [:], {:} or $:$ pairs.
 
  { and } normal motions	-- also work in visual mode (see |}| and |{|).
 
@@ -478,7 +478,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  with a count. |atp-:Yank| by default uses the " register.
 
  |atp-:SyncTex| is now mapped to |atp-\f|, instead of t, which was not
- compatible with |t| vim command. It is easy to remember |atp-\f| = like forward
+ compatible with |t| vim command.  It is easy to remember |atp-\f| = like forward
  search ;)
 
  New normal mode wrapping operator maps: see |atp-nmap-fonts| and
@@ -494,7 +494,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
     :Lmap[!] {pattern}			|atp-:Lmap|
 There is another plugin: MapFinder 
     http://www.vim.org/scripts/script.php?script_id=3767
-which defines them. The only Imap differs, here it is more specific to ATP,
+which defines them.  The only Imap differs, here it is more specific to ATP,
 since ATP defines and deletes some imaps on the fly not all of them are
 visible with :imap command.
 
@@ -515,10 +515,10 @@ visible with :imap command.
  They are also disabled inside [:].
 
  Vmaps: ~
- 'o, 'u	instead of 'ov and 'uv (\overline, \underline). This is compatible
+ 'o, 'u	instead of 'ov and 'uv (\overline, \underline).  This is compatible
  with imaps 'o and 'u.
 
- Some bug fixes. For example the algorithm for closing brackets is more
+ Some bug fixes.  For example the algorithm for closing brackets is more
  reliable (should work in 100% cases ;).
 
  Cmap: ~
@@ -531,7 +531,7 @@ visible with :imap command.
 <
  Thanks for all the vim karma points: if you look at all ftplugin scripts ATP has 8th
  rate and among ten most rated plugins it has 2nd best average rate: 3.71, while the
- first one has 3.73. If you find something in ATP which is not convenient, or
+ first one has 3.73.  If you find something in ATP which is not convenient, or
  you think it might be done in a more friendly way, let me know, I'm open for
  discussions :) 
 
@@ -552,10 +552,10 @@ visible with :imap command.
 
   Xpdf				-- support for inverse searching added (Xpdf -> vim)
 				   thus both inverse and forward searching
-				   works for Xpdf (and Okular). See
+				   works for Xpdf (and Okular).  See
 				   |atp-Viewers-Xpdf| how to set it.
 
-  :MakeLatex [mode]		-- mode is one of silent/debug/Debug. Will
+  :MakeLatex [mode]		-- mode is one of silent/debug/Debug.  Will
 				   also show bibtex/biber/makeidx error
 				   code/debug info.
 
@@ -570,7 +570,7 @@ visible with :imap command.
 				   join lines which do not end with \\, see
 				   |g:atp_TexAlign_join_lines| how to set this.
 
-  'iskeyword'			-- is set using g:tex_isk variable. This is
+  'iskeyword'			-- is set using g:tex_isk variable.  This is
 				   compatible with the standard tex syntax
 				   file.
   :TexAlign!			-- bang added+some fixes, see |atp-:TexAlign|.
@@ -582,7 +582,7 @@ visible with :imap command.
 				   if you do |atp-r| over one of the brackets:
 				   (:), {:}, [:] then r(, r{, r[ (and r), r},
 				   r]) will change both: the opening and the
-				   closing bracket. Otherwise, i.e. over any
+				   closing bracket.  Otherwise, i.e. over any
 				   other character, or rc where c is other
 				   than opening bracket at opening position or
 				   closing bracket at closing position,
@@ -594,14 +594,14 @@ visible with :imap command.
   wedge is also under #& but #ve (for \vee) and #V (for \bigvee) are removed,
   since they were interfering with #ve for \varepsilon.
 
-  Greek Letter Maps: are disabled when the previous character is '\'. So you
+  Greek Letter Maps: are disabled when the previous character is '\'.  So you
   can type '\#a' with the default value of |g:atp_imap_leader_1| and it will
   not transform into '\\alpha'.
 
   TOC:
   map _				-- set section: focus main window on the
 				   section under cursor and jump back to TOC.
-  map & vmap zc			-- fold sections/chapters/... . Has one
+  map & vmap zc			-- fold sections/chapters/... .  Has one
 				   limitation: cannot fold subsection if
 				   section in which it sits is folded.
 				   You can fold several sections at once using
@@ -614,7 +614,7 @@ visible with :imap command.
 <
   If you use <Shift-Tab> (i.e. non-expert mode for completion) to close
   a bracket, it will be put after the cursor, allowing you to write inside
-  brackets. This doesn't work with \(:\) and other math pairs and closing
+  brackets.  This doesn't work with \(:\) and other math pairs and closing
   environments.
 
   Closing brackets with <Tab> is much faster now.
@@ -634,15 +634,15 @@ visible with :imap command.
   ++ 	\sum	(it is disabled now when typing X_++ or X^++)
 
   The command :Align (and thus also :TexAlign) are using ATP_strlen function to
-  measure the string length. ATP sets g:Align_xstrlen="ATP_strlen" if
-  'conceallevel' option is >0. If 'conceallevel' is reset to 0 ATP_strlen
+  measure the string length.  ATP sets g:Align_xstrlen="ATP_strlen" if
+  'conceallevel' option is >0.  If 'conceallevel' is reset to 0 ATP_strlen
   behaves like g:Align_xstrlen=2. (This needs Align plugin version higher than
   36, available at: http://drchip.0sites.net/astronaut/vim/#ALIGN .
 
   |atp-:TOC| and |atp-:Labels| commands when open together will be in one
   column with table of contents at the top.
 
-  ]*, ]%, [*, [%  - skip comment maps, all works now in the same way. If 
+  ]*, ]%, [*, [%  - skip comment maps, all works now in the same way.  If 
   |g:atp_VimCompatible| is 1 they go to where comment starts/ends, if it is
   0 they go one line above/below. 
 
@@ -661,7 +661,7 @@ Third option is to clone the git repository with the command: >
     git clone ssh://mszamotulski@atp-vim.git.sourceforge.net/gitroot/atp-vim/atp-vim ./atp
 If you use VAM you can clone into your vim-addon directory
 (~/.vim/vim-addons/AutomaticLaTexPlugin) and VAM will update it using git
-pull. In this way you will have always the most recent version of ATP.
+pull.  In this way you will have always the most recent version of ATP.
 
 Note: If you use Pathogen or VAM you need to restart all your vim servers if
 you want revesre search to work, or at least use in each running server
@@ -686,7 +686,7 @@ To get updates it is enough to use this command:
 							*atp-:UpdateATP*
 :UpdateATP[!]
 	With bang update ATP to latest {UNSTABLE} snapshot, without to latest
-	stable release. It makes a check if your version is the latest one. 
+	stable release.  It makes a check if your version is the latest one. 
 	If you have installed {UNSTABLE} snapshot and then you run :UpdateATP
 	without a bang "!", then ATP will ask you if you want to DOWNGRADE to
 	the last stable release.
@@ -701,7 +701,7 @@ To get updates it is enough to use this command:
 							*atp-:ATPversion*
 :ATPversion	
 	This command prints version information of ATP and the time stamp when
-	this version was build. The time stamp is in format 'dd-mm-yy_HH-MM'.
+	this version was build.  The time stamp is in format 'dd-mm-yy_HH-MM'.
 
 --------------------------------------------------------------------------------
 ATP AND OTHER PLUGINS					*atp-and-other-plugins*
@@ -709,7 +709,7 @@ ATP AND OTHER PLUGINS					*atp-and-other-plugins*
 EasyMotion and ATP ~
     If you want to use EasyMotion vim plugin (which is quite handy):
 	http://www.vim.org/scripts/script.php?script_id=3526
-    You can set |g:atp_Compare|="". Alternatively, if you want to use the
+    You can set |g:atp_Compare|="".  Alternatively, if you want to use the
     fastest comparing method of ATP, you can add to last line of
     s:EasyMotion() function (i.e. just above the |:endfunction| vimL keyword) in
     autoload/EasyMotion.vim: 
@@ -719,7 +719,7 @@ EasyMotion and ATP ~
     plugin/EasyMotion.vim file.
 
     You might want to change g:EasyMotion_leader_key (see |easymotion-leader-key|), 
-    because some maps of ATP are interfering with EasyMotion. For example "-"
+    because some maps of ATP are interfering with EasyMotion.  For example "-"
     might be a good choice.  You can also try to change |maplocalleader| which
     is heavily used by ATP.
 
@@ -728,48 +728,48 @@ COMMANDS	                               		*atp-commands* *atp-:*
 							
 							*atp-compilation*
 The main function is not seen by the user (it is called s:compiler, for those
-who want to read the plugin). It executes tex compiler specified by the
-variable |b:atp_TexCompiler|. It is executed as an autocommand by the line: >
+who want to read the plugin).  It executes tex compiler specified by the
+variable |b:atp_TexCompiler|.  It is executed as an autocommand by the line: >
 	au! CursorHold $HOME*.tex silent call 's:auTeX()'
 < where s:auTeX() is a simple function which calls s:compiler if the file
-written on the disk and the buffer differ. There are two comparing mechanism,
+written on the disk and the buffer differ.  There are two comparing mechanism,
 the default one is using |b:changedtick-variable| , the seconds compares the
 buffer with the on-disk version:
 							*g:atp_Compare*
 							*g:atp_compare_double_empty_lines*
 							*g:atp_compare_embedded_comments*
-	The default value is "changedtick". Then the |b:changedtick-variable|
-	is used to find if there buffer differs and to run latex. With any other
+	The default value is "changedtick".  Then the |b:changedtick-variable|
+	is used to find if there buffer differs and to run latex.  With any other
 	value a compare function will be used (which compares the buffer and
 	the written file on the disk) - this method is much slower but has
 	additional features: by default differences in comments are skipped
 	(if you set |g:atp_compare_embedded_comments|=0 (the default is 1)
 	then also the comments which do not start right at the beginning of
-	line will be skipped). The second feature is to not see differences in
+	line will be skipped).  The second feature is to not see differences in
 	amount of blank lines: two or more blank lines is the same as one
 	blank line, for this set |g:atp_compare_double_empty_lines|=0, which
 	is the default.
 
 As you can see it will run if a key is not pressed during time defined by
-option |'updatetime'| (see |CursorHold|) in the normal mode. If you type in
+option |'updatetime'| (see |CursorHold|) in the normal mode.  If you type in
 insert mode the file won't be compiled (and that's all right as you can be in the
-middle of your very long formula). The value of |'updatetime'| which works
-fine is around 1000ms (|'updatetime'| is set in milliseconds). Instead of
+middle of your very long formula).  The value of |'updatetime'| which works
+fine is around 1000ms (|'updatetime'| is set in milliseconds).  Instead of
 setting |'updatetime'| options directly you should set the variables
-|b:atp_updatetime_insert| and |b:atp_updatetime_normal|. Here's an important
+|b:atp_updatetime_insert| and |b:atp_updatetime_normal|.  Here's an important
 note on using CTRL-C (|i_CTRL-C|) in Vim:
 
 							*g:atp_IMapCC*
     In vim the key combination CTRL-C (|i_CTRL-C|) in insert mode exists to
-    normal without triggering the InsertLeave autocommands. In this way it
+    normal without triggering the InsertLeave autocommands.  In this way it
     doesn't changes the |'updatetime'| from |b:atp_updatetime_insert| to
-    |b:atp_updatetime_normal|. If |g:atp_IMapCC|=1 then |_CTRL-C| is mapped to
-    |i_CTRL-[| so the InsertLeave autocommands are parsed. However, it is
-    a good habit to use |i_CTRL-C| while you are writing/editing and |i_CTRL-[| or
-    |i_ESC| when you wish to see what you wrote (then TeX will be run
-    quicker). If you follow this you can even set
-    |b:atp_updatetime_normal|=1 (if you set it to 0 then the file will not
-    be processed while Vim is in normal mode).
+    |b:atp_updatetime_normal|.  If |g:atp_IMapCC|=1 then |_CTRL-C| is mapped
+    to |i_CTRL-[| so the InsertLeave autocommands are parsed.  However, it is
+    a good habit to use |i_CTRL-C| while you are writing/editing and
+    |i_CTRL-[| or |i_ESC| when you wish to see what you wrote (then TeX will
+    be run quicker).  If you follow this you can even set
+    |b:atp_updatetime_normal|=1 (if you set it to 0 then the file will not be
+    processed while Vim is in normal mode).
 
 							*b:atp_updatetime_insert*
 							*b:atp_updatetime_normal*
@@ -777,9 +777,9 @@ note on using CTRL-C (|i_CTRL-C|) in Vim:
  b:atp_updatetime_insert = 4000	
  b:atp_updatetime_normal = 2000
 < - These variables sets the value of |'updatetime'| vim option.
-    Separate settings are for normal and insert mode. You can make
+    Separate settings are for normal and insert mode.  You can make
     |b:atp_updatetime_normal| even smaller so that the file is processed
-    whenever you go out from insert mode to normal mode. These values will
+    whenever you go out from insert mode to normal mode.  These values will
     overwrite the original value of |'updatetime'| (unless you set both
     variables to 0)  so you should adjust them in order for the change to have
     an effect.
@@ -795,18 +795,18 @@ note on using CTRL-C (|i_CTRL-C|) in Vim:
  b:atp_MaxProcesses = 3
 <
     When |g:atp_Compiler|="python" this variable will control the maximal
-    number of simultaneous LaTeX processes in the background. If new process
+    number of simultaneous LaTeX processes in the background.  If new process
     comes old and the number of processes is |b:atp_MaxProcesses| or bigger
     one appropriate number of processes is killed to have not more than
-    |b:atp_MaxProcesses|. If you set it to 0 ATP will not control the number
-    of running instances of LaTeX compiler. There is one more variable:
+    |b:atp_MaxProcesses|.  If you set it to 0 ATP will not control the number
+    of running instances of LaTeX compiler.  There is one more variable:
 
     							*b:atp_KillYoungest*
 >
  b:atp_KillYoungest = 0
 <
     When set to 0 (the default) oldest processes are killed, when set to
-    1 youngest ones. If your file is big it might be better to kill youngest
+    1 youngest ones.  If your file is big it might be better to kill youngest
     processes.
 
 Coming back to compilation ... ~
@@ -817,33 +817,33 @@ which points to a unique temporary file in a temporary directory |b:atp_TempDir|
 
 							*b:atp_autex*
 You can switch off/on the function s:auTeX by pressing <S-F5> or by letting
-the local to buffer variable |b:atp_autex|=1 (on) |b:atp_autex|=0 (off). It is
+the local to buffer variable |b:atp_autex|=1 (on) |b:atp_autex|=0 (off).  It is
 useful in some situations turn automatic compiling off. 
     Note: if you set |b:atp_autex|=2 the the automatic compilation will
     compile the currently edited subfile of your project (for this you need to
     use the subfiles package).
 The key <S-F5> calls the command |atp-:ToggleAuTeX| which sets the variable
-|b:atp_autex| and issue a message. You can also set this variable to 0 for
+|b:atp_autex| and issue a message.  You can also set this variable to 0 for
 some files that are not supposed to be processed, for example:
 >
 	au BufRead texmf/*.tex let b:atp_autex=0
 <
 On start up |b:atp_autex| is set to 1 if the path of opened file is not under any
-tex directory ('kpsewhich -show-path tex', except the current dir). For example,
-files located under your local texmf tree will have b:atp_autex=0. Also for
+tex directory ('kpsewhich -show-path tex', except the current dir).  For example,
+files located under your local texmf tree will have b:atp_autex=0.  Also for
 files with other extension than the standard "tex" it will be set to 0.
 
 							*atp-:ToggleAuTeX*
 :ToggleAuTeX {arg}
-	The {arg} is one of off/on/local. It sets b:atp_autex to 0/1/2
-	respecively. If {arg} is omitted it changes: local->off (2->0),
+	The {arg} is one of off/on/local.  It sets b:atp_autex to 0/1/2
+	respecively.  If {arg} is omitted it changes: local->off (2->0),
 	on->off (1->0) and off->on (0->1).
 
 The second important variable |b:atp_TexCompiler| configures if you use TeX,
 PdfTeX, LaTeX, PdfLaTeX and it should point to the program name so please do
 not use capital letters.
 
-Next variable to set is |b:atp_OutDir|. It configures where TeX
+Next variable to set is |b:atp_OutDir|.  It configures where TeX
 will put the output and where viewer and log analysing tools can find
 appropriate files. 
 
@@ -858,8 +858,8 @@ forth between you |b:atp_OutDir| and the temporary directory)
 
 							*atp-compile.py*
 There are two function compile which can compile your tex file: one written in
-python (for portability reasons) and old one in bash. They work almost the
-same with one small difference. The python code has some vim enhancements (for
+python (for portability reasons) and old one in bash.  They work almost the
+same with one small difference.  The python code has some vim enhancements (for
 example the progres bar).
 
 The python code has a debug file compile.log under |g:atp_TempDir| will
@@ -877,11 +877,11 @@ determine if xpdf is running and secondly, more importantly to check if latex
 is running. 
     							*b:atp_LatexPIDs*
 The python script |compile.py| sends PID numbers of latex processes to vim
-variable |b:atp_LatexPIDs|. Then the function which makes the status line for
+variable |b:atp_LatexPIDs|.  Then the function which makes the status line for
 ATP has a python code to check if the latex PIDs are still valid processes.
 This is more accurate than the method used with bash compiler (before running
 latex increase variable |b:atp_running| and decrease after getting signal that
-latex has ended). In many situations this was failing.  The new method works
+latex has ended).  In many situations this was failing.  The new method works
 better, however it shows that latex is running after slightly longer period of
 time (not that first python must run the script and then run latex). 
 
@@ -909,9 +909,9 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 							*g:atp_statusNotif*
 	* Status Line Notification: status line can show if tex is running >
 		let g:atp_statusNotif = 1
-<	  If unset you will get a message when compiler ends. If set the
+<	  If unset you will get a message when compiler ends.  If set the
 	  number next to the name of your compiler indicates how many
-	  instances are currently running. If |g:atp_ProgressBar|=1 then also
+	  instances are currently running.  If |g:atp_ProgressBar|=1 then also
 	  progress information of TeX compiler will be shown.
 
 	  It can also show if other programs such as bibtex, biber or makeidx
@@ -921,7 +921,7 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	  						*g:atp_cgetfile*
 	  The command |:cgetfile| will be run when you open new files, this
 	  nicely works with |:edit| command but not |:split| if you want to keep
-	  the old log file in QuickFix window. If this is the case set >
+	  the old log file in QuickFix window.  If this is the case set >
 	     let g:atp_cgetfile = 0 
 <   	  The default value is 1.	
 
@@ -947,16 +947,16 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	  nmap <LocalLeader><LocalLeader>d
 	       After the end of compilation (invoked by the user or
 	       autocommand) you will get a message with the return status of
-	       the compilation. If the exit code is non zero it will be
+	       the compilation.  If the exit code is non zero it will be
 	       highlighted with |hl-ErrorMsg|.
 
 	       If you open the error window with |:copen| or with the menu
 	       option ToggleDebugMode then it will be automatically closed
-	       after first compilation with no errors. Quick fix window is
-	       closed in both 'silent' and 'debug' debug modes. This depends
+	       after first compilation with no errors.  Quick fix window is
+	       closed in both 'silent' and 'debug' debug modes.  This depends
 	       on |errorformat| which you can set with |atp-:ErrorFormat|
 	       and |atp-:ShowErrors|:
-		    ATP test for 'no errors' is 'len(|getqflist()|)'. If the
+		    ATP test for 'no errors' is 'len(|getqflist()|)'.  If the
 		    debug mode was 'debug' |t:atp_DebugMode| will fall back to
 		    |g:atp_DefaultDebugMode| (by default it is the 'silent'
 		    mode).
@@ -984,9 +984,9 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	       errorstopmode).
 
 	Note: the 'verbose' mode in 'Vim' (in the console) needs to be run,
-	when there is no other latex instance running. Now you get a message
-	to wait until compilation ends. In future releases, a better solution
-	will be worked out. Gui version 'gvim' works better (as it doesn't
+	when there is no other latex instance running.  Now you get a message
+	to wait until compilation ends.  In future releases, a better solution
+	will be worked out.  Gui version 'gvim' works better (as it doesn't
 	suspend the editor).
 
 	The background compilation is always done in |g:atp_DefaultDebugMode|.
@@ -999,8 +999,8 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 >
  g:atp_ProgressBar = 1  
 <       By default, when using the python compiler you will get progress 
-	message in your status line. The number indicates the last page number
-	compiled by LaTeX. If by some reason, you want to switch this off, set
+	message in your status line.  The number indicates the last page number
+	compiled by LaTeX.  If by some reason, you want to switch this off, set
 	g:atp_ProgressBar to 0 (use |let|).
 
 	You need |g:atp_statusNotif|=1 for this feature to work (if you use
@@ -1016,18 +1016,18 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 
 	Limitations ~
 	Progress Bar doesn't like when you switch windows while the
-	compilation takes time. You might need to use |atp-:Kill| command. 
+	compilation takes time.  You might need to use |atp-:Kill| command. 
 >
  g:atp_ProgressBarValues
 <	This is a dictionary of dictionaries:
 	    { 'bufnr' : {dict}, ... }
-	Every buffer gets its entry (by |bufnr()|). The {dict} is a dictionary
+	Every buffer gets its entry (by |bufnr()|).  The {dict} is a dictionary
 	which is an empty dictionary {} if compilation is not going on, and
 	while compilation it contains the dictionary of PID number and page
 	number where the compilator actually is doining its job.
 
 	Note: If you compile and the progress bar starts at page > 1, you can
-	use 'let |g:atp_ProgressBarValues|={}' to reset the progress bar. You
+	use 'let |g:atp_ProgressBarValues|={}' to reset the progress bar.  You
 	should check if there is any LaTeX process running in the system.
 	You can also use the |atp-:Kill| command which will reset the
 	progress bar and kill the corresponding processes.
@@ -1045,8 +1045,8 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 >
  let g:atp_DefaultDebugMode = 'silent'
 < 	This is the default debug mode in which background compilation will
-	run. It can be set to 'debug', setting it to 'verbose' will have the
-	same effect as setting it to 'debug'. ATP will come back to this debug
+	run.  It can be set to 'debug', setting it to 'verbose' will have the
+	same effect as setting it to 'debug'.  ATP will come back to this debug
 	mode if compilation ends with exit status 0.
 
 	When compilations ends without errors (i.e. when quick fix list is
@@ -1058,7 +1058,7 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 >
  g:atp_DebugModeCmdHeight = &cmdheight
 <       the default cmd height (see |cmdheight|) for the debug mode. 
-	ATP will switch to it back and forth if needed. By default it is set
+	ATP will switch to it back and forth if needed.  By default it is set
 	to |cmdheigh| value (thus unless you set it to sth else you will not
 	see the difference). 
 
@@ -1081,7 +1081,7 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	nmap <LocalLeader><LocalLeader>s
 	:DebugMode[!] autos[ilent]
 		It will load error file (|cgetfile|) with bang "!" it will
-		open |quickfix| window if there are errors (|cwindow|). If
+		open |quickfix| window if there are errors (|cwindow|).  If
 		|quickfix| window was opened it will be closed.
 		Sets |t:atp_DebugMode|='silent' ('autosilent').
 	:DebugMode d[ebug]
@@ -1104,14 +1104,14 @@ CALL BACK AND DEBUG MODE				*atp-callback*
 	|g:atp_DebugModeQuickFixHeight|.
 							
 :copen							*atp-:copen*
-	Works slightly different than |:copen|. The [height] argument will not
-	take effect. Use |:resize| instead. ATP computes the height of the
+	Works slightly different than |:copen|.  The [height] argument will not
+	take effect.  Use |:resize| instead.  ATP computes the height of the
 	QuickFix window, and uses the variable |g:atp_DebugModeQuickFixHeight|
 	as an upper bound for QuickFix window height.
 
 							*b:atp_ReloadOnError*
 The variable b:atp_ReloadOnError if set to 1 (which is the default) reload the
-file even when the exit status of compiler was non zero. If set to 0, then the
+file even when the exit status of compiler was non zero.  If set to 0, then the
 file will not be reloaded [actually for viewers other than Xpdf it will not be
 copied from the temporary directory, for Xpdf it will be copied but not
 reloaded). 
@@ -1122,7 +1122,7 @@ your tex compiler, see |g:atp_TexCommand|.
 :[count]Tex[!] [debug_mode]				*atp-:Tex*
 map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	If anyway you want to run TeX yourself but you do not want to see the
-	output this is the right tool. This runs TeX in 'nonstopmode'. You can
+	output this is the right tool.  This runs TeX in 'nonstopmode'.  You can
 	specify an argument [count] which tells how many consecutive runs of
 	TeX you need (this is important if you want to compile Table of
 	Contents, or index, or the bibliography (see |atp-:Bibtex|)
@@ -1131,14 +1131,14 @@ map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	buffers.
 
 	If b:atp_OpenViewer=1 and there current viewer (b:Viewer) is not
-	running on the output file then this function will open a viewer. By
-	default b:atp_OpenViewer=0 and this feature is disabled. 
+	running on the output file then this function will open a viewer.
+	By default b:atp_OpenViewer=0 and this feature is disabled. 
 
 	The command :2Tex will call the compiler two times.
 
 	It is useful when you want to make the outline (using hyperref
 	package) of your article in pdf files, the tex file has to be
-	'sourced' twice. To make the bibliography you can use |atp-:Bibtex|.
+	'sourced' twice.  To make the bibliography you can use |atp-:Bibtex|.
 
 	If {runs} > 5 it will be reduced to 5, to avoid running tex for hundreds
 	(or event thousands) of times (what could happen otherwise by
@@ -1146,7 +1146,7 @@ map [count]<LocalLeader>l, map [runs]<LocalLeader>d
 	number).
 
 	The optional argument [debug_mode] has possible values: '', 'silent',
-	'debug', 'Debug', 'verbose'. When '' the current debug mode is used
+	'debug', 'Debug', 'verbose'.  When '' the current debug mode is used
 	(|t:atp_DebugMode|). ( [debug_mode] can be suppressed to 's', 'd',
 	'D', 'v' or "si"/"sil"/"sile"/... etc.) See the description of
 	|atp-debug-mode|.
@@ -1163,11 +1163,11 @@ map [count]<LocalLeader>k
 	it back to the main log file).
 	
 	Note that ATP is coping the project aux file (if present) and using it
-	for compilation of subfiles. In this way you get all the labels and
-	references. If you add new labels to the subfile then ATP will copy
+	for compilation of subfiles.  In this way you get all the labels and
+	references.  If you add new labels to the subfile then ATP will copy
         the corresponding entries from the subfile aux file to the main aux
-        file. However, it will not work if the label (its value) was changed
-        or removed. Then you need to compile the project with |atp-:Tex|
+        file.  However, it will not work if the label (its value) was changed
+        or removed.  Then you need to compile the project with |atp-:Tex|
         command.
 
 	Note: the advantage of using subfiles package is that you
@@ -1203,13 +1203,13 @@ map [count]<LocalLeader>d
 map <LocalLeader>b
     With BANG "!":
 	This function will call bibtex to produce the bibliography file
-	(.bbl). If in |b:atp_OutDir| there is no 'aux' file it first calls tex
-	compiler. After the 'bbl' file is produced two consecutive runs of tex
+	(.bbl).  If in |b:atp_OutDir| there is no 'aux' file it first calls tex
+	compiler.  After the 'bbl' file is produced two consecutive runs of tex
 	compiler are called to make the bibliography.
 
 	If you specify any value to the [debug_mode] option (for the values
 	see |atp-:Tex|) In verbose mode (only the last time tex compiler will
-	run in errorstop mode and echoed to the console). This gives you the
+	run in errorstop mode and echoed to the console).  This gives you the
 	chance to see the output of bibtex command (it will be also printed
 	when latex ends). 
 	
@@ -1230,8 +1230,8 @@ map <LocalLeader>b
 
 							*g:atp_raw_bibinputs*
     Tex is looking for the date base files in the path: `kpsewhich -show-path
-    bib`. The variable g:atp_bibinputs contains these directories separated by
-    commas. If atp cannot find your bib file, tex also won't be able. 
+    bib`.  The variable g:atp_bibinputs contains these directories separated by
+    commas.  If atp cannot find your bib file, tex also won't be able. 
 							*g:atp_raw_texinputs*
     Similarly this variable stores all of path reported by `kpsewhich
     -show-path tex`.
@@ -1243,14 +1243,14 @@ map <LocalLeader>b
     see ':h file-searching'.
 
     Note: The above four variables might be added to
-    |g:atp_ProjectGlobalVariables|. ATP will start faster, but remember to
+    |g:atp_ProjectGlobalVariables|.  ATP will start faster, but remember to
     unlet them and restart vim when you change your TeX distribution, so that
     ATP will rebuild them.
 
 							*atp-:Kill*
 :Kill							
 	Kill python scripts running (b:atp_PythonPIDs) and all pids in
-	|b:atp_LatexPIDs|. This only works with |g:atp_Compiler|="python".
+	|b:atp_LatexPIDs|.  This only works with |g:atp_Compiler|="python".
 
 :Pid 							*atp-:Pid*
 	Prints PIDs of all running instances of |b:atp_TexCompiler|.
@@ -1289,7 +1289,7 @@ map <LocalLeader>b
 
 :ShowErrors[!] [flag]					*atp-:ShowErrors*
 nmap <LocalLeader>e					/for other maps see |atp-:ShowErrors-maps|/
-	This command shows error/warning messages. It sets the |'errorformat'|
+	This command shows error/warning messages.  It sets the |'errorformat'|
 	variable accordingly to the optional [flag] argument (if bang is used
 	the change is permanent, if not |errorformat| will be restored at the
 	end), which is a word made of letters:
@@ -1320,39 +1320,39 @@ nmap <LocalLeader>e					/for other maps see |atp-:ShowErrors-maps|/
 		:ShowErrors rc
 <	will show all reference and citation warnings.
 
-	Note: this command works in quickfix window. It will change
-	errorformat but will not reload quickfix list. Use |atp-:ErrorFormat|
+	Note: this command works in quickfix window.  It will change
+	errorformat but will not reload quickfix list.  Use |atp-:ErrorFormat|
 	instead.
 
 							*atp-:Cgetfile*
 :Cgetfile	
 	This works like |:cgetfile| command, but also filters errors from
 	quick fix list which are not recognised by |errorformat| (it is done
-	by |atp-:ShowErrors|). This is only useful with |g:atp_ParseLog|=1 and
+	by |atp-:ShowErrors|).  This is only useful with |g:atp_ParseLog|=1 and
 	when vim is not compiled with the patch 468, see |has-patch|
-	(otherwise the command is not provided). If you use cmdalias plugin
+	(otherwise the command is not provided).  If you use cmdalias plugin
 	(vimscript 746) you can alias this command to cg (|:cg|) in |atprc|
 	file.
 
 							*g:atp_ParseLog*
 g:atp_ParseLog = 1
 	If |g:atp_ParseLog| is 1 (|g:atp_Compiler|="python"), then ATP will
-	parse the log file. So that |quickfix| will show you corrent file
-	names for the errors. This is particullary usefull for project 
-	files. The new log file is written with an extension '_log'.
+	parse the log file.  So that |quickfix| will show you corrent file
+	names for the errors.  This is particullary usefull for project 
+	files.  The new log file is written with an extension '_log'.
 
 							*g:atp_DefaultErrorFormat*
 g:atp_DefaultErrorFormat = 'erc' 
     The value is the  same as argument to |atp-:ShowErrors| and
-    |atp-:ErrorFormat|. This is the default argument for these commands when
-    they are used without any argument. Also corresponding 'errorformat' is
+    |atp-:ErrorFormat|.  This is the default argument for these commands when
+    they are used without any argument.  Also corresponding 'errorformat' is
     set up at startup.
 						 
 							*b:atp_ErrorFormat*
 b:atp_ErrorFormat = 'ecw'
-	This variable stores the current format of errors. It is a word with
-	letters given in [flag] argument to |atp-:ShowErrors|. You can set it
-	with |atp-:ErrorFormat| command. It is used by serveral ATP functions,
+	This variable stores the current format of errors.  It is a word with
+	letters given in [flag] argument to |atp-:ShowErrors|.  You can set it
+	with |atp-:ErrorFormat| command.  It is used by serveral ATP functions,
 	for example call back feature checks if there are errors looking into
 	Quick Fix list (with |getqflist()|), which will depend on the variable
 	|b:atp_ErrorFormat|.
@@ -1372,9 +1372,9 @@ This is not a texloganalyzer mapping but it is a good place to mention it:
 			this is a mapping to the |atp-:OpenLog|.
 
 :ErrorFormat {flag} 					*atp-:ErrorFormat*
-	This command has the same syntax as |atp-:ShowErrors|. It sets the
+	This command has the same syntax as |atp-:ShowErrors|.  It sets the
 	|b:atp_ErrorFormat| variable and vim option |'erroformat'|, and the
-	rereads the log file with |cgetfile|. If {flag} is not given it only
+	rereads the log file with |cgetfile|.  If {flag} is not given it only
 	shows the current value of |b:atp_ErrorFormat|.  The variable
 	|b:atp_ErrorFormat| is also set when you use the command
 	|atp-:ShowErrors|.
@@ -1390,7 +1390,7 @@ This is not a texloganalyzer mapping but it is a good place to mention it:
 							*atp-:SetErrorFile*
 :SetErrorFile					
 	If you change |b:atp_OutDir| variable and you want to update the
-	|'errorfile'| option use this command. It will show you the value to
+	|'errorfile'| option use this command.  It will show you the value to
 	which |'errorfile'| was set. 
 
 :ShowErrors o						*atp-:OpenLog*
@@ -1412,19 +1412,19 @@ automatically using autocommand group |CursorMoved|.
 :nmap <LocalLeader>f, nmap <Enter>
 	If you open log file with ':ShowErrors o' command then you can use
 	this command to move to the place in the source code where the error
-	occurs. It works with project files and also can go to error which
-	appear in a declared package. It will go to the first error line
+	occurs.  It works with project files and also can go to error which
+	appear in a declared package.  It will go to the first error line
 	declared in the log file below the cursor position (more precisely, to
 	first line which matches '^l\.\d\+\|on input line\|at lines' will be used).
 
 	With bang [!] it opens new window if the file with error is not shown
-	in the current tab page. Without bang it opens the file in the window
+	in the current tab page.  Without bang it opens the file in the window
 	where ':ShowErrors o' was used.
 							*g:atp_LogSync*
 	If you set |g:atp_LogSync|=1 (the default value is 0) then the source
 	file will be syncronize with the log file via autocommand (with
-	|CursorMoved|). This sets 'cursorline' option to indicate the
-	corresponding line in the source file. When the log buffer becomes
+	|CursorMoved|).  This sets 'cursorline' option to indicate the
+	corresponding line in the source file.  When the log buffer becomes
 	hidden this option should be unset.
 							*atp-:LogSync*
 	To set |g:atp_LogSync| you can use |atp-:Sync| command. |atp-:Sync|
@@ -1437,19 +1437,19 @@ automatically using autocommand group |CursorMoved|.
 :SyncXpdf
 	If you set g:atp_SyncXpdfLog = 1 (the default value is 0) and you use
 	Xpdf as a viewer it will be synchronised with the log file (with
-	autocommand group |CursorMoved|). You can also use the command
+	autocommand group |CursorMoved|).  You can also use the command
 	:SyncXpdf or :Xpdf in the log buffer which does the same.
 
 :View[!] 						*atp-:View*
 map <LocalLeader>v, map <F3>, imap <F3>  
-	You would like to see what you are editing use this function. It will
-	use the program defined in the variable b:atp_Viewer. See |b:atp_Viewer|,
-	|g:atp_XpdfServer|, |atp-xpdfOptions|. When there is no output file it will run
-	TeX and open the file. Read more about particular viewers
+	You would like to see what you are editing use this function.  It will
+	use the program defined in the variable b:atp_Viewer.  See |b:atp_Viewer|,
+	|g:atp_XpdfServer|, |atp-xpdfOptions|.  When there is no output file it will run
+	TeX and open the file.  Read more about particular viewers
 	(inverse/reverse searching) in |atp-viewers|. 
 
 	With bang (and <F3> maps) opens viewer at the cursor position in vim
-	(forward search). This will only work for viewers that support forward
+	(forward search).  This will only work for viewers that support forward
 	searching (xpdf, xdvi, okular, skim).
 
 							*g:atp_OpenAndSyncSleepTime*
@@ -1467,24 +1467,24 @@ map <LocalLeader>V, map <S-F3>, imap <S-F3>
 
 :SyncTex[!]						*atp-:SyncTex* *atp-\f*
 map <LocalLeader>f, map <S-LeftMouse>
-	Which makes an forward search (vim->Viewer). As for now ATP supports Okular,
-	Xpdf and Xdvi with this feature (Evince is not yet supported).
+	Which makes an forward search (vim->Viewer).  As for now ATP supports
+	Okular, Xpdf and Xdvi with this feature (Evince is not yet supported).
 
 	With bang |atp-:SyncTex| will not check if the viewer is running.
 
 	Note: you can also set reverse search for Okular and Xdvi, see
 	|atp-Viewers-Okular| and |atp-Viewers-Xdvi| for an instruction how to
-	do that. Xpdf doesn't support reverse searching.
+	do that.  Xpdf doesn't support reverse searching.
 
 							*atp-:SyncTex_Xpdf-hack*
 	Note: there is a bug in Xpdf, one cannot sent commands to Xpdf to
-	quickly. If the |atp-:SyncTex| command only updates the page, but
+	quickly.  If the |atp-:SyncTex| command only updates the page, but
 	doesn't shift it then you can try to set g:atp_XpdfSleepTime variable
 	to something higher than the default 0.1 (this is sleep time between
 	sending commands to Xpdf in seconds)
 
 	When the output file or the synctex file (.synctex.gz) doesn't exists
-	then first it will be generated. It can also open the document if it
+	then first it will be generated.  It can also open the document if it
 	is not yet opened.
 
 	Read |atp-:SyncTex_with_Okular| if you use Okular.
@@ -1504,13 +1504,13 @@ map <LocalLeader><LocalLeader>f
 
 :SetXdvi						*atp-:SetXdvi*
 	This command sets the options for xdvi viewer, which enables inverse
-	and reverse searching. You can use the command |atp-:SyncTex| for
+	and reverse searching.  You can use the command |atp-:SyncTex| for
 	forward searches (Vim->Xdvi) >
 		:SyncTex	(although dvi is using srcspecials rather than synctex)
 		map <LocalLeader>f
 		nmap <S-LeftMouse>
 <	For inverse searching hold CTRL and press click left mouse button on
-	the text in xdvi viewer. It sets: >
+	the text in xdvi viewer.  It sets: >
 	    let b:atp_TexOptions="-src-specials"
 <	and also other variable to enable reverse searching (Xdvi->Vim) see
 	more |atp-viewers-Xdvi|.
@@ -1522,15 +1522,15 @@ map <LocalLeader><LocalLeader>f
 
 :SetXpdf						*atp-:SetXpdf*
 :SetOkular						*atp-SetOkular*
-	This command sets options for Xpdf viewer. Xpdf supports forward
-	searching (vim->Xpdf) with command: |atp-:SyncTex|. It sets >
+	This command sets options for Xpdf viewer.  Xpdf supports forward
+	searching (vim->Xpdf) with command: |atp-:SyncTex|.  It sets >
 	    let b:atp_TexOptions="-synctex=1"
 < 	Thus it enables the forward searching (the above is the default 
 	value for ATP, but it will change when you use |atp-:SetXdvi| which
 	uses "-src-specials".
 
 	It reads the Xpdf viewer options from the variables
-	|b:atp_xpdfOptions| and g:atp_xpdfOptions. Similarly for Okular.
+	|b:atp_xpdfOptions| and g:atp_xpdfOptions.  Similarly for Okular.
 						
 							*atp-:PdfFonts*
 :PdfFonts
@@ -1540,43 +1540,43 @@ nmap <F6>g
 :BibSearch /{pattern}/ [flag]				see |atp-:BibSearch|
 	This function finds bib entries in bib files defined in your tex file
 	and in the variable |b:atp_BibFiles|, which match the
-	[pattern] (a Vim regular expression). The output is configurable by
-	the [flag] argument, see |atp-bibflags|. By default the pattern is
+	[pattern] (a Vim regular expression).  The output is configurable by
+	the [flag] argument, see |atp-bibflags|.  By default the pattern is
 	case insensitive.
 
 							*atp-:AMSRef*
 :AMSRef[!] {bibdata}  
     A command to get bib data from AMSRef:
 		    http://www.ams.org/mathscinet-mref 
-    The bib data will be appended to bibliography of the current document. If
-    there are many bib files will get a choice which one to use. This command
+    The bib data will be appended to bibliography of the current document.  If
+    there are many bib files will get a choice which one to use.  This command
     is also available in bib files.  Without bang, i.e. "!", it writes and
     closes the bib buffer with it will leave you in unsaved bib file buffer.
     You will be also asked for the bib key, the default choice is to use the
     AMS bib key. 
 
     							*g:atp_bibrefRegister*
-    This command also works when you use \begin{bibliography} environment. But
-    the default is to use a bib file.  The obtained bibliographic reference is
-    copied to the register |g:atp_bibrefRegister| (the default is "0" so you can
-    paste it using Vim command 'p'). In addition, it is stored in the variable
-    g:atp_bibref.
+    This command also works when you use \begin{bibliography} environment.
+    But the default is to use a bib file.  The obtained bibliographic
+    reference is copied to the register |g:atp_bibrefRegister| (the default is
+    "0" so you can paste it using Vim command 'p').  In addition, it is stored
+    in the variable g:atp_bibref.
 
 :BibYank						see |atp-:BibYank|, |atp-:BibPaste|
 map [count]c, [count]y, 
 :BibPaste
 map [count]p, [count]P
 	This commands are defined in the buffer with results of
-	|atp-:BibSearch| command. It is mapped to '[count]y', '[count]c',
+	|atp-:BibSearch| command.  It is mapped to '[count]y', '[count]c',
 	'[count]p' and '[count]P' and let you copy the bib entry key to
 	a register (see |atp-:BibYank|) or directly to the last opened buffer.
 
 :FindBibFiles						*atp-:FindBibFiles*
 	This updates the variables s:bibfiles, s:allbibfiles,
-	s:notreadablebibfiles. Finds all bib files defined in all
-	'\bibliography' commands. For more about the above variables read
-	|atp-variables-bib|. The command |atp-:FindBibFiles| finds bib
-	files in the current buffer. 
+	s:notreadablebibfiles.  Finds all bib files defined in all
+	'\bibliography' commands.  For more about the above variables read
+	|atp-variables-bib|.  The command |atp-:FindBibFiles| finds bib files
+	in the current buffer. 
 
 	If a readable bib file was not found under one of path listed in of
 	g:atp_bibinputs variable (see |g:atp_bibinputs|) it is classified
@@ -1586,17 +1586,17 @@ map [count]p, [count]P
 :Edit[!]				 		*atp-:Edit* *atp-gf*
 nmap gf
 	This command finds input files under b:atp_MainFile (it is recursive).
-	The nmap 'gf' checks first if there is a file under the cursor. If
-	there is no file under the cursor it list all input files. Input file
+	The nmap 'gf' checks first if there is a file under the cursor.  If
+	there is no file under the cursor it list all input files.  Input file
 	is one introduced in the source file with \input{<file>}, \input
-	<file> \include{<file>}. The current file is now shown with highlight
+	<file> \include{<file>}.  The current file is now shown with highlight
 	group: |hl-WarningMsg|. 
 
 	This command uses kpsewhich to find in which path to find input files.
 	Actually the path variables: |g:atp_texinputs| for input files and
 	|g:atp_bibinputs| for bib files are used.
 
-	The bibliographic declared are also listed. The command searches for
+	The bibliographic declared are also listed.  The command searches for
 	them in any directory listed in g:atp_bibinputs (see
 	|g:atp_bibinputs|).
 
@@ -1611,43 +1611,43 @@ nmap gf
 	The current file is now shown with highlight group: |hl-WarningMsg|. 
 
 :KpsewhichEdit {file}					*atp-:KpsewhichEdit*
-	Find {file} using kpsewhich and edit it. For example >
+	Find {file} using kpsewhich and edit it.  For example >
 	    :KpsewhichEdit amsmath.sty
 <
 							*atp-:Texdoc*
 :Texdoc
 map <F1>, imap <F1>
-	Then you have to type what you are looking for and press enter. The
+	Then you have to type what you are looking for and press enter.  The
 	option 'keywordprg' is set to 'texdoc -m', i.e when your cursor is
 	over a package name and you press 'K' key then you should see the
 	package document file (if it is named after the package).
 
 	Without any argument it will open "g:atp_TeXdocDefault", by default it
 	is equal to "-a lshort", i.e. "The not so short introduction to LaTeX
-	2e" by Tobias Oetiker. You can change the default for something that
+	2e" by Tobias Oetiker.  You can change the default for something that
 	you use more often, for example you can set it to "-a faq", i.e. 'The
 	UK TeX FAQ' (or even to "-a lshort faq" if you want them both :). 
 
 							*atp-:Texdef*
 :Texdef[!] {args}
-	This command is an interface to the texdef program. Use ':Texdef --help'
+	This command is an interface to the texdef program.  Use ':Texdef --help'
 	to see the help message. |atp-:Texdef| command automatically sets the
-	--tex switch (using |filetype|). If run with bang [!] a comma
+	--tex switch (using |filetype|).  If run with bang [!] a comma
 	separeted list of packages of the current tex file will be appended to
 	the texdef command (using --package switch).
 
 	Note: this command is defined only if |g:atp_developer| is set to 1 on
-	startup. See |g:atp_developer| for details.
+	startup.  See |g:atp_developer| for details.
 
 							*atp-:InputFiles*
 :InputFiles				
-	List input files of the current project. It also updates the
+	List input files of the current project.  It also updates the
 	|b:ListOfFiles| and |b:TreeOfFiles| variables to the current values.
 
 	The variable *g:atp_inputfile_pattern* is used as a pattern to find
-	input files. If you use 'biblatex' you do not need to put any pattern
+	input files.  If you use 'biblatex' you do not need to put any pattern
 	matching bibliographies (\addbibresource, \bibliography, ...), ATP has
-	special way of dealing with them which is faster. If you use 'subfile'
+	special way of dealing with them which is faster.  If you use 'subfile'
 	package ATP will add \\subfile pattern.
 
 							*atp-:Open*
@@ -1659,9 +1659,9 @@ map <F1>, imap <F1>
 		g:atp_OpenTypeDict
 <	The g:atp_LibraryPath is a comma-separated list of directory names.
 	You should use wild cards '**' and '*' as in |globpath()|, if you want
-	to include subdirectories, etc. For example >
+	to include subdirectories, etc.  For example >
 	    let g:atp_LibraryPath=$HOME."/**"
-<	will search for files under your $HOME directory. The default value of
+<	will search for files under your $HOME directory.  The default value of
 	g:atp_OpenTypeDict is: >
 	    let g:atp_OpenTypeDict = { 
 		\ "pdf" 	: "xpdf",		"ps" 	: "evince",
@@ -1669,12 +1669,12 @@ map <F1>, imap <F1>
 		\ "tex"		: "edit",		"dvi"	: "xdvi -s 5" }
 <	The values of g:atp_OpenTypeDict should be a program to open the file,
 	or one of 'tabe', 'split', 'edit', (if 'vim' is specified, then 'tabe'
-	will be used). The cat program is also supported.
+	will be used).  The cat program is also supported.
 
 	Found files (all not just matching ones) are stored in the variable
-	g:atp_Library. It is set by |globpath()| on g:atp_LibraryPath and then
+	g:atp_Library.  It is set by |globpath()| on g:atp_LibraryPath and then
 	filtered, only files which extensions are given in g:atp_OpenTypeDict
-	will be stored. This variable is restored by the global project script.
+	will be stored.  This variable is restored by the global project script.
 	You can use {bang} "!" to regenerate the library if it has changed.
 	This is particularly useful as by default ATP remembers g:atp_Library in
 	the common project script (see |atp-ProjectScript|).
@@ -1682,9 +1682,9 @@ map <F1>, imap <F1>
 							*atp-:Dictionary*
 :Dictionary {word}
 map =d
-	This is an interface to http://www.impan.pl/Dictionary/. Type a [word]
+	This is an interface to http://www.impan.pl/Dictionary/.  Type a [word]
 	and you will get quotes from mathematical articles or books written by
-	native speakers of English. The command has a completion for words
+	native speakers of English.  The command has a completion for words
 	List of words is hard coded in ATP (it is too slow to get it), since the
 	dictionary evolves it might contain new entries (note: if this is the
 	case, please inform me).
@@ -1694,9 +1694,9 @@ map =d
 :Delete[!]						*atp-:Delete*
 map <F6>d
 	Deletes all files which extension belongs to g:atp_tex_extensions in
-	the directory |b:atp_OutDir|. By default |g:atp_tex_extensions| does
+	the directory |b:atp_OutDir|.  By default |g:atp_tex_extensions| does
 	not contain 'tex', 'pdf', 'dvi' so none of your important files will
-	be deleted. When the command is used without bang the extensions
+	be deleted.  When the command is used without bang the extensions
 	from |g:atp_DeleteWithBang| are removed from |g:atp_tex_extensions|.
 	The default value of |g:atp_DeleteWithBang| contains for example
 	'synctex.gz' extensions, thus it won't be removed by :Delete (without
@@ -1709,19 +1709,20 @@ map <F6>d
 >
  g:atp_DeleteWithBang = ['synctex.gz', 'tex.project.vim']
 <	This is list of extensions which will not be removed when
-	|atp-:Delete| is run without bang. You do not need to add "pdf" or
+	|atp-:Delete| is run without bang.  You do not need to add "pdf" or
 	"dvi", extensions.
 
 							*atp-:SshPrint*
 :SshPrint [lpr_options]
 	It will run 'lpr' command and append to it the options defined in the
-	variable 'g:printeroptions' + options given in the second argument. It
-	prints the pdf or dvi depending on the value of |b:atp_TexCompiler|.
+	variable 'g:printeroptions' + options given in the second argument.
+	It prints the pdf or dvi depending on the value of
+	|b:atp_TexCompiler|.
 							*g:atp_ssh*
 	If you specify the variable 'g:atp_ssh=<user>@<host>' it will print
 	via ssh on the <host> using the [lpr_options] passed to the lpr
-	command. The command ':SshPrint' has a completion set for the printers
-	available on your local system or in the host. You do not have to
+	command.  The command ':SshPrint' has a completion set for the printers
+	available on your local system or in the host.  You do not have to
 	escape white spaces.
 	
 	The command has completion for the names of printers (also remote
@@ -1731,7 +1732,7 @@ map <F6>d
 
 							*atp-:Lpr*
 :Lpr [lpr_options]					
-	It prints using the lpr command on a local printer. The syntax and
+	It prints using the lpr command on a local printer.  The syntax and
 	completion are the same as for |atp-:SshPrint|.
 
 							*atp-:Lpstat*
@@ -1746,15 +1747,15 @@ map <F6>d
 							*atp-:Wrap*
 :Wrap [beginWrapper] [endWrapper] [cursor_pos] [new_lines]
 
-	Puts selected text between [beginWrapper] and [endWrapper]. Also sets
-	the cursor position according to the [cursor_pos]. Possible values
+	Puts selected text between [beginWrapper] and [endWrapper].  Also sets
+	the cursor position according to the [cursor_pos].  Possible values
 	are: a number -- indicates the character offset from beginning of
 	[beginWrapper]; or "end" put the cursor at the end of [endWrapper] or
 	"begin" leave the cursor at the beginning (to be precise at the end of
 	the starting wrapper).  The default [beginWrapper] is '{', the default
 	[endWrapper] is the bracket which closes the last character of
 	[beginWrapper], if the penultimum element of [beginWrapper] is '\' it
-	is also prepanded to the [endWrapper]. The last argument [new_lines]
+	is also prepanded to the [endWrapper].  The last argument [new_lines]
 	has two values 0/1 (default is 0): if 1 then the [beginWrapper] and
 	[endWrapper] are put in separate lines (the begin line and end line
 	are split), this is useful for putting text into an environment
@@ -1771,7 +1772,7 @@ map <F6>d
 :Unwrap	
 nmap <LocalLeader>u
 	If cursor is standing over a bracket it will remove both matching
-	brackets together with \left:\right, \bigl:\bigr, ... sizes. This
+	brackets together with \left:\right, \bigl:\bigr, ... sizes.  This
 	works for: (:), {:}, [:], \{:\}, \[:\] and \(:\).
 
 							*atp-:IWrap*
@@ -1781,8 +1782,8 @@ nmap <LocalLeader>u
 	in mathematics otherwise inside {textWrapperPair}.  {mathWrapperPair}
 	{textWrapperPair} are Vim lists of length at least 1, the first
 	wrapper is the opening and the second is the closing one (if not given
-	the default '}' is used. The other arguments are as for
-	|atp-:Wrap|. If the opening leader in is not given then this
+	the default '}' is used.  The other arguments are as for
+	|atp-:Wrap|.  If the opening leader in is not given then this
 	command is not wrapping the text (see below for the suggested map
 	'\tx').
 
@@ -1796,8 +1797,8 @@ nmap <LocalLeader>u
 
 	You can also use a wrapper which was yanked into register 'a': >
 		:Wrap @a
-<  	This will work not only in visual mode. It will operate on last
-	selected text. So if you accidentally lost the selection you can still
+<  	This will work not only in visual mode.  It will operate on last
+	selected text.  So if you accidentally lost the selection you can still
 	use this command (but not the maps)!
 
 							*atp-:TexAlign*
@@ -1814,13 +1815,13 @@ vmap <LocalLeader>a
 	the |g:atp_completion_limits|[2] applies.
 
 	The command :Align (and thus also :TexAlign) are using ATP_strlen
-	function to measure the string length. ATP sets
-	g:Align_xstrlen="ATP_strlen" if 'conceallevel' option is >0. If
+	function to measure the string length.  ATP sets
+	g:Align_xstrlen="ATP_strlen" if 'conceallevel' option is >0.  If
 	'conceallevel' is reset to 0 ATP_strlen behaves like
 	g:Align_xstrlen=2.
 
 	With bang "!", |atp-:TexAlign| will join lines which do not ends with
-	'\\'. If *g:atp_TexAlign_join_lines* =1 then the map <LocalLeader>a
+	'\\'.  If *g:atp_TexAlign_join_lines* =1 then the map <LocalLeader>a
 	will use the bang.
 
 	When the [range] the lines in the range are aligned.  When [range] is
@@ -1830,8 +1831,8 @@ vmap <LocalLeader>a
 							*atp-:Tags*
 :Tags[!]
 :LatexTags[!]
-    Make a tag file with a python script included in ATP. It also scans aux
-    file for associated numbers to labels which then are used as tags. If you
+    Make a tag file with a python script included in ATP.  It also scans aux
+    file for associated numbers to labels which then are used as tags.  If you
     declare hyperref package in the preambule also \hyperref{}{} commands are
     matched for tags as well. 
     |atp-:Tags| command will be defined only if you do not define it yourself. 
@@ -1839,23 +1840,23 @@ vmap <LocalLeader>a
     Natbib as well as biblatex commands are supported (with exception of
     \cites, ... biblatex commands).
 
-    With bang the bibtags for \cite commands are not made. If you use more
+    With bang the bibtags for \cite commands are not made.  If you use more
     than one bibliography file searching to which of them it belongs might
-    take some time. If this is the case and you do not want this kind of tags
+    take some time.  If this is the case and you do not want this kind of tags
     you can make the tag file faster.
 
-    Note: you might need to adjust 'iskeyword' Vim option. ATP is adding
+    Note: you might need to adjust 'iskeyword' Vim option.  ATP is adding
     |g:atp_separator| to 'iskeyword' if |g:atp_no_separator| is 0.
 
-    Note!:In Vim 'iskeyword' by default contains '_'. It is disabled by the
+    Note!:In Vim 'iskeyword' by default contains '_'.  It is disabled by the
     standard tex syntax file (you do not want to include _ from _{} LaTeX
-    construct into 'w' motion). So it is better to avoid it in label names, so
-    that |CTRL-]| works well. If you need to add it use:
+    construct into 'w' motion).  So it is better to avoid it in label names, so
+    that |CTRL-]| works well.  If you need to add it use:
 	au FileType set iskeyword+=_
     (this will not work with setlocal).
 
-    Note: the python script is sourced in the background. When the script
-    finishes it will let you know. The tag file is not accessible until the
+    Note: the python script is sourced in the background.  When the script
+    finishes it will let you know.  The tag file is not accessible until the
     script finishes.
 
     Check out |tag-and-searches| how to use tags.
@@ -1864,7 +1865,7 @@ vmap <LocalLeader>a
 
 :TOC[!] 						*atp-:TOC*
 nmap <LocalLeader>t
-	Shows Table of Contents of your document. It do not yet support the
+	Shows Table of Contents of your document.  It do not yet support the
 	starred version of chapter, section,... . 
 
 	The optional argument bang controls if the table of contents data base
@@ -1874,26 +1875,26 @@ nmap <LocalLeader>t
 
 	See |atp-toc-window| for commands and maps defined in the toc window.
 
-	|atp-:TOC| supports many edited files. The variable t:atp_toc_buflist
+	|atp-:TOC| supports many edited files.  The variable t:atp_toc_buflist
 	is a list of project names (|b:atp_MainFile|) which are shown in ToC. 
 	Use |atp-:RemoveFromToC| to remove a project from ToC. 
 
 	If you have in your buffer list two files a.tex and b.tex this command
-	will produce table of contents of both of them. If you have just one
+	will produce table of contents of both of them.  If you have just one
 	opened window (excluding the ToC window) then pressing <space>,
 	<enter>, p and _ will take you to the right buffer (which will be read
-	if is unloaded or hidden). If you split a window then <space>,
+	if is unloaded or hidden).  If you split a window then <space>,
 	<enter>, p, _ will take you to the window from which you are coming.
 	However, if you have two windows with two different buffers loaded
 	they will act on the window with the matching buffer name.
 
 	The variable t:toc_window_width sets the width of table of contents
-	window. By default t:toc_window_width=30. You can set a global
+	window.  By default t:toc_window_width=30.  You can set a global
 	variable g:toc_window_width to override the default value.
 
 							*atp-:RemoveFromToC*
 :RemoveFromToC {name}
-	Remove the project with main file {name} from ToC. There is
+	Remove the project with main file {name} from ToC.  There is
 	a completion for {name}s.
 
 *atplib#motion#ctoc()*
@@ -1903,7 +1904,7 @@ nmap <LocalLeader>t
 
 :Labels[!]						*atp-:Labels*
 map <LocalLeader>L 
-	Shows labels defined in your file. You can also use the commands and
+	Shows labels defined in your file.  You can also use the commands and
 	mappings described in |atp-toc-window|.
 
 	If you forget what are these mappings, write ':map <buffer>' in the
@@ -1913,8 +1914,8 @@ map <LocalLeader>L
 	The key 's' shows the context of the label under the cursor (your
 	current window splits).
 
-	The variable t:labels_window_width sets the width of labels window. By
-	default t:labels_window_width=30. You can set a global
+	The variable t:labels_window_width sets the width of labels window.  By
+	default t:labels_window_width=30.  You can set a global
 	variable g:labels_window_width to override the default value.
 
 	Without bang "!" the labels data base will not be generated.
@@ -1926,13 +1927,13 @@ map <LocalLeader>L
 
   							*atp-:GotoLabel*
 :GotoLabel[!] {pattern} 
-	The command does the obvious thing. The {pattern} matches against the
-	label or label value (as appears in output file). When matching the
-	label value '^' is added at the beginning of pattern. With bang it
-	doesn't regenerate the labels dictionary. It works with project files.
+	The command does the obvious thing.  The {pattern} matches against the
+	label or label value (as appears in output file).  When matching the
+	label value '^' is added at the beginning of pattern.  With bang it
+	doesn't regenerate the labels dictionary.  It works with project files.
 	It has completion.  If pattern matches many labels they all are listed
 	with some useful info: label value, label and the file where it was
-	defined (only in projects). Examples: >
+	defined (only in projects).  Examples: >
 	    :GotoLabel 1.2
 	    :GotoLabel ^thm:
 <       Note: there is |atp-:Tags| command which makes the tag file, and you
@@ -1945,10 +1946,10 @@ map <LocalLeader>L
 							{only in Xpdf}
 :GotoNamedDest <destination_name>
 	Using '\hypertarget{<destination_name>}{<text>}' from hyperref package
-	you can insert into PDF named destinations. This command will set the
-	position of PDF file in Xpdf to this destination. There is
-	a completion for destination names. This command solely works with
-	Xpdf. Using: >
+	you can insert into PDF named destinations.  This command will set the
+	position of PDF file in Xpdf to this destination.  There is
+	a completion for destination names.  This command solely works with
+	Xpdf.  Using: >
 	    :%s/\\label{\([^}]*\)}/\hypertarget{\1}{}/gc
 <       you can turned labels into named destinations.
 
@@ -1956,14 +1957,22 @@ map <LocalLeader>L
 							*atp-:F* *atp-]]*
 :[count]F {arg}
 nmap [count]]]
-	Go (forward) to {arg}, {arg} might be: part, section, subsection,
-	subsubsection, defined environment name. You can use command
-	completion which uses all the locally defined environments.
+	Go (forward) to {arg}.  {arg} might be: part, section, subsection,
+	subsubsection, defined environment name.  You can use command
+	completion which uses all the locally defined environments.  It first
+	check if there {arg} matches at the begining of any defined
+	environment, if nothing is found it returns all the environments that
+	match anywhere.  In this way you can do : >
 
+	    :F oo<Tab>
+<	and it should expand to >
+	    :F proof
+<
 							*atp-:B* *atp-[[*
 :[count]B {arg}
 nmap [count][[
-	Go backward to {arg}, like above |atp-:F|.
+	Go backward to {arg}, the completion for {arg} works like for the
+	command above: |atp-:F|.
 
 							*atp-}m* *atp-}M*
 							*atp-{m* *atp-{M*
@@ -1982,9 +1991,9 @@ nmap %
  							*atp-}e* *atp-{e*
 nmap [count]}e
 nmap [count]{e
-	Go to previous/next environment. If the cursor is on the \begin the
+	Go to previous/next environment.  If the cursor is on the \begin the
 	forward motion will not descent into child nodes (i.e. it will omitt
-	environments inside). The same applies to the backward motion. 
+	environments inside).  The same applies to the backward motion. 
 
 >
         \begin{theorem}
@@ -2016,7 +2025,7 @@ nmap [count]{e
  							*atp-}E* *atp-{E*
 nmap [count]}E
 nmap [count]{E
-	Go to previous/next environment one level up. These are good motions
+	Go to previous/next environment one level up.  These are good motions
 	when you want to go out of a nested environment, or jump to the \begin
 	of the current environment.
 
@@ -2040,8 +2049,8 @@ nmap [count]{E
 
 	Note: the '\begin{' is not included as being inside, i.e. }E from
 	above \begin will to the same place as being just before it (as on the
-	above diagram). This also applies to backward motions. The environment
-	name is treated as an interior part of the environment.
+	above diagram).  This also applies to backward motions.  The
+	environment name is treated as an interior part of the environment.
 
  							*atp-}o* *atp-{o*
 nmap [count]}o
@@ -2086,7 +2095,7 @@ nmap {O
 	
 <
 
-	Note: the motion is written using the |searchpair()| function. Since
+	Note: the motion is written using the |searchpair()| function.  Since
 	it is slow on long files every call to |searchpair()| is limited to
 	the scope of |g:atp_completion_limits|[3] ahead/back (it is computed
 	for every call). 
@@ -2095,8 +2104,8 @@ nmap {O
 							*atp-}F* *atp-{F*
 nmap [count]}f [count]}F
 nmap [count]{f [count]{F
-	These two maps are only valid in beamer. They goto next/previous
-	frame. }F and {F are using |zt| command.
+	These two maps are only valid in beamer.  They goto next/previous
+	frame.  |atp-}F| and |atp-{F| are using |zt| command.
 						
 							*atp-:NextSection*
 							*atp-:NPart*	*atp-}p*
@@ -2110,8 +2119,8 @@ nmap [count]{f [count]{F
 vmap }p, vmap }c, vmap }s, vmap }S
 
 	Go to next part/chapter/section/subsection/subsubsection which title
-	matches optionally given [title_pattern]. With bang "!" the command
-	doesn't skip commented sections. Maps skip them. The search will wrap
+	matches optionally given [title_pattern].  With bang "!" the command
+	doesn't skip commented sections.  Maps skip them.  The search will wrap
 	around the end of a file if 'wrapscan' is set.
 
 	The {section} argument for :F is one off:
@@ -2128,8 +2137,8 @@ vmap }p, vmap }c, vmap }s, vmap }S
 	variable.
 
 	Note: If you set |g:atp_map_forward_motion_leader| to '>' then ATP remaps
-	|>>| to >> and also |v_>| to >>. |>| is working and is not touched by
-	ATP. If you have |'timeout'| set then the map is executed faster, if
+	|>>| to >> and also |v_>| to >>.  |>| is working and is not touched by
+	ATP.  If you have |'timeout'| set then the map is executed faster, if
 	you use |'notimeout'| this workaround it makes these operators work.
 
 	Note: If you set |g:atp_map_forward_motion_leader|="}" then ATP remaps |}|
@@ -2142,7 +2151,7 @@ vmap }p, vmap }c, vmap }s, vmap }S
 	author is using).
 
 	Note: the maps work in visual mode and operator pending mode ('d\ns'
-	will delete till the end of the section). You can use |n| and |N| Vim
+	will delete till the end of the section).  You can use |n| and |N| Vim
 	normal commands (also in visual mode) to go further. 
 
 	In visual mode these maps go to end of current section or, if already
@@ -2152,12 +2161,12 @@ vmap }p, vmap }c, vmap }s, vmap }S
 	should start with '.*' when you want to match somewhere in a middle of
 	the title. 
 	
-	These commands (and maps) use Vim |search()| function or |atp-:S| command
-	depending on the value of |g:atp_mapNn| (see |atp-:ToggleNn|, when
-	g:atp_mapNn=1 the |atp-:S| command is used). You can set the value
-	of |g:atp_mapNn| using the command |atp-:ToggleNn|. If 'wrapscan' is
-	set and g:atp_mapNn=1 the search will wrap around the end of the
-	project (not the end of the current buffer).
+	These commands (and maps) use Vim |search()| function or |atp-:S|
+	command depending on the value of |g:atp_mapNn| (see |atp-:ToggleNn|,
+	when g:atp_mapNn=1 the |atp-:S| command is used).  You can set the
+	value of |g:atp_mapNn| using the command |atp-:ToggleNn|.  If
+	'wrapscan' is set and g:atp_mapNn=1 the search will wrap around the
+	end of the project (not the end of the current buffer).
 
 	You can unmap these keys and use <Plug>GotoNextSubSection,
 	<Plug>GotoNextSection, <Plug>GotoNextChapter, <Plug>GotoNextPart to
@@ -2176,8 +2185,8 @@ vmap }p, vmap }c, vmap }s, vmap }S
 vmap {p, vmap {c, vmap {s, vmap {S
 
 	Go to previous part/chapter/section/subsection/subsubsection which
-	title matches [title_pattern] (an optional argument). With bang "!"
-	the command doesn't skip commented sections. Maps skip them. The
+	title matches [title_pattern] (an optional argument).  With bang "!"
+	the command doesn't skip commented sections.  Maps skip them.  The
 	search will wrap around the beginning of a file if 'wrapscan' is set.
 
 							*g:atp_map_backward_motion_leader*
@@ -2197,17 +2206,17 @@ vmap {p, vmap {c, vmap {s, vmap {S
 
 	These commands (and maps) use Vim |search()| function or |atp-:S|
 	command depending on the value of |g:atp_mapNn| (see |atp-:ToggleNn|,
-	when g:atp_mapNn=1 the |atp-:S| command is used). If 'wrapscan' is
-	set and g:atp_mapNn=1 the search will wrap around the beginning of
-	the project (not the beginning of the current buffer).
+	when g:atp_mapNn=1 the |atp-:S| command is used).  If 'wrapscan' is
+	set and g:atp_mapNn=1 the search will wrap around the beginning of the
+	project (not the beginning of the current buffer).
 
 	You can unmap these keys and use <Plug>GotoPreviousSubSection,
 	<Plug>GotoPreviousSection, <Plug>GotoPreviousChapter,
 	<Plug>GotoPreviousPart to define new maps.
 
 	Note: If you set |g:atp_backward_motion_leader| as '<' then ATP remaps
-	|<<| to << and also |v_<| to <<. |<| is working and is not touched by
-	ATP. If you have |'timeout'| set then the map is executed faster, if
+	|<<| to << and also |v_<| to <<.  |<| is working and is not touched by
+	ATP.  If you have |'timeout'| set then the map is executed faster, if
 	you use |'notimeout'| this workaround it makes these operators work.
 
 	Note: If you set |g:atp_backward_motion_leader|="{" then ATP remaps |}|
@@ -2215,7 +2224,7 @@ vmap {p, vmap {c, vmap {s, vmap {S
 
 
 Previous commands where using relative position - goto next/previous
-section/chapter. The following commands/maps will go to section/chapter as
+section/chapter.  The following commands/maps will go to section/chapter as
 counted from first one.
 							*atp-:SSec* *atp--S*
 							*atp-:Sec*  *atp--s*
@@ -2231,7 +2240,7 @@ nmap -c
 nmap -p
 	Go to subsection/section/chapter/part [count] from begin of the
 	section/chapter/document, i.e. 3]s will jump to section 3 in current
-	chapter. Mark ' is preserved.
+	chapter.  Mark ' is preserved.
 
 	Note: if you are in a section which has no subsections :SSec and -S
 	will go to next section, the same applies to other section types.
@@ -2243,13 +2252,13 @@ nmap -p
 							*atp-]star* *atp-]%* *atp-gc*
 :[count]SkipCommentForward 
 nmap [count]]* [count]]% [count]gc
-	Go to end of current/next comment group. Do this [count] times. The
+	Go to end of current/next comment group.  Do this [count] times.  The
 	default [count] is 1.
 
 	Note: if |g:atp_VimCompatible|=1 (the default) it goes one line below
 	the last commented line, if it is 0 it goes to the end of the comment.
 
-	Note: This commands wraps around the begining/end of the file. The
+	Note: This commands wraps around the begining/end of the file.  The
 	'wrapscan' option applies.
     							*atp-:SkipCommentBackward*
 							*atp-[star* *atp-[%* *atp-gC*
@@ -2270,13 +2279,13 @@ map |<LocalLeader>|s
 							*atp-:InsertEnv*
 :InsertEnv[!] {envname}
 	This command inserts environment {envname} and puts the cursor at the
-	end of \begin{{envname}} statement. To open new line below use |o|.
+	end of \begin{{envname}} statement.  To open new line below use |o|.
 	If used with bang the environment is inserted in line.
 
 							*atp-:ToggleEnv*
 :ToggleEnv	 	
 map <S-F4>    		
-	mapped to <F4> and <S-F4>, switches environment        	name. See
+	mapped to <F4> and <S-F4>, switches environment name.  See
 	(i.e. echo ) g:atp_toggle_environments_1...7 (you can change or add
 	your own variables, just add numbers - they must be consecutive).          	
 	
@@ -2296,15 +2305,15 @@ nmap <F4>
 	prefixes of labels (if there is one, which belongs to
 	g:atp_shortnames_dict) and all ref's (\ref, \eqref and \pageref).  You
 	have to turn on this feature by putting g:atp_toggle_labels=1 (by
-	default it is 0). If there is a label (\label{...}) to which it wants
+	default it is 0).  If there is a label (\label{...}) to which it wants
 	to change it doesn't change labels and issue a Warning Message but as
-	this changes your file it is turned off by default. It will still
+	this changes your file it is turned off by default.  It will still
 	change the labels if there is a reference \(\ref{...}, \eqref{...},
 	etc) (with undefined label).
 
 	In project files this is done in all files belonging to the project.
 	Changes are not saved by default (ATP uses |'hidden'| option, so when
-	you use q! or qa! all changes will be lost).
+	you use |q|! or |qa|! all changes will be lost).
 
 							*atp-:ChangeLabel*
 :ChangeLabel
@@ -2313,7 +2322,7 @@ nmap <F4>
 
 	In project files this is done in all files belonging to the project.
 	Changes are not saved by default (ATP uses |'hidden'| option, so when
-	you use q! or qa! all changes will be lost).
+	you use |q|! or |qa|! all changes will be lost).
 							*atp-:WrapEnvironment*
 :WrapEnvironment {environment} 
 vmap <F4>		
@@ -2322,12 +2331,12 @@ vmap <F4>
 
 							*atp-:Wdiff*
 :Wdiff {old-file} {new-file}
-	This is diff using the GNU wdiff. This command will split the view and
-	show the wdiff output. You can use ]s and [s to go to next previous
-	change. The deleted parts of {old-file} are marked embraced into
-	{=...=} and highlighted with |hl-DiffDelete|. The added parts of
+	This is diff using the GNU wdiff.  This command will split the view and
+	show the wdiff output.  You can use ]s and [s to go to next previous
+	change.  The deleted parts of {old-file} are marked embraced into
+	{=...=} and highlighted with |hl-DiffDelete|.  The added parts of
 	{new-file} are embraced with {+...+} and highlighted with
-	|hl-DiffAdd|. If the preambles differ you will be asked which one to
+	|hl-DiffAdd|.  If the preambles differ you will be asked which one to
 	use in the diff file.
 
 	This is an alternative for latexdiff program, but is much faster.
@@ -2336,41 +2345,42 @@ vmap <F4>
 	0 by default), this is mainly because the math environments can be
 	break and the output might contain: \( a {= =c\)=} {+ !=c\)+} Other
 	things which are not taken into account are changes of environment
-	names, changes of coordinates in tikz. It would be nice to tell to
+	names, changes of coordinates in tikz.  It would be nice to tell to
 	wdiff to not diff them, but this is not implemented.
 
 	After you resolve such conflicts the file should compile nicely
-	(though I didn't do many tests). After that you can change {=...=} and
-	{+...+} for something better. For example you can change {= and =} for
-	\textcolor{red}{=} and {+, +} for \textcolor{blue}{+}. If you resolved
-	syntactic conflicts in a very nice way you can change whole {=<old>=}
-	for \textcolor{red}{<old>} and {+<new>+} for \textcolor{blue}{<new>}.
-	For this you can use the following Vim command:
+	(though I didn't do many tests).  After that you can change {=...=}
+	and {+...+} for something better.  For example you can change {= and
+	=} for \textcolor{red}{=} and {+, +} for \textcolor{blue}{+}.  If you
+	resolved syntactic conflicts in a very nice way you can change whole
+	{=<old>=} for \textcolor{red}{<old>} and {+<new>+} for
+	\textcolor{blue}{<new>}.  For this you can use the following Vim
+	command:
 
 							*atp-:NiceDiff*
 :NiceDiff
-	(which also remaps ]s and [s and keeps the highlighted areas).
-	The :NiceDiff command, although I tried, is not changing all the regions,
-	I will try to fix this in next releases. (Thus not all parts of the output
-	file might be highlighted).
+	(which also remaps ]s and [s and keeps the highlighted areas).  The
+	:NiceDiff command, although I tried, is not changing all the regions,
+	I will try to fix this in next releases.  Thus not all parts of the
+	output file might be highlighted.
 
 							*atp-:Dsearch*
 							*atp-[d* *atp-[D*
 :Dsearch[!] [/]{pattern}[/] 					
 nmap [d, [D
-	The {pattern} argument is optional. It is any vim pattern. Finds all
-	definitions which matches the pattern. It looks in the main file (only
-	in the preamble, unless the optional bang '!' is used) and all the
-	input files (except bib files). This command respects the options:
-	'ignorecase' and 'smartcase'. You can override them with '\C' (match
+	The {pattern} argument is optional.  It is any vim pattern.  Finds all
+	definitions which matches the pattern.  It looks in the main file
+	(only in the preamble, unless the optional bang '!' is used) and all
+	the input files (except bib files).  This command respects the options:
+	'ignorecase' and 'smartcase'.  You can override them with '\C' (match
 	case what follows) and '\c' (ignore case in what follows).
 
 	The maps |atp-[d| and |atp-[D| are reading the keyword under the
 	cursors (in the same way as |atp-gD| does), |atp-[D| uses the bang
 	option of |atp-:Dsearch|.
 
-	It works likes |[d|, |[D| but handles multi line definitions. The also
-	jump back to the current buffer, while the command leaves in the
+	It works likes |[d|, |[D| but handles multi line definitions.  The
+	also jump back to the current buffer, while the command leaves in the
 	preview buffer.
 
 	Recommendation: you can make command alias to |:ds| with cmdalias plugin
@@ -2379,19 +2389,19 @@ nmap [d, [D
 nmap gD
 	This works like |gD| (with the difference that it searches in include
 	files as well): it finds the first global definition of the command
-	under the cursor. It start from the first line of the main project
+	under the cursor.  It start from the first line of the main project
 	file (|b:atp_MainFile|) and goes down visiting all included files on
-	the way. It finds definitions of commands, environments and colors.
+	the way.  It finds definitions of commands, environments and colors.
 	You can use |CTRL-O| to return.
 
 							*g:atp_iskeyword*
 	To get the keyword under the cursor, he 'iskeyword' is set to the
-	value of |g:atp_iskeyword| variable. By default it will only match
-	[a-zA-Z] and the backslash. At the end your 'iksyeword' setting will
+	value of |g:atp_iskeyword| variable.  By default it will only match
+	[a-zA-Z] and the backslash.  At the end your 'iksyeword' setting will
 	be restored.
 
 	Note: to find environment the cursor have to be over the environment
-	name rather than the '\begin' command. If you want to go to the
+	name rather than the '\begin' command.  If you want to go to the
 	reference definition (\label) use |CTRL-]|, see |atp-:Tags|.
 
 	Only available if vim is compiled with |+python| interface.
@@ -2438,7 +2448,7 @@ nmap gD
 	Additionally, read |font-lowlevelcommands| to learn how to use
 	|\usefont|, |\fontsize|, |\selectfont| and other such commands.
 	The 'Latex 2e font selection' by 'LeTeX3 Project Team' might be very
-	useful. It is available on the net (you probably have it in your tex
+	useful.  It is available on the net (you probably have it in your tex
 	distribution if it is installed with the documentation, if not check
 	the CTAN archive).
 
@@ -2450,15 +2460,15 @@ nmap gD
 							*atp-:FontPreview*
 :FontPreview[!] {fdFile} [encoding] [keep_tex]
 	Previews all fonts defined in fd file matching the pattern <fd_file>
-	with encoding [encoding] (optional). If [keep_tex] is 1 (default is 0)
-	it will keep the latex source file for debugging purposes.
+	with encoding [encoding] (optional).  If [keep_tex] is 1 (default is
+	0) it will keep the latex source file for debugging purposes.
 
 	Without [!] it matches just the name of the fd files, with [!] the
 	pattern {fdFile} matches for full path.
 
 	It returns a list of fonts which fd files matches the {fdFile} pattern in
-	[encoding]. You will be asked to chose for which files make a preview,
-	possible answers are: >
+	[encoding].  You will be asked to chose for which files make
+	a preview, possible answers are: >
 			1,2,3
 < 	which is equivalent to >
 			1-3
@@ -2484,7 +2494,7 @@ nmap gD
 <	
 							*b:atp_StatusCurSection*
 	If |b:atp_StatusCurSection| is set to 1 (the default) the current section will be
-	put in the status line. Some times it is slow though.
+	put in the status line.  Some times it is slow though.
 
 							*g:atp_statusOutDir*
 	Note: if you set |g:atp_statusOutDir|=0 (the default is 1) then the
@@ -2514,22 +2524,22 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 :ToDo[!] [bufname]					*atp-:ToDo*
 :Note[!] [bufname]					*atp-:Note*
 	The function list all the lines of the buffer [bufname] which match
-	for the pattern '^\s*%.*{keyword}'. The {stop} argument is the pattern to
-	before which to stop. The optional argument is the buffer name
-	(the buffer name completion is set on). If not given the current
-	buffer is assumed.  You can set highlighting for this command by:
+	for the pattern '^\s*%.*{keyword}'.  The {stop} argument is the
+	pattern to before which to stop.  The optional argument is the buffer
+	name (the buffer name completion is set on).  If not given the current
+	buffer is assumed.  You can set highlighting for this command by: >
 		highlight atp-Todo ctermfg=... 	guifg=...
-	The command :ToDo sets keyword='^\s*%\s*$\|^\s*%\c.*\<note\>' and
+<	The command :ToDo sets keyword='^\s*%\s*$\|^\s*%\c.*\<note\>' and
 	stop='^\s*%.*\c\<note\>', and the command :Note sets
-	keyword='\c\<note\>' and stop='^\s*%\s*$\|^\s*%\c.*\<to\s*do\>'. This
+	keyword='\c\<note\>' and stop='^\s*%\s*$\|^\s*%\c.*\<to\s*do\>'.  This
 	prevent from listing ToDo lines with Notes and vice versa and stops at
-	lines which contains only '%'. With bang "!" the '^\s*' is not
+	lines which contains only '%'.  With bang "!" the '^\s*' is not
 	prepended to the patterns.
 
   							*atp-:WordCount*
 :[range]WordCount[!]
-	The command to compute the number of words. With bang [!] it will show
-	the word count of each input file. It uses 'detex' program (which is
+	The command to compute the number of words.  With bang [!] it will show
+	the word count of each input file.  It uses 'detex' program (which is
 	present in 'texlive') to remove the latex markups prior to word
 	counting (done by the external 'wc' program).  Note: This command will
 	first save the file. 
@@ -2550,7 +2560,7 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 	line (if you use the |atp-status-line|.
 							*g:atp_keymaps*
 	The |g:atp_kemaps| variable is used to translate babel language name
-	to 'keymap' value. The default is something like: >
+	to 'keymap' value.  The default is something like: >
     let g:atp_keymaps = { 
 		\ 'british'	: 'ignore',		'english' 	: 'ignore',
 		\ 'USenglish'	: 'ignore', 		'UKenglish'	: 'ignore',
@@ -2563,7 +2573,7 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 		\ 'polish' 	: 'polish-slash' }
 <	When the value is <ignore> then the function <SID>Babel() (or the
 	command |atp-:Babel|) will ignore setting keymap option for this
-	language. Using the above syntax you can set this variable in |vimrc|
+	language.  Using the above syntax you can set this variable in |vimrc|
 	or |atprc| file.
 
 	This is useful if you in day to day work use one language, but some
@@ -2574,7 +2584,7 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 	This will show values of variables that are currently set. 
 	With bang it also shows global variables defined in
 	'ftplugin/ATP_files/options.vim' (that means almost all global
-	variables). Completion lists are filtered out by default. 
+	variables).  Completion lists are filtered out by default. 
 
 	The optional argument [pattern] is used to filter variables names with
 	the given pattern.
@@ -2599,7 +2609,7 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 :Omap[!] {pattern}					*atp-:Omap*
 :Lmap[!] {pattern}					*atp-:Lmap*
 	The {pattern} is matched against the right hand side of a map as shown
-	by the corresponding |:map| command. If |<bang>| is added the pattern
+	by the corresponding |:map| command.  If |<bang>| is added the pattern
 	is matched against output of [nisvol]map commands with only first
 	column removed (which indicates the map mode).
 
@@ -2617,7 +2627,7 @@ ToDo({keyword}, {stop}, [bufname])			*atp-function-ToDo*
 		is installed.
   							*atp-:ReloadATP*
 :ReloadATP 
-    Reloads ATP plugin: variables, functions, and maps. Note that maps are not
+    Reloads ATP plugin: variables, functions, and maps.  Note that maps are not
     deleted.
 
 ================================================================================
@@ -2638,7 +2648,7 @@ Compilation ~
 
 *atp-g:LatexBox_output_type*	Default: "pdf"
 
-	Extension of the output file. One of "pdf", "dvi" or "ps".
+	Extension of the output file.  One of "pdf", "dvi" or "ps".
 
 *atp-g:LatexBox_autojump*		Default: 0
 
@@ -2663,25 +2673,25 @@ TABLE OF CONTENTS WINDOW				*atp-toc-window*
 			    sets the current line to the beginning of the
 			    chapter/section or label under the cursor.
 			    If [N] fiven the new window will be that heigh
-			    (like with |:split| command). In ToC window |zt| is
-			    also used.
+			    (like with |:split| command).  In ToC window |zt|
+			    is also used.
 	    'q' 	to quit, 
 	    <Enter> 	to go to the section under the cursor and close ToC.
    <space>, <LeftMouse> to go to the section under the cursor but
 			leave ToC open.
 	    '_' 	to go to the section under the cursor and return to 
 			ToC afterwards.
-	    'zc'	to fold section/chapter/... . You can mark several
+	    'zc'	to fold section/chapter/... .  You can mark several
 			lines in visual mode and use 'zc' to fold them at
 			once. 
 			Limitation: ~
 			It cannot fold subsections in a right way when the
-			section is folded. In particular, this applies when
+			section is folded.  In particular, this applies when
 			folding several sections with subsections in visual
 			mode.
 
 	There are also commands: ':C' and ':P', which do the same as 'c' and
-	'p' mappings. They all call the function 'Yank(<where>)', the argument
+	'p' mappings.  They all call the function 'Yank(<where>)', the argument
 	<where> can be one of: '@<register name>' or 'p'. 
 
 	You can also delete and paste sections using the Table of Contents
@@ -2691,12 +2701,12 @@ TABLE OF CONTENTS WINDOW				*atp-toc-window*
 							*atp-:PasteSection*
 							*atp-:SectionStack*
 
-	These commands are available in table of contents. They act on
+	These commands are available in table of contents.  They act on
 	parts/chapters/sections/subsections/subsubsections.
 >
     :YankSection [register]
 <	Yank the section under the cursor (in table of contents) to the given
-	register. If the register is not specified use the unnamed register
+	register.  If the register is not specified use the unnamed register
 	(|registers|).
 	 
 	 The other commands do not use registers but an internal stack.
@@ -2705,26 +2715,26 @@ TABLE OF CONTENTS WINDOW				*atp-toc-window*
     :PasteSection[!]
     :SectionStack
 <	Using ':DeleteSection' you can delete the section under cursor together 
-	with all its subsections.  /Section can be one of: part, chapter,
-	section, subsection, subsubsection, or bibliography/.  Deleted section
+	with all its subsections.  Section can be one of: part, chapter,
+	section, subsection, subsubsection, or bibliography.  Deleted section
 	will be added to a stack which can be shown using the command
 	':SectionStack' There is a command to paste the section from section
-	stack ':PasteSection'. By default it pastes the most recent element in
-	the stack. Passing a number will paste that element of the stack
+	stack ':PasteSection'.  By default it pastes the most recent element in
+	the stack.  Passing a number will paste that element of the stack
 	/bear in mind that then numbers of sections in the stack will change/.
 
 	':PasteSection' puts the section just after where current section
-	ends (section under the cursor in the ToC buffer). With bang "!" it
+	ends (section under the cursor in the ToC buffer).  With bang "!" it
 	puts before.
 
 	Note: If you use bibtex commands to make bibliography ATP finds the
-	line which contains '\bibliography' command. And then searches
-	backward for the first line which is a blank line. The next line is
+	line which contains '\bibliography' command.  And then searches
+	backward for the first line which is a blank line.  The next line is
 	assumed to be the first line of bibliography.  Thus to move the last
 	section before bibliography or the bibliography itself its better you
 	put a blank line before bibliography commands.  The same applies for
 	bibliographies put in the middle of document (end of a chapter, part,
-	etc.) The end of bibliography is found in the same way as the end of
+	etc.)  The end of bibliography is found in the same way as the end of
 	subsubsection.  If you use
 	\begin{thebibliography}:\end{thebibliography} there is no such
 	a problem.
@@ -2735,19 +2745,20 @@ TABLE OF CONTENTS WINDOW				*atp-toc-window*
 >
      :Undo 
      nnoremap u, nnoremap U, nnoremap g-, nnoremap g+ 
-<	You can use undo. The :Undo command will undo in the buffer under
+<	You can use undo.  The :Undo command will undo in the buffer under
 	the cursor (it switches to the correct window, using the Vim undo
-	function, and runs :TOC command - so after all your back in ToC.). The
-	':Undo' command has one argument - the Vim undo command to use, it is
-	one of: 'u/U/g-/g+' (the default is 'u'). They are mapped to 'u','U',
-	'g-' and 'g+'.  (only in the ToC buffer).  Note: ':Undo' command
-	doesn't changes the Section Stack.
+	function, and runs :TOC command - so after all your back in ToC.).
+	The ':Undo' command has one argument - the Vim undo command to use, it
+	is one of: 'u/U/g-/g+' (the default is 'u').  They are mapped to
+	'u','U', 'g-' and 'g+'.  (only in the ToC buffer).  Note: ':Undo'
+	command doesn't changes the Section Stack.
 
 	There is one more level of security: There is a global variable which
 	stores all the deleted sections together with some information about
 	them: >
 			g:atp_SectionBackup
-<	it is a Vim list (see |List|). Each entry is a list of the following format: >
+<	it is a Vim list (see |List|).  Each entry is a list of the following
+	format: >
 		[ <title>, <type>, <deleted_section>, <section_nr>, <file> ]
 <	where <title> is the section title, <type> is one of: part, chapter, 
 	section, subsection, subsubsection bibliography or abstract.  Deleted
@@ -2777,7 +2788,7 @@ FOLDING							*atp-folding*
 	 '|:filetype| detect' command in order for changes to take place.
 
  g:atp_fold_environments = []			*g:atp_fold_environments*
-	 enables/disables folding of environments. By default folding is
+	 enables/disables folding of environments.  By default folding is
 	 disabled since it slows down vim.  The variable is a list of
 	 environments which you want to be folded.  If you want to fold all
 	 environments just set it to "['_all_']".
@@ -2819,9 +2830,9 @@ One more function is provided which searches the bib files for bib fields,
 and for the bib field labels for the latex command \cite{}.
 
 :BibSearch /{pattern}/ [flag] 				*atp-:BibSearch*
-	which do what you expect. The arguments should not be quoted and
+	which do what you expect.  The arguments should not be quoted and
 	separated by a white spaces (if you want to include a white space use
-	'\ '), for more see |f-args|. If you do not provide any argument then
+	'\ '), for more see |f-args|.  If you do not provide any argument then
 	all entries of all bib files will be shown. 
 							*g:atp_bibsearch*
 	Note: {pattern} should be a PYTHON regular expression not vim regular
@@ -2832,7 +2843,7 @@ and for the bib field labels for the latex command \cite{}.
 	But there is no vim '\&' in python regexp.
 
 	The pattern to highlight matching string is passed to |@/| hence you can
-	use |n| and |N| in the BibSearch buffer. This will only work for
+	use |n| and |N| in the BibSearch buffer.  This will only work for
 	{pattern} which is both vim and python regular expression.
 
 	See |atp-bibflags| for the [flag] argument.
@@ -2840,9 +2851,9 @@ and for the bib field labels for the latex command \cite{}.
 							*atp-bibpatterns*
 	Note: Upper pattern is vim pattern lower one is python regexp. 
 
-	Before the match all the ligature symbols and {:} are removed. For
+	Before the match all the ligature symbols and {:} are removed.  For
 	example \`a, \' e, \oa,\ea are substituted with a, e, oa, ea
-	(respectively).  Note that the space in \' e is also removed. Each
+	(respectively).  Note that the space in \' e is also removed.  Each
 	line (without ligatures) of every bib file found in your tex document
 	will be matched against the pattern, for example if the pattern is:
 >
@@ -2851,7 +2862,7 @@ and for the bib field labels for the latex command \cite{}.
 <
 	the BibSearch function will find all the bibliographic fields
 	which in one line have the words 'author' and 'Grothendieck' (in most
-	cases it means that you will see only works of Grothendieck). Another
+	cases it means that you will see only works of Grothendieck).  Another
 	example:
 >
 		'^\(\s*author.*Joayl\)\|Galois Theory'
@@ -2899,7 +2910,7 @@ and for the bib field labels for the latex command \cite{}.
 	kinds of flags: entry flags which matches against labels of bib
 	entries, like author, title, etc..., and keyword flags: which matches
 	against keywords of bib fields: @article, @book, @techreport, etc...
-	and two special flags 'All' and 'L'. A flag is a word on letters:
+	and two special flags 'All' and 'L'.  A flag is a word on letters:
 >
 		a  - author
  		e  - editor
@@ -2939,12 +2950,12 @@ and for the bib field labels for the latex command \cite{}.
  							publisher of matching books (@book,@booklet).
 <
 	Flags '@.' are filtered out, if one does not belong to the one above
-	then it is deleted. You can see which flags are defined using
+	then it is deleted. Y ou can see which flags are defined using
 	ShowOptions function/command (they are listed as Available
 	KeyWordFlags).
 							*atp-bibflags:default*
 	The default flag is stored in the global variable g:defaultbibflags and is
-	equal to 'tabejsyu'. This means that the output for each bib field found 
+	equal to 'tabejsyu'.  This means that the output for each bib field found 
 	will include the 
 		title
 		author
@@ -2954,8 +2965,8 @@ and for the bib field labels for the latex command \cite{}.
 		series
 		year
 	if title,author,... are specified in the bibliography for the given
-	position. If there are many position which match you can set flags to
-	be as simple as possible to include more lines on the screen. For
+	position.  If there are many position which match you can set flags to
+	be as simple as possible to include more lines on the screen.  For
 	example 'tabe' is quite reasonable (note that all bib entries are
 	matched separately, i.e. if a bib field has both 'title' and 'booktitle'
 	bib entries it will give you both of them.
@@ -2972,9 +2983,9 @@ and for the bib field labels for the latex command \cite{}.
 	flags='+@b'
 <
 	This feature ADDS FLAGS TO THE DEFAULT VALUE defined in the variable
-	g:defaultbibflags (see |atp-defaulbibflags|). The first will result in
+	g:defaultbibflags (see |atp-defaulbibflags|).  The first will result in
 	showing the default entries and the page number, the second will
-	result in showing only books with the default bib entries. You can
+	result in showing only books with the default bib entries.  You can
 	specify as many additional flags as you wish.  *atp-bibflags:output*
 	Note that the function shows the line with database file name if there
 	are entries in this bibliography which match the pattern thus,for
@@ -2984,17 +2995,17 @@ and for the bib field labels for the latex command \cite{}.
 	
 							*atp-bibflags:all*
 	The flags='All' is a synonym of flag=g:defaultallbibflags which by default is
-	equal to'tabejfsvnyPNSohiuHcp' i.e. all flags in this order. If you
-	add your own flag you should change this global variable. You can add to
+	equal to'tabejfsvnyPNSohiuHcp' i.e. all flags in this order.  If you
+	add your own flag you should change this global variable.  You can add to
 	this flag any flag which contains '@' (see |atp-bibflags|) by
-	the plus operator, i.e. All+@a@b or +@aAll will give the same result.
+	the plus operator, i.e.  All+@a@b or +@aAll will give the same result.
 
 							*atp-bibflags:last*
 							*atp-bib-b:atp_LastBibFlags*	
-	The variable 'b:atp_LastBibFlags' stores the recently used flags. The flag
+	The variable 'b:atp_LastBibFlags' stores the recently used flags.  The flag
 	'L' sets the flags for this search to the value of 'b:atp_LastBibFlags'.
 	You can write '+L@a', '+L@a', 'L@a' or '@aL' but not '+@La', if you
-	want to add some flags to previous searches. Next time the flag 'L'
+	want to add some flags to previous searches.  Next time the flag 'L'
 	will change the meaning (i.e. it is really the last time not earlier
 	:) However, there is no '-' :( '-@aL' could be helpful.
 	 
@@ -3025,7 +3036,7 @@ and for the bib field labels for the latex command \cite{}.
 	    :BibSearch @ yt	
 <				and this is a tip how to show all bib fields with
 				different flags than the default ones(the '@'
-				will match at every bib field!). It is
+				will match at every bib field!).  It is
 				equivalent to:
 >
 	    :BibSearch // yt
@@ -3043,8 +3054,8 @@ and for the bib field labels for the latex command \cite{}.
 map {count[register]}c, map {count[register]}y
 	This function/command is only available in the window with BibSearch
 	results and allows to copy a bib entry key to a register or directly
-	to the last opened buffer (after the cursor position). It is mapped to
-	'c' and 'y'. You will be asked to give the number of bib entry to
+	to the last opened buffer (after the cursor position).  It is mapped to
+	'c' and 'y'.  You will be asked to give the number of bib entry to
 	yank:
 >
 	    <bib entry number><register name><Enter>	- to copy it to a register
@@ -3058,7 +3069,7 @@ map {count[register]}c, map {count[register]}y
 		:7Yank +
 		:2Yank
 <	Copy the bibkey to register e,+, or " (this might depend on the
-	'clipboard' option in which register the bib key will be put). The
+	'clipboard' option in which register the bib key will be put).  The
 	same you will obtain using the nmaps y or c. 
 	
 	This commands and maps are only in the BibSearch buffer.
@@ -3066,24 +3077,24 @@ map {count[register]}c, map {count[register]}y
 							*atp-:Paste*
 :{BibEntry}Paste [RegisterName]
 map {count}p, {count}P
-	The syntax is the same as for |atp-:BibYank|. It paste the bib entry
-	to the tex buffer (where the |atp-:BibSearch| was inoked). The bib
+	The syntax is the same as for |atp-:BibYank|.  It paste the bib entry
+	to the tex buffer (where the |atp-:BibSearch| was inoked).  The bib
 	entry is also copied to the " register.
 
 							*atp-bibsearch-highlight*
 	The colours of the output are set by the syntax file
-	'syntax/bibsearch_atp.Vim'. All groups except one are the same as in
+	'syntax/bibsearch_atp.Vim'.  All groups except one are the same as in
 	the syntax file for bib files ('syntax/bib.Vim' in your $VIMRUNTIME
-	directory). Their names are 'bibsearchEntryKw' instead 'bibEntryKw'.
+	directory).  Their names are 'bibsearchEntryKw' instead 'bibEntryKw'.
 	The one that is differently defined 'bibsearchComment'.  Which is
 	changed in that way to highlight the bib file names.  One additional
-	highlight group is: 'bibsearchInfo'. It highlights the number of
-	entry and its line number in the bib file. By default all bibsearch
+	highlight group is: 'bibsearchInfo'.  It highlights the number of
+	entry and its line number in the bib file.  By default all bibsearch
 	groups are linked to the corresponding bib group, the bibsearchInfo
 	group is not set.
 	
 	In a colour file (~/.Vim/color/*.Vim) you can use these groups to set
-	colours.  See |highlight| or just read a colour file. For example,
+	colours.  See |highlight| or just read a colour file.  For example,
 	this is a nice set of colours for dark background 
 		
 							 	
@@ -3095,11 +3106,11 @@ BIBSEARCH COMMENTS					*atp-bibsearch-comments*
 	|atp-mailing-list|.
 	
 	The algorithm will work only if all kind of bib entries of your bib
-	file are included in the list g:bibentries. However, changing just
-	this variable is not enough. In that case the search engine (function
+	file are included in the list g:bibentries.  However, changing just
+	this variable is not enough.  In that case the search engine (function
 	s:search) will produce correct output, but the function which displays
-	found entries, will not know how to work with the new entries. One
-	would have to add an entry to the dictionary 'g:bibflagsdict'. If
+	found entries, will not know how to work with the new entries.  One
+	would have to add an entry to the dictionary 'g:bibflagsdict'.  If
 	it is the case, please let me know: |atp-mailing-list|.  
 
 	As you can see entries of the type '@string' which can be used in bib
@@ -3111,9 +3122,9 @@ BIBSEARCH COMMENTS					*atp-bibsearch-comments*
 COMPLETION			                        *atp-completion*
 
 The completion is by default mapped to <C-X><C-O> (expert mode) and <C-X>o
-(non expert mode). However if you set |g:atp_tab_map| to 1 (in your |vimrc|
+(non expert mode).  However if you set |g:atp_tab_map| to 1 (in your |vimrc|
 or |atprc| file), then  <Tab> (expert mode) and <S-Tab> (non expert mode) are
-used. For example if you type \math<C-X><C-o> you will get a list of choices
+used.  For example if you type \math<C-X><C-o> you will get a list of choices
 which completes this command. (See ':h popupmenu-completion' and ':h
 completion' for more).
 
@@ -3121,7 +3132,7 @@ completion' for more).
 							*atp-completion-non-expert-mode*
 There are two completion algorithm: expert mode and non expert mode: the
 keyword for completion in expert mode must match at the begining, in non
-expert mode any where. Also in expert mode the list of possible completions is
+expert mode any where.  Also in expert mode the list of possible completions is
 smaller (for example there is no '\lneqq', there is only '\lneq').
 
 Note: Non expert mode doesn't check if you are editing math (see
@@ -3131,10 +3142,10 @@ command inside mathematics.
 							*atp-tab-note*
 							*g:atp_tab_map*
 If you prefer to use map <Tab> key then you can define |g:atp_tab_map|=1 in
-your |vimrc| file or atprc file |atprc|. Note that Vim can add/remove
+your |vimrc| file or atprc file |atprc|.  Note that Vim can add/remove
 tabshift width from the beginning of line in other ways: in normal mode with
 |>>| and |<<|, in insert mode: |i_CTRL-T|, |i_CTRL-D| and in visual mode with
-|>| and |<|. Also you can use |atp-g>| and |atp-g<|. The alignment of tabular
+|>| and |<|.  Also you can use |atp-g>| and |atp-g<|.  The alignment of tabular
 and other environments can be done with |atp-:TexAlign| command. 
 
 
@@ -3145,19 +3156,19 @@ the variable |g:atp_completion_modes|.
 							*g:atp_local_completion*
 If |g:atp_local_completion| is set to non zero value, then input files will be
 scanned for \def, \newcommand, \newnevironment and \newtheorem commands and
-they will be used for completion (with |atp-:LocalCommands|). If its value is
+they will be used for completion (with |atp-:LocalCommands|).  If its value is
 1 then this will be done during first completion, if it is set to 2 then this
-will be done at start up. The default value is 2 when vim has |+python|
-feature otherwise it is 1. With |+python| this is done at every time you
+will be done at start up.  The default value is 2 when vim has |+python|
+feature otherwise it is 1.  With |+python| this is done at every time you
 use the completion.
 
 NOTE: if you press <C-X><C-O> but then you changed your mind, the completion
 pop-up menu allows to cancel completion: press <C-p> (i.e.  go up - some
 times more than once) and then press <Space>.
 
-Note: The completion checks the preamble for definitions of LaTeX packages. If
-a supported package is present (for example: tikz) then the completion will
-contain additional commands. If you add a package or a class you should unlet
+Note: The completion checks the preamble for definitions of LaTeX packages.
+If a supported package is present (for example: tikz) then the completion will
+contain additional commands.  If you add a package or a class you should unlet
 corresponding variable: |g:atp_LatexPackages| and |g:atp_LatexClasses| and ATP
 will regenerate them when necessary.
 
@@ -3170,10 +3181,10 @@ nmap, imap `<Tab>
 
 DICTIONARIES ~
     I added extended versions of dictionaries of latex-suite to ATP (the files
-    dictionaries/dictionary and dictionary/SIunits). They are added to
+    dictionaries/dictionary and dictionary/SIunits).  They are added to
     |'complete'| vim option, so you can use them through |ins-completion|.
     I made one more dictionary (dictionaries/ams_dictionary) with ams commands
-    and environment names. It will be added to the vim |'complete'| option if
+    and environment names.  It will be added to the vim |'complete'| option if
     you use amsmath package or if the document class is one of the standard
     ams classes or of |g:atp_amsmath| is set to 1.
 
@@ -3182,11 +3193,11 @@ COMPLETION MODES		                       	*atp-completion-modes*
 	commands ~
 		if g:atp_check_if_math_mode = 1 then the pull of commands
 		contains math commands only if there you are inside a math
-		environment. This works perfectly if you switch from $:$ and
+		environment.  This works perfectly if you switch from $:$ and
 		$$:$$ to their equivalent (and more up-to-date) \(:\) and \[:\].
 		The list of math environment in which ATP will think you are
 		editing a math mode is stored in the variable:
-		'g:atp_math_modes'. Its entries are two element list of
+		'g:atp_math_modes'.  Its entries are two element list of
 		patterns which matches the beginning and end of a math mode.
 		The '0' entry have to provide the beginning and end pattern of
 		in line math '\(:\)', the second for displayed math '\[:\]'.
@@ -3197,7 +3208,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		names defined in these packages  Because some classes calls
 		amsmath package silently setting the variable
 		'g:atp_amsmath=1' will ensure that you will get completions
-		for these commands. The algorithm checks if you have this
+		for these commands.  The algorithm checks if you have this
 		package declared or if you use some of the standard ams
 		class (actually checks if the document class name matches
 		'^ams'). 
@@ -3213,7 +3224,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 			\begin{theorem}\lab<Tab>
 		will complete to 
 			\begin{theorem}\label{thm:
-		The dictionary of short names is 'g:atp_shortname_dict'. If
+		The dictionary of short names is 'g:atp_shortname_dict'.  If
 		you do not likes this idea (however it can help you to
 		correctly write \ref{ - to avoid referring to lemmas as
 		propositions, and also it makes completion for \ref{ nicer
@@ -3231,7 +3242,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 							*b:atp_LocalEnvironments*
 		By default the first time you are completing an environment
 		name or a command a list of locally defined environments and
-		commands is made (it takes a few seconds). If you do not want
+		commands is made (it takes a few seconds).  If you do not want
 		to completions for them define "let |g:atp_local_completion|=0",
 		if |g:atp_local_completion|=2" then the search for local
 		definitions and commands will be done on startup (after
@@ -3244,14 +3255,14 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		If you added a command or an environment the command
 		:LocalCommands! will update the list of local definitions.
 		With bang "!" it update the list of input files
-		|b:ListOfFiles| in which the search is done. The output is
+		|b:ListOfFiles| in which the search is done.  The output is
 		stored in three variables: >
 				b:atp_LocalColors
 				b:atp_LocalCommands
 				b:atp_LocalEnvironments
 <		If a command was declared with a arguments (i.e. using \def#1, or
 		\def#1#2, etc. or with \newcommand{...}[1]{...}) a single '{'
-		is attached. It doesn't match for definitions inside comments.
+		is attached.  It doesn't match for definitions inside comments.
 
 		This command will also make abbreviations to environments
 		found, see |atp-abbreviations|.
@@ -3268,9 +3279,9 @@ COMPLETION MODES		                       	*atp-completion-modes*
 	tikzpicture ~
 		There is an extended support for tikz picture environment both
 		in-line \tikz{:} and displayed: \begin{tikzpicture}
-		\end{tikzpicture}. The completion works for both commands and
-		keywords. The pull of them is enlarged if you add tikz
-		libraries. Normal commands are added if you are inside {:}.
+		\end{tikzpicture}.  The completion works for both commands and
+		keywords.  The pull of them is enlarged if you add tikz
+		libraries.  Normal commands are added if you are inside {:}.
 
 		NOTE!: Keyword completion is only active in non expert mode
 		(|atp-completion-non-expert-mode|).
@@ -3282,23 +3293,23 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		For label completion puts short names, for ref and eqref
 		commands the completions are the labels found in all files
 		associated to the main file (the plugin searches the input
-		and include files for them). The same for cite: which searches
+		and include files for them).  The same for cite: which searches
 		also in bib files defined in the main file.
 
 		In the popup menu the first column show the label name, second
 		column contains the first letter of the counter name used:
 		e for equation, t for theorem, s for section, c for chapter,
 		I for Item, etc. - these are the most common things you will
-		see. The third column contains the value of the counter. It is
+		see.  The third column contains the value of the counter.  It is
 		put in brackets () if it comes from equation counter.
 
 		There is also omni completion (see |i_CTRL-X_CTRL-O|) for
-		\cite command. Check it out, as it is very nice (especially in
+		\cite command.  Check it out, as it is very nice (especially in
 		gvim!) and very fast. 
 
 		For both completion and omni completion for the cite command,
 		the text after \cite{  [ or after a comma after \cite{ ] is
-		treated as a regular expression. Thus you can write:
+		treated as a regular expression.  Thus you can write:
 
 		\cite{.*author1\&.*author2<Tab>
 
@@ -3939,8 +3950,8 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*g:texmf*
 >
  let g:texmf	= substitute(system("kpsewhich -expand-var='$TEXMFHOME'"), '\n', '', 'g')
-<	This variable configures where local input files are placed. See
-	|atp-:Edit|. Note: if you set this variable in |vimrc| or |atprc| file
+<	This variable configures where local input files are placed.  See
+	|atp-:Edit|.  Note: if you set this variable in |vimrc| or |atprc| file
 	vim will startup a bit faster with tex files, since calling kpsewhich
 	is slow.
 							*g:askforoutdir*
@@ -3953,10 +3964,10 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 >
  let b:atp_Viewer	= "okular"			
 <	it was tested with Xpdf, Evince, ePdfViewer, Kpdf, Okular, Xdvi and
-	they all works fine. I'm using Xpdf and the Xpdf server options are
+	they all works fine.  I'm using Xpdf and the Xpdf server options are
 	supported so that the file is automatically reloaded (other viewers,
-	except epdfview, have this functionality as well. This do not works
-	for acroread. Read more about viewers in |atp-viewers|. 
+	except epdfview, have this functionality as well.  This do not works
+	for acroread.  Read more about viewers in |atp-viewers|. 
 
 	If you use program b:atp_Viewer then you can use the variable
 	b:atp_{b:atp_Viewer}Options to set the options (it is a vim list), for
@@ -3974,10 +3985,10 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 	Used by function: ViewOutput() (map <LocalLeader>v, map <F3>, imap <F3>)
 
 	These are lists in which every viewer switch and its value should be
-	placed as element (separate!). See examples below. 
+	placed as element (separate!).  See examples below. 
 
 	For example, if you want to have different look of one document you can
-	set it to "-bg gray20". Some examples:
+	set it to "-bg gray20".  Some examples:
 >
  	let b:atp_xpdfOptions	= ['-bg', 'Grey30', '-mattecolor', 'SlateBlue2', '-papercolor', 'White']
 	let g:atp_xpdfOptions	= ['-bg', 'NavajoWhite4', '-fg', 'black', '-mattecolor', 'burlywood']
@@ -4018,7 +4029,7 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*g:atp_cpcmd*
 >
  let g:atp_cpcmd		= "/bin/cp"
-< 	This sets the copy command used by compiler. The value tries to not use
+< 	This sets the copy command used by compiler.  The value tries to not use
 	shell internal function and to avoid the -i switch (ask if overwrite). 
 
 							*g:atp_tex_extensions*	
@@ -4031,14 +4042,14 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 >
  let g:atp_keep	= [ "log", "aux", "toc", "bbl", "ind", "idx", "synctex.gz", "blg", "loa", "toc", "lot", "lof", "thm", "out" ]
 <	Files with an extension belonging to this list will be copied from
-	'b:atp_OutDir' to the temporary directory with appropriate name. Then it
-	will be used by (La)TeX. (log file will be copied after it is created,
-	other files will be copied back and forth between 'b:atp_OutDir' and the
-	temporary directory). These four elements: log,aux,toc,bbl are
-	essentially minimum to work with: table of contents, pdf-bookmarks and
-	bibtex. There are possibly other classes, like beamer, or packages
-	like theorem (produce .thm files) which will need to configure this
-	variable.
+	'b:atp_OutDir' to the temporary directory with appropriate name.  Then
+	it will be used by (La)TeX. (log file will be copied after it is
+	created, other files will be copied back and forth between
+	'b:atp_OutDir' and the temporary directory).  These four elements:
+	log,aux,toc,bbl are essentially minimum to work with: table of
+	contents, pdf-bookmarks and bibtex.  There are possibly other classes,
+	like beamer, or packages like theorem (produce .thm files) which will
+	need to configure this variable.
 
 	If you use "biber" ATP will add "run.xml" and "bcf".
 
@@ -4047,15 +4058,15 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*g:printeroptions*		
 >
  let g:printeroptions	= ""				
-<	You can set the printer options. These are options for the 'lpr'
+<	You can set the printer options.  These are options for the 'lpr'
 	command, which will print the output file (pdf or dvi) this depends on
 	the b:atp_TexCompiler that you use.
 							*g:atp_TexCommand*
 >
  g:atp_TexCommand						
-<	This variable is for debugging purposes. It stores the last executed command to
-	compile your document. It changes also when your compiler was run
-	automatically. >
+<	This variable is for debugging purposes.  It stores the last executed
+	command to compile your document. It changes also when your compiler
+	was run automatically. >
 		:Tex
 		:echo g:atp_TexCommand
 		:Tex!
@@ -4066,17 +4077,17 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
  b:atp_TempDir = b:atp_OutDir/.tmp
 <	In this directory vim (or python) will make a temporary directory
 	(with a unique name) to which output files will be put by your TeX
-	compiler. This is done so to prevent overwriting the output file while
+	compiler.  This is done so to prevent overwriting the output file while
 	the compilation is being done (this can cause problems when there are
 	many TeX processes and the Viewer is accessing not yet compiled
-	file). The output files are copied back to b:atp_OutDir after
-	compilation. The temporary directory is passed to your TeX compiler
+	file).  The output files are copied back to b:atp_OutDir after
+	compilation.  The temporary directory is passed to your TeX compiler
 	using '-output-directory' switch.  
 
 							*g:atp_TempDir*
 >
  g:atp_TempDir 
-<	In this directory the logs of ATP are stored. If vim has python support
+<	In this directory the logs of ATP are stored.  If vim has python support
 	is created by python in most secure way available (readable only by
 	the user) if not it is made using |mkdir()| vim function with 0700
 	permissions.
@@ -4123,17 +4134,17 @@ s:notreadablebibfiles
  g:atp_raw_kpsewhich_tex
 <	This two variables stores the information returned by 
 	    'kpsewhich -show-path tex'
-	They are locked. The first one has pretended '**' wild cards to every
+	They are locked.  The first one has pretended '**' wild cards to every
 	directory, which is done for using with globpath() and findfile()
 	functions.
 
   							*g:atp_VimCompatible*
 >
  g:atp_VimCompatible variable
-<   	with default value 0 ("no"). Its values are 0/1 or yes/no. It changes 
-	the behaviour of '%'. In nocomatible mode it goes to matching pair
-	in a different line in compatible mode it finds the matching pair only
-	if the ending bracket is in the same line.
+<   	with default value 0 ("no").  Its values are 0/1 or yes/no.  It
+	changes the behaviour of '%'. In nocomatible mode it goes to matching
+	pair in a different line in compatible mode it finds the matching pair
+	only if the ending bracket is in the same line.
 
 	See also how it changes the behaviour of |atp-]%| and |atp-[%|.
 
@@ -4142,8 +4153,8 @@ s:notreadablebibfiles
 							*g:atp_indent*
 >
  g:atp_idnent=1
-<	by defalt ATP is useing LatexBox indentation script. If you set this
-	to 0 the vim runtime indantation script will be used. Also
+<	by defalt ATP is useing LatexBox indentation script.  If you set this
+	to 0 the vim runtime indantation script will be used.  Also
 	'indentkeys' differ.
 
 							*g:atp_developer*
@@ -4151,7 +4162,7 @@ s:notreadablebibfiles
  g:atp_developer=0
 <
 	If set to 1 (the default is 0) then |atp-gf| can go to package and
-	class files under texmf tree. When set on startup within your |vimrc|
+	class files under texmf tree.  When set on startup within your |vimrc|
 	or |atrc| file then also |atp-:Texdef| is defined (when set in |vimrc|
 	file it be defined in any filetype - not only tex).
 
@@ -4161,14 +4172,14 @@ WRITING PROJECTS					*atp-ProjectFiles*
 >
  let b:atp_MainFile	= expand("%:p")
 <	This variable points to the main file of the project, it is set on the
-	start up to the file you open. If you edit project file (for the first
+	start up to the file you open.  If you edit project file (for the first
 	time), start with the main file and use gf (see |atp-gf|) to go to the
-	project file you want to edit. In this way all the project files will
-	have correctly set this variable. The value of this variable is used
-	by compilation functions. This variable is written in the project
-	script (see |atp-ProjectScript|). And when the project script is on (see
+	project file you want to edit.  In this way all the project files will
+	have correctly set this variable.  The value of this variable is used
+	by compilation functions.  This variable is written in the project
+	script (see |atp-ProjectScript|).  And when the project script is on (see
 	|atp-ProjectScript|, or set |b:atp_ProjectScript|=1) it is restored between
-	sessions. In this way, next time, you can open any project file and
+	sessions.  In this way, next time, you can open any project file and
 	the b:atp_MainFile variable will be set to the correct value.
 
 							*b:TreeOfFiles*
@@ -4178,18 +4189,18 @@ WRITING PROJECTS					*atp-ProjectFiles*
 	The project feature stores more variables: |b:TreeOfFiles| a dictionary
 	which contains the tree of input files, |b:ListOfFiles| - list of input
 	files, |b:TypeDict| dictionary of types of input files, where the type
-	is one of following: {preamble}, {input}, {bib}. The last variable is
+	is one of following: {preamble}, {input}, {bib}.  The last variable is
 	|b:LevelDict| which is a dictionary of input levels (for example: an
 	input file in input file has level 2).
 
-	There are other tools to make editing project files more easy. There
+	There are other tools to make editing project files more easy.  There
 	is search function: |atp-:S| which works better than the Vim |:ijump|
 	command, which cannot go above the current file in the tree of input
 	files /but |:ijump| is much faster/. 
 
-	If you write a project you might want to use subfiles package. Then
+	If you write a project you might want to use subfiles package.  Then
 	you can compile with |atp-:Texl|, view with |atp-:Viewl| and forward
-	search with |atp-:SyncTexl|. Furthermore, you can still use completion
+	search with |atp-:SyncTexl|.  Furthermore, you can still use completion
 	of labels by numbers if you add to the preambule of the subfile the
 	following command (requires ifthen package): >
 	    \ifthenelse{\value{chapter}=0}{\setcounter{chapter}{CHAPTER_NR}}{}
@@ -4199,10 +4210,10 @@ WRITING PROJECTS					*atp-ProjectFiles*
 
 *b:atp_ProjectDir*
 	Stores the project directory, by default where |b:atp_MainFile| is
-	located (the filename is resolved if it is a symbolic link). It is not
+	located (the filename is resolved if it is a symbolic link).  It is not
 	written to the |atp-ProjectScript| (this makes the |atp-ProjectScript|
-	independent of the host when |g:atp_RelativePath| is set). This
-	variable is mainly for internal purposes. If you want to set the
+	independent of the host when |g:atp_RelativePath| is set).  This
+	variable is mainly for internal purposes.  If you want to set the
 	output directory use |b:atp_OutDir|.
 
 *g:atp_RelativePath*
@@ -4210,7 +4221,7 @@ WRITING PROJECTS					*atp-ProjectFiles*
 	|b:TreeOfFiles|, |b:ListOfFiles|, |b:TypeDict|, |b:LevelDict| will store path
 	relative to |b:atp_ProjectDir| (which is the same as path to your main
 	file, however if the file is a symbolic link it will hint to the
-	resolved path). The |atp-:S| will use correctly these values. This is
+	resolved path).  The |atp-:S| will use correctly these values.  This is
 	particularly useful if you want to share the project file.
 	 
 	If you run into problems with |atp-:S| you can set this variable to
@@ -4239,44 +4250,44 @@ WRITING PROJECTS					*atp-ProjectFiles*
 		    let g:atp_mapNn = 1
 		endif
 <	Then the value will be preserved when atp opens new buffer 
-	when using |atp-:S| command. If you want to have project specific
+	when using |atp-:S| command.  If you want to have project specific
 	setting use |atp-ProjectScript|.
 
 	Another good tip for LaTeX project files is to set |b:atp_TexFlavor|
-	variable to 'tex' (in your |vimrc| or |atprc| file). This will prevent
+	variable to 'tex' (in your |vimrc| or |atprc| file).  This will prevent
 	from situations that Vim recognizes input file as a plain TeX while it
 	is an input file into a LaTeX project. 
-	Another way is add options to 'viewoptions' (see |'viewoptions'|). And
+	Another way is add options to 'viewoptions' (see |'viewoptions'|).  And
 	set mkview and loadview via autocommands >
 		au BufWinLeave *.tex mkview
 		au BufWinEnter *.tex silent loadview
-<	This will ensure that filetype variable is set correctly. Some ATP tools
-	behave in a different way in plaintex files. For example TreeOfFiles
-	function (it makes the variables |b:TreeOfFiles|, |b:ListOfFiles|,
-	|b:TypeDict|, |b:LevelDict|). It is recursive in LaTeX files but not in
-	plain TeX files). On this function is based the command
-	|atp-:LocalCommands| which makes list of commands, environments and
-	colours for Tab Completion and also |atp-:S| command. It is done so,
-	because in plain tex there is no way to distinguish input files from
-	input packages which we do not want to scan (especially recursively,
-	which might be time consuming). 
+<	This will ensure that filetype variable is set correctly.  Some ATP
+	tools behave in a different way in plaintex files.  For example
+	TreeOfFiles function (it makes the variables |b:TreeOfFiles|,
+	|b:ListOfFiles|, |b:TypeDict|, |b:LevelDict|).  It is recursive in
+	LaTeX files but not in plain TeX files).  On this function is based
+	the command |atp-:LocalCommands| which makes list of commands,
+	environments and colours for Tab Completion and also |atp-:S| command.
+	It is done so, because in plain tex there is no way to distinguish
+	input files from input packages which we do not want to scan
+	(especially recursively, which might be time consuming). 
 
 PROJECT SCRIPT						*atp-ProjectScript*
     LOCAL PROJECT SCRIPT ~
 <	The file: |b:atp_MainFile| . ".project.vim", called local project
 	script, in the same directory as |b:atp_MainFile| stores values of
 	variables saved before Vim left the  buffer (it is very similar to
-	|View|). It is a configuration script per project. There is additional
-	file which stores some global variables, see
+	|View|).  It is a configuration script per project.  There is
+	additional file which stores some global variables, see
 	|atp-ProjectScript_Global|.
 	
-	Loading procedure searches for files which ends with '.project.vim'. There
-	might be many such files in one directory. The file is used which contains
-	the current buffer in the list |b:ListOfFiles| or as a value of
-	|b:atp_MainFile|. If there wasn't any such the project scripts file
-	then a new project script will be written for the current buffer. Before
-	writing the project script file if |b:ListOfFiles| doesn't exists it
-	will be generated and written.
+	Loading procedure searches for files which ends with '.project.vim'.
+	There might be many such files in one directory.  The file is used
+	which contains the current buffer in the list |b:ListOfFiles| or as
+	a value of |b:atp_MainFile|.  If there wasn't any such the project
+	scripts file then a new project script will be written for the current
+	buffer.  Before writing the project script file if |b:ListOfFiles|
+	doesn't exists it will be generated and written.
 
 	The project script is stored locally so that it is possible to include
 	it in a revision system (git, bzr, svn, etc.) and share it with
@@ -4307,8 +4318,8 @@ PROJECT SCRIPT						*atp-ProjectScript*
 							*b:atp_ProjectScript*
 							*g:atp_ProjectScript*
 	Setting one of the variables |b:atp_ProjectScript| or
-	|g:atp_ProjectScript| to 0 the feature will be turned off. Local
-	variable, i.e. b: has precedence over the global one g:. So you can
+	|g:atp_ProjectScript| to 0 the feature will be turned off.  Local
+	variable, i.e. b: has precedence over the global one g:.  So you can
 	turned off the feature for only specific files. The global variable
 	will turn it off for all files.
 
@@ -4328,14 +4339,14 @@ PROJECT SCRIPT						*atp-ProjectScript*
 		\ ] 
 <
 	If you want to alter value of this variable, it should be done in
-	|atprc| or |vimrc| files. When you remove a variable from this list it
-	will not automattically be removed from the local project script. You
+	|atprc| or |vimrc| files.  When you remove a variable from this list it
+	will not automattically be removed from the local project script.  You
 	need to delete it your self (or delete the project script with
 	|atp-:DeleteProjectScript|).
 
 	If your vim doesn't have python support |+python| three more variables
 	are stored: |b:atp_LocalEnvironments| |b:atp_LocalCommands|, and
-	|b:atp_LocalColors|. With |+python| this is not needed since
+	|b:atp_LocalColors|.  With |+python| this is not needed since
 	|atp-:LocalCommands| is then very fast and is run on |BufEnter|.
 
 							*b:atp_ProjectScriptFile*
@@ -4345,7 +4356,7 @@ PROJECT SCRIPT						*atp-ProjectScript*
 
 							*atp-ProjectScript_Global*
     GLOBAL PROJECT SCRIPT ~
-	There is also file for variables for all projects. It stores values of
+	There is also file for variables for all projects.  It stores values of
 	global variables (by default it is "ftplugin/ATP_files/common_var.vim". 
 	The global variables that are written in this file are given in Vim
 	list: 
@@ -4380,28 +4391,28 @@ PROJECT SCRIPT						*atp-ProjectScript*
 :ToggleProjectScript[!] [on/off]			*atp-:ToggleProjectScript*
 
 	which do the obvious thing (if |g:atp_ProjectScript|=0 or |b:atp_ProjectScript|=0 they
-	will not work). The default value of the optional argument is "local".
+	will not work).  The default value of the optional argument is "local".
 	:DeleteProjectScript [local] command (with optional argument [local]) deletes
 	the project script file for the current buffer (only the local one), with
-	bang "!" it deletes also global project scrip. The bang of
+	bang "!" it deletes also global project scrip.  The bang of
 	:WriteProjectScript forces to write to project script even when
 	project script is turned off (|b:atp_ProjectScript|==0 or
 	!exists("|b:atp_ProjectScript|") && |g:atp_ProjectScript|==0).
 
 	The command ':ToggleProjectScript [on/off]' turns on/off the feature
-	for this buffer (it sets |b:atp_ProjectScript|). When no argument is
-	given it will toggle the value. With bang it also sets the global
+	for this buffer (it sets |b:atp_ProjectScript|).  When no argument is
+	given it will toggle the value.  With bang it also sets the global
 	variable |g:atp_ProjectScript|. |b:atp_ProjectScript| is by default in the >
 	    g:atp_ProjectLocalVariables 
 <	so it will be restored afterwards. |b:atp_ProjectScript| if defined
-	overrides the value of global variable |g:atp_ProjectScript|. So you can set
+	overrides the value of global variable |g:atp_ProjectScript|.  So you can set
 	in your atp file g:atp_ProjectScript = 0 and for some files using the
 	if-construction: >
 		let g:atp_ProjectScript = 0
 		if expand("%:t") == "myfile.tex"
 		    let b:atp_ProjectScript = 1
 		endif
-<	will turn on the feature only for myfile.tex. Something more elaborate
+<	will turn on the feature only for myfile.tex.  Something more elaborate
 	would be to set |b:atp_ProjectScript| only for files with modification time
 	less than two days for example.
 
@@ -4417,8 +4428,8 @@ PROJECT SCRIPT						*atp-ProjectScript*
 	Note: If you use this feature, you might need to use the commands:
 	|atp-:LocalCommands| and |atp-:InputFiles| which will update
 	b:atp_LocalCommands, b:atp_LocalColors, b:atp_LocalEnvironments and
-	|b:TreeOfFiles|, |b:ListOfFiles|, |b:TypeDict| and |b:LevelDict|. Use
-	these commands with a bang "!". The second set of variables is also
+	|b:TreeOfFiles|, |b:ListOfFiles|, |b:TypeDict| and |b:LevelDict|.  Use
+	these commands with a bang "!".  The second set of variables is also
 	updated by |atp-:S| (also with "!") and and |atp-:GotoFile| (with "!"
 	as well).
 
@@ -4428,19 +4439,19 @@ PROJECT SCRIPT						*atp-ProjectScript*
 
 							*atp-:S*
 :S[!] /{pattern}/ [flags]
-	The pattern is a Vim pattern (with 'magic'). With bang "!" it
+	The pattern is a Vim pattern (with 'magic').  With bang "!" it
 	regenerates the tree of input files.
 
 	This is command does the same job as |/| but is recursive in the tree
-	of files (so it is useful only in project files). The syntax of this
-	command is similar to |:vimgrep|. It also sets the ` mark and thus it
+	of files (so it is useful only in project files).  The syntax of this
+	command is similar to |:vimgrep|.  It also sets the ` mark and thus it
 	adds a position in the jump list (i.e. |atp-:S| as |/| belongs to the
 	|jump-motions|)
 
-	This works similarly to |:ijump|. But also goes back to the root file
+	This works similarly to |:ijump|.  But also goes back to the root file
 	(b:atp_MainFile).
 
-	Note: this command is very fragil on the variable b:TreeOfFiles. It
+	Note: this command is very fragil on the variable b:TreeOfFiles.  It
 	should be uptodate if you use it (use the bang :S! or
 	|atp-:InputFiles| command).
 
@@ -4454,13 +4465,13 @@ PROJECT SCRIPT						*atp-ProjectScript*
 	The {pattern} is any Vim pattern as described in |pattern| (it was only
 	tested with 'magic' set on).
 			
-	The supported [flags] are 'bcewWx'. Their meaning is the same as flags
-	for |search()| function, except the additional flag 'x'. When used the
+	The supported [flags] are 'bcewWx'.  Their meaning is the same as flags
+	for |search()| function, except the additional flag 'x'.  When used the
 	|v:searchforward| value will not be changed.
 
 	You can enclose the pattern with any non-ID character (see
 	|'isident'|) instead of /, as far as it does not appear in the
-	{pattern}. Examples: >
+	{pattern}.  Examples: >
 			    :S pattern\_swith\_sspaces
 <	will work but: >
 			    :S pattern with spaces
@@ -4474,11 +4485,11 @@ PROJECT SCRIPT						*atp-ProjectScript*
 	asks kpsewhich which directories to search, filters out 
 	directories which are not under '/home' (I assume that there is your
 	local texmf tree) and also directories which name contains one of the
-	two keywords 'texlive' and 'kpsewhich'. This makes the searching
+	two keywords 'texlive' and 'kpsewhich'.  This makes the searching
 	faster. 
 							*atp-:S_input*
 	Furthermore, the command is designed so that it can find all patterns
-	'\\input' (and thus easily find next/previous input file). You can
+	'\\input' (and thus easily find next/previous input file).  You can
 	use: >
 		:S \\input
 		:S \\input b 
@@ -4499,14 +4510,14 @@ PROJECT SCRIPT						*atp-ProjectScript*
 
 							*atp-:NInput* 	*atp->i*   *atp->gf*
 							*atp-:PInput* 	*atp-<i*   *atp-<gf*
-	Now it also doesn't search inside commented input files. There two
+	Now it also doesn't search inside commented input files.  There two
 	commands:
 :[count]NInput, nmap [count]>gf, nmap [count]>i
 :[count]PInput, nmap [count]<gf, nmap [count]<i
-	which finds the [count]next/previous input line (also commented). See
-	|atp-:S_input| to find how it works. They depend on |g:atp_mapNn|, if
-	1 |atp-S:| is used if 0 Vim |search()| function. To repeat search you
-	can use |n| and |N| Vim normal commands. These commands omit comment
+	which finds the [count]next/previous input line (also commented).  See
+	|atp-:S_input| to find how it works.  They depend on |g:atp_mapNn|, if
+	1 |atp-S:| is used if 0 Vim |search()| function.  To repeat search you
+	can use |n| and |N| Vim normal commands.  These commands omit comment
 	lines.
 
 	If 'wrapscan' is on it will wrap around the file/project.
@@ -4515,11 +4526,11 @@ PROJECT SCRIPT						*atp-ProjectScript*
 MAPS 		                     			*atp-mappings* 
 							*atp-maps*
 
-Lots of mappings which are given here uses #. This is a convenient map on
+Lots of mappings which are given here uses #.  This is a convenient map on
 British keyboards, but not in the US layout, you can change them for '`' or
 some other key that it is not used in Vim (there are not many of them though).
 The most commonly used latex-suite plugin uses similar set of mappings (but
-there might be some differences). The easy way to change imap leaders is by
+there might be some differences).  The easy way to change imap leaders is by
 using the variables:
 							*g:atp_imap_leader_1*
 >
@@ -4540,7 +4551,7 @@ using the variables:
 							*g:atp_imap_over_leader*
 >
 	    g:atp_imap_over_leader = "`"
-<		for imaps of all sort of accents. See |atp-imaps-diacritics|,
+<		for imaps of all sort of accents.  See |atp-imaps-diacritics|,
 		some maps in |atp-imaps-math-misc|, and also in vmaps:
 		|atp-vmap-WrapSelection-accents|.
 							|g:atp_map_forward_motion_leader|
@@ -4558,16 +4569,16 @@ command.
 
 If you want change the map the best way is to copy the rhs of map provided by
 ATP, since before loading maps the script tests if map to such rhs already
-exists. To see it you can use on of '|:map| {lhs}<CR>' commands.
+exists.  To see it you can use on of '|:map| {lhs}<CR>' commands.
 
 You can list imaps with |atp-:HelpMathIMaps| and |atp-:HelpEnvIMaps| but the
 best way is to use |imap| directly.
 
 All other mappings (|map|, |vmap|, |nmap|, ...) are using |<LocalLeader>| which can be
-altered with the option |maplocalleader|. A good alternate solution is to use "_"
+altered with the option |maplocalleader|.  A good alternate solution is to use "_"
 instead of "##".
 
-Maps are using the <buffer> option thus are local to the buffer. To unmap you
+Maps are using the <buffer> option thus are local to the buffer.  To unmap you
 also have to use this option, for example to unmap <LocalLeader>l issue the
 command:
 >
@@ -4593,7 +4604,7 @@ search for them inside the scripts).
 
 Note: you might like to use |'notimeout'| and |'nottimeout'| settings.
 However, they require that there are no maps such that no lhs is a subset ot
-the another, i.e. like "ab" and "abc". With the default settings it is
+the another, i.e. like "ab" and "abc".  With the default settings it is
 shouldn't be a problem.
 
 nmap ]], vmap ]]
@@ -4626,7 +4637,7 @@ nmap <LocalLeader>u, vmap <LocalLeader>u   -- uncomment
 	Comment/Uncomment lines (both in |Normal| and |Visual| modes). 
 
 	Comment leader can be set with the variable g:atp_CommentLeader (by
-	default it is '% '). If you do not want this maps or you want to
+	default it is '% ').  If you do not want this maps or you want to
 	remap them to something else you can set |g:atp_MapCommentLines|=0 in
 	your |vimrc| or |atprc| file and use <Plug>CommentLines,
 	<Plug>UnCommentLines (these are normal maps), for example:
@@ -4638,7 +4649,7 @@ nmap <LocalLeader>u, vmap <LocalLeader>u   -- uncomment
 cmap <buffer> <C-Space> 	\_s\+
 cmap <buffer> <C-_> 		\_s\+
     The <C-Space> map doesn't work in Vim, instead <C-@> is used which works
-    as <C-Space>. In Vim, and gVim as well. See |atp-:ToggleSpace|.
+    as <C-Space>.  In Vim, and gVim as well.  See |atp-:ToggleSpace|.
 
 
 IMAPS 							*atp-imaps*
@@ -4652,11 +4663,11 @@ All ATP imaps ae defined in several variables (vim lists): >
 < Itmes of this vim lists are vim list of the following form:
 [ <imap_command>, <imap_args>, <imap_leader>, <imap_lhs>, <imap_rhs>, <info> ]
 The first four lists: g:atp_imap_greek_letters, g:atp_imap_math,
-g:atp_imap_math_misc, are only defined when you enter LaTeX math mode. For
+g:atp_imap_math_misc, are only defined when you enter LaTeX math mode.  For
 example by typing '\(' or '\begin{align}', etc ... (this is recognized using
-syntax: |synstack()|). The imap defined in g:atp_imap_diacritics are only
-defined in non math mode. The advantage of this is that the imap o* which
-produces \otimes doesn't affect typing o in LaTeX text mode. In this way we
+syntax: |synstack()|).  The imap defined in g:atp_imap_diacritics are only
+defined in non math mode.  The advantage of this is that the imap o* which
+produces \otimes doesn't affect typing o in LaTeX text mode.  In this way we
 can provide many useful math imaps!
 
 The function which makes the imaps is: atplib#MakeIMaps(), the function which
@@ -4664,13 +4675,13 @@ toggles on/off math/text imaps is atplib#ToggleIMaps() (which now also set vim
 options for math mode, see |g:atp_MathVimOptions|).
 
 NOTE: If you are looking for some imap, using :imap you might not find it,
-because some imaps are only defined when ATP is in insert mode. Moreover, the
-result depends if you are in a mathematical environment or not. Here is
-a trick how to find an imap which is only defined in insert mode. First go to
+because some imaps are only defined when ATP is in insert mode.  Moreover, the
+result depends if you are in a mathematical environment or not.  Here is
+a trick how to find an imap which is only defined in insert mode.  First go to
 insert mode, then press CTRL-O (see |i_CTRL-O|), and then type ':imap<CR>'.
 If the cursor sands inside mathematical environment (for example inside \[:\])
-the result will show mathematical imaps. This is especially useful tip for imaps
-which begins with ' - different imaps for accents in LaTeX text and math
+the result will show mathematical imaps.  This is especially useful tip for
+imaps which begins with ' - different imaps for accents in LaTeX text and math
 modes.
 
 							*atp-j_motion* *atp-k_motion*
@@ -4684,8 +4695,8 @@ map CTRL-j, map CTRL-k	 	- as above but in normal mode.
 
 FONT COMMANDS						*atp-imap-fonts*
 
-Below are listed font imaps. They work in text mode, or math mode, or if there
-is only one given in both. The map leader is defined by the variable
+Below are listed font imaps.  They work in text mode, or math mode, or if
+there is only one given in both.  The map leader is defined by the variable
 |g:atp_imap_leader_2|, which by default is set to '##' (another good
 setting is '_')
 	  	in text			in math ~
@@ -4707,26 +4718,26 @@ imap <LocalLeader>cr	\(\mathscr{}<left>	\mathscr{}<Left>
 imap <LocalLeader>fr	\(\mathfrak{}<left>	\mathfrak{}<Left>
 
 							*atp-nmap-fonts*
-These maps are also defined in normal mode. They requre a motion afterwards,
+These maps are also defined in normal mode.  They requre a motion afterwards,
 i.e. <LocalLeader>rmw will wrap next word in \textrm{:} or \mathrm{:}.
 
 							*atp-nmap-fonts-operator*
 These maps are also available in as operators (|operator|, |g@|,
-'operatorfunc'). That means you can type _bf{motion} to turn the text into
-bold (\textbf or \mathbf depending if the motion starts in text or math). The
+'operatorfunc').  That means you can type _bf{motion} to turn the text into
+bold (\textbf or \mathbf depending if the motion starts in text or math).  The
 map leader '_' is set by |g:atp_vmap_text_font_leader|.
 
 							
 GREEK LETTERS						*atp-imap-greek-letters*
-Note: You can list this mappings using the command |atp-:HelpMathIMaps|. You
-      might not see them using |:imap| unless the last cursor position in
-      insert mode was inside mathematics.
+Note: You can list this mappings using the command |atp-:HelpMathIMaps|.  You
+might not see them using |:imap| unless the last cursor position in insert
+mode was inside mathematics.
 							*g:atp_imap_define_greek_letters*
 Note: If you do not want imaps for greek letters you can set
       |g:atp_imap_define_greek_letters| = 0
 Note: |g:atp_imap_leader_1| is used as a leader (with the default value '#').
 Note: if the previous character is '\' the mapping will not work which allows
-      writing '\#a', etc. However, there is no check for '\\'.
+      writing '\#a', etc.  However, there is no check for '\\'.
 imap #a 	\alpha
 imap #b 	\beta
 imap #c 	\chi
@@ -4775,7 +4786,7 @@ g:atp_imap_ShortEnvIMaps=1
     By default the short environment imaps are defined, but if you set this
     variable to 0 you will get three letter abbreviations.  The only clashes
     is for proof (pro) and proposition (Pro) environments and itemize (ite)
-    and \item (I). You can also reconfigure them using the variables:
+    and \item (I).  You can also reconfigure them using the variables:
     g:atp_imap_{env_name} (for example g:atp_imap_theorem, if you don't want
     a map for particular environment set the corresponding variable to empty
     string ""), |g:atp_imap_leader_3| is used as a leader (the default is
@@ -4797,15 +4808,15 @@ Note: This can be effectively set only in |atprc| or |vimrc| files.
     This variables defines environment names put it the following environment imaps.
 
 							*b:atp_StarEnvDefault*
-    b:atp_StarEnvDefault variable with value "*" or "" (the default). This
+    b:atp_StarEnvDefault variable with value "*" or "" (the default).  This
     star is added to theorem like environment imaps (|atp-imap-environments|).
-    By default it will be restored by the project script. See
+    By default it will be restored by the project script.  See
     |g:atp_ProjectLocalVariables|.
 
     							*b:atp_StarMathEnvDefault*	
     b:atp_StarMathEnvDefault variable with values "*" or "" (the default).  It
     is added to align and equation imaps (|atp-imap-environments|).  By
-    default it will be restored by the project script. See
+    default it will be restored by the project script.  See
     |g:atp_ProjectLocalVariables|.
 
 imap ]b   ]beg 		\begin{}<Left>
@@ -4858,7 +4869,7 @@ imap      ]let		\begin{letter}{<cursor>}
 Next three sets of imaps: |atp-imap-math|, |atp-imap-math-misc| and
 |atp-imap-diacritics| define imaps with overlapping keys (lhs), but note that
 first two are defined only in math environment, while the last only in non
-math environment. In this way `' in math environment will produce \acute{}
+math environment.  In this way `' in math environment will produce \acute{}
 while in non math \'{}. 
 
  							*atp-imaps-math-misc*
@@ -4866,7 +4877,7 @@ while in non math \'{}.
 MATH IMAPS MISC						*g:atp_imap_define_math_misc*
 
     These imaps are defined in |g:atp_imap_math_misc| variable (except ]m and ]M
-    imaps). They might be turned off using |atp-:ToggleIMaps| commands or
+    imaps).  They might be turned off using |atp-:ToggleIMaps| commands or
     by setting |g:atp_imap_define_math_misc| variable to 0 (this should also
     work on the fly).
 
@@ -4880,7 +4891,7 @@ AuTeX maps: ~
 imap __ 	_{}<Left>
 imap ^^		^{}<Left>
     You can set the leader for these two maps using g:atp_imap_subscript,
-    g:atp_imap_supscript variables. If you do not have any maps which begins
+    g:atp_imap_supscript variables.  If you do not have any maps which begins
     with _ or ^ then you can set them to _ and ^, if this is the case the
     maps will not be fired if you type \_ or \^ (which means literal _ or ^ in
     LaTeX). 
@@ -4907,7 +4918,7 @@ imap #.		\dot		[#.s will put \dots]
 
 MATH ACCENTS AND DECORATIONS ~
 
-These imaps are defined in g:atp_imap_math_misc variable. They might be turned
+These imaps are defined in g:atp_imap_math_misc variable.  They might be turned
 off using |atp-:ToggleIMaps| commands or |g:atp_imap_define_math_misc| variable.
 
 imap ``		\grave{}
@@ -4927,7 +4938,7 @@ imap `o		\overline{}
 MATH IMAPS						*g:atp_imap_define_math*
 
     These imaps are defined in |g:atp_imap_math| variable (except ]m and ]M
-    imaps). They might be turned off using |atp-:ToggleIMaps| commands or
+    imaps).  They might be turned off using |atp-:ToggleIMaps| commands or
     |g:atp_imap_define_math| variable (be setting it to 0, works on the fly).
 
     For convenience, there are:
@@ -4989,7 +5000,7 @@ using |atp-:ToggleIMaps| commands or |g:atp_imap_define_diacritics| variable
 
 							*g:atp_diacritics*
 if |g:atp_diacritics| is set to 2 (the default) to get \'{a} you have to type
-a`', i.e. the map acts on the character just before the cursor. See below
+a`', i.e. the map acts on the character just before the cursor.  See below
 |g:atp_diacritics_letters|. Otherwise, if |g:atp_diacritics|=1 they act as
 normal imaps, i.e. typing `' resolves to \'{} with cursor placed between the
 brackets. If you set |g:atp_diacritics|=0 no diacritics imaps will be set.
@@ -5910,7 +5921,7 @@ links:
 <   value of these variables are used to set highlight for the group UserN
     where N is the value of g:atp_statusNotifHi. Its value should be
     0,1,...,9. Where 0 means no highlight for status notification (which is
-    the default). If it is set to positive value then the default values of
+    the default).  If it is set to positive value then the default values of
     these variables should give the same colour as the status line has.
 
     							*b:atp_StatusLine*
@@ -5930,8 +5941,8 @@ If you set this to 1 the following command will be available.
     files under |g:atp_TempDir|.
 
 Debug information is accessible for almost every function, but it is turned
-off by default. The variable names for that are g:atp_depub{FunctionName},
-where {FunctionName} is or name of the function or an abbreviation. See
+off by default.  The variable names for that are g:atp_depub{FunctionName},
+where {FunctionName} is or name of the function or an abbreviation.  See
 section in ftplugin/ATP_files/options.vim script.
 
 ================================================================================

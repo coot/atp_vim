@@ -2,7 +2,7 @@
 " Descriptiion:	These are various editting tools used in ATP.
 " Note:	       This file is a part of Automatic Tex Plugin for Vim.
 " Language:    tex
-" Last Change: Sat Jan 26, 2013 at 21:32:31  +0000
+" Last Change: Sun Jan 27, 2013 at 11:38:49  +0000
 
 let s:sourced 	= exists("s:sourced") ? 1 : 0
 
@@ -809,7 +809,14 @@ function! atplib#various#F_compl(ArgLead, CmdLine, CursorPos) "{{{
 	let env_list=atplib#Extend(env_list, g:atp_amsmath_environments)
     endif
     call filter(env_list+['math'], "v:val !~ '\*$'")
-    return join(env_list, "\n")
+    let env_listcpy = copy(env_list)
+    call filter(env_list, 'v:val =~ ''^''.a:ArgLead')
+    if !empty(env_list)
+	return env_list
+    else
+	call filter(env_listcpy, 'v:val =~ a:ArgLead')
+	return env_listcpy
+    endif
 endfunction "}}}
 " TexDoc commanand and its completion
 " {{{ TexDoc 

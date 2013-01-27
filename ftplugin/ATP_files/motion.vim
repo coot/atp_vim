@@ -83,8 +83,8 @@ command! -buffer -bang Labels		:call atplib#motion#Labels(<q-bang>)
 command! -buffer -count=1 -nargs=? -complete=customlist,EnvCompletionWithoutStarEnvs Nenv	:call atplib#motion#GotoEnvironment('sW',<q-count>,<q-args>)  | let v:searchforward=1 
 command! -buffer -count=1 -nargs=? -complete=customlist,EnvCompletionWithoutStarEnvs Penv	:call atplib#motion#GotoEnvironment('bsW',<q-count>,<q-args>) | let v:searchforward=0
 "TODO: These two commands should also work with sections.
-command! -buffer -count=1 -nargs=? -complete=custom,atplib#various#F_compl F	:call atplib#motion#GotoEnvironment('sW',<q-count>,<q-args>)  | let v:searchforward=1
-command! -buffer -count=1 -nargs=? -complete=custom,atplib#various#F_compl B	:call atplib#motion#GotoEnvironment('bsW',<q-count>,<q-args>) | let v:searchforward=0
+command! -buffer -count=1 -nargs=? -complete=customlist,atplib#various#F_compl F	:call atplib#motion#GotoEnvironment('sW',<q-count>,<q-args>)  | let v:searchforward=1
+command! -buffer -count=1 -nargs=? -complete=customlist,atplib#various#F_compl B	:call atplib#motion#GotoEnvironment('bsW',<q-count>,<q-args>) | let v:searchforward=0
 
 nnoremap <silent> <buffer> <Plug>GotoNextEnvironment		:<C-U>call atplib#motion#GotoEnvironment('sW',v:count1,'')<CR>
 nnoremap <silent> <buffer> <Plug>GotoPreviousEnvironment	:<C-U>call atplib#motion#GotoEnvironment('bsW',v:count1,'')<CR>
