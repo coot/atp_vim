@@ -3,10 +3,19 @@
 # Author: Marcin Szamotulski <mszamot[@]gmail[.]com>
 # This file is a part of Automatic TeX Plugin for Vim.
 
-import sys, errno, os.path, shutil, subprocess, psutil, re, tempfile, optparse, glob
-import traceback, atexit
-
-from os import chdir, mkdir, putenv, devnull
+import sys
+import os
+import errno
+import os.path
+import shutil
+import subprocess
+import psutil
+import re
+import tempfile
+import optparse
+import glob
+import traceback
+import atexit
 
 from optparse import OptionParser
 from collections import deque
@@ -372,9 +381,11 @@ try:
 
     # Link local bibliographies:
     for bib in bibliographies:
-        # XXX: test this with options.output_dir.
         if os.path.exists(os.path.join(mainfile_dir,os.path.basename(bib))):
-            os.symlink(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            if hasattr(os, 'symlink'):
+                os.symlink(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            else:
+                shutil.copyfile(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
     ####################################
     #

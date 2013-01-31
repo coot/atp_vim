@@ -14,9 +14,19 @@
 # def handler(signum, frame):
 
 
-import shutil, os.path, re, optparse, subprocess, traceback, psutil
-import tempfile, os, atexit, sys
+import sys
+import os
+import os.path
+import shutil
+import re
+import optparse
+import subprocess
+import traceback
+import psutil
+import tempfile
+import atexit
 import locale
+
 encoding = locale.getpreferredencoding()
 
 import latex_log
@@ -305,9 +315,15 @@ try:
     debug_file.write("bibliographies = %s\n" % bibliographies)
     for bib in bibliographies:
         if os.path.exists(os.path.join(outdir,os.path.basename(bib))):
-            os.symlink(os.path.join(outdir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            if hasattr(os, 'symlink'):
+                os.symlink(os.path.join(outdir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            else:
+                shutil.copyfile(os.path.join(outdir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
         elif os.path.exists(os.path.join(texfile_dir,os.path.basename(bib))):
-            os.symlink(os.path.join(texfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            if hasattr(os, 'symlink'):
+                os.symlink(os.path.join(texfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+            else:
+                shutil.copyfile(os.path.join(texfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
     debug_file.write("TMPDIR contains: %s\n" % os.listdir(tmpdir))
     # SET ENVIRONMENT

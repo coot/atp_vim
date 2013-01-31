@@ -1648,7 +1648,10 @@ class LatexThread( threading.Thread ):
 # Link local bibliographies:
             for bib in bibliographies:
                 if os.path.exists(os.path.join(mainfile_dir,os.path.basename(bib))):
-                    os.symlink(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+                    if hasattr(os, 'symlink'):
+                        os.symlink(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
+                    else:
+                        shutil.copyfile(os.path.join(mainfile_dir,os.path.basename(bib)),os.path.join(tmpdir,os.path.basename(bib)))
 
 ####################################
 #
