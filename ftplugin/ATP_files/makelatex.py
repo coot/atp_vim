@@ -134,7 +134,7 @@ bibliographies  = list(filter(nonempty, bibliographies))
 tex_options     = list(filter(nonempty,re.split('\s*,\s*',options.tex_options)))
 debug_file.write("TEX_OPTIONS_LIST="+str(tex_options)+"\n")
 
-outdir		= options.outdir
+outdir		= os.path.abspath(options.outdir)
 debug_file.write("OUTDIR="+outdir+"\n")
 force		= options.force
 debug_file.write("FORCE="+str(force)+"\n")

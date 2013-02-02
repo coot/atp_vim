@@ -83,7 +83,7 @@ def nonempty(string):
     else:
         return True
 
-logdir          = options.logdir
+logdir          = os.path.abspath(options.logdir)
 script_logfile  = os.path.join(logdir, 'compile.log')
 debug_file      = open(script_logfile, 'w')
 
@@ -139,6 +139,7 @@ bang            = options.bang
 reload_on_error = options.reload_on_error
 gui_running     = options.gui_running
 progress_bar    = options.progress_bar
+options.output_dir = os.path.abspath(options.output_dir)
 
 debug_file.write("COMMAND "+command+"\n")
 debug_file.write("BIBCOMMAND "+bibcommand+"\n")
