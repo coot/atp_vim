@@ -253,8 +253,9 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
 	endif
     elseif b:atp_Viewer == "okular"
 	let [ page_nr, y_coord, x_coord ] = atplib#compiler#GetSyncData(line, col, a:main_file)
-	" This will not work in project files. (so where it is mostly needed.) 
-	let sync_cmd = "okular --unique ".shellescape(fnamemodify(main_file, ":p:r").".pdf")."\\#src:".line.shellescape(expand("%:p"))." &"
+	let outpath = atplib#joinpath(b:atp_OutDir,fnamemodify(main_file, ":t:r").".pdf")
+	let sync_cmd = "okular --unique ".shellescape(output_file)
+		    \."\\#src:".line.shellescape(expand("%:p"))." &"
 	if !dryrun
 	    call system(sync_cmd)
 	    call atplib#compiler#SyncShow(page_nr, y_coord)
