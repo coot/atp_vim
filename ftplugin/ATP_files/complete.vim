@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options and functions for completion.
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Thu Nov 01, 2012 at 12:05:02  +0000
+" Last Change: Mon Feb 04, 2013 at 11:41:25  +0000
 
 " Todo: biblatex.sty (recursive search for commands contains strange command \i}.
 
@@ -521,15 +521,15 @@ if get(self, a:package_name, {}) == {}
 endif
 " a:1 = [ 'options', 'commands' ] (list of things to scan if
 " a:1 = [ 'options!' ] then make scan even if the value exists.
-let modes = ( !a:0 ? [ 'options', 'commands' ] : a:1 )
+let modes = ( !a:0 ? [ 'options', 'commands', 'environments' ] : a:1 )
 " a:2 == 1 : recursive search (\RequirePackage, \input)
 let recursive = ( a:0 < 2 ? 0 : a:1 )
-let modes_dict = {'options' : 0, 'commands' : 0}
+let modes_dict = {'options' : 0, 'commands' : 0, 'environments': 0}
 for mode in modes
     let m = matchstr(mode, '\w*\ze!\?')
     let modes_dict[m]= get(self[a:package_name], m, ['@']) == ['@'] || ( mode != m )
 endfor
-if modes_dict['options'] == 0 && modes_dict['commands'] == 0
+if modes_dict['options'] == 0 && modes_dict['commands'] == 0 && modes_dict['environments'] == 0
     return self
 endif
 if !has("python")
@@ -579,6 +579,7 @@ command_pat = re.compile(r'(?:^\s*\\e?def|\\(?:newcommand|Declare(?:Document|Uni
 # /usr/local/texlive/2011/texmf-dist/tex/latex/index/index.sty
 # it is \RequirePackage by /usr/local/texlive/2011/texmf-dist/tex/latex/index/bibref.sty
 # it uses \def to define commands.
+environment_pat = re.compile(r'^\s*\\newenvironment\s*{\s*([^}]*)\s*}', re.MULTILINE)
 
 def remove_duplicates(seq, idfun=None):
     # found at http://www.peterbe.com/plog/uniqifiers-benchmark
@@ -603,17 +604,18 @@ def Kpsewhich(package):
         return ''
 
 
-def ScanPackage(package, o=True, c=True):
+def ScanPackage(package, o=True, c=True, e=True):
 
     options = []
     commands = []
+    environments = []
 
     package_file = Kpsewhich(package)
     # check the variable: @classoptionslist
     if package_file != '':
         vim.command("let path='%s'" % str(package_file))
         with open(package_file, 'r') as fo:
-	    package_f  = fo.read()
+            package_f  = fo.read()
         if o:
             # We can cut the package_f variable at \ProcessOptions:
             o_match = re.match('((?:.|\n)*)\\\\ProcessOptions', package_f)
@@ -628,22 +630,26 @@ def ScanPackage(package, o=True, c=True):
                 option_list = [item for item in option_list if re.match('(?:\w|\d|-|_|\*)+$',item)]
                 options+=option_list
         if c:
-            vim.command("echomsg '[ATP]: processing commands from "+package+"'")
+            vim.command("echomsg '[ATP]: processing commands from %s'" % package)
             matches = re.findall(command_pat, package_f)
             for match in matches:
                 for m in match:
                     if (not '@' in m and not '\\' in m and
 			not re.match('Declare\w*(?:Command|Option)', m) and m != ''):
                         commands.append(re.match('(\S*)', m).group(1))
-    return [options, remove_duplicates(commands)]
+	if e:
+            vim.command("echomsg '[ATP]: processing environments from %s'" % package)
+            matches = re.findall(environment_pat, package_f)
+            for match in matches:
+                environments.append(match)
+    return [options, remove_duplicates(commands), remove_duplicates(environments)]
 
 require_package_pat = re.compile(r'\\RequirePackage\s*{([^}]*)}')
 def RequiredPackage(package):
     #scan package for input files
     package_file = Kpsewhich(package)
-    package_fo = open(package_file, 'r!')
-    package_f = package_fo.read()
-    package_fo.close()
+    with open(package_file, 'r') as fo:
+        package_f = fo.read()
     matches = re.findall(require_package_pat, package_f)
     input_files = []
     for match in matches:
@@ -656,7 +662,8 @@ def RequiredPackage(package):
 
 # List of all commands: 
 re_commands=[]
-# dictionary { package_name : commands }:
+re_environments=[]
+# dictionary { package_name : (commands, environments) }:
 recursive_dict = {}
 # do not scan files twice:
 did_files=[]
@@ -668,11 +675,15 @@ def RecursiveSearch(package):
     global did_files
     i_files = RequiredPackage(Kpsewhich(package))
     did_files.append(package)
-    re_commands_add = ScanPackage(package, o=False, c=True)[1]
-    recursive_dict[package]=remove_duplicates(re_commands_add)
+    re_commands_add, re_environments_add = ScanPackage(package, o=False, c=True, e=True)[1:]
+    recursive_dict[package]=(remove_duplicates(re_commands_add),
+                            remove_duplicates(re_environments_add))
     for c in re_commands_add:
 	if not c in re_commands:
             re_commands.append(c)
+    for e in re_environments_add:
+        if not e in re_environments:
+            re_environments.appedn(e)
     for p in i_files:
 	if not p in did_files:
             RecursiveSearch(p)
@@ -681,22 +692,25 @@ def RecursiveSearch(package):
 if vim.eval("recursive") == '0':
     o = ( str(vim.eval("modes_dict['options']")) == '1' )
     c = ( str(vim.eval("modes_dict['commands']")) == '1' )
-    [options, commands]=ScanPackage(package, o, c)
+    e = ( str(vim.eval("modes_dict['environments']")) == '1')
+    [options, commands, environments]=ScanPackage(package, o, c, e)
 else:
     RecursiveSearch(package)
     import json
     vim.command("let recursive_dict="+json.dmup(recursive_dict))
     commands = re_commands
+    environments = re_environments
     # print("re_commands="+str(re_commands))
     o = ( str(vim.eval("modes_dict['options']")) == '1' )
     if o:
-        options=ScanPackage(package, o, c=False)[0]
+        options=ScanPackage(package, o, c=False, e=False)[0]
     else:
         options=[]
 
 
 vim.command("let options = "+str(options))
 vim.command("let commands= "+str(commands))
+vim.command("let environments= "+str(environments))
 EOF
 if exists('path')
     let self[a:package_name]['path'] = path
@@ -706,6 +720,9 @@ if exists('options') && modes_dict['options']
 endif
 if exists('commands') && modes_dict['commands']
     let self[a:package_name]['commands']=map(commands, "'\\'.v:val")
+endif
+if exists('environments') && modes_dict['environments']
+    let self[a:package_name]['environments']=environments
 endif
 if exists('recursive_dict')
     call map(recursive_dict, 'map(v:val, "''\\''.v:val")')

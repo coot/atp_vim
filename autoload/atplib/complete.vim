@@ -2330,6 +2330,9 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		else
 		    call extend(completion_list,{'g:atp_'.package.'_environments'})
 		endif
+	    elseif has("python") || has("python3")
+		let env_list = get(get(g:atp_package_dict.ScanPackage(package.'.sty', ['environments']) ,package.'.sty',{}) , 'environments', [])
+		call extend(completion_list, env_list)
 	    endif
 	endfor
     " {{{3 ------------ ENVIRONMENT VALUES OF OPTIONS
