@@ -264,11 +264,13 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
             if re.match(latex_warning_pat, line):
                 # Log Message: 'LaTeX Warning: '
                 input_line = re.search('on input line (\d+)', line)
-                warning_type = re.match('LaTeX Warning: (Citation|Reference)', line)
+                warning_type = re.match('LaTeX Warning: (Citation|Reference|Hyper reference)', line)
                 if warning_type:
                     wtype = warning_type.group(1)
                 else:
                     wtype = ""
+                if wtype == 'Hyper reference': 
+                    wtype = 'Reference'
                 msg = re.sub('\s+on input line (\d+)', '', re.sub(latex_warning_pat,'', line))
                 if msg == "":
                     msg = " "
