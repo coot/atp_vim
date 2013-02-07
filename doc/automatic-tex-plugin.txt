@@ -3982,7 +3982,8 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
     |b:atp_xdviOptions|
     |b:atp_okularOptions|
     |b:atp_evinceOptions|, etc ... (also global variables g:atp_...Options)
-	Used by function: ViewOutput() (map <LocalLeader>v, map <F3>, imap <F3>)
+	Used by the |atp-:View| command (map <LocalLeader>v, map <F3>, imap
+	<F3>)
 
 	These are lists in which every viewer switch and its value should be
 	placed as element (separate!).  See examples below. 
