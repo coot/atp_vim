@@ -2,7 +2,7 @@
 " Description: 	This file contains all the options defined on startup of ATP
 " Note:		This file is a part of Automatic Tex Plugin for Vim.
 " Language:	tex
-" Last Change: Sat Jan 26, 2013 at 21:30:55  +0000
+" Last Change: Thu Feb 07, 2013 at 17:50:18  +0000
 
 " NOTE: you can add your local settings to ~/.atprc.vim or
 " ftplugin/ATP_files/atprc.vim file
@@ -1536,10 +1536,11 @@ function! <SID>SetXdvi()
     let Compiler		= get(g:CompilerMsg_Dict, matchstr(b:atp_TexCompiler, '^\s*\S*'), 'Compiler')
     let Viewer			= get(g:ViewerMsg_Dict, matchstr(b:atp_Viewer, '^\s*\S*'), 'View\ Output')
     try
-	execute "aunmenu LaTeX.".Compiler
-	execute "aunmenu LaTeX.".Compiler."\\ debug"
-	execute "aunmenu LaTeX.".Compiler."\\ twice"
-	execute "aunmenu LaTeX.View\\ with\\ ".Viewer
+	execute "aunmenu Latex.".Compiler
+	execute "aunmenu Latex.".Compiler."\\ debug"
+	execute "aunmenu Latex.".Compiler."\\ twice"
+	execute "aunmenu Latex.View\\ with\\ ".Viewer
+	execute "aunmenu Latex.View\\Output"
     catch /E329:/
     endtry
 
@@ -1575,7 +1576,7 @@ function! <SID>SetXdvi()
     execute "nmenu 550.5 &Latex.&".Compiler."<Tab>:TEX			:TEX<CR>"
     execute "nmenu 550.6 &Latex.".Compiler."\\ debug<Tab>:TEX\\ debug 	:DTEX<CR>"
     execute "nmenu 550.7 &Latex.".Compiler."\\ &twice<Tab>:2TEX		:2TEX<CR>"
-    execute "nmenu 550.10 Latex.&View\\ with\\ ".Viewer."<Tab>:ViewOutput 		:ViewOutput<CR>"
+    execute "nmenu 550.10 Latex.&View\\ with\\ ".Viewer."<Tab>:View 	:View<CR>"
 endfunction
 command! -buffer SetXdvi			:call <SID>SetXdvi()
 nnoremap <silent> <buffer> <Plug>SetXdvi	:call <SID>SetXdvi()<CR>
@@ -1654,7 +1655,7 @@ function! <SID>SetPdf(viewer)
     execute "nmenu 550.5 &Latex.&".Compiler.	"<Tab>:TEX			:TEX<CR>"
     execute "nmenu 550.6 &Latex." .Compiler.	"\\ debug<Tab>:TEX\\ debug 	:DTEX<CR>"
     execute "nmenu 550.7 &Latex." .Compiler.	"\\ &twice<Tab>:2TEX		:2TEX<CR>"
-    execute "nmenu 550.10 Latex.&View\\ with\\ ".Viewer.	"<Tab>:ViewOutput 		:ViewOutput<CR>"
+    execute "nmenu 550.10 Latex.&View\\ with\\ ".Viewer.	"<Tab>:View 	:View<CR>"
 endfunction
 command! -buffer SetXpdf			:call <SID>SetPdf('xpdf')
 command! -buffer SetOkular			:call <SID>SetPdf('okular')
@@ -2565,13 +2566,13 @@ function! <SID>Viewer(...)
     silent! execute "aunmenu Latex.View\\ with\\ ".oldViewer
     silent! execute "aunmenu Latex.View\\ Output"
     if Viewer != ""
-	execute "menu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:ViewOutput 		:<C-U>ViewOutput<CR>"
-	execute "cmenu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:ViewOutput 		<C-U>ViewOutput<CR>"
-	execute "imenu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:ViewOutput 		<Esc>:ViewOutput<CR>a"
+	execute "menu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:View 		:<C-U>View<CR>"
+	execute "cmenu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:View 		<C-U>View<CR>"
+	execute "imenu 550.10 LaTe&X.&View\\ with\\ ".Viewer."<Tab>:View 		<Esc>:View<CR>a"
     else
-	execute "menu 550.10 LaTe&X.&View\\ Output\\ <Tab>:ViewOutput 		:<C-U>ViewOutput<CR>"
-	execute "cmenu 550.10 LaTe&X.&View\\ Output\\ <Tab>:ViewOutput 		<C-U>ViewOutput<CR>"
-	execute "imenu 550.10 LaTe&X.&View\\ Output\\ <Tab>:ViewOutput 		<Esc>:ViewOutput<CR>a"
+	execute "menu 550.10 LaTe&X.&View\\ Output\\ <Tab>:View 		:<C-U>View<CR>"
+	execute "cmenu 550.10 LaTe&X.&View\\ Output\\ <Tab>:View 		<C-U>View<CR>"
+	execute "imenu 550.10 LaTe&X.&View\\ Output\\ <Tab>:View 		<Esc>:View<CR>a"
     endif
 endfunction
 command! -buffer -nargs=? -complete=customlist,ViewerComp Viewer	:call <SID>Viewer(<q-args>)
