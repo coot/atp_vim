@@ -64,11 +64,10 @@ SOURCEFORGE						*atp-sourceforge*
 
 SUPPORT     						*atp-support*
 >
-    You can [DONATE] for this project through your [PayPal] account (my email
-    is <mszamot [AT] gmail [dot] com>).  This will be highly appreciated.
-    I have a problem with my hardware now, and the donations will help to
-    solve it.  This is quite_an_issue for me now so thanks a lot for you
-    support.
+    Please consider to a [DONATION] for this project.  You can do that
+    through your [PayPal] account (my email is <mszamot [AT] gmail [dot]
+    com>).  This will be highly appreciated.
+
 							Thank You. ~
     You can use this link:							
     https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
@@ -188,13 +187,11 @@ NEWS							*atp-news*
  Changes in version 12.2
 <
 >
- You can help me get new hardware, since my laptop is dying ...
+ You can support this project:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
 >
- This is quite important issue for me these days so if you can donate just a few
- pennies ...  
 
- Thanks for your support,
+ Thanks,
 
 		    Marcin Szamotulski
 <
