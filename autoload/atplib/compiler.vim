@@ -1393,9 +1393,9 @@ def latex_progress_bar(cmd):
                 stack.popleft()
             match = re.match('\[(\n?\d(\n|\d)*)({|\])',str(''.join(stack)))
             if match:
-                vim.eval("atplib#callback#ProgressBar("+match.group(1)[match.start():match.end()]+","+str(pid)+")")
+		vim.eval("atplib#callback#ProgressBar(%s,%s,%s)" % (match.group(1)[match.start():match.end()], pid, bufnr))
     child.wait()
-    vim.eval("atplib#callback#ProgressBar('end',"+str(pid)+")")
+    vim.eval("atplib#callback#ProgressBar('end',%s,%s)" % (pid, bufnr))
     vim.eval("atplib#callback#PIDsRunning(\"b:atp_LatexPIDs\")")
     return child
 
@@ -1448,6 +1448,7 @@ else:
     aucommand="COM"
 command_opt     = list(filter(nonempty,re.split('\s*,\s*', vim.eval("tex_options"))))
 mainfile_fp     = vim.eval("file")
+bufnr		= vim.eval("bufnr('%')")
 output_format   = vim.eval("ext")
 if output_format == "pdf":
     extension = ".pdf"
@@ -2011,11 +2012,11 @@ function! atplib#compiler#auTeX(...)
 " 	if atplib#compiler#NewCompare()
 	    if g:atp_Compiler == 'python'
 		if b:atp_autex == 1
-" 		    if g:atp_devversion == 0
+		    " if g:atp_devversion == 0
 			call atplib#compiler#PythonCompiler(0, 0, b:atp_auruns, mode, "AU", atp_MainFile, "")
-" 		    else
-" 			call atplib#compiler#ThreadedCompiler(0, 0, b:atp_auruns, mode, "AU", atp_MainFile, "")
-" 		    endif
+		    " else
+			" call atplib#compiler#ThreadedCompiler(0, 0, b:atp_auruns, mode, "AU", atp_MainFile, "")
+		    " endif
 		else
 		    call atplib#compiler#LocalCompiler("n", 1)
 		endif
