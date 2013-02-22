@@ -11,7 +11,12 @@ if s:sourced && !g:atp_reload_functions
 endif
 
 if get(split(globpath(b:atp_ProjectDir, fnamemodify(b:atp_MainFile, ":t")), "\n"), 0, '') != ''
-    let s:atp_MainFile	= ( g:atp_RelativePath ? split(globpath(b:atp_ProjectDir, fnamemodify(b:atp_MainFile, ":t")), "\n")[0] : b:atp_MainFile )
+    let s:atp_MainFile	= ( g:atp_RelativePath
+	    \ ? get(
+		    \ split(globpath(b:atp_ProjectDir, fnamemodify(b:atp_MainFile, ":t")), "\n"),
+		    \ 0,
+		    \ atplib#joinpath(b:atp_ProjectDir, fnamemodify(b:atp_MainFile, ":t")))
+	    \ : b:atp_MainFile )
 else
     let s:atp_MainFile	= atplib#FullPath(b:atp_MainFile)
 endif
