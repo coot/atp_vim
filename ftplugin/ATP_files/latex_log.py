@@ -184,7 +184,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     font_info_pat = re.compile('LaTeX Font Info: ')
     font_info = "LaTeX Font Info"
 
-    package_warning_pat = re.compile('Package (\w+) Warning: ')
+    package_warning_pat = re.compile('Package ((?:\w|\.)+) Warning: ')
     package_warning = "Package Warning"
 
     package_info_pat = re.compile('Package (\w+) Info: ')
