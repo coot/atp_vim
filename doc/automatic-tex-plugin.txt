@@ -5961,9 +5961,9 @@ FINAL REMARKS                               		*atp-remarks*
 COPY RIGHTS						*atp-copy-rights*
 
 
-    Copyright (C) 2010, 2011, 2012, Marcin Szamotulski Permission is hereby
-    granted to use and distribute this code, with or without modifications,
-    provided that this copyright notice is copied with it. 
+    Copyright (C) 2010, 2011, 2012, 2013 Marcin Szamotulski Permission is
+    hereby granted to use and distribute this code, with or without
+    modifications, provided that this copyright notice is copied with it. 
 
     Automatic Tex Plugin for Vim is free software: you can redistribute it
     and/or modify it under the terms of the GNU General Public License as

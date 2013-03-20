@@ -45,4 +45,4 @@ Licence note:
 
 ATP is published under *GPL v3+*.
 
-Copyright: Marcin Szamotulski, © 2011, 2012
+Copyright: Marcin Szamotulski, © 2011, 2012, 2013
