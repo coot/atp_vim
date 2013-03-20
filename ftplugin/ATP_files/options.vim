@@ -187,14 +187,9 @@ setl backupskip+=*.tex.project.vim
 
 " The vim option 'iskeyword' is adjust just after g:atp_separator and
 " g:atp_no_separator variables are defined.
-setl keywordprg=texdoc\ -m
-if maparg("K", "n") != ""
-    try
-	nunmap <buffer> K
-    catch E31:
-	nunmap K
-    endtry
-endif
+
+nmap <buffer> <silent> K :exe ':Texdoc' expand('<cword>')<cr>
+" This works better than setting the keywordprg option.
 
 exe "setlocal complete+=".
 	    \ "k".split(globpath(&rtp, "ftplugin/ATP_files/dictionaries/greek"), "\n")[0].
