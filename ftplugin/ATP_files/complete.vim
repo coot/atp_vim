@@ -617,8 +617,8 @@ def ScanPackage(package, o=True, c=True, e=True):
         if package_file[-1] in ['\n', '\r']:
             package_file = package_file[:-1]
 	try:
-        with open(package_file, 'r') as fo:
-            package_f  = fo.read()
+            with open(package_file, 'r') as fo:
+		package_f  = fo.read()
         except IOError as err:
             vim.command('echom "[ATP:] (%r) error: [%s]"' % (package_file,err))
             package_f = ""
