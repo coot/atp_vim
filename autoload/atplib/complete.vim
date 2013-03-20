@@ -2135,8 +2135,9 @@ function! atplib#complete#TabCompletion(expert_mode,...)
     "{{{3 --------- command values
     " this is at the end because there are many command completions done
     " before - they would not work if this would be on the top.
-    elseif (l =~ '\%(\\\w\+\%(\[\%([^\]]\|\[[^\]]*\]\)*\]\)\?\%({\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*}\)\?{\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*$\|\\renewcommand{[^}]*}{[^}]*$\)' && !normal_mode) &&
-		\ index(g:atp_completion_active_modes, 'environment names') != -1 
+    elseif ((l =~ '\%(\\\w\+\%(\[\%([^\]]\|\[[^\]]*\]\)*\]\)\?\%({\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*}\)\?{\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*$\|\\renewcommand{[^}]*}{[^}]*$\)')
+		\ && !normal_mode) &&
+		\ index(g:atp_completion_active_modes, 'command values') != -1 
 	    let completion_method="command values"
 	    " DEBUG:
 	    let b:comp_method=completion_method

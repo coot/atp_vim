@@ -31,4 +31,7 @@ let g:atp_enumitem_command_values={
 	\ '\\SetLabelAlign' : [ 'left', 'right', 'perleft' ],
 	\ '\\restartlist' : [ 'enumerate', 'enumerate*', 'itemize', 'itemize*', 'description', 'description*' ],
 	\ }
-let g:atp_enumitem_command_values_dict = { '\\setlist\s*\[[^\]]*\]\s*' : s:options_values }
+let g:atp_enumitem_command_values_dict = {
+	\ '\\setlist\s*\[[^\]]*\]\s*' : s:options_values,
+	\ '\\setlist\s*\[\s*': ['enumerate', 'itemize', 'description'],
+	\ }
