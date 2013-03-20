@@ -167,6 +167,9 @@ function! atplib#callback#CallBack(bufnr,mode,...)
     let l:clist 	= 0
     let atp_DebugMode 	= t:atp_DebugMode
 
+    if !exists('b:atp_TexReturnCode')
+	let b:atp_TexReturnCode = ''
+    endif
     if b:atp_TexReturnCode == 0 && ( a:mode == 'silent' || atp_DebugMode == 'silent' ) && g:atp_DebugMode_AU_change_cmdheight 
 	let &l:cmdheight=g:atp_cmdheight
     endif
