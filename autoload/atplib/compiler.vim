@@ -232,7 +232,7 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
 	    "visible through cmdline arguments -> this happens if file is opened in
 	    "another server. We can use: xpdf -remote a:xpdf_server "run('echo %f')"
 	    echohl WarningMsg
-	    echomsg "[SyncTex:] please open the file first. (if file is opend add bang \"!\")"
+	    echomsg "[SyncTex:] please open the file (".output_file.") first. (if the file is opened use the bang \"!\")"
 	    echohl None
 	    return
 	endif
