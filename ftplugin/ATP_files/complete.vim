@@ -65,13 +65,13 @@ endif
 	let g:atp_Environments=['array', 'abstract', 'center', 'corollary', 
 		\ 'definition', 'document', 'description', 'displaymath',
 		\ 'enumerate', 'example', 'eqnarray', 
-		\ 'flushright', 'flushleft', 'figure', 'frontmatter', 
+		\ 'flushright', 'flushleft', 'figure', 'frame', 'frontmatter', 
 		\ 'keywords', 
 		\ 'itemize', 'lemma', 'list', 'letter', 'notation', 'minipage', 
 		\ 'proof', 'proposition', 'picture', 'theorem', 'tikzpicture',  
 		\ 'tabular', 'table', 'tabbing', 'thebibliography', 'titlepage',
 		\ 'quotation', 'quote',
-		\ 'remark', 'verbatim', 'verse', 'frame' ]
+		\ 'remark', 'verbatim', 'verse' ]
 
 	let g:atp_amsmath_environments=['align', 'alignat', 'equation', 'gather',
 		\ 'multline', 'split', 'substack', 'flalign', 'smallmatrix', 'subeqations',
