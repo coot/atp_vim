@@ -614,8 +614,14 @@ def ScanPackage(package, o=True, c=True, e=True):
     # check the variable: @classoptionslist
     if package_file != '':
         vim.command("let path='%s'" % str(package_file))
+        if package_file[-1] in ['\n', '\r']:
+            package_file = package_file[:-1]
+	try:
         with open(package_file, 'r') as fo:
             package_f  = fo.read()
+        except IOError as err:
+            vim.command('echom "[ATP:] (%r) error: [%s]"' % (package_file,err))
+            package_f = ""
         if o:
             # We can cut the package_f variable at \ProcessOptions:
             o_match = re.match('((?:.|\n)*)\\\\ProcessOptions', package_f)
@@ -683,7 +689,7 @@ def RecursiveSearch(package):
             re_commands.append(c)
     for e in re_environments_add:
         if not e in re_environments:
-            re_environments.appedn(e)
+            re_environments.append(e)
     for p in i_files:
 	if not p in did_files:
             RecursiveSearch(p)

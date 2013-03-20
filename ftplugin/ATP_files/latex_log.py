@@ -241,8 +241,6 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
                             fname = os.path.normpath(os.path.join(output_dir, fname))
                         else:
                             fname = fname_
-                with open(log_to_path, 'a') as fo:
-                    fo.write("fname='%s' '%s'\n" % (fname_,fname))
                 output_data.append(["Input File", fname, "0", "0", "Input File"])
                 file_stack.append(fname)
                 open_dict[fname]=0

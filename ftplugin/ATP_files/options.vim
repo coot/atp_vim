@@ -1257,7 +1257,8 @@ if !exists("g:atp_statusNotifHi")
 endif
 if !exists("g:atp_callback")
     if exists("g:atp_statusNotif") && g:atp_statusNotif == 1 &&
-		\ has('clientserver') && !empty(v:servername)
+		\ has('clientserver') && !empty(v:servername) &&
+		\ !(has('win16') || has('win32') || has('win64') || has('win95'))
 	let g:atp_callback	= 1
     else
 	let g:atp_callback	= 0
