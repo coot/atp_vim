@@ -98,6 +98,7 @@ TABLE OF CONTENTS 					*atp*
                                                 	*atp-help-toc*
 	|atp-news|			News.
 	|atp-installation| 		Installation.								
+	    |atp-on-Windows|
 	    |atp-and-other-plugins|
 	|atp-commands| 			Functions and commands:
 	some most important commands: ~
@@ -109,7 +110,7 @@ TABLE OF CONTENTS 					*atp*
 		|atp-:ShowErrors|
 		|atp-:ErrorFormat|
 		|atp-:Kill|
-	    viewer ~
+	    view ~
 		|atp-:View|
 		|atp-:SyncTex|		forward searching,
 	    diff ~
@@ -699,6 +700,16 @@ To get updates it is enough to use this command:
 :ATPversion	
 	This command prints version information of ATP and the time stamp when
 	this version was build.  The time stamp is in format 'dd-mm-yy_HH-MM'.
+
+--------------------------------------------------------------------------------
+ATP ON WINDOWS							*atp-on-Windows*
+
+The progress bar and callback features are turned off on Windows.  The reason
+is how vim-server works on Windows: whenever one calls back it shows a window
+with a message ERROR 0, which is quite annoying especially since compilation
+script calls back vim several times.  ATP is not thoroughly tested on Windows
+so feautures might not work.  Send me an email or write to the mailing list,
+and note that its about ATP on Windows.
 
 --------------------------------------------------------------------------------
 ATP AND OTHER PLUGINS					*atp-and-other-plugins*
@@ -5320,6 +5331,10 @@ vmap [counti]a{
 		selects a bracket pair before the beginning of the inner part
 		of an environment, so it can be environment name or an option
 		just after. 	
+
+        Note: maing the omap ie and ae act linear is not easy ('omap ie Vie')
+        did not work for me, also the |o_V| wasn't.  Probably the best advice
+        is to go through visual mode with: 'Vae'.
 
 							*atp-im* *atp-am*
 	im, am	selects mathematics operators: you can use "vim" to select

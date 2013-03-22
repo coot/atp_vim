@@ -1,18 +1,17 @@
 [Automatic TeX Plugin](http://atp-vim.sf.net) For [Vim](http://vim.org) version 7.3
 ========================================
 
-Supported OS'es: *Linux*, *Mac OS*, *Windows* (not quite!, your welcome to
-help - ask me how to and I will be happy to provide help).
+Supported OS'es: *Linux*, *Mac OS*, *Windows* (some features are not working).
 
-Visit http://atp-vim.sf.net to get more info: features, vidoes presenting some
+Visit http://atp-vim.sf.net to get more info: features, videos presenting some
 functionalities, online help. Just to list the main features:
 
  * background processing with a progress bar,
  * forward/inverse search for okular, evince, xpdf, open (on MacOs),
  * compilation of projects, or just parts of projects (using the subfiles
  LaTeX package),
- * excelent completion, which also closes environments and brackets, and
- inputing labels by their numbers (as seen in the output) and much more ...
+ * excellent completion, which also closes environments and brackets, and
+ inputting labels by their numbers (as seen in the output) and much more ...
  * table of contents,
  * do you want to see [more](http://atp-vim.sf.net) ... / even that is not complete ... /
 
@@ -39,6 +38,15 @@ the same, but also prints a progress information on the *Vim* status line.).
 *GNU* [wdiff](http://www.gnu.org/software/wdiff/) for making word
 diffs (see ":help atp-:Wdiff").
 
+Windows:
+--------
+
+The progress bar and callback features are turned off on Windows.  The reason
+is how vim-server works on windows: whenever one calls back it shows a window
+with message ERROR 0, which is quite annoying especially since compilation
+script calls back vim several times.  ATP is not thoroughly tested on Windows
+so something might not work.  Drop me an email or write to the mailing list,
+and note that its about ATP on Windows.
 
 Licence note:
 -------------
