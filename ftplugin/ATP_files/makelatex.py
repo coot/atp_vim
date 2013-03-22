@@ -33,7 +33,6 @@ import latex_log
 
 from optparse import OptionParser
 from os import getcwd
-from signal import SIGKILL
 from collections import deque
 
 usage   = "usage: %prog [options]"
