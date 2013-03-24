@@ -1011,7 +1011,7 @@ if !exists("g:atp_OpenTypeDict")
 		\ "pdf" 	: "xpdf",		"ps" 	: "evince",
 		\ "djvu" 	: "djview",		"txt" 	: "split" ,
 		\ "tex"		: "edit",		"dvi"	: "xdvi -s 5" }
-    " for txt type files supported viewers: cat, gvim = vim = tabe, split, edit
+    " for txt type files supported viewers are: cat, gvim = vim = tabe, split, edit
 endif
 if !exists("g:atp_LibraryPath")
     let g:atp_LibraryPath	= 0
