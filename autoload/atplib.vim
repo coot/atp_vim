@@ -24,7 +24,7 @@ function! atplib#ReadATPRC() "{{{
 	    execute 'source ' . fnameescape(atprc_file)
 	endif
     else
-	let atprc_file = get(split(globpath(&rtp, "**/ftplugin/ATP_files/atprc.vim"), '\n'), 0, "")
+	let atprc_file=get(split(globpath($HOME, '_atprc.vim', 1), "\n"), 0, "")
 	if filereadable(atprc_file)
 	    execute 'source ' . fnameescape(atprc_file)
 	endif
