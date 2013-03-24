@@ -63,8 +63,8 @@ function! LatexBox_Latexmk(force)
 	if a:force
 		let l:options .= ' -g'
 	endif
-	let l:options .= " -e '$pdflatex =~ s/ / -file-line-error /'"
-	let l:options .= " -e '$latex =~ s/ / -file-line-error /'"
+	" let l:options .= " -e '$pdflatex =~ s/ / -file-line-error /'"
+	" let l:options .= " -e '$latex =~ s/ / -file-line-error /'"
 
 	" callback to set the pid
 	let vimsetpid = g:vim_program . ' --servername ' . v:servername . ' --remote-expr ' .
