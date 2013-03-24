@@ -2192,7 +2192,7 @@ python << EOF
 import os, errno
 dir=vim.eval('a:dir')
 try:
-    os.rmtree(dir)
+    os.rmdir(dir)
 except OSError, e:
     if errno.errorcode[e.errno] == 'ENOENT':
         pass
