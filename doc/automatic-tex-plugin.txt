@@ -3814,8 +3814,9 @@ All the values of important variables with their values can be shown
 (grepped) by |atp-:ShowOptions| command.
 
 							*atprc*
-$HOME/.atprc.vim (only on Unix and GNU/Linux) or 
-$VIMRUNTIME/ftplugin/ATP_files/atprc.vim					
+$HOME/.atprc.vim (on Unix and GNU/Linux) or 
+$HOME/_atprc.vim (on Windows)
+$VIMRUNTIME/ftplugin/ATP_files/atprc.vim (only on MacOs and GNU/Linux)
     A configuration file for ATP.  You do not have to use autocommands to set
     local-buffer variables, just place them here.  The settings in |atprc|
     file override the values in the project script (|atp-ProjectScript|).  You
