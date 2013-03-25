@@ -748,7 +748,9 @@ fun! ATPCompleteDone()
     endif
     if g:atp_completion_method == 'package'
 	let package = matchstr(getline(line('.')), '\w*$')
-	call add(g:atp_packages, package)
+	if index(g:atp_LatexPackages, package) != -1 && index(g:atp_packages, package) == -1
+	    call add(g:atp_packages, package)
+	endif
     endif
 endfun
 
