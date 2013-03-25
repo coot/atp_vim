@@ -747,8 +747,10 @@ fun! ATPCompleteDone()
 	return
     endif
     if g:atp_completion_method == 'package'
-	let package = matchstr(getline(line('.')), '\w*$')
+	let package = matchstr(getline(line('.')), '[^,{]*$')
+	let package = matchstr(package, '\s*\zs.*\ze\s*')
 	if index(g:atp_LatexPackages, package) != -1 && index(g:atp_packages, package) == -1
+	    echom '[ATP:] '.package.' added to g:atp_packages.'
 	    call add(g:atp_packages, package)
 	endif
     endif
