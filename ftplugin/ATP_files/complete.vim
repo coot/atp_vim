@@ -741,4 +741,20 @@ if exists('recursive_dict')
 endif
 return self
 endfunction "}}}1
+
+fun! ATPCompleteDone()
+    if !exists('g:atp_completion_method')
+	return
+    endif
+    if g:atp_completion_method == 'package'
+	let package = matchstr(getline(line('.')), '\w*$')
+	call add(g:atp_packages, package)
+    endif
+endfun
+
+augroup ATP_CompeletDone
+    au!
+    au CompleteDone * call ATPCompleteDone()
+augroup END
+
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1

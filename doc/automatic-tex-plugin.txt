@@ -183,6 +183,11 @@ NEWS							*atp-news*
  |atp-:Preamble| shows preamble in a scratch buffer.  If 
     http://www.vim.org/scripts/script.php?script_id=4296
  is installed, the buffer is editable.
+
+ |g:atp_packages| variable is automatically updated if you add a package using
+ ATP completion function.  This extends the pool of commands, environments
+ for completion by the ones which are provided by the package.
+ 
 >
  ======================
  Changes in version 12.2
@@ -3548,10 +3553,21 @@ COMPLETION MODES		                       	*atp-completion-modes*
 							*atp-completion-documentclass-options*
 							*atp-completion-package-options*
 							*atp-completion-packages*
+							*g:atp_packages*
 	documentclass options ~
 	package options ~
+		The completion function only examins packages that are listed
+		in |g:atp_packages| variables.  If you add a packages using
+		completion it will be automatically added to the list,
+		otherwise you have to add it manually: >
+		    call add(g:atp_packages, 'wallpaper')
+<
+
 		You can write your own scrip which will add support for
 		documentclass or a package (see |atp-copmletion-new-package|).
+		This is only necessary if the buil-in ATP scanning method does
+		not give all the commands that the package provides.
+
 		Put it under 'ftplugin/ATP_files/packages/' directory in your
 		vim path.  Supported variables:
 >
@@ -3594,7 +3610,7 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		only matching completions.  It should return a vim list.  An
 		example is in 'ftplugin/ATP_files/packages/xcolors.vim'.
 >
-	g:atp_{p_name}_loading = { "package" : "option", ... }
+	    g:atp_{p_name}_loading = { "package" : "option", ... }
 <		This variable is a dictionary { "package" : "option" } which
 		loads xcolor package, when option is empty means that the
 		package is always loading.  Both "package" and "option" are
