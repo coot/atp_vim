@@ -51,18 +51,27 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
 	let g:outfile	     = outfile
 	let g:tex_file = a:tex_file
     endif
-    let view_cmd	= viewer." ".global_options." ".local_options." ".shellescape(outfile)." &"
+    let view_cmd	= viewer." ".global_options." ".local_options." ".shellescape(outfile)
+    if !(has('win16') || has('win32') || has('win64') || has('win95'))
+	let view_cmd.=' &'
+    endif
+
+
 
     if g:atp_debugV
 	let g:view_cmd	= view_cmd
     endif
 
     if filereadable(outfile)
-	if b:atp_Viewer == "xpdf"
-	    call system(view_cmd)
+	if !(has('win16') || has('win32') || has('win64') || has('win95'))
+	    if b:atp_Viewer == "xpdf"
+		call system(view_cmd)
+	    else
+		call system(view_cmd)
+		redraw!
+	    endif
 	else
-	    call system(view_cmd)
-	    redraw!
+	    silent exe '!start '.view_cmd
 	endif
     else
 	echomsg "[ATP:] output file do not exists. Calling " . b:atp_TexCompiler
@@ -812,8 +821,9 @@ function! atplib#compiler#PythonCompiler(bibtex, start, runs, verbose, command, 
 	exe ":!".cmd
     elseif g:atp_debugPythonCompiler && has("unix") 
 	call system(cmd." 2".g:atp_TempDir."/PythonCompiler.log &")
-    elseif has("win16") || has("win32") || has("win64")
-	call system(cmd)
+    elseif has("win16") || has("win32") || has("win64") || has("win95")
+	" call system(cmd)
+	silent exe '!start '.cmd
     else
 	call system(cmd." &")
     endif
