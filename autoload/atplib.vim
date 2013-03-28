@@ -346,6 +346,22 @@ else
 endif
 endfunction
 fun! atplib#joinpath(path1, path2) " {{{1
+    if has("python")
+python << EOF
+import vim
+import os.path
+import json
+path = os.path.join(vim.eval('a:path1'), vim.eval('a:path2'))
+vim.command('let path = %s' % json.dumps(path))
+EOF
+    return path
+    endif
+
+    if has('win16') || has('win32') || has('win64') || has('win95')
+	let sep = '\'
+    else
+	let sep = '/'
+    endif
     let idx = match(a:path1, '\/\s*$')
     if idx != -1
 	let path1 = a:path1[:(idx-1)]
@@ -358,7 +374,7 @@ fun! atplib#joinpath(path1, path2) " {{{1
     else
 	let path2 = a:path2
     endif
-    return path1.'/'.path2
+    return path1.sep.path2
 endfun
 function! atplib#RelativePath(path, rel) "{{{1
     " Return {path} relative to {rel}, if not under {rel} return {path}
