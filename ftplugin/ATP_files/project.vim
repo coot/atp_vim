@@ -824,7 +824,7 @@ call s:LoadScript("", s:common_project_script, 'global', 0, 'silent',1)
 " Commands:
 command! -buffer -bang -nargs=? -complete=customlist,s:LocalCommonGlobalComp LoadProjectScript :call <SID>LoadProjectScript(<q-bang>,<f-args>)
 " write:
-command! -buffer -bang -nargs=? -complete=customlist,s:WPSI_comp WriteProjectScript	:call <SID>WriteProjectScriptInterface(<q-bang>,<f-args>)
+command! -buffer -bang -nargs=* -complete=customlist,s:WPSI_comp WriteProjectScript	:call <SID>WriteProjectScriptInterface(<q-bang>,<f-args>)
 command! -buffer -nargs=* -complete=customlist,HistComp 	ProjectScript 		:call <SID>ProjectScript(<f-args>)
 
 " delete:

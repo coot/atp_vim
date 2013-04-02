@@ -1653,7 +1653,7 @@ map <F1>, imap <F1>
 	startup.  See |g:atp_developer| for details.
 
 							*atp-:InputFiles*
-:InputFiles				
+:InputFiles[!]				
 	List input files of the current project.  It also updates the
 	|b:ListOfFiles| and |b:TreeOfFiles| variables to the current values.
 
@@ -1662,6 +1662,9 @@ map <F1>, imap <F1>
 	matching bibliographies (\addbibresource, \bibliography, ...), ATP has
 	special way of dealing with them which is faster.  If you use 'subfile'
 	package ATP will add \\subfile pattern.
+
+	Without bang, i.e. "!", the commands also saves the data to the
+	project script file (|atp-ProjectScript|.  Adding "!" prevents this.
 
 							*atp-:Open*
 							*g:atp_LibraryPath*

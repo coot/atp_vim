@@ -160,8 +160,7 @@ endtry
 " (includes commands, and maps - all the things 
 " 		that must be sources for each file
 " 		+ sets g:atp_inputfile_pattern variable)
-" {{{1
-call atplib#common#SetProjectName()
+call atplib#common#SetProjectName() "{{{1
 
 " The pattern g:atp_inputfile_pattern should match till the begining of the file name
 " and shouldn't use \zs:\ze. 
@@ -190,12 +189,21 @@ if expand("%:e") == "tex"
     call atplib#common#SetErrorFile()
 endif "}}}1
 
+fun! <SID>InputFiles(bang)
+    call atplib#search#UpdateMainFile() 
+    call atplib#search#FindInputFiles(atplib#FullPath(b:atp_MainFile)) 
+    if a:bang == ""
+	WriteProjectScript local 1
+    endif
+    echo join([b:atp_MainFile]+b:ListOfFiles, "\n")
+endfun
+
 " Commands:
 "{{{1
 command! -buffer -bang SetProjectName	:call atplib#common#SetProjectName(<q-bang>, 0)
 command! -buffer SetErrorFile		:echo atplib#common#SetErrorFile()
-command! -buffer -nargs=? -complete=dir SetOutDir	:call <sid>SetOutDir(<f-args>)
-command! -buffer InputFiles 		:call atplib#search#UpdateMainFile() | :call atplib#search#FindInputFiles(atplib#FullPath(b:atp_MainFile)) | echo join([b:atp_MainFile]+b:ListOfFiles, "\n")
+command! -buffer -nargs=? -complete=dir SetOutDir :call <sid>SetOutDir(<f-args>)
+command! -buffer -bang InputFiles 	:call <SID>InputFiles(<q-bang>)
 
 " This should set the variables and run atplib#common#SetNotificationColor function
 command! -buffer SetNotificationColor :call atplib#common#SetNotificationColor()
