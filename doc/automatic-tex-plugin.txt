@@ -1824,8 +1824,9 @@ vmap <LocalLeader>a
 	This is a wrapper around Align command of the great AutoAlign Vim plugin:
 	    http://www.vim.org/scripts/script.php?script_id=884. 
 	This command sets correct align options and aligns the environment.
-	The following LaTeX environments are supported: >
-	    equation, align, alignat, flalign, displaymath and tabular
+	The following LaTeX, AMSMath and Tikz environments are supported: >
+	    align, alignat, array, displaymath, eqnarray, equation, flalign,
+	    smallmatrix, split, tabular, table, longtable, \matrix (tikz)
 <	Equation, align, alignat, flalign and displaymath are checked using
 	syntax, tabular environment is checked using searchpair() function,
 	the |g:atp_completion_limits|[2] applies.

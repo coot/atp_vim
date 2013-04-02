@@ -387,7 +387,7 @@ function! atplib#various#TexAlign(bang, s_line, e_line)
     let winsaveview = winsaveview()
     let synstack = map(synstack(line("."), col(".")), 'synIDattr( v:val, "name")')
 
-    let barray=searchpair('\\begin\s*{\s*array\s*}', '', '\\end\s*{\s*array\s*}', 'bnW', '',max([1,line('.')-500]))
+    let barray=searchpair('\\begin\s*{\s*\%(array\|split\)\s*}', '', '\\end\s*{\s*\%(array\|split\)\s*}', 'bnW', '',max([1,line('.')-500]))
     let bsmallmatrix=searchpair('\\begin\s*{\s*smallmatrix\s*}', '', '\\end\s*{\s*smallmatrix\s*}', 'bnW', '',max([1,line('.')-500]))
 "     let [bmatrix, bmatrix_col]=searchpairpos('\\matrix\s*\%(\[[^]]*\]\s*\)\=\zs{', '', '}', 'bnW', '', max([1, (line(".")-g:atp_completion_limits[2])]))
     let [bmatrix, bmatrix_col]=searchpos('^\%([^%]\|\\%\)*\\matrix\s*\%(\[[^]]*\]\s*\)\=\zs{', 'bW', max([1, (line(".")-g:atp_completion_limits[2])]))
@@ -404,9 +404,9 @@ function! atplib#various#TexAlign(bang, s_line, e_line)
 	let AlignSep = '&\|\\pgfmatrixnextcell'
 	let env = "matrix"
     elseif barray
-	let bpat = '\\begin\s*{\s*array\s*}'
+	let bpat = '\\begin\s*{\s*\%(array\|split\)\s*}'
 	let bline = barray+1
-	let epat = '\\end\s*{\s*array\s*}'
+	let epat = '\\end\s*{\s*\%(array\|split\)\s*}'
 	let AlignCtr = 'l+'
 	let AlignSep = '&'
 	let env = "array"
