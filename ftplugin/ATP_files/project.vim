@@ -663,7 +663,7 @@ catch /E127:/
 endtry
 function! <SID>WriteProjectScriptInterface(bang,...)
     let type 	= ( a:0 >= 1 ? a:1 : 'local' )
-    let silent  = ( a:0 >= 2 ? a:2 : 0 )
+    let silent  = ( a:0 >= 2 ? str2nr(a:2) : 0 )
 
     let cond = exists("g:atp_ProjectScript") && !g:atp_ProjectScript || exists("b:atp_ProjectScript") && ( !b:atp_ProjectScript && (!exists("g:atp_ProjectScript") || exists("g:atp_ProjectScript") && !g:atp_ProjectScript )) || !exists("b:atp_ProjectScript") && !exists("g:atp_ProjectScript")
     if a:bang == "" && cond
@@ -674,7 +674,7 @@ function! <SID>WriteProjectScriptInterface(bang,...)
     endif
 
     if type != 'global' && type != 'local' 
-	echoerr "WriteProjectScript Error : type can be: local or global." 
+	echoerr "WriteProjectScript Error : type (".type.") can be: local or global." 
 	return
     endif
     
