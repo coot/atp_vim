@@ -2125,7 +2125,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	if g:atp_debugTabCompletion
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	endif
-    "{{{3 --------- command values of values
+    "{{{3 --------- command's values of values
     elseif l =~ '\\\w\+{\%([^}]*,\)\?[^,}=]*=[^,}]*$' && !normal_mode
 	let g:atp_completion_method='command values of values'
 	let b:comp_method=g:atp_completion_method
@@ -2145,7 +2145,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	    endif
     "{{{3 --------- command's optional values
-    elseif ((l =~ '\\\w\+\[[^\]]*$' 
+    elseif ((l =~ '\\\w\+\%({[^}]*}\)\{0,2}\[[^\]]*$' 
 		\ && !normal_mode) &&
 		\ index(g:atp_completion_active_modes, 'command optional values') != -1)
 	    let g:atp_completion_method="command optional values"
