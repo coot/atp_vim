@@ -10,3 +10,8 @@ let g:atp_graphicx_commands=[
 	\ '\rotatebox{', '\scalebox{', '\resizebox{', '\includegraphics{', '\DeclareGraphicsExtensions{',
 	\ '\DeclareGraphicsRule{'
 	\ ]
+let g:atp_graphicx_command_optional_values = {
+	    \ '\\includegraphics\>' : ['bb', 'bbllx', 'bblly', 'bburx', 'bbury', 'natwidth', 'natheight',
+		    \ 'hiresbb', 'viewport', 'trim', 'angle', 'origin', 'width', 'height', 'totalheight',
+		    \ 'keepaspectratio', 'scale', 'clip', 'draft', 'type', 'ext', 'read', 'command'],
+	    \ }

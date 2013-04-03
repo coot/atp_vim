@@ -28,7 +28,7 @@ let g:atp_completion_modes=[
 	    \ 'page numberings',	'abbreviations',
 	    \ 'package options', 	'documentclass options',
 	    \ 'package options values', 'environment options',
-	    \ 'command values'
+	    \ 'command values',		'command optional values'
 	    \ ]
 lockvar 2 g:atp_completion_modes
 catch /E741:/

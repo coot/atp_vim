@@ -187,6 +187,9 @@ NEWS							*atp-news*
  |g:atp_packages| variable is automatically updated if you add a package using
  ATP completion function.  This extends the pool of commands, environments
  for completion by the ones which are provided by the package.
+
+ Completion for optinal values of commands.  For now only \includegraphix[] is
+ supported.
  
 >
  ======================
@@ -3614,13 +3617,17 @@ COMPLETION MODES		                       	*atp-completion-modes*
 		only matching completions.  It should return a vim list.  An
 		example is in 'ftplugin/ATP_files/packages/xcolors.vim'.
 >
+	    g:atp_{p_name}_command_optional_values
+<		As above but only for optional values like \includegraphics[...]
+		See 'ftplugin/ATP_files/packages/graphicx.vim'.
+>
 	    g:atp_{p_name}_loading = { "package" : "option", ... }
 <		This variable is a dictionary { "package" : "option" } which
-		loads xcolor package, when option is empty means that the
-		package is always loading.  Both "package" and "option" are
-		vim patterns.  See xcolor for an example.  Loading through
-		document class is not yet supported, but might be added on
-		request.
+		loads {p_name} package, when option is empty means that the
+		package is always loading {p_name}.  Both "package" and
+		"option" are vim patterns.  See packages/xcolor.vim for an
+		example.  Loading through document class is not yet supported,
+		but might be added on request.
 >
 	    g:atp_{p_name}_environment_options_values
 <		This is a dictionary.  It is used to find completion for values

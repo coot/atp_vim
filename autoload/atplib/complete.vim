@@ -2132,7 +2132,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	if g:atp_debugTabCompletion
 	    call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
 	endif
-    "{{{3 --------- command values
+    "{{{3 --------- command's values
     " this is at the end because there are many command completions done
     " before - they would not work if this would be on the top.
     elseif ((l =~ '\%(\\\w\+\%(\[\%([^\]]\|\[[^\]]*\]\)*\]\)\?\%({\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*}\)\?{\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*$\|\\renewcommand{[^}]*}{[^}]*$\)')
@@ -2140,6 +2140,16 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		\ index(g:atp_completion_active_modes, 'command values') != -1 
 	    let g:atp_completion_method="command values"
 	    " DEBUG:
+	    let b:comp_method=g:atp_completion_method
+	    if g:atp_debugTabCompletion
+		call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
+	    endif
+    "{{{3 --------- command's optional values
+    elseif ((l =~ '\\\w\+\[[^\]]*$' 
+		\ && !normal_mode) &&
+		\ index(g:atp_completion_active_modes, 'command optional values') != -1)
+	    let g:atp_completion_method="command optional values"
+	    "DEBUG
 	    let b:comp_method=g:atp_completion_method
 	    if g:atp_debugTabCompletion
 		call atplib#Log("TabCompletion.log", "b:comp_method=".b:comp_method)
@@ -2705,7 +2715,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	endif
 
 	call extend(completion_list, [ '\label{' . short_env_name ],0)
-    " {{{3 ------------ COMMAND VALUES
+    " {{{3 ------------ COMMAND'S VALUES
     elseif g:atp_completion_method == 'command values'
 	if l !~ '\\renewcommand{[^}]*}{[^}]*$'
 " 	    let command = matchstr(l, '.*\\\w\+\%(\[\%([^\]]\|\[[^\]]*\]\)*\]\)\?\%({\%([^}]\|{\%([^}]\|{[^}]*\)*}}\)*}\)*{\ze\%([^}]\|{\%([^}]\|{[^}]*}\)*}\)*$')
@@ -2713,7 +2723,6 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	else
 	    let command = matchstr(l, '.*\\renewcommand{\s*\zs\\\?\w*\ze\s*}')
 	endif
-	let g:command = command
 	let completion_list = []
 	let command_pat='\\\w\+[{\|\[]'
 	for package in g:atp_packages
@@ -2743,6 +2752,56 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		    if command =~ key
 			let command_pat = key
 			let val={"g:atp_".package."_command_values"}[key]
+			if g:atp_debugTabCompletion
+			    call atplib#Log("TabCompletion.log", 'command_pat='.command_pat." package=".package)
+			    call atplib#Log("TabCompletion.log", 'val='.string(val))
+			endif
+			if type(val) == 3
+			    call extend(completion_list, val)
+			elseif type(val) == 1 && exists("*".val)
+			    execute "let add=".val."()"
+			    call extend(completion_list, add)
+			else
+			    if g:atp_debugTabCompletion
+				call atplib#Log("TabCompletion.log", "command values: wrong type error")
+			    endif
+			endif
+		    endif
+		endfor
+	    endif
+	endfor
+    " {{{3 ------------ COMMAND'S OPTIONAL VALUES
+    elseif g:atp_completion_method == 'command optional values'
+	let command = matchstr(l, '.*\\\w\+\ze\s*\[[^\]]*$')
+	let completion_list = []
+	let command_pat='\\\w\+[{\|\[]'
+	for package in g:atp_packages
+	    let test = 0
+	    if exists("g:atp_".package."_loading")
+		for key in keys(g:atp_{package}_loading)
+		    let package_line_nr = atplib#search#SearchPackage(g:atp_{package}_loading[key])
+		    if g:atp_{package}_loading[key] == "" || package_line_nr == 0
+			let test = package_line_nr
+		    else
+			let package_line = getline(package_line_nr)
+			let test = (package_line=~'\\\%(usepackage\|RequirePackage\)\[[^\]]*,\='.g:atp_{package}_loading[key].'[,\]]')
+		    endif
+		    if test
+			break
+		    endif
+		endfor
+	    endif
+
+	    if exists("g:atp_".package."_command_optional_values") && 
+		\ ( 
+		    \ atplib#search#SearchPackage(package) || test || 
+		    \ atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)) == package || package == "common" 
+		\ )
+		for key in keys({"g:atp_".package."_command_optional_values"})
+		    " uncomment this to debug in which package file there is a mistake.
+		    if command =~ key
+			let command_pat = key
+			let val={"g:atp_".package."_command_optional_values"}[key]
 			if g:atp_debugTabCompletion
 			    call atplib#Log("TabCompletion.log", 'command_pat='.command_pat." package=".package)
 			    call atplib#Log("TabCompletion.log", 'val='.string(val))
@@ -3179,8 +3238,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    elseif g:atp_completion_method == 'environment values of options' || g:atp_completion_method == 'command values of values'
 		" This is essentialy done in previous step already
 		let completions = completion_list
-	    " {{{4 --------- command values
-	    elseif g:atp_completion_method == 'command values' 
+	    " {{{4 --------- command values, command optional values
+	    elseif g:atp_completion_method == 'command values' || g:atp_completion_method == 'command optional values'
 		if a:expert_mode
 		    let completions	= filter(copy(completion_list),' v:val =~? "^".cmd_val_begin') 
 		else
@@ -3282,8 +3341,8 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 		\ 'font shape', 'font encoding', 'inputfiles', 'includefiles', 
 		\ 'labels', 'package options', 'package options values',
 		\ 'documentclass options', 'documentclass options values', 
-		\ 'tikz libraries', 'command values', 'command values of values', 
-		\ 'environment values' ], g:atp_completion_method) == -1
+		\ 'tikz libraries', 'command values', 'command optional values',
+		\ 'command values of values', 'environment values' ], g:atp_completion_method) == -1
 	call filter(completions, 'len(substitute(v:val,"^\\","","")) >= g:atp_completion_truncate')
     endif
 "     THINK: about this ...
@@ -3394,7 +3453,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	call complete(col+1, completions)
 	let column = col+1
     " {{{3 command values
-    elseif  !normal_mode && ( g:atp_completion_method == 'command values' )
+    elseif  !normal_mode && ( g:atp_completion_method == 'command values' || g:atp_completion_method == 'command optional values' )
 	let col = len(l)-len(cmd_val_begin)
 	call complete(col+1, completions)
 	let column = col+1
