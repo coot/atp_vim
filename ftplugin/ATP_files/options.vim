@@ -2101,7 +2101,7 @@ if !s:did_options
     function! ATP_BufLeave()
 	let s:error_format = ( exists("b:atp_ErrorFormat") ? b:atp_ErrorFormat : 'no_error_format' )
 	let s:ef = &l:ef
-" 	echomsg "PFILE ".s:previous_file." EFM ".s:error_format
+	" echomsg "PFILE ".s:previous_file." EFM ".s:error_format
     endfunction
     let s:error_format = ( exists("b:atp_ErrorFormat") ? b:atp_ErrorFormat : 'no_error_format' )
     let s:ef = &l:ef
@@ -2131,7 +2131,7 @@ if !s:did_options
 	endif
     endfunction
 
-" This augroup sets the efm on startup:
+    " This augroup sets the efm on startup:
     augroup ATP_ErrorFormat
 	au!
 	au BufLeave * :call ATP_BufLeave()
@@ -2255,35 +2255,35 @@ EOF
 	endif
     endfunction "}}}2
     " {{{2
-if (v:version < 703 || v:version == 703 && !has("patch468"))
-    augroup ATP_QuickFix_cgetfile
-"     When using cgetfile the position in quickfix-window is lost, which is
-"     annoying when changing windows. 
-	au!
-	au BufLeave *		:call <SID>BufLeave()
-	au BufEnter *.tex 	:call <SID>BufEnterCgetfile()
-    augroup END
-else
-    function! <SID>Latex_Log() " {{{3
-	if exists("b:atp_MainFile")
-	    let log_file  = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"
-	    let _log_file = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r")."._log"
-	    if !filereadable(log_file)
-		return
+    if (v:version < 703 || v:version == 703 && !has("patch468"))
+	augroup ATP_QuickFix_cgetfile
+	" When using cgetfile the position in quickfix-window is lost, which is
+	" annoying when changing windows. 
+	    au!
+	    au BufLeave *		:call <SID>BufLeave()
+	    au BufEnter *.tex 	:call <SID>BufEnterCgetfile()
+	augroup END
+    else
+	function! <SID>Latex_Log() " {{{3
+	    if exists("b:atp_MainFile")
+		let log_file  = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"
+		let _log_file = fnamemodify(atplib#FullPath(b:atp_MainFile), ":r")."._log"
+		if !filereadable(log_file)
+		    return
+		endif
+		" Run latex_log.py only if log_file is newer than _log_file. 
+		" This is only if the user run latex manualy, since ATP calles
+		" latex_log.py after compilation.
+		if !filereadable(_log_file) || !exists("*getftime") || getftime(log_file) > getftime(_log_file)
+		    call system("python ".shellescape(split(globpath(&rtp, "ftplugin/ATP_files/latex_log.py"), "\n")[0])." ".shellescape(fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"))
+		endif
 	    endif
-	    " Run latex_log.py only if log_file is newer than _log_file. 
-	    " This is only if the user run latex manualy, since ATP calles
-	    " latex_log.py after compilation.
-	    if !filereadable(_log_file) || !exists("*getftime") || getftime(log_file) > getftime(_log_file)
-		call system("python ".shellescape(split(globpath(&rtp, "ftplugin/ATP_files/latex_log.py"), "\n")[0])." ".shellescape(fnamemodify(atplib#FullPath(b:atp_MainFile), ":r").".log"))
-	    endif
-	endif
-    endfunction " }}}3
-    augroup ATP_QuickFix_cgetfile
-	au QuickFixCmdPre cgetfile,cfile,cfileadd 	:call <SID>Latex_Log()
-	au QuickFixCmdPost cgetfile,cfile,cfileadd 	:call atplib#compiler#FilterQuickFix()
-    augroup END
-endif 
+	endfunction " }}}3
+	augroup ATP_QuickFix_cgetfile
+	    au QuickFixCmdPre cgetfile,cfile,cfileadd 	:call <SID>Latex_Log()
+	    au QuickFixCmdPost cgetfile,cfile,cfileadd 	:call atplib#compiler#FilterQuickFix()
+	augroup END
+    endif 
 
     augroup ATP_VimLeave " {{{2
 	au!
@@ -2348,35 +2348,37 @@ endif
 endif
 
     " Quit {{{2
-    fun! <sid>ATP_Quit(cmd) 
-	let blist = tabpagebuflist()
-	let cbufnr = bufnr("%")
-	if index(['__ToC__', '__Labels__'],bufname(cbufnr)) == -1
-	    call remove(blist, index(blist, cbufnr))
-	endif
-	let bdict = {}
-	for buf in blist
-	    let bdict[buf]=bufname(buf)
-	endfor
-	let l=0
-	let l+= (index(values(bdict), '__ToC__') != -1)
-	let l+= (index(values(bdict), '__Labels__') != -1)
-	call filter(bdict, 'bdict[v:key] == "__ToC__" || bdict[v:key] == "__Labels__"')
-	if !empty(bdict)
-	    for i in keys(bdict)
-		if a:cmd == 'quit'
-		    quit
-		else
-		    exe a:cmd i
-		endif
+    if exists('##QuitPre')
+	fun! <sid>ATP_Quit(cmd) 
+	    let blist = tabpagebuflist()
+	    let cbufnr = bufnr("%")
+	    if index(['__ToC__', '__Labels__'],bufname(cbufnr)) == -1
+		call remove(blist, index(blist, cbufnr))
+	    endif
+	    let bdict = {}
+	    for buf in blist
+		let bdict[buf]=bufname(buf)
 	    endfor
-	endif
-    endfun
-    augroup ATP_Quit
-	au!
-	au QuitPre * :call <sid>ATP_Quit('quit')
-	au BufUnload * :call <sid>ATP_Quit('bw')
-    augroup END
+	    let l=0
+	    let l+= (index(values(bdict), '__ToC__') != -1)
+	    let l+= (index(values(bdict), '__Labels__') != -1)
+	    call filter(bdict, 'bdict[v:key] == "__ToC__" || bdict[v:key] == "__Labels__"')
+	    if !empty(bdict)
+		for i in keys(bdict)
+		    if a:cmd == 'quit'
+			quit
+		    else
+			exe a:cmd i
+		    endif
+		endfor
+	    endif
+	endfun
+	augroup ATP_Quit
+	    au!
+	    au QuitPre * :call <sid>ATP_Quit('quit')
+	    au BufUnload * :call <sid>ATP_Quit('bw')
+	augroup END
+    endif
 " }}}1
 
 " This function and the following autocommand toggles the textwidth option if
