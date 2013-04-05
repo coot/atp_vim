@@ -201,6 +201,13 @@ endif
 	\ "\\linepenalty", "\\outputpenalty", "\\penalty", "\\postdisplaypenalty", "\\predisplaypenalty", 
 	\ "\\repenalty", "\\unpenalty", "\\everymath", "\\DeclareMathSizes{",
 	\ "\\abovedisplayskip", "\\belowdisplayskip", "\\abovedisplayshortskip", "\\belowdisplayshortskip", ]
+
+	let g:atp_TexCommands = [
+		    \ '\begingroup', '\endgroup', '\bgroup', '\egroup', '\let', '\center',
+		    \ '\flushleft', '\endflushleft', '\flushright', '\endflushright',
+		    \ '\def', '\edef'
+		    \ ]
+	call extend(g:atp_Commands, g:atp_TexCommands)
 	
 	let g:atp_picture_commands=[ "\\put", "\\circle", "\\dashbox", "\\frame{", 
 		    \"\\framebox(", "\\line(", "\\linethickness{",
@@ -742,23 +749,25 @@ endif
 return self
 endfunction "}}}1
 
-fun! ATPCompleteDone()
-    if !exists('g:atp_completion_method')
-	return
-    endif
-    if g:atp_completion_method == 'package'
-	let package = matchstr(getline(line('.')), '[^,{]*$')
-	let package = matchstr(package, '\s*\zs.*\ze\s*')
-	if index(g:atp_LatexPackages, package) != -1 && index(g:atp_packages, package) == -1
-	    echom '[ATP:] '.package.' added to g:atp_packages.'
-	    call add(g:atp_packages, package)
+if exists('##CompleteDone')
+    fun! ATPCompleteDone()
+	if !exists('g:atp_completion_method')
+	    return
 	endif
-    endif
-endfun
+	if g:atp_completion_method == 'package'
+	    let package = matchstr(getline(line('.')), '[^,{]*$')
+	    let package = matchstr(package, '\s*\zs.*\ze\s*')
+	    if index(g:atp_LatexPackages, package) != -1 && index(g:atp_packages, package) == -1
+		echom '[ATP:] '.package.' added to g:atp_packages.'
+		call add(g:atp_packages, package)
+	    endif
+	endif
+    endfun
 
-augroup ATP_CompeletDone
-    au!
-    au CompleteDone * call ATPCompleteDone()
-augroup END
+    augroup ATP_CompeletDone
+	au!
+	au CompleteDone * call ATPCompleteDone()
+    augroup END
+endif
 
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1
