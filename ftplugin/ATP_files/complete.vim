@@ -770,4 +770,22 @@ if exists('##CompleteDone')
     augroup END
 endif
 
+function! <SID>ReadPackageFiles() " {{{1
+    " Read Package/Documentclass Files
+    " This is run by an autocommand group ATP_Packages which is after ATP_LocalCommands
+    " b:atp_LocalColors are used in some package files.
+    let time=reltime()
+    let package_files = split(globpath(&rtp, "ftplugin/ATP_files/packages/*"), "\n")
+    let g:atp_packages = map(copy(package_files), 'fnamemodify(v:val, ":t:r")')
+    for file in package_files
+	" We cannot restrict here to not source some files - because the completion
+	" variables might be needed later. I need to find another way of using this files
+	" as additional scripts running syntax ... commands for example only if the
+	" packages are defined.
+	execute "source ".file
+    endfor
+    let g:source_time_package_files=reltimestr(reltime(time))
+endfunction
+call <SID>ReadPackageFiles()
+
 " vim:fdm=marker:tw=85:ff=unix:noet:ts=8:sw=4:fdc=1

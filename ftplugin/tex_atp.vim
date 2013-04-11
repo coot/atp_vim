@@ -3,7 +3,7 @@
 " Web Page: http://atp-vim.sourceforge.net
 " Mailing List:	atp-vim-list [AT] lists.sourceforge.net
 " Do NOT DELETE the line just below, it is used by :UpdateATP (':help atp-:UpdateATP')
-" Time Stamp: 22-03-13_15-16
+" Time Stamp: 11-04-13_14-56
 " (but you can edit, if there is a reason for doing this. The format is dd-mm-yy_HH-MM)
 " Language: tex
 " Last Change: Sat Oct 27, 2012 at 11:16:57  +0100
@@ -89,11 +89,11 @@ endif
 	" Functions needed before setting options.
 	runtime ftplugin/ATP_files/common.vim
 
-	" Completion.
-	runtime ftplugin/ATP_files/complete.vim
-
 	" Options, global and local variables, autocommands.
 	runtime ftplugin/ATP_files/options.vim
+
+	" Completion.
+	runtime ftplugin/ATP_files/complete.vim
 
 	runtime ftplugin/ATP_files/tex-fold.vim
 
