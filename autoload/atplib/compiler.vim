@@ -519,7 +519,11 @@ function! atplib#compiler#IsRunning(program, file, ...)
 
 let s:return_is_running=0
 python << EOF
-import vim, psutil, os, pwd
+import vim
+import psutil
+import os
+import pwd
+import re
 from psutil import NoSuchProcess
 x=0
 program =vim.eval("a:program")
@@ -845,7 +849,11 @@ function! atplib#compiler#LocalCompiler(mode, runs, ...)
 	" if subfiles package is used.
 	" compilation is done in the current directory.
 python << ENDPYTHON
-import vim, os, os.path, shutil, re
+import vim
+import os
+import os.path
+import shutil
+import re
 
 file = vim.eval("file")
 basename = os.path.splitext(file)[0]
@@ -1353,9 +1361,20 @@ function! atplib#compiler#ThreadedCompiler(bibtex, start, runs, verbose, command
     let keep                    = join(g:atp_keep, ',')
 
 python << ENDPYTHON
-import vim, threading
-import sys, errno, os.path, shutil, subprocess, psutil, re, tempfile, optparse, glob
-import traceback, atexit
+import vim
+import threading
+import sys
+import errno
+import os.path
+import shutil
+import subprocess
+import psutil
+import re
+import tempfile
+import optparse
+import glob
+import traceback
+import atexit
 
 from os import chdir, mkdir, putenv, devnull
 from collections import deque
@@ -1870,8 +1889,18 @@ function! atplib#compiler#tex()
 " E121: Undefined variable: a:var 
 " and other similar errors. Mainly (if not only) errors E121.
 python << ENDPYTHON
-import vim, threading
-import sys, errno, os.path, shutil, subprocess, psutil, re, tempfile, optparse, glob
+import vim
+import threading
+import sys
+import errno
+import os.path
+import shutil
+import subprocess
+import psutil
+import re
+import tempfile
+import optparse
+import glob
 import traceback, atexit
 
 from os import chdir, mkdir, putenv, devnull

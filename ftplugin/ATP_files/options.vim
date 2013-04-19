@@ -1663,7 +1663,11 @@ nnoremap <silent> <buffer> <Plug>SetEvince	:call <SID>SetPdf('evince')<CR>
 function! <SID>Kill_Evince_Sync()
 python << EOF
 try:
-    import psutil, vim, os, signal
+    import psutil
+    import vim
+    import os
+    import signal
+    import re
     from psutil import NoSuchProcess
     for pid in psutil.get_pid_list():
         try:

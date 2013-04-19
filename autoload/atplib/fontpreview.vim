@@ -401,7 +401,8 @@ function! atplib#fontpreview#ShowFonts_vim(fd_file)
 endfunction
 function! atplib#fontpreview#ShowFonts_py(fd_file)
 python << END
-import vim, re
+import vim
+import re
 file=vim.eval("a:fd_file")
 try:
     file_o=open(file, "r")

@@ -2509,7 +2509,9 @@ endfunction "}}}
 "{{{ atplib#various#GetTimeStamp
 function! atplib#various#GetTimeStamp(file)
 python << END
-import vim, tarfile, re
+import vim
+import tarfile
+import re
 
 file_name	=vim.eval('a:file')
 tar_file	=tarfile.open(file_name, 'r:gz')
@@ -2536,7 +2538,9 @@ endfunction "}}}
 "{{{ atplib#various#Tar
 function! atplib#various#Tar(file, path)
 python << END
-import tarfile, vim
+import tarfile
+import vim
+
 file_n=vim.eval("a:file")
 path=vim.eval("a:path")
 file_o=tarfile.open(file_n, "r:gz")

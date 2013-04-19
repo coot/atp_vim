@@ -543,7 +543,11 @@ if !has("python")
     return {'options' : []}
 endif
 python << EOF
-import vim, re, subprocess, os.path
+import vim
+import re
+import subprocess
+import os.path
+
 package = vim.eval("a:package_name")
 
 # Pattern to find declared options:

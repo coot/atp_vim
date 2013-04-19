@@ -36,8 +36,10 @@ function! atplib#KillPIDs(pids,...) "{{{
 	return
     endif
 python << END
-import os, signal
+import os
+import signal
 from signal import SIGKILL
+
 pids=vim.eval("a:pids")
 for pid in pids:
     try:
@@ -334,7 +336,10 @@ function! atplib#TempDir() "{{{1
     " Return temporary directory, unique for each user.
 if has("python")
 python << END
-import vim, tempfile, os
+import vim
+import tempfile
+import os
+
 USER=os.getenv("USER")
 tmp=tempfile.mkdtemp(suffix="", prefix="atp_")
 vim.command("let g:atp_TempDir='"+tmp+"'")
