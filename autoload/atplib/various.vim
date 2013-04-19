@@ -298,7 +298,7 @@ function! atplib#various#WrapEnvironment(...)
 	    call search('\\end{'.env_name.'}', 'e')
 	endif
     else
-	let envs=sort(filter(EnvCompletion("","",""), "v:val !~ '\*$' && v:val != 'thebibliography'"))
+	let envs=sort(filter(atplib#various#EnvCompletion("","",""), "v:val !~ '\*$' && v:val != 'thebibliography'"))
 	" adjust the list - it is too long.
 	let envs_a=copy(envs)
 	call map(envs_a, "index(envs_a, v:val)+1.'. '.v:val")
