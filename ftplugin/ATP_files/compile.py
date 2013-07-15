@@ -366,10 +366,17 @@ try:
     # /except the log file/
     # os.chdir(mainfile_dir)
     os.chdir(options.output_dir)
-    for ext in filter(lambda x: x != "log", keep):
+    for ext in filter(lambda x: x != "log" and x != "bib", keep):
         file_cp=basename+"."+ext
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
+    if 'bib' in keep:
+        bibs = filter(lambda p: p.endswith('.bib'), os.listdir(texfile_dir))
+        for bib in bibs:
+            if hasattr(os, 'symlink'):
+                os.symlink(os.path.join(texfile_dir, bib), os.path.join(tmpdir, bib))
+            else:
+                shutil.copy(os.path.join(texfile_dir, bib), tmpdir)
     os.chdir(mainfile_dir)
 
     tempdir_list = os.listdir(tmpdir)
