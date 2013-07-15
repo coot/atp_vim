@@ -2197,13 +2197,12 @@ function! atplib#compiler#SimpleBibtex()
     " directory and they should no be given with full path:
     "  		p (paranoid)   : as `r' and disallow going to parent directories, and
     "                  		 restrict absolute paths to be under $TEXMFOUTPUT.
-    let saved_cwd	= getcwd()
+    let saved_cwd = getcwd()
     exe "lcd " . fnameescape(expand(b:atp_OutDir))
-    let g:cwd = getcwd()
     if filereadable(auxfile)
-	let command	= bibcommand . shellescape(file)
-	let b:atp_BibtexOutput=system(command)
-	let b:atp_BibtexReturnCode=v:shell_error
+	let command = bibcommand . shellescape(file)
+	let b:atp_BibtexOutput = system(command)
+	let b:atp_BibtexReturnCode = v:shell_error
 	echo b:atp_BibtexOutput
     else
 	echo "[ATP:] aux file " . auxfile . " not readable."
@@ -2228,8 +2227,7 @@ function! atplib#compiler#Bibtex(bang, ...)
 	return
     endif
 
-    let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
-    let g:a=a:0
+    let atp_MainFile = atplib#FullPath(b:atp_MainFile)
 
     if a:0 >= 1
 	let mode = ( a:1 != 'default' ? a:1 : t:atp_DebugMode )
