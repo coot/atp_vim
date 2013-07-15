@@ -2285,7 +2285,7 @@ function! atplib#motion#JMotion(flag)
 
     if getline(line("."))[col(".")-1] =~ '\%(\$\|{\|}\|(\|)\|\[\|\]\)' && a:flag !~# 'b'
 	if col(".") == len(getline(line(".")))
-	    execute "normal a "
+	    execute "normal! +"
 	else
 	    call cursor(line("."), col(".")+1)
 	endif
