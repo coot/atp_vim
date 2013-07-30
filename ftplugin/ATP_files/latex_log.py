@@ -108,14 +108,15 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     try:
         if sys.version_info < (3, 0):
             log_file = open(input_fname, 'r')
+            log_stream = log_file.read().decode(encoding, 'ignore')
         else:
             # We are assuming the default encoding (utf-8)
             log_file = open(input_fname, 'r', errors='replace')
+            log_stream = log_file.read()
     except IOError:
         print("IOError: cannot open %s file for reading" % input_fname)
         sys.exit(1)
     else:
-        log_stream = log_file.read().decode(encoding, 'ignore')
         log_file.close()
     # Todo: In python3 there is UnicodeDecodeError. I should remove all the
     # bytes where python cannot decode the character.
