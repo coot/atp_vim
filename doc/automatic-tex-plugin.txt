@@ -41,7 +41,7 @@ MikTeX on Windows.
   	see |atp-:SyncTex|, |atp_inverse_search|,
 * table of contents which allows to switch between different sections, files, 
   but also to delete and paste sections:
-	see |atp-:TOC|, |atp-toc-window|,
+	see |atp-:Toc|, |atp-toc-window|,
 * list of labels which allows to see the context of a label:
 	see |atp-:Labels|,
 * a command to get bib data from the AMSRef web page http://www.ams.org/mathscinet-mref:
@@ -116,7 +116,7 @@ TABLE OF CONTENTS 					*atp*
 	    diff ~
 		|atp-:Wdiff|
 	    motion ~
-		|atp-:TOC|
+		|atp-:Toc|
 		|atp-:F|
 		|atp-:B|
 		|atp-:Tags|		make tags file,
@@ -159,9 +159,13 @@ for all the defined functions :help atp*()CTRL-d, mappings: :help atp-mapCTRL-d
 
 ================================================================================
 NEWS							*atp-news*
-
 >
- ======================
+ =======================
+ Changes in version 12.4
+<
+ Just a few bug fixes and the documentation get updated.
+>
+ =======================
  Changes in version 12.3
 <
  |atp-:TexAlign| with range (and new vmap <LocalLeader>a).
@@ -192,7 +196,7 @@ NEWS							*atp-news*
  supported.
  
 >
- ======================
+ =======================
  Changes in version 12.2
 <
 >
@@ -213,8 +217,8 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  New motions |atp-}o|, |atp-{o|.
 
- |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :TEX, :TEXL,
- :DTEX, :PID.  I think it is easier to type.
+ |atp-:Tex|, |atp-:Texl|, |atp-:Dtex|, |atp-:Pid| instead of :Tex, :Texl,
+ :Dtex, :Pid.  I think it is easier to type.
 
  |atp-gW| instead of gw (if you prefer the previous map you can redefine in
  your |atprc| file with: >
@@ -232,7 +236,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  USE AT-YOUR-OWN-RISK - added to the license ;)
 >
- ======================
+ =======================
  Changes in version 12.1
 <
  |g:atp_HighlightMatchingPair| to turn on/off higlighting of matching pairs
@@ -244,7 +248,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  A few reported bug were fixed.
 
 >
- ======================
+ =====================
  Changes in version 12
 <
 
@@ -281,7 +285,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  Read this note: |atp-completion-new-packages|.
 >
- ======================
+ =======================
  Changes in version 11.1
 <
  Hi, 
@@ -307,7 +311,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  MakeLatex! - with the bang "!" the commands writes (using |update| command)
 	      all the loaded project buffers.
 >
- ======================
+ =====================
  Changes in version 11
 <
  NOTE: You should remove the file:
@@ -359,11 +363,11 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  |v:searchforward| value will not be changed.
 
  TABLE OF CONTENTS:~
- |atp-:TOC| was rewritten in python so that it works well with project files.
+ |atp-:Toc| was rewritten in python so that it works well with project files.
  If your vim is compiled without python the old ToC will be used. 
 
- TOC and Labels windows are clicable: acts like <space> = go to section and
- leave TOC/Labels window open. 
+ Toc and Labels windows are clicable: acts like <space> = go to section and
+ leave Toc/Labels window open. 
  See also |atp-:RemoveFromToC| command.
 
  NEW DEBUG MODES:~
@@ -390,7 +394,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  New commands: |atp-:Texdef|, |atp-:KpsewhichEdit|.  They are defined in
  plugin/tex_atp.vim script, so you can use them not only inside tex files.
 >
- ======================
+ =========================
  Changes in version 10.6.4
 <
  ATP normal r map is working better, that is |.| works well with |atp-r| map.
@@ -410,7 +414,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  Completion scans package and documentclass files for options (if vim is
  compiled with |+python|).
 >
- ======================
+ =========================
  Changes in version 10.6.3
 <
  A small bug fixed when opening a new tex buffer.
@@ -429,7 +433,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  Note also that g:atp_no_tab_map has changed to |g:atp_tab_map|.
 >
- ======================
+ =========================
  Changes in version 10.6.2
 <
  Omni completion	-- ATP Tab completion now works as Omni Completion, see
@@ -475,7 +479,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
 
  |atp-:View| 		-- instead of :ViewOutput command.
 >
- ======================
+ =========================
  Changes in version 10.6.1
 <
  In the |atp-:BibSearch| window:
@@ -505,7 +509,7 @@ since ATP defines and deletes some imaps on the fly not all of them are
 visible with :imap command.
 
 >
- ======================
+ =======================
  Changes in version 10.6
 <
  The command |atp-:View| with bang (also <F3> map) opens and makes forward search.
@@ -532,7 +536,7 @@ visible with :imap command.
  \_s+ is used as rhs.
 
 >
- ======================
+ =======================
  Changes in version 10.5
 <
  Thanks for all the vim karma points: if you look at all ftplugin scripts ATP has 8th
@@ -549,7 +553,7 @@ visible with :imap command.
  See added note below |g:atp_texinputs|.
  The package variable names are changed, see |atp-completion-packages|.
 >
- ======================
+ =======================
  Changes in version 10.2
 <
   Skim (MacOS)                  -- support for "Skim" added (forward search)
@@ -604,9 +608,9 @@ visible with :imap command.
   can type '\#a' with the default value of |g:atp_imap_leader_1| and it will
   not transform into '\\alpha'.
 
-  TOC:
+  Toc:
   map _				-- set section: focus main window on the
-				   section under cursor and jump back to TOC.
+				   section under cursor and jump back to Toc.
   map & vmap zc			-- fold sections/chapters/... .  Has one
 				   limitation: cannot fold subsection if
 				   section in which it sits is folded.
@@ -615,7 +619,7 @@ visible with :imap command.
 				   folded in right way though).
 
 >
- ======================
+ =====================
  Changes in version 10
 <
   If you use <Shift-Tab> (i.e. non-expert mode for completion) to close
@@ -645,7 +649,7 @@ visible with :imap command.
   behaves like g:Align_xstrlen=2. (This needs Align plugin version higher than
   36, available at: http://drchip.0sites.net/astronaut/vim/#ALIGN .
 
-  |atp-:TOC| and |atp-:Labels| commands when open together will be in one
+  |atp-:Toc| and |atp-:Labels| commands when open together will be in one
   column with table of contents at the top.
 
   ]*, ]%, [*, [%  - skip comment maps, all works now in the same way.  If 
@@ -1883,19 +1887,19 @@ vmap <LocalLeader>a
 
     :LatexTags command is only defined if there was :Tags command defined.
 
-:TOC[!] 						*atp-:TOC*
+:Toc[!] 						*atp-:Toc*
 nmap <LocalLeader>t
 	Shows Table of Contents of your document.  It do not yet support the
 	starred version of chapter, section,... . 
 
 	The optional argument bang controls if the table of contents data base
 	must be generated: by default map <LocalLeader>t doesn't regenerate
-	the toc data base (unless if it doesn't exist), :TOC command
-	regenerate the data base, :TOC! not.
+	the toc data base (unless if it doesn't exist), :Toc command
+	regenerate the data base, :Toc! not.
 
 	See |atp-toc-window| for commands and maps defined in the toc window.
 
-	|atp-:TOC| supports many edited files.  The variable t:atp_toc_buflist
+	|atp-:Toc| supports many edited files.  The variable t:atp_toc_buflist
 	is a list of project names (|b:atp_MainFile|) which are shown in ToC. 
 	Use |atp-:RemoveFromToC| to remove a project from ToC. 
 
@@ -1928,7 +1932,7 @@ map <LocalLeader>L
 	mappings described in |atp-toc-window|.
 
 	If you forget what are these mappings, write ':map <buffer>' in the
-	TOC or LABELS window, or move to the end of the LABELS window to see
+	toc or labels window, or move to the end of the LABELS window to see
 	a short help message.
 
 	The key 's' shows the context of the label under the cursor (your
@@ -2677,9 +2681,9 @@ Compilation ~
 ================================================================================
 TABLE OF CONTENTS WINDOW				*atp-toc-window*
 
-	For the table of contents command and maps read |atp-:TOC|.
+	For the table of contents command and maps read |atp-:Toc|.
 
-	The Table of Contents window is used by both |atp-:TOC| and |atp-:Labels|
+	The Table of Contents window is used by both |atp-:Toc| and |atp-:Labels|
 	commands.
 
 	In the Table of Contents window there are the following nmaps:
@@ -2767,7 +2771,7 @@ TABLE OF CONTENTS WINDOW				*atp-toc-window*
      nnoremap u, nnoremap U, nnoremap g-, nnoremap g+ 
 <	You can use undo.  The :Undo command will undo in the buffer under
 	the cursor (it switches to the correct window, using the Vim undo
-	function, and runs :TOC command - so after all your back in ToC.).
+	function, and runs |atp-:Toc| command - so after all your back in ToC.).
 	The ':Undo' command has one argument - the Vim undo command to use, it
 	is one of: 'u/U/g-/g+' (the default is 'u').  They are mapped to
 	'u','U', 'g-' and 'g+'.  (only in the ToC buffer).  Note: ':Undo'
@@ -3958,7 +3962,7 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
  b:atp_running						
 <	This variable stores the current number of running instances of latex.
 	When it is greater than 1 a message in the status line is shown.  If
-	:PID command returns that no latex is running this variable this
+	|atp-:Pid| command returns that no latex is running this variable this
 	variable is reset to 0. 
 							*g:atp_MathVimOptions*
 >
