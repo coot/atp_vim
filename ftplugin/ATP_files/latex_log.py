@@ -56,25 +56,26 @@
 
 import sys, re, os, os.path, fnmatch
 from optparse import OptionParser
+PY3 = sys.version_info[0] == 3
 
 __all__ = [ 'rewrite_log' ]
 
 class Dict(dict):
     """ 2to3 Python transition. """
     def iterkeys(self):
-        if sys.version_info < (3,0):
+        if not PY3:
             return super(type(self), self).iterkeys()
         else:
             return self.keys()
 
     def iteritems(self):
-        if sys.version_info < (3,0):
+        if not PY3:
             return super(type(self), self).iteritems()
         else:
             return self.items()
 
     def itervalues(self):
-        if sys.version_info < (3,0):
+        if not PY3:
             return super(type(self), self).itervalues()
         else:
             return self.values()
@@ -106,7 +107,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
     output_dir = os.path.dirname(output_fname)
 
     try:
-        if sys.version_info < (3, 0):
+        if not PY3:
             log_file = open(input_fname, 'r')
             log_stream = log_file.read().decode(encoding, 'ignore')
         else:
@@ -525,7 +526,7 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         print("IOError: cannot open %s file for writting" % output_fname)
         sys.exit(1)
     else:
-        if sys.version_info < (3,0):
+        if not PY3:
             output_fo.write(('\n'.join(output_data)+'\n').encode(encoding, 'ignore'))
         else:
             output_fo.write(('\n'.join(output_data)+'\n'))

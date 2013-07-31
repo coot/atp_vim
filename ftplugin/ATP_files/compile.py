@@ -23,6 +23,7 @@ from collections import deque
 import latex_log
 import locale
 encoding = locale.getpreferredencoding()
+PY3 = sys.version_info[0] == 3
 
 # readlink is not available on Windows.
 readlink=True
@@ -180,7 +181,7 @@ def write_pbf(string):
 
     cond = False
     try:
-        if sys.version_info.major < 3:
+        if not PY3:
             with open(pb_fname, 'r') as fobj:
                 pb_file = fobj.read().decode(encoding, errors="replace")
         else:

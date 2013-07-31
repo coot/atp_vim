@@ -28,6 +28,7 @@ import atexit
 import locale
 
 encoding = locale.getpreferredencoding()
+PY3 = sys.version_info[0] == 3
 
 import latex_log
 
@@ -362,7 +363,7 @@ try:
 
         need_runs = [0]
 
-        if sys.version_info.major < 3:
+        if not PY3:
             with open(tmplog, "r") as log_file:
                 log = log_file.read().decode(encoding, errors='replace')
         else:
@@ -427,7 +428,7 @@ try:
 
         debug_file.write("AUXFILE: %s\n" % tmpaux)
         try:
-            if sys.version_info.major < 3:
+            if not PY3:
                 with open(tmpaux, "r") as aux_file:
                     aux=aux_file.read().decode(encoding, errors="replace")
             else:
@@ -441,7 +442,7 @@ try:
         #         bibtex=re.search('No file '+basename+'\.bbl\.', log)
         if not bibtex:
             # Then search for biblatex package. Alternatively, I can search for biblatex messages in log file.
-            if sys.version_info.major < 3:
+            if not PY3:
                 with open(texfile, 'r') as sock:
                     tex_lines = sock.read().decode(encoding=encoding, errors="replace").split("\n")
             else:
@@ -508,7 +509,7 @@ try:
 
             #CONDITION
             try:
-                if sys.version_info.major < 3:
+                if not PY3:
                     with open(tmplog, "r") as sock:
                         log=sock.read().decode(encoding, errors='replace')
                 else:
