@@ -525,7 +525,10 @@ def rewrite_log(input_fname, output_fname=None, check_path=False, project_dir=""
         print("IOError: cannot open %s file for writting" % output_fname)
         sys.exit(1)
     else:
-        output_fo.write(('\n'.join(output_data)+'\n').encode(encoding, 'ignore'))
+        if sys.version_info < (3,0):
+            output_fo.write(('\n'.join(output_data)+'\n').encode(encoding, 'ignore'))
+        else:
+            output_fo.write(('\n'.join(output_data)+'\n'))
         output_fo.close()
 
 # Main call
