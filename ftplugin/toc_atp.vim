@@ -384,7 +384,7 @@ function! EchoLine()
 
     let label		= matchstr(sec_line,'\\label\s*{\zs[^}]*\ze}')
     try
-        let section	= matchstr(sec_line, '{\zs\%([^{}]*\|{\%([^{}]\|{[^{}]*}\)*}\)*\ze}')
+        let section	= matchstr(sec_line, '{\zs\([^{}]*\|{\%([^{}]\|{[^{}]*}\)*}\)*\ze}')
     catch /E363/
         let section     = sec_line
     endtry
