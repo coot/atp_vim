@@ -14,27 +14,27 @@ let Compiler    = get(g:CompilerMsg_Dict, matchstr(b:atp_TexCompiler, '^\s*\zs\S
 let Viewer      = get(g:ViewerMsg_Dict, matchstr(b:atp_Viewer, '^\s*\zs\S*'), "")
 
 if !exists("no_plugin_menu") && !exists("no_atp_menu")
-execute "menu 550.5 &Latex.&".Compiler."<Tab>:TEX                               :<C-U>TEX<CR>"
-execute "cmenu 550.5 &Latex.&".Compiler."<Tab>:TEX                              <C-U>TEX<CR>"
-execute "imenu 550.5 &Latex.&".Compiler."<Tab>:TEX                              <Esc>:TEX<CR>a"
+execute "menu 550.5 &Latex.&".Compiler."<Tab>:Tex                               :<C-U>Tex<CR>"
+execute "cmenu 550.5 &Latex.&".Compiler."<Tab>:Tex                              <C-U>Tex<CR>"
+execute "imenu 550.5 &Latex.&".Compiler."<Tab>:Tex                              <Esc>:Tex<CR>a"
 function! <SID>TEXL_menuentry()
     if !exists("b:atp_TexCompiler")
         return
     endif
     let Compiler = get(g:CompilerMsg_Dict, matchstr(b:atp_TexCompiler, '^\s*\zs\S*'), 'Compile')
     if expand("%:p") != atplib#FullPath(b:atp_MainFile)
-        execute "menu 550.6 Latex.".Compiler."\\ (subfile)<Tab>:TEXL                    :<C-U>TEXL<CR>"
+        execute "menu 550.6 Latex.".Compiler."\\ (subfile)<Tab>:Texl                    :<C-U>Texl<CR>"
     else
         silent! execute "silent! unmenu Latex.".Compiler."\\ (subfile)"
     endif
 endfunction
 au BufEnter,BufWinEnter *.tex :call <SID>TEXL_menuentry()
-execute "menu 550.7 &Latex.".Compiler."\\ debug<Tab>:TEX\\ debug                :<C-U>DTEX<CR>"
-execute "cmenu 550.7 &Latex.".Compiler."\\ debug<Tab>:TEX\\ debug               <C-U>DTEX<CR>"
-execute "imenu 550.7 &Latex.".Compiler."\\ debug<Tab>:TEX\\ debug               <Esc>:DTEX<CR>a"
-execute "menu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2TEX                      :<C-U>2TEX<CR>"
-execute "cmenu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2TEX                     <C-U>2TEX<CR>"
-execute "imenu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2TEX                     <Esc>:2TEX<CR>a"
+execute "menu 550.7 &Latex.".Compiler."\\ debug<Tab>:Tex\\ debug                :<C-U>DTEX<CR>"
+execute "cmenu 550.7 &Latex.".Compiler."\\ debug<Tab>:Tex\\ debug               <C-U>Dtex<CR>"
+execute "imenu 550.7 &Latex.".Compiler."\\ debug<Tab>:Tex\\ debug               <Esc>:Dtex<CR>a"
+execute "menu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2Tex                      :<C-U>2Tex<CR>"
+execute "cmenu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2Tex                     <C-U>2Tex<CR>"
+execute "imenu 550.8 &Latex.".Compiler."\\ &twice<Tab>:2Tex                     <Esc>:2Tex<CR>a"
 nmenu 550.9 &Latex.&MakeLatex<Tab>:MakeLatex                                    :<C-U>MakeLatex<CR>
 cmenu 550.9 &Latex.&MakeLatex<Tab>:MakeLatex                                    <C-U>MakeLatex<CR>
 imenu 550.9 &Latex.&MakeLatex<Tab>:MakeLatex                                    <Esc>:MakeLatex<CR>a
@@ -108,9 +108,9 @@ cmenu 550.26 &Latex.&SshPrint<Tab>:SshPrint                                     
 imenu 550.26 &Latex.&SshPrint<Tab>:SshPrint                                     <Esc>:SshPrinta
 "
 menu 550.30 &Latex.-TOC-                                                        :
-menu 550.30 &Latex.&Table\ of\ Contents<Tab>:TOC                                :<C-U>TOC<CR>
-cmenu 550.30 &Latex.&Table\ of\ Contents<Tab>:TOC                               <C-U>TOC<CR>
-imenu 550.30 &Latex.&Table\ of\ Contents<Tab>:TOC                               <Esc>:TOC<CR>
+menu 550.30 &Latex.&Table\ of\ Contents<Tab>:Toc                                :<C-U>Toc<CR>
+cmenu 550.30 &Latex.&Table\ of\ Contents<Tab>:Toc                               <C-U>Toc<CR>
+imenu 550.30 &Latex.&Table\ of\ Contents<Tab>:Toc                               <Esc>:Toc<CR>
 menu 550.30 &Latex.L&abels<Tab>:Labels                                          :<C-U>Labels<CR>
 cmenu 550.30 &Latex.L&abels<Tab>:Labels                                         <C-U>Labels<CR>
 imenu 550.30 &Latex.L&abels<Tab>:Labels                                         <Esc>:Labels<CR>
