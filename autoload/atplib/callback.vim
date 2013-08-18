@@ -130,7 +130,21 @@ function! atplib#callback#CallBack(bufnr,mode,...)
     let b:atp_running	= b:atp_running - 1
 
     " Read the log file
+    if g:atp_debugCallBack
+	silent echo "file: ".expand("%:p")
+	silent echo "servername: ".v:servername
+	silent echo "errorfile: ".&ef
+	silent echo "g:atp_HighlightErrors: ".g:atp_HighlightErrors
+    endif
     cgetfile
+    if g:atp_debugCallBack
+	let log = readfile(&ef)
+	for l in log
+	    if l =~# 'LaTeX Error'
+		silent echo l
+	    endif
+	endfor
+    endif
     if v:version < 703 || v:version == 703 && !has("patch648")
 	call atplib#compiler#FilterQuickFix()
     endif
@@ -140,10 +154,6 @@ function! atplib#callback#CallBack(bufnr,mode,...)
 	call atplib#callback#Signs(a:bufnr)
     endif
 
-    if g:atp_debugCallBack
-	silent echo "file=".expand("%:p")
-	silent echo "g:atp_HighlightErrors=".g:atp_HighlightErrors
-    endif
     if g:atp_HighlightErrors
 	call atplib#callback#HighlightErrors()
     endif
@@ -307,7 +317,6 @@ function! atplib#callback#CallBack(bufnr,mode,...)
 	let add=2
     endif
     let &l:cmdheight	= max([cmdheight, msg_len+add])
-    let g:msg_len=msg_len
     if l:clist && len(getqflist()) > 7 && !t:atp_QuickFixOpen
 	let winnr = winnr()
 	copen
