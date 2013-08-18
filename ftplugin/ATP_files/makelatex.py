@@ -28,6 +28,8 @@ import atexit
 import locale
 
 encoding = locale.getpreferredencoding()
+if not encoding:
+    encoding = 'UTF-8'
 PY3 = sys.version_info[0] == 3
 
 import latex_log

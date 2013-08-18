@@ -23,6 +23,8 @@ from collections import deque
 import latex_log
 import locale
 encoding = locale.getpreferredencoding()
+if not encoding:
+    encoding = 'UTF-8'
 PY3 = sys.version_info[0] == 3
 
 # readlink is not available on Windows.

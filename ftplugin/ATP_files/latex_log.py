@@ -540,6 +540,8 @@ if __name__ == '__main__':
 
     import locale
     encoding = locale.getpreferredencoding()
+    if not encoding:
+        encoding = 'UTF-8'
 
     parser.add_option("-e", "--encoding", dest="encoding", default=encoding, help="encoding to use (default=%s)" % encoding)
     (options, args) = parser.parse_args()
