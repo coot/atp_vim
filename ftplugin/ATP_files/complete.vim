@@ -165,7 +165,7 @@ endif
 	\ "\\maketitle",
 	\ "\\marginpar", "\\indent", "\\par", "\\sloppy", "\\pagebreak", "\\nopagebreak",
 	\ "\\newpage", "\\newline", "\\newtheorem{", "\\linebreak", "\\line", "\\linespread{",
-	\ "\\hyphenation{", "\\fussy", "\\eject",
+	\ "\\listoftables", "\\hyphenation{", "\\fussy", "\\eject",
 	\ "\\enlagrethispage{", "\\centerline{", "\\centering", "\\clearpage", "\\cleardoublepage",
 	\ "\\encodingdefault", 
 	\ "\\caption{", "\\chapter", 
@@ -266,7 +266,7 @@ endif
 	\ "\\langle", "\\rangle", "\\Diamond", "\\lgroup", "\\rgroup", "\\propto", "\\Join", "\\div", 
 	\ "\\land", "\\star", "\\uplus", "\\leadsto", "\\rbrack", "\\lbrack", "\\mho", 
 	\ "\\diamondsuit", "\\heartsuit", "\\clubsuit", "\\spadesuit", "\\top", "\\ell", 
-	\ "\\imath", "\\jmath", "\\wp", "\\Im", "\\Re", "\\prime", "\\ll", "\\gg", "\\Nabla", ]
+	\ "\\imath", "\\jmath", "\\wp", "\\Im", "\\Re", "\\prime", "\\ll", "\\gg", "\\Nabla",]
 
 	let g:atp_math_commands_PRE=[  
 		    \ "\\diagdown", "\\diagup", 
