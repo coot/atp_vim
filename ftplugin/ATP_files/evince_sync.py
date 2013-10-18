@@ -25,6 +25,8 @@ import subprocess
 import time
 import os.path
 import logging
+import urllib
+import locale
 
 from optparse import OptionParser
 usage = """\nto make evince sync (it will exit when sync is done):\n    %prog EVINCE output_file line_number input_file\n\nto make gvim sync in response to evince clicks (keep it running):\n    %prog GVIM gvim_server_name output_file input_file\n\noutput_file -- file path [might be relative to the current directory]\ninput_file  -- as above"""
@@ -93,9 +95,11 @@ class EvinceWindowProxy(object):
                 EvinceWindowProxy.bus = dbus.SessionBus()
 
             if EvinceWindowProxy.daemon is None:
-                EvinceWindowProxy.daemon = EvinceWindowProxy.bus.get_object(EV_DAEMON_NAME,
-                                                EV_DAEMON_PATH,
-                                                follow_name_owner_changes=True)
+                EvinceWindowProxy.daemon = EvinceWindowProxy.bus.get_object(
+                    EV_DAEMON_NAME,
+                    EV_DAEMON_PATH,
+                    follow_name_owner_changes=True
+                )
             self._get_dbus_name(False)
 
         except dbus.DBusException:
@@ -132,7 +136,7 @@ class EvinceWindowProxy(object):
     def handle_get_window_list_reply (self, window_list):
         if len(window_list) > 0:
             window_obj = EvinceWindowProxy.bus.get_object(self.dbus_name, window_list[0])
-            self.window = dbus.Interface(window_obj,EV_WINDOW_IFACE)
+            self.window = dbus.Interface(window_obj, EV_WINDOW_IFACE)
             self.window.connect_to_signal("Closed", self.on_window_close)
             self.window.connect_to_signal("SyncSource", self.on_sync_source)
         else:
@@ -140,7 +144,7 @@ class EvinceWindowProxy(object):
             if self._log:
                 self._log.debug("GetWindowList returned empty list")
 
-    def set_source_handler (self, source_handler):
+    def set_source_handler(self, source_handler):
         self.source_handler = source_handler
 
     def on_window_close(self):
@@ -220,6 +224,7 @@ if __name__ == '__main__':
             print_usage()
             sys.exit(os.EX_USAGE)
 
+        path_output=urllib.quote(path_output)
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         a = EvinceWindowProxy('file://%s' % path_output, True, logger=logger )
 
@@ -267,11 +272,15 @@ if __name__ == '__main__':
 
         def source_view_handler(input_file, source_link, timestamp):
             if str(input_file).startswith("file://"):
-                input_file = input_file[7:]
-            cmd = progname+' --servername "' + gvim_server_name + '" --remote +' + str(source_link[0]) + ' ' + input_file
+                input_file=urllib.unquote(str(input_file[7:]))
+            cmd = '{} --servername "{}" --remote {} "{}"'.format(progname,
+                                                                 gvim_server_name,
+                                                                 str(source_link[0]),
+                                                                 input_file)
             logger.debug('executing: %s' % cmd)
             os.system(cmd)
 
+        path_output=urllib.quote(path_output)
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         a = EvinceWindowProxy('file://' + path_output, True, logger = logger )
 
