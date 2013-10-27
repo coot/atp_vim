@@ -74,7 +74,7 @@ function! atplib#compiler#ViewOutput(bang,tex_file,xpdf_server,...)
 	    silent exe '!start '.view_cmd
 	endif
     else
-	echomsg "[ATP:] output file do not exists. Calling " . b:atp_TexCompiler
+	echomsg "[ATP:] output file does not exist. Calling " . b:atp_TexCompiler
 	if fwd_search
 	    if g:atp_Compiler == 'python'
 		call atplib#compiler#PythonCompiler( 0, 2, 1, 'silent' , "AU" , tex_file, "")
