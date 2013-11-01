@@ -66,17 +66,18 @@ function! LatexBox_TexIndent()
 
 	let n += s:ComputeLevel(lnum_prev, '\\begin{\%(' . join(s:itemize_envs, '\|') . '\)}', 
 		    \ '\\end{\%(' . join(s:itemize_envs, '\|') . '\)}')
+	n *= &sw
 
 	" less shift for lines starting with \item
 	let item_here = getline(v:lnum) =~ '^\s*\\item'
 	let item_above = getline(lnum_prev) =~ '^\s*\\item'
 	if !item_here && item_above
-		let n += 1
+		let n += &sw
 	elseif item_here && !item_above
-		let n -= 1
+		let n -= 6  " '\item ' = 6 chars
 	endif
 
-	return indent(lnum_prev) + n * &sw
+	return indent(lnum_prev) + n
 endfunction
 " }}}
 
