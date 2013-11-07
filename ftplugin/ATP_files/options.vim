@@ -1668,16 +1668,14 @@ try:
     import os
     import signal
     import re
-    from psutil import NoSuchProcess
+    from psutil import NoSuchProcess, AccessDenied
     for pid in psutil.get_pid_list():
         try:
             process = psutil.Process(pid)
             cmdline = process.cmdline
             if len(cmdline) > 1 and re.search('evince_sync\.py$', cmdline[1]):
                 os.kill(pid, signal.SIGTERM)
-        except psutil.error.NoSuchProcess:
-            pass
-        except psutil.error.AccessDenied:
+        except (NoSuchProcess, AccessDenied):
             pass
 except ImportError:
     vim.command("echomsg '[ATP:] Import error. You will have to kill evince_sync.py script yourself'")
