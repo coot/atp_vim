@@ -99,6 +99,9 @@ function! <SID>TexLogSettings(fname) "{{{1
     " atplib#various#OpenLog, but since it requires b:atp_ProjectDir and
     " possibly b:atp_MainFile variables, it is not yet done.
     let log = readfile(expand(a:fname), "", 1)
+    if len(log) == 0
+	return
+    endif
     if log[0] =~? '^this is \(pdf\)\?\(lua\|xe\|xe\)\?tex'
 	setl nomodifiable
 	setl buftype=nowrite
