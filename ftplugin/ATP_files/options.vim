@@ -247,8 +247,11 @@ setl includeexpr=substitute(v:fname,'\\%(.tex\\)\\?$','.tex','')
 if !exists("g:Align_xstrlen") && v:version >= 703 && &conceallevel 
     let g:Align_xstrlen="ATP_strlen"
 endif
+
+" The two options below format lists, but they clash with indentation script.
 setl formatlistpat=^\\s*\\\\item\\s*
-setl formatoptions+=n
+" setl formatoptions+=n
+
 " setl formatexpr=TexFormat
 setl cinwords=
 " }}}
