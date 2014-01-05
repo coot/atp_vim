@@ -663,6 +663,13 @@ if !exists("g:atp_imap_enumerate")
 	let g:atp_imap_enumerate="enu"
     endif
 endif
+if !exists("g:atp_imap_description")
+    if g:atp_imap_ShortEnvIMaps
+	let g:atp_imap_description="D"
+    else
+	let g:atp_imap_description="descr"
+    endif
+endif
 if !exists("g:atp_imap_tabular")
     if g:atp_imap_ShortEnvIMaps
 	let g:atp_imap_tabular="u"
@@ -898,6 +905,9 @@ if !exists("g:atp_EnvOptions_enumerate")
     " enumerate map <Leader>E will put \begin{enumerate}[topsep=0pt,noitemsep] Useful
     " options of enumitem to make enumerate more condenced.
     let g:atp_EnvOptions_enumerate=""
+endif
+if !exists("g:atp_EnvOptions_description")
+    let g:atp_EnvOptions_description=""
 endif
 if !exists("g:atp_EnvOptions_itemize")
     " Similar to g:atp_enumerate_options.
