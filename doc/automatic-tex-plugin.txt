@@ -1671,7 +1671,7 @@ map <F1>, imap <F1>
 	package ATP will add \\subfile pattern.
 
 	Without bang, i.e. "!", the commands also saves the data to the
-	project script file (|atp-ProjectScript|.  Adding "!" prevents this.
+	project script file |atp-ProjectScript|.  Adding "!" prevents this.
 
 							*atp-:Open*
 							*g:atp_LibraryPath*
