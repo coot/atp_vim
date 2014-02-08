@@ -910,6 +910,16 @@ The variable |b:atp_TexReturnCode| stores the return code of compilation.
 
 See |atp-requirements-python| for python libraries that are used by ATP.
 
+                                                        *g:atp_ProjectFileLocation*
+
+The variable |g:atp_ProjectFileLocation| is the location of the project you
+want to store. This directory you specified will have the same structure as
+the filesystem tree on your system. For example, if you set this variable to
+'~/.atp-project-files', the project file for '/path/to/my.tex' will be
+'~/.atp-project-files/path/to/my.tex.project.vim'. If this variable is not set
+or is set to an empty string, the project file will be created in the same
+directory of the tex file, if no existing project file is found.
+
 -------------------------------------------------------------------------------
 CALL BACK AND DEBUG MODE				*atp-callback*
 							*atp-debug-mode*
