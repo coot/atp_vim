@@ -4711,7 +4711,7 @@ defined in non math mode.  The advantage of this is that the imap o* which
 produces \otimes doesn't affect typing o in LaTeX text mode.  In this way we
 can provide many useful math imaps!
 
-The function which makes the imaps is: atplib#MakeIMaps(), the function which
+The function which makes the imaps is: atplib#MakeMaps(), the function which
 toggles on/off math/text imaps is atplib#ToggleIMaps() (which now also set vim
 options for math mode, see |g:atp_MathVimOptions|).
 
