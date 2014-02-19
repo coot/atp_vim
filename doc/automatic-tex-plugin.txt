@@ -1488,13 +1488,14 @@ map <LocalLeader>V, map <S-F3>, imap <S-F3>
 :SyncTex[!]						*atp-:SyncTex* *atp-\f*
 map <LocalLeader>f, map <S-LeftMouse>
 	Which makes an forward search (vim->Viewer).  As for now ATP supports
-	Okular, Xpdf and Xdvi with this feature (Evince is not yet supported).
+	Okular, Xpdf, Xdvi and zathura with this feature (Evince is not yet supported).
 
 	With bang |atp-:SyncTex| will not check if the viewer is running.
 
-	Note: you can also set reverse search for Okular and Xdvi, see
-	|atp-Viewers-Okular| and |atp-Viewers-Xdvi| for an instruction how to
-	do that.  Xpdf doesn't support reverse searching.
+	Note: you can also set reverse search for Okular, Xdvi and zathura see
+	|atp-Viewers-Okular|, |atp-Viewers-Xdvi| and |atp-Viewers-zathura| for
+	an instruction how to do that.  Xpdf doesn't support reverse
+	searching.
 
 							*atp-:SyncTex_Xpdf-hack*
 	Note: there is a bug in Xpdf, one cannot sent commands to Xpdf to
@@ -5626,8 +5627,12 @@ Xdvi ~
 	Note the watchfile switch for xdvi: with it xdvi will reload the file,
 	if needed, every second.
 
+							*atp-Viewers-Zathura*
 Zathura	~
-	Perfectly works (but there is no reverse/inverse searching).
+	Use the '-s' switch to enable syntex support for zathura. To enable
+	backwards synchronisation you need to set the editor command with the
+	'-x' flag:
+	    zathura -s -x "gvim --servername synctex --remote +%{line} %{input}"
 
 Mupdf ~
 	It is the fastest pdf viewer program ever made, why? because it

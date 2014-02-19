@@ -1079,7 +1079,8 @@ if !exists("g:ViewerMsg_Dict")
 		\ 'skim'		: 'Skim', 
 		\ 'evince'		: 'Evince',
 		\ 'acroread'		: 'AcroRead',
-		\ 'epdfview'		: 'epdfView' }
+		\ 'epdfview'		: 'epdfView',
+		\ 'zathura'		: 'zathura' }
 endif
 if b:atp_updatetime_normal
     let &l:updatetime=b:atp_updatetime_normal
@@ -1669,9 +1670,11 @@ endfunction
 command! -buffer SetXpdf			:call <SID>SetPdf('xpdf')
 command! -buffer SetOkular			:call <SID>SetPdf('okular')
 command! -buffer SetEvince			:call <SID>SetPdf('evince')
+command! -buffer SetZathura			:call <SID>SetPdf('zathura')
 nnoremap <silent> <buffer> <Plug>SetXpdf	:call <SID>SetPdf('xpdf')<CR>
 nnoremap <silent> <buffer> <Plug>SetOkular	:call <SID>SetPdf('okular')<CR>
 nnoremap <silent> <buffer> <Plug>SetEvince	:call <SID>SetPdf('evince')<CR>
+nnoremap <silent> <buffer> <Plug>SetZathura	:call <SID>SetPdf('zathura')<CR>
 
 function! <SID>Kill_Evince_Sync()
 python << EOF

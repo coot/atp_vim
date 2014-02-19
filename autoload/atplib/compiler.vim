@@ -281,6 +281,10 @@ function! atplib#compiler#SyncTex(bang, mouse, main_file, xpdf_server, ...)
 	let evince_sync=split(globpath(&rtp, "ftplugin/ATP_files/evince_sync.py"), "\n")[0]
 	let sync_cmd = g:atp_Python." ".shellescape(evince_sync)." EVINCE ".shellescape(output_file)." ".line." ".shellescape(curr_file)
 	call system(sync_cmd)
+    elseif b:atp_Viewer == "zathura"
+	let curr_file = atplib#FullPath(expand("%:p"))
+	let sync_cmd = "zathura --synctex-forward=".line.":".col.":".shellescape(curr_file)." ".shellescape(output_file)
+	call system(sync_cmd)
     elseif b:atp_Viewer =~ '^\s*xdvi\>'
 	if exists("g:atp_xdviOptions")
 	    let options = " ".join(map(copy(g:atp_xdviOptions), 'shellescape(v:val)'), " ")

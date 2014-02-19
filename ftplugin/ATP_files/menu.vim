@@ -186,6 +186,9 @@ imenu 550.60 &Latex.Set\ &Okular\ (forward\/reverse\ search)<Tab>:SetOkular     
 menu 550.60 &Latex.Set\ X&Dvi\ (forward\/reverse\ search)<Tab>:SetXdvi          :<C-U>SetXdvi<CR>
 cmenu 550.60 &Latex.Set\ X&Dvi\ (forward\/reverse\ search)<Tab>:SetXdvi         <C-U>SetXdvi<CR>
 imenu 550.60 &Latex.Set\ X&Dvi\ (forward\/reverse\ search)<Tab>:SetXdvi         <Esc>:SetXdvi<CR>
+menu 550.60 &Latex.Set\ &Zathura\ (forward\/reverse\ search)<Tab>:SetZathura      :<C-U>SetZathura<CR>
+cmenu 550.60 &Latex.Set\ &Zathura\ (forward\/reverse\ search)<Tab>:SetZathura     <C-U>SetZathura<CR>
+imenu 550.60 &Latex.Set\ &Zathura\ (forward\/reverse\ search)<Tab>:SetZathura     <Esc>:SetZathura<CR>
 "
 menu 550.70 &Latex.-Editting-                                                   :
 "
