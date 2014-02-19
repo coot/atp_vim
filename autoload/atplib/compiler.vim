@@ -524,26 +524,25 @@ import psutil
 import os
 import pwd
 import re
-from psutil import NoSuchProcess
-x=0
-program =vim.eval("a:program")
-f       =vim.eval("a:file")
-pat     ="|".join(vim.eval("a:000"))
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
+program = vim.eval("a:program")
+f = vim.eval("a:file")
+pat = "|".join(vim.eval("a:000"))
+x = False
 for pid in psutil.get_pid_list():
     try:
-        p=psutil.Process(pid)
-        if p.username == pwd.getpwuid(os.getuid())[0] and re.search(program, p.cmdline[0]):
+        p = psutil.Process(pid)
+        if p.username == pwd.getpwuid(os.getuid())[0] and program in p.cmdline[0]:
             for arg in p.cmdline:
                 if arg == f or re.search(pat, arg):
-                    x=1
+                    x = True
                     break
-        if x:
+        if x is True:
             break
-    except psutil.error.NoSuchProcess:
-        pass
-    except psutil.error.AccessDenied:
-        pass
-    except IndexError:
+    except (NoSuchProcess, AccessDenied, IndexError):
         pass
 vim.command("let s:return_is_running=%d" % x)
 EOF
