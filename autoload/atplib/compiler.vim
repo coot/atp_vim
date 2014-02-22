@@ -2127,7 +2127,7 @@ endfunction
 " 		  (g:atp_DefaultDebugMode).
 function! atplib#compiler#TeX(runs, bang, ...)
 
-    let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
+    let atp_MainFile = atplib#FullPath(b:atp_MainFile)
 
     if !exists("t:atp_DebugMode")
 	let t:atp_DebugMode = g:atp_DefaultDebugMode
