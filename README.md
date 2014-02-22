@@ -7,7 +7,7 @@ Visit http://atp-vim.sf.net to get more info: features, videos presenting some
 functionalities, online help. Just to list the main features:
 
  * background processing with a progress bar,
- * forward/inverse search for okular, evince, xpdf, open (on MacOs),
+ * forward/inverse search for okular, evince, xpdf, open (on MacOs), zathura,
  * compilation of projects, or just parts of projects (using the subfiles
  LaTeX package),
  * excellent completion, which also closes environments and brackets, and
