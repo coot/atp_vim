@@ -1,3 +1,4 @@
 *.pyc
 /doc/tags
 /ftplugin/ATP_files/common_var.vim
+/statistics
