@@ -2630,8 +2630,7 @@ function! <SID>Compiler(...)
 endfunction
 command! -buffer -nargs=? -complete=customlist,CompilerComp Compiler	:call <SID>Compiler(<f-args>)
 function! CompilerComp(A,L,P)
-    let compilers = [ 'tex', 'pdftex', 'latex', 'pdflatex', 'etex', 'xetex', 'luatex', 'lualatex', 'xelatex' ]
-"     let g:compilers = copy(compilers)
+    let compilers = keys(g:atp_CompilersDict)
     call filter(compilers, "v:val =~ '^' . a:A")
     call filter(compilers, 'executable(v:val)')
     return compilers
