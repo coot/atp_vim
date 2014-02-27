@@ -4138,10 +4138,11 @@ put them in your |atprc| it is enough to use the standard "let b:...=".
 							*g:atp_CompilersDict*
 >
  let g:atp_CompilersDict 	= { 
-		\ "pdflatex": ".pdf", 		"pdftex" 	: ".pdf", 
+		\ "pdflatex"    : ".pdf", 	"pdftex" 	: ".pdf",
 		\ "xetex" 	: ".pdf", 	"latex" 	: ".dvi", 
 		\ "tex" 	: ".dvi",	"elatex"	: ".dvi",
-		\ "etex"	: ".dvi", 	"luatex"	: ".pdf"}
+		\ "etex"	: ".dvi", 	"luatex"	: ".pdf",
+		\ "lualatex"	: ".pdf", 	"xelatex"	: ".pdf"}
 <	This variable is used to associate an extension to the compiler that
 	is used.
 

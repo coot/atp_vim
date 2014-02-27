@@ -1053,7 +1053,8 @@ if !exists("g:atp_CompilersDict")
 		\ "pdflatex" 	: ".pdf", 	"pdftex" 	: ".pdf", 
 		\ "xetex" 	: ".pdf", 	"latex" 	: ".dvi", 
 		\ "tex" 	: ".dvi",	"elatex"	: ".dvi",
-		\ "etex"	: ".dvi", 	"luatex"	: ".pdf"}
+		\ "etex"	: ".dvi", 	"luatex"	: ".pdf",
+		\ "lualatex"	: ".pdf", 	"xelatex"	: ".pdf"}
 endif
 
 if !exists("g:CompilerMsg_Dict")
@@ -1066,6 +1067,8 @@ if !exists("g:CompilerMsg_Dict")
 		\ 'pdflatex'		: 'pdfLaTeX', 
 		\ 'context'		: 'ConTeXt',
 		\ 'luatex'		: 'LuaTeX',
+		\ 'lualatex'		: 'LuaLaTeX',
+		\ 'xelatex'		: 'XeLaTeX',
 		\ 'xetex'		: 'XeTeX'}
 endif
 
@@ -2627,7 +2630,7 @@ function! <SID>Compiler(...)
 endfunction
 command! -buffer -nargs=? -complete=customlist,CompilerComp Compiler	:call <SID>Compiler(<f-args>)
 function! CompilerComp(A,L,P)
-    let compilers = [ 'tex', 'pdftex', 'latex', 'pdflatex', 'etex', 'xetex', 'luatex', 'xelatex' ]
+    let compilers = [ 'tex', 'pdftex', 'latex', 'pdflatex', 'etex', 'xetex', 'luatex', 'lualatex', 'xelatex' ]
 "     let g:compilers = copy(compilers)
     call filter(compilers, "v:val =~ '^' . a:A")
     call filter(compilers, 'executable(v:val)')
