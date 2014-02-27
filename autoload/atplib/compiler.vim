@@ -864,7 +864,7 @@ mainfile_base = os.path.splitext(vim.eval("main_file"))[0]
 # read the local aux file (if present) find all new \newlabel{} commands
 # if they are present in the original aux file substitute them (this part is
 # not working) if not add them at the end. Note that after running pdflatex
-# the local aux file becomes agian short.
+# the local aux file becomes again short.
 if os.path.exists(basename+".aux"):
     local_aux_file = open(basename+".aux", "r")
     local_aux = local_aux_file.readlines()
