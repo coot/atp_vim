@@ -232,7 +232,7 @@ function! FindProjectScripts()
     let cwd 	= getcwd()
     try
 	if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
-	    let proj_dir = fnameescape(expand(g:atp_ProjectFileLocation) . dir)
+	    let proj_dir = atplib#joinpath(fnameescape(expand(g:atp_ProjectFileLocation)), dir)
 	    silent! call mkdir(proj_dir, 'p')
 	    exe "lcd " . proj_dir
 	else
@@ -350,7 +350,10 @@ function! <SID>LoadProjectScript(bang,...)
 	    " If there was no project script we set the variable and it will
 	    " be written when quiting vim by <SID>WriteProjectScript().
 	    let b:atp_ProjectScriptFile = resolve(expand("%:p")) . ".project.vim"
-	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
+	    if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
+		let b:atp_ProjectScriptFile = atplib#joinpath(fnameescape(expand(g:atp_ProjectFileLocation)), b:atp_ProjectScriptFile)
+	    endif
+	    let b:atp_ProjectDir = fnamemodify(b:atp_ProjectScriptFile, ":h")
 	    return
 	endif
     else
