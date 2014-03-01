@@ -231,7 +231,13 @@ function! FindProjectScripts()
     let dir 	= fnamemodify(resolve(expand("%:p")), ":p:h")
     let cwd 	= getcwd()
     try
-	exe "lcd " . fnameescape(dir)
+	if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
+	    let proj_dir = fnameescape(expand(g:atp_ProjectFileLocation) . dir)
+	    silent! call mkdir(proj_dir, 'p')
+	    exe "lcd " . proj_dir
+	else
+	    exe "lcd " . fnameescape(dir)
+	endif
     catch /E344:/
 	return [] 
     endtry
@@ -315,6 +321,9 @@ function! <SID>LoadProjectScript(bang,...)
 	" Return if nothing was found
 	if len(project_files) == 0
 	    let b:atp_ProjectScriptFile = resolve(expand("%:p")) . ".project.vim"
+	    if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
+		let b:atp_ProjectScriptFile = fnameescape(expand(g:atp_ProjectFileLocation)) . resolve(expand("%:p")) . ".project.vim"
+	    endif
 	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
 	    return
 	endif
@@ -685,6 +694,9 @@ function! <SID>WriteProjectScriptInterface(bang,...)
 	    let b:atp_ProjectDir	= fnamemodify(project_script, ":h")
 	else
 	    let b:atp_ProjectScriptFile = resolve(expand("%:p")) . ".project.vim"
+	    if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
+		let b:atp_ProjectScriptFile = fnameescape(expand(g:atp_ProjectFileLocation)) . resolve(expand("%:p")) . ".project.vim"
+	    endif
 	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
 	endif
     endif
