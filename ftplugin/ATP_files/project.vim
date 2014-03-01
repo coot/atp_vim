@@ -5,7 +5,7 @@
 " Language:	tex
 " Last Change:Tue Sep 06, 2011 at 03:17  +0100
 
-let s:sourced 	= exists("s:sourced") ? 1 : 0
+let s:sourced = exists("s:sourced") ? 1 : 0
 
 " VARIABLES:
 " Variables {{{
@@ -15,20 +15,20 @@ let s:sourced 	= exists("s:sourced") ? 1 : 0
 "     setl noautochdir
 " endif
 
-let s:file	= expand('<sfile>:p')
+let s:file = expand('<sfile>:p')
 
 " This gives some debug info: which project scripts are loaded, loading time,
 " which project scripts are written.
 " Debug File: /tmp/ATP_ProjectScriptDebug.vim  / only for s:WriteProjectScript() /
 if !exists("g:atp_debugProject")
-    let g:atp_debugProject 	= 0
+    let g:atp_debugProject = 0
 endif
 if !exists("g:atp_debugLPS")
     " debug <SID>LoadProjectScript (project.vim)
-    let g:atp_debugLPS		= 0
+    let g:atp_debugLPS = 0
 endif
 if !exists("g:atp_RelativePath")
-    let g:atp_RelativePath 	= 1
+    let g:atp_RelativePath = 1
 endif
 " Also can be set in vimrc file or atprc file! (tested)
 " The default value (0) is set in options.vim
@@ -37,7 +37,7 @@ if !exists("g:atp_TempDir")
 endif
 
 " Windows version:
-let s:windows	= has("win16") || has("win32") || has("win64") || has("win95")
+let s:windows = has("win16") || has("win32") || has("win64") || has("win95")
 
 " This variable is set if the projectr script was loaded by s:LoadScript()
 " function.
@@ -45,10 +45,10 @@ let s:windows	= has("win16") || has("win32") || has("win64") || has("win95")
 
 if !exists("s:project_Load")
     " Load once in s:LoadScript() function
-    let s:project_Load	= {}
+    let s:project_Load = {}
 endif
 if !exists("g:atp_CommonScriptDirectory")
-    let g:atp_CommonScriptDirectory	= expand('<sfile>:p:h')
+    let g:atp_CommonScriptDirectory = expand('<sfile>:p:h')
 endif
 if !isdirectory(g:atp_CommonScriptDirectory)
     " Make common script dir if it doesn't exist (and all intermediate directories).
@@ -56,7 +56,7 @@ if !isdirectory(g:atp_CommonScriptDirectory)
 endif
 
 " Mimic names of vim view files
-let s:common_project_script	= s:windows ? g:atp_CommonScriptDirectory  . '\common_var.vim' : g:atp_CommonScriptDirectory . '/common_var.vim' 
+let s:common_project_script = s:windows ? g:atp_CommonScriptDirectory  . '\common_var.vim' : g:atp_CommonScriptDirectory . '/common_var.vim' 
 
 " These local variables will be saved:
 " let g:atp_ProjectGlobalVariable = [ 
@@ -103,14 +103,14 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
 
     if g:atp_debugProject
 	exe "redir! > ".g:atp_TempDir."/LoadScript.log"
-	let hist_time	= reltime()
+	let hist_time = reltime()
 	echomsg "ATP_ProjectScript: LoadScript " . a:type . " file " . string(a:project_script)
     endif
 
-    let silent	= a:0 >= 1 ? a:1 : "0"
-    let silent 	= silent || silent == "silent" ? "silent" : ""
+    let silent = a:0 >= 1 ? a:1 : "0"
+    let silent = silent || silent == "silent" ? "silent" : ""
     let ch_load = a:0 >= 2 ? a:2 : 0 
-    let ignore	= a:0 >= 3 ? a:3 : 0
+    let ignore = a:0 >= 3 ? a:3 : 0
 
     " Is project script on/off
     " The local variable overrides the global ones!
@@ -143,8 +143,8 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
 	return
     endif
 
-    let cond_A	= get(s:project_Load, expand("%:p"), {}) != {}
-    let cond_B	= get(get(s:project_Load, expand("%:p"), []), a:type, 0)
+    let cond_A = get(s:project_Load, expand("%:p"), {}) != {}
+    let cond_B = get(get(s:project_Load, expand("%:p"), []), a:type, 0)
     if empty(expand("%:p"))
 	if g:atp_debugProject
 	    echohl ErrorMsg
@@ -214,9 +214,9 @@ function! <SID>LoadScript(bang, project_script, type, load_variables, ...) "{{{
     if a:load_variables
 	if !exists("b:atp_project")
 	    if exists("b:LevelDict") && max(values(filter(deepcopy(b:LevelDict), "get(b:TypeDict, v:key, '')=='input'"))) >= 1
-		let b:atp_project	= 1
+		let b:atp_project = 1
 	    else
-		let b:atp_project 	= 0
+		let b:atp_project = 0
 	    endif
 	endif
     endif
@@ -228,8 +228,8 @@ endfunction "}}}
 " This functoin finds recursilevy (upward) all project scripts. 
 " {{{ FindProjectScripts()
 function! FindProjectScripts()
-    let dir 	= fnamemodify(resolve(expand("%:p")), ":p:h")
-    let cwd 	= getcwd()
+    let dir = fnamemodify(resolve(expand("%:p")), ":p:h")
+    let cwd = getcwd()
     try
 	if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
 	    let proj_dir = atplib#joinpath(fnameescape(expand(g:atp_ProjectFileLocation)), dir)
@@ -242,8 +242,8 @@ function! FindProjectScripts()
 	return [] 
     endtry
     while glob('*.project.vim', 1) == '' 
-	let dir_l 	= dir
-	let dir 	= fnamemodify(dir, ":h")
+	let dir_l = dir
+	let dir = fnamemodify(dir, ":h")
 	if dir == $HOME || dir == dir_l
 	    break
 	endif
@@ -261,8 +261,8 @@ function! GetProjectScript(project_files)
 	if g:atp_debugLPS
 	    echomsg "[ATP:] checking " . pfile 
 	endif
-	let file_name 	= s:windows ? escape(expand("%:p"), '\') : escape(expand("%:p"), '/') 
-	let sfile_name 	= expand("%:t")
+	let file_name = s:windows ? escape(expand("%:p"), '\') : escape(expand("%:p"), '/') 
+	let sfile_name = expand("%:t")
 	try
 	    let pf_lines = readfile(pfile)
 	catch /E484:/
@@ -322,9 +322,9 @@ function! <SID>LoadProjectScript(bang,...)
 	if len(project_files) == 0
 	    let b:atp_ProjectScriptFile = resolve(expand("%:p")) . ".project.vim"
 	    if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
-		let b:atp_ProjectScriptFile = fnameescape(expand(g:atp_ProjectFileLocation)) . resolve(expand("%:p")) . ".project.vim"
+		let b:atp_ProjectScriptFile = atplib#joinnpath(fnameescape(expand(g:atp_ProjectFileLocation)), b:atp_ProjectScriptFile)
 	    endif
-	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
+	    let b:atp_ProjectDir = fnamemodify(b:atp_ProjectScriptFile, ":h")
 	    return
 	endif
 
@@ -332,7 +332,7 @@ function! <SID>LoadProjectScript(bang,...)
 	" place if it exists.
 	" This saves time :) when there are many project files
 	" (especially when the projects are big)
-	let index 	= index(project_files, expand("%:p") . ".project.vim")
+	let index = index(project_files, expand("%:p") . ".project.vim")
 	if index != -1
 	    call remove(project_files, index)
 	    call extend(project_files, [ expand("%:p") . ".project.vim" ], 0) 
@@ -345,7 +345,7 @@ function! <SID>LoadProjectScript(bang,...)
 	    endif
 	    call <SID>LoadScript("", project_script, "local", 0, "silent", 1, 0)
 	    let b:atp_ProjectScriptFile = project_script
-	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
+	    let b:atp_ProjectDir = fnamemodify(b:atp_ProjectScriptFile, ":h")
 	else
 	    " If there was no project script we set the variable and it will
 	    " be written when quiting vim by <SID>WriteProjectScript().
@@ -359,7 +359,7 @@ function! <SID>LoadProjectScript(bang,...)
     else
 	try
 	execute "silent! source " . fnameescape(b:atp_ProjectScriptFile)
-	let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
+	let b:atp_ProjectDir = fnamemodify(b:atp_ProjectScriptFile, ":h")
 	catch /E484/
 	    " this is used by the s:Babel() function.
 	    " if b:atp_ProjectDir is unset it returns.
@@ -394,7 +394,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     endif
 
     if !exists("b:ListOfFiles")
-	let atp_MainFile	= atplib#FullPath(b:atp_MainFile)
+	let atp_MainFile = atplib#FullPath(b:atp_MainFile)
 	call TreeOfFiles(atp_MainFile)
     endif
 
@@ -449,7 +449,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
 	return
     endif
 
-    let winsaveview	= winsaveview()
+    let winsaveview = winsaveview()
 
     " Check if global variables where changed.
     " (1) copy global variable to l:variables
@@ -457,7 +457,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     " (2) source the project script and compare the results.
     " (3) resore variables and write the project script.
     if a:type == "global"
-	let existing_variables 	= {}
+	let existing_variables = {}
 	for var in a:cached_variables 
 	    if g:atp_debugProject >= 2
 		echomsg var . " EXISTS " . exists(var)
@@ -548,7 +548,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     endif
     
     " Make a list of variables defined in project script
-    let defined_variables	= []
+    let defined_variables = []
     let defined_variables = []
     try
 	let ps_lines = readfile(a:project_script)
@@ -562,11 +562,11 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     endfor
     call map(defined_variables, 'matchstr(v:val, ''^\s*let\s\+\zs[bg]:[^[:blank:]=]*'')') 
     if g:atp_debugProject
-	let g:defined_variables	= defined_variables
+	let g:defined_variables = defined_variables
     endif
 
 
-    let deleted_variables	= []
+    let deleted_variables = []
     for var in defined_variables
 	if !exists(var)
 	    call add(deleted_variables, var)
@@ -574,11 +574,11 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     endfor
 
     if g:atp_debugProject
-	let g:existing_variables	= []
+	let g:existing_variables = []
     endif
     for var in a:cached_variables
 	if exists(var)
-	    let lvar	= 'l:' . substitute(var, '^[bg]:', '', '')
+	    let lvar = 'l:' . substitute(var, '^[bg]:', '', '')
 	    let {lvar} = {var}
 	    if g:atp_debugProject
 		call add(g:existing_variables, var)
@@ -590,22 +590,22 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
 	let g:deleted_variables = deleted_variables
     endif
 
-    let hidden	= &l:hidden
+    let hidden = &l:hidden
     setl hidden
 
     let lazyredraw = &l:lazyredraw
     setl lazyredraw
 
-    let bufnr	= bufnr("%")
+    let bufnr = bufnr("%")
     try
 	silent! exe "keepalt keepjumps edit +setl\\ noswapfile " . fnameescape(a:project_script)
     catch /.*/
 	echoerr v:errmsg
-	let errmsg	= v:errmsg
+	let errmsg = v:errmsg
 	echoerr "WriteProjectScript catched error while opening " . a:project_script . ". Project script not written."
-	let v:errmsg	= errmsg
-	let &l:hidden		= hidden
-	let &l:lazyredraw	= lazyredraw
+	let v:errmsg = errmsg
+	let &l:hidden = hidden
+	let &l:lazyredraw = lazyredraw
 	if g:atp_debugProject
 	    let g:return = 4
 	endif
@@ -635,7 +635,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
     " Write new variables:
     for var in a:cached_variables
 
-	let lvar 	=  "l:" . substitute(var, '^[bg]:', '', '')
+	let lvar =  "l:" . substitute(var, '^[bg]:', '', '')
 	    if g:atp_debugProject
 		echomsg var . " " . exists(lvar)
 	    endif
@@ -655,7 +655,7 @@ function! <SID>WriteProjectScript(bang, project_script, cached_variables, type, 
 	call append(0, '" ATP project vim script: '.strftime( "%a %b %d, %Y at %I:%M %p %z").".")
     endif
     silent write
-    let projectscript_bufnr	= bufnr("%")
+    let projectscript_bufnr = bufnr("%")
     exe "silent keepalt keepjumps b " . bufnr
     exe "bdelete " . projectscript_bufnr
 
@@ -674,8 +674,8 @@ endfunction
 catch /E127:/
 endtry
 function! <SID>WriteProjectScriptInterface(bang,...)
-    let type 	= ( a:0 >= 1 ? a:1 : 'local' )
-    let silent  = ( a:0 >= 2 ? str2nr(a:2) : 0 )
+    let type = ( a:0 >= 1 ? a:1 : 'local' )
+    let silent = ( a:0 >= 2 ? str2nr(a:2) : 0 )
 
     let cond = exists("g:atp_ProjectScript") && !g:atp_ProjectScript || exists("b:atp_ProjectScript") && ( !b:atp_ProjectScript && (!exists("g:atp_ProjectScript") || exists("g:atp_ProjectScript") && !g:atp_ProjectScript )) || !exists("b:atp_ProjectScript") && !exists("g:atp_ProjectScript")
     if a:bang == "" && cond
@@ -694,17 +694,17 @@ function! <SID>WriteProjectScriptInterface(bang,...)
 	let project_script = GetProjectScript(FindProjectScripts())
 	if project_script != "no project script found"
 	    let b:atp_ProjectScriptFile = project_script
-	    let b:atp_ProjectDir	= fnamemodify(project_script, ":h")
+	    let b:atp_ProjectDir = fnamemodify(project_script, ":h")
 	else
 	    let b:atp_ProjectScriptFile = resolve(expand("%:p")) . ".project.vim"
 	    if exists('g:atp_ProjectFileLocation') && !empty(g:atp_ProjectFileLocation)
 		let b:atp_ProjectScriptFile = fnameescape(expand(g:atp_ProjectFileLocation)) . resolve(expand("%:p")) . ".project.vim"
 	    endif
-	    let b:atp_ProjectDir	= fnamemodify(b:atp_ProjectScriptFile, ":h")
+	    let b:atp_ProjectDir = fnamemodify(b:atp_ProjectScriptFile, ":h")
 	endif
     endif
 
-    let script 	= ( type == 'local' ? b:atp_ProjectScriptFile : s:common_project_script )
+    let script = ( type == 'local' ? b:atp_ProjectScriptFile : s:common_project_script )
     let variables = ( type == 'local' ? g:atp_ProjectLocalVariables : g:atp_ProjectGlobalVariables )
     if type == 'local' && !silent
 	echomsg "[ATP:] writing to " . b:atp_ProjectScriptFile
@@ -767,7 +767,7 @@ endfunction "}}}
 " 	s:common_project_script" 
 " 	It also unlets the variables stored in s:common_project_script.
 function! <SID>DeleteProjectScript(bang,...) 
-    let type	= ( a:0 >= 1 ? a:1 : "local" )
+    let type = ( a:0 >= 1 ? a:1 : "local" )
 
     if type == "local"
 	let file = b:atp_ProjectScriptFile
@@ -789,7 +789,7 @@ function! <SID>DeleteProjectScript(bang,...)
     endif
 endfunction
 function! s:DelPS(CmdArg, CmdLine, CursorPos)
-    let comp	= [ "local", "common" ]  
+    let comp = [ "local", "common" ]  
     call filter(comp, "v:val =~ '^' . a:CmdArg")
     return comp
 endfunction
@@ -802,8 +802,8 @@ endfunction
 
 " Save and Restore Project Variables (used by atplib#motion#GotoFile()).
 function! SaveProjectVariables(...) "{{{
-    let variables_List	= ( a:0 >= 1 ? {a:1} : g:atp_SavedProjectLocalVariables )
-    let variables_Dict 	= {}
+    let variables_List = ( a:0 >= 1 ? {a:1} : g:atp_SavedProjectLocalVariables )
+    let variables_Dict = {}
     for var in variables_List
 	if exists(var)
 	    call extend(variables_Dict, { var : {var} })
