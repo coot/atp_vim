@@ -1,4 +1,4 @@
-let g:vimball_home	= "."
+let g:vimball_home = "."
 edit Makefile
 g!/^SOURCE/d
 %s/^SOURCE\s*+\?=\s*//
