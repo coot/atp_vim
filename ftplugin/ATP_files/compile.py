@@ -436,7 +436,7 @@ try:
         debug_file.write("BIBTEX RET CODE {}\nBIBTEX OUTPUT\n{}\n".
                          format(bibtex_returncode, bibtex_output))
         if verbose != 'verbose':
-            vim_remote_expr(servername, "atplib#callback#BibtexReturnCode('{:d}',\"{:d}\")".
+            vim_remote_expr(servername, "atplib#callback#BibtexReturnCode('{}',\"{}\")".
                             format(bibtex_returncode, bibtex_output))
         else:
             print(bibtex_output)
