@@ -3082,6 +3082,9 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 			endif
 		    endif
 		endfor
+		if g:atp_debugTabCompletion
+		    let g:bibfiles = bibfiles
+		endif
 		let bibitems_list=values(atplib#bibsearch#searchbib_py("", pat, bibfiles))
 	    else
 		let bibdict={}
@@ -3106,6 +3109,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 	    let g:time_searchbib_py=reltimestr(reltime(searchbib_time))
 	    if g:atp_debugTabCompletion
+		let g:bibitems_list = bibitems_list
 		let g:pat = pat
 	    endif
 	    let pre_completion_list=[]
