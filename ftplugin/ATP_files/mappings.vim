@@ -1483,7 +1483,9 @@ if !exists("g:atp_imap_math") || g:atp_reload_variables
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "#<", "atplib#IsInMath() ? '".s:backslash."langle' 	: '#<'", "g:atp_imap_define_math",		'\\langle'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "#>", "atplib#IsInMath() ? '".s:backslash."rangle' 	: '#>'", "g:atp_imap_define_math",		'\\rangle'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "->", "atplib#IsInMath('!') ? '".s:backslash."rightarrow' 	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[->]' : '->' )", "g:atp_imap_define_math",		'\\rightarrow'],
+	\ [ "inoremap", "<buffer> <silent> <expr>", "", "->>", "atplib#IsInMath('!') ? '".s:backslash."twoheadrightarrow' 	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[->>]' : '->>' )", "g:atp_imap_define_math",		'\\twoheadrightarrow'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "<-", "atplib#IsInMath('!') ? '".s:backslash."leftarrow' 	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[<-]' : '<-' )", "g:atp_imap_define_math",		'\\leftarrow'],
+	\ [ "inoremap", "<buffer> <silent> <expr>", "", "<<-", "atplib#IsInMath('!') ? '".s:backslash."twoheadleftarrow'	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[<<-]' : '<<-' )", "g:atp_imap_define_math",		'\\twoheadleftarrow'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "<_", "atplib#IsInMath('!') ? '".s:backslash."Leftarrow' 	: '<-'", "g:atp_imap_define_math",		'\\Leftarrow'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "_>", "atplib#IsInMath('!') ? '".s:backslash."Rightarrow' 	: '->'", "g:atp_imap_define_math",		'\\Rightarrow'],
 	\ ]
