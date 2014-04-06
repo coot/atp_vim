@@ -513,7 +513,7 @@ endfunction "}}}
 " This function checks if program a:program is running a file a:file.
 " a:file should be full path to the file.
 function! atplib#compiler#IsRunning(program, file, ...)
-    " Since there is an issue in psutil on OS X, we cannot run this function:
+    " Since there is an issue with psutil on OS X, we cannot run this function:
     " http://code.google.com/p/psutil/issues/detail?id=173
     " Reported by F.Heiderich.
     if has("mac") || has("gui_mac")
@@ -533,15 +533,21 @@ try:
 except ImportError:
     from psutil.error import NoSuchProcess, AccessDenied
 program = vim.eval("a:program")
-f = vim.eval("a:file")
+file_name = vim.eval("a:file")
 pat = "|".join(vim.eval("a:000"))
 x = False
 for pid in psutil.get_pid_list():
     try:
         p = psutil.Process(pid)
-        if p.username == pwd.getpwuid(os.getuid())[0] and program in p.cmdline[0]:
-            for arg in p.cmdline:
-                if arg == f or re.search(pat, arg):
+        if psutil.version_info[0] >= 2:
+            cmdline = p.cmdline()
+            username = p.username()
+        else:
+            cmdline = p.cmdline
+            username = p.username
+        if username == pwd.getpwuid(os.getuid())[0] and program in cmdline[0]:
+            for arg in cmdline:
+                if arg == file_name or re.search(pat, arg):
                     x = True
                     break
         if x is True:
