@@ -357,7 +357,7 @@ try:
         # it is removed by Vim on exit.
         os.mkdir(options.tempdir)
     tmpdir = tempfile.mkdtemp(dir=options.tempdir, prefix="")
-    debug_file.write("TMPDIR: {:s}\n".format(tmpdir))
+    debug_file.write("TMPDIR: {!s}\n".format(tmpdir))
     tmpaux = os.path.join(tmpdir, "{}.aux".format(basename))
     dirs = filter(lambda d: os.path.isdir(d), os.listdir(os.path.dirname(mainfile_fp)))
     dirs = map(lambda d: os.path.basename(d), dirs)
@@ -365,9 +365,11 @@ try:
         os.mkdir(os.path.join(tmpdir, d))
 
     command_opt.append('-output-directory={}'.format(tmpdir))
-    latex_cmd = [command] + command_opt + [mainfile_fp]
-    debug_file.write("COMMAND {:s}\n".format(latex_cmd))
-    debug_file.write("COMMAND {:s}\n".format(" ".join(latex_cmd)))
+    latex_cmd = [command]
+    latex_cmd.extend(command_opt)
+    latex_cmd.append(mainfile_fp)
+    debug_file.write("COMMAND {!s}\n".format(latex_cmd))
+    debug_file.write("COMMAND {!s}\n".format(" ".join(latex_cmd)))
 
     # Copy important files to output directory:
     # /except the log file/
@@ -387,7 +389,7 @@ try:
     os.chdir(mainfile_dir)
 
     tempdir_list = os.listdir(tmpdir)
-    debug_file.write("\nls tmpdir {:s}\n".format(tempdir_list))
+    debug_file.write("\nls tmpdir {!s}\n".format(tempdir_list))
 
     # Set environment
     for var in env:
@@ -423,7 +425,7 @@ try:
             bibfname = basename
         else:
             bibfname = "{}.aux".format(basename)
-        debug_file.write("\nBIBTEX1{:s}\n".format([bibcommand, bibfname]))
+        debug_file.write("\nBIBTEX1{!s}\n".format([bibcommand, bibfname]))
         os.chdir(tmpdir)
         bibtex_popen = subprocess.Popen([bibcommand, bibfname], stdout=subprocess.PIPE)
         vim_remote_expr(servername, "atplib#callback#BibtexPID('{}')".format(bibtex_popen.pid))
@@ -447,7 +449,7 @@ try:
         # we need run latex at least 3 times
         runs = max([runs, 3])
 
-    debug_file.write("\nRANGE={:s}\n".format(range(1, int(runs + 1))))
+    debug_file.write("\nRANGE={!s}\n".format(range(1, int(runs + 1))))
     debug_file.write("RUNS={:d}\n".format(runs))
     for i in range(1, int(runs + 1)):
         debug_file.write("RUN={}\n".format(i))
@@ -486,8 +488,8 @@ try:
                 bibfname = basename
             else:
                 bibfname = basename + ".aux"
-            debug_file.write("BIBTEX2 {:s}\n".format([bibcommand, bibfname]))
-            debug_file.write("{:d}\n".format(os.getcwd()))
+            debug_file.write("BIBTEX2 {!s}\n".format([bibcommand, bibfname]))
+            debug_file.write("{}\n".format(os.getcwd()))
             tempdir_list = os.listdir(tmpdir)
             debug_file.write("ls tmpdir {}\n".format(tempdir_list))
             os.chdir(tmpdir)
@@ -552,10 +554,10 @@ try:
         xpdf_server_dict = xpdf_server_file_dict()
         cond = xpdf_server_dict.get(XpdfServer, ['_no_file_']) != ['_no_file_']
         debug_file.write("XPDF SERVER DICT={}\n".format(xpdf_server_dict))
-        debug_file.write("COND={:s}:{:s}:{:s}\n".
+        debug_file.write("COND={!s}:{!s}:{!s}\n".
                          format(cond, reload_on_error, bang))
         debug_file.write("COND={}\n".format(not reload_on_error or bang))
-        debug_file.write("{:s}\n".format(xpdf_server_dict))
+        debug_file.write("{!s}\n".format(xpdf_server_dict))
         if start == 1:
             run = ['xpdf']
             run.extend(viewer_opt)
