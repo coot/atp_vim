@@ -334,24 +334,31 @@ endfunction
 function! atplib#compiler#PythonGetPID() 
 python << EOF
 import psutil
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
 latex = vim.eval("b:atp_TexCompiler")
 # Make dictionary: xpdf_servername : file
 # to test if the server host file use:
 # basename(xpdf_server_file_dict().get(server, ['_no_file_'])[0]) == basename(file)
 ps_list=psutil.get_pid_list()
-latex_running	= False
+latex_running = False
 for pr in ps_list:
-	try:
-		name=psutil.Process(pr).name
-		cmdline=psutil.Process(pr).cmdline
-		if name == latex:
-			latex_pid=pr
-			latex_running=True
-			break
-	except psutil.error.NoSuchProcess:
-		pass
-	except psutil.error.AccessDenied:
-		pass
+    try:
+        p = psutil.Process(pr)
+        if psutil.version_info[0] >= 2:
+            name = p.name()
+            cmdline = p.cmdline()
+        else:
+            name = p.name
+            cmdlines = p.cmdline
+        if name == latex:
+            latex_pid = pr
+            latex_running = True
+            break
+    except (NoSuchProcess, AccessDenied):
+        pass
 
 if latex_running:
 	vim.command("let atplib#compiler#var=%s" % latex_pid)
@@ -1378,6 +1385,10 @@ import os.path
 import shutil
 import subprocess
 import psutil
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
 import re
 import tempfile
 import optparse
@@ -1453,8 +1464,13 @@ def xpdf_server_file_dict():
     server_file_dict={}
     for pr in ps_list:
         try:
-            name=psutil.Process(pr).name
-            cmdline=psutil.Process(pr).cmdline
+            p = psutil.Process(pr)
+            if psutil.version_info[0] >= 2:
+                name = p.name()
+                cmdline = p.cmdline()
+            else:
+                name = p.name
+                cmdline = p.cmdline
             if name == 'xpdf':
                 try:
                     ind=cmdline.index('-remote')
@@ -1462,9 +1478,7 @@ def xpdf_server_file_dict():
                     ind=0
                 if ind != 0 and len(cmdline) >= 1:
                     server_file_dict[cmdline[ind+1]]=[cmdline[len(cmdline)-1], pr]
-        except psutil.error.NoSuchProcess:
-            pass
-        except psutil.error.AccessDenied:
+        except (NoSuchProcess, AccessDenied):
             pass
     return server_file_dict
 
