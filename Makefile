@@ -10,7 +10,7 @@
 # make release	-- upload new snaphot and new release to SourceForge
 # make clean	-- delete *.tar.gz, *.vmb and msg file
 PLUGIN 	= AutomaticTexPlugin
-VERSION = 12.4
+VERSION = 12.5
 DATE	= $(shell date '+%d-%m-%y_%H-%M')
 # The ${DESTDIR} variable should point to one of your vim 'runtimepath'
 # entries. I use VAM plugin, so this setting is more complicated:
