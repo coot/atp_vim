@@ -1490,6 +1490,8 @@ if !exists("g:atp_imap_math") || g:atp_reload_variables
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "_>", "atplib#IsInMath('!') ? '".s:backslash."Rightarrow' 	: '->'", "g:atp_imap_define_math",		'\\Rightarrow'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", ":=", "atplib#IsInMath('!') ? '".s:backslash."coloneqq' 	: ':='", "g:atp_imap_define_math",		'\\coloneqq'],
 	\ [ "inoremap", "<buffer> <silent> <expr>", "", "::", "atplib#IsInMath('!') ? '".s:backslash."colon' 	: '::'", "g:atp_imap_define_math",		'\\colon'],
+	\ [ "inoremap", "<buffer> <silent> <expr>", "", "<->", "atplib#IsInMath('!') ? '".s:backslash."leftrightarrow' 	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[<->]' : '<->' )", "g:atp_imap_define_math",		'\\leftrightarrow'],
+	\ [ "inoremap", "<buffer> <silent> <expr>", "", "<=>", "atplib#IsInMath('!') ? '".s:backslash."Leftrightarrow' 	: ( atplib#complete#CheckSyntaxGroups(['texMathZoneT']) && getline('.')[1:col('.')] !~ '\\[[^\\]]*$' ? '\\draw[<=>]' : '<=>' )", "g:atp_imap_define_math",		'\\Leftrightarrow'],
 	\ ]
 
     if !empty(g:atp_imap_subscript)
