@@ -334,24 +334,31 @@ endfunction
 function! atplib#compiler#PythonGetPID() 
 python << EOF
 import psutil
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
 latex = vim.eval("b:atp_TexCompiler")
 # Make dictionary: xpdf_servername : file
 # to test if the server host file use:
 # basename(xpdf_server_file_dict().get(server, ['_no_file_'])[0]) == basename(file)
 ps_list=psutil.get_pid_list()
-latex_running	= False
+latex_running = False
 for pr in ps_list:
-	try:
-		name=psutil.Process(pr).name
-		cmdline=psutil.Process(pr).cmdline
-		if name == latex:
-			latex_pid=pr
-			latex_running=True
-			break
-	except psutil.error.NoSuchProcess:
-		pass
-	except psutil.error.AccessDenied:
-		pass
+    try:
+        p = psutil.Process(pr)
+        if psutil.version_info[0] >= 2:
+            name = p.name()
+            cmdline = p.cmdline()
+        else:
+            name = p.name
+            cmdlines = p.cmdline
+        if name == latex:
+            latex_pid = pr
+            latex_running = True
+            break
+    except (NoSuchProcess, AccessDenied):
+        pass
 
 if latex_running:
 	vim.command("let atplib#compiler#var=%s" % latex_pid)
@@ -513,7 +520,7 @@ endfunction "}}}
 " This function checks if program a:program is running a file a:file.
 " a:file should be full path to the file.
 function! atplib#compiler#IsRunning(program, file, ...)
-    " Since there is an issue in psutil on OS X, we cannot run this function:
+    " Since there is an issue with psutil on OS X, we cannot run this function:
     " http://code.google.com/p/psutil/issues/detail?id=173
     " Reported by F.Heiderich.
     if has("mac") || has("gui_mac")
@@ -533,15 +540,21 @@ try:
 except ImportError:
     from psutil.error import NoSuchProcess, AccessDenied
 program = vim.eval("a:program")
-f = vim.eval("a:file")
+file_name = vim.eval("a:file")
 pat = "|".join(vim.eval("a:000"))
 x = False
 for pid in psutil.get_pid_list():
     try:
         p = psutil.Process(pid)
-        if p.username == pwd.getpwuid(os.getuid())[0] and program in p.cmdline[0]:
-            for arg in p.cmdline:
-                if arg == f or re.search(pat, arg):
+        if psutil.version_info[0] >= 2:
+            cmdline = p.cmdline()
+            username = p.username()
+        else:
+            cmdline = p.cmdline
+            username = p.username
+        if username == pwd.getpwuid(os.getuid())[0] and program in cmdline[0]:
+            for arg in cmdline:
+                if arg == file_name or re.search(pat, arg):
                     x = True
                     break
         if x is True:
@@ -1372,6 +1385,10 @@ import os.path
 import shutil
 import subprocess
 import psutil
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
 import re
 import tempfile
 import optparse
@@ -1447,8 +1464,13 @@ def xpdf_server_file_dict():
     server_file_dict={}
     for pr in ps_list:
         try:
-            name=psutil.Process(pr).name
-            cmdline=psutil.Process(pr).cmdline
+            p = psutil.Process(pr)
+            if psutil.version_info[0] >= 2:
+                name = p.name()
+                cmdline = p.cmdline()
+            else:
+                name = p.name
+                cmdline = p.cmdline
             if name == 'xpdf':
                 try:
                     ind=cmdline.index('-remote')
@@ -1456,9 +1478,7 @@ def xpdf_server_file_dict():
                     ind=0
                 if ind != 0 and len(cmdline) >= 1:
                     server_file_dict[cmdline[ind+1]]=[cmdline[len(cmdline)-1], pr]
-        except psutil.error.NoSuchProcess:
-            pass
-        except psutil.error.AccessDenied:
+        except (NoSuchProcess, AccessDenied):
             pass
     return server_file_dict
 

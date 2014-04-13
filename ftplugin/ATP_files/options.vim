@@ -1687,11 +1687,17 @@ try:
     import os
     import signal
     import re
-    from psutil import NoSuchProcess, AccessDenied
+    try:
+        from psutil import NoSuchProcess, AccessDenied
+    except ImportError:
+        from psutil.error import NoSuchProcess, AccessDenied
     for pid in psutil.get_pid_list():
         try:
             process = psutil.Process(pid)
-            cmdline = process.cmdline
+            if psutil.version_info[0] >= 2:
+                cmdline = process.cmdline()
+            else:
+                cmdline = process.cmdline
             if len(cmdline) > 1 and re.search('evince_sync\.py$', cmdline[1]):
                 os.kill(pid, signal.SIGTERM)
         except (NoSuchProcess, AccessDenied):

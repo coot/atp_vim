@@ -22,6 +22,10 @@ import re
 import subprocess
 import traceback
 import psutil
+try:
+    from psutil import NoSuchProcess, AccessDenied
+except ImportError:
+    from psutil.error import NoSuchProcess, AccessDenied
 import tempfile
 import atexit
 import locale
@@ -245,8 +249,13 @@ def xpdf_server_file_dict():
     server_file_dict = {}
     for pr in ps_list:
         try:
-            name = psutil.Process(pr).name
-            cmdline = psutil.Process(pr).cmdline
+            p = psutil.Process(pr)
+            if psutil.version_info[0] >= 2:
+                name = p.name()
+                cmdline = p.cmdline()
+            else:
+                name = p.name
+                cmdline = p.cmdline
             if name == 'xpdf':
                 try:
                     ind = cmdline.index('-remote')
@@ -254,9 +263,7 @@ def xpdf_server_file_dict():
                     ind = 0
                 if ind != 0 and len(cmdline) >= 1:
                     server_file_dict[cmdline[ind + 1]] = [cmdline[len(cmdline) - 1], pr]
-        except psutil.error.NoSuchProcess:
-            pass
-        except psutil.error.AccessDenied:
+        except (NoSuchProcess, AccessDenied):
             pass
     return server_file_dict
 
