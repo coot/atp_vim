@@ -275,7 +275,7 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG
  If subfiles packge is used, the local aux file is searched for labels
  (completion).
 
- If you don't like the maps associated to a given leader (g:atp_imap_leader_1,
+ If you don't like the maps associated to a given leader (|g:atp_imap_leader_1|,
  ...) put define the variable to be an empty string in your |vimrc| or |atprc|
  file.
 
