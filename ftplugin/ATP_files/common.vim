@@ -108,14 +108,22 @@ function! ATPStatus(command,...) "{{{
 
     if a:command >= 1
 	" This is run be the command :Status (:ATPStatus)
-	if a:0 >= 1 && a:1
+	if a:0 >= 1 && a:1 || exists('g:atp_statusOutDir') && g:atp_statusOutDir
 	    let g:status_OutDir = atplib#StatusOutDir()
 	    let g:atp_statusOutDir = 1
 	else
 	    let g:status_OutDir = ""
 	    let g:atp_statusOutDir = 0
 	endif
-	let b:atp_statusCurSection = ( a:0 >= 2 ? a:2 : 0 )
+	if exists('b:atp_statusCurSection')
+	    echohl WarningMSG
+	    echomsg 'b:atp_statusCurSection is deprecated, use b:atp_statusCurrentSection'
+	    echohl Normal
+	    let b:atp_statusCurrentSection = b:atp_statusCurSection
+	endif
+	if !exists('b:atp_statusCurrentSection')
+	    let b:atp_statusCurrentSection = ( a:0 >= 2 ? a:2 : 0 )
+	endif
     else
 	" This is run by the autocommand group ATP_Status
 	if g:atp_statusOutDir
@@ -123,10 +131,18 @@ function! ATPStatus(command,...) "{{{
 	else
 	    let g:status_OutDir = ""
 	endif
-	let b:atp_statusCurSection = ( a:0 >= 1 ? a:1 : 0 )
+	if exists('b:atp_statusCurSection')
+	    echohl WarningMSG
+	    echomsg 'b:atp_statusCurSection is deprecated, use b:atp_statusCurrentSection'
+	    echohl Normal
+	    let b:atp_statusCurrentSection = b:atp_statusCurSection
+	endif
+	if !exists('b:atp_statusCurrentSection')
+	    let b:atp_statusCurrentSection = ( a:0 >= 1 ? a:1 : 0 )
+	endif
     endif
 
-    let status_CurrentSection = ( b:atp_statusCurSection ? '%{atplib#CurrentSectionn()}' : '' )
+    let status_CurrentSection = ( b:atp_statusCurrentSection ? '%{atplib#CurrentSection()}' : '' )
     if g:atp_statusNotifHi > 9 || g:atp_statusNotifHi < 0
 	let g:atp_statusNotifHi = 9
 	if !s:errormsg

@@ -2517,9 +2517,9 @@ nmap gD
 	This command is called at startup unless the variable
 	'|g:atp_StatusLine|=0'. 
 <	
-							*b:atp_StatusCurSection*
-	If |b:atp_StatusCurSection| is set to 1 (the default) the current section will be
-	put in the status line.  Some times it is slow though.
+							*b:atp_StatusCurrentSection*
+	If |b:atp_StatusCurrentSection| is set to 1 (the default) the current
+	section will be put in the status line.  Some times it is slow though.
 
 							*g:atp_statusOutDir*
 	Note: if you set |g:atp_statusOutDir|=0 (the default is 1) then the
