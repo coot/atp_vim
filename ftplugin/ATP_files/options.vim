@@ -316,7 +316,7 @@ let s:optionsDict= {
 		\ "atp_BibtexOutput"		: "",
 		\ "atp_MakeidxOutput"		: "",
 		\ "atp_DocumentClass"		: atplib#search#DocumentClass(atplib#FullPath(b:atp_MainFile)),
-		\ "atp_statusCurSection"	: 1,
+		\ "atp_statusCurrentSection"	: 1,
 		\ }
 
 " Note: the above atp_OutDir is not used! the function s:SetOutDir() is used, it is just to
