@@ -396,7 +396,7 @@ try:
             with open(tmplog, "r") as log_file:
                 log = log_file.read().decode(encoding, errors='replace')
         else:
-            with open(tmplog, "r", enconding=encoding, errors="replace") as log_file:
+            with open(tmplog, "r", encoding=encoding, errors="replace") as log_file:
                 log = log_file.read()
         log_list = re.findall('(undefined references)|(Citations undefined)|(There were undefined citations)|(Label\(s\) may have changed)|(Writing index file)|(run Biber on the file)', log)
         citations = False
@@ -461,7 +461,7 @@ try:
                 with open(tmpaux, "r") as aux_file:
                     aux = aux_file.read().decode(encoding, errors="replace")
             else:
-                with open(tmpaux, "r", encondig=encoding, errors="replace") as aux_file:
+                with open(tmpaux, "r", encoding=encoding, errors="replace") as aux_file:
                     aux = aux_file.read()
         except IOError:
             aux = ""
