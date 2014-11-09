@@ -244,7 +244,7 @@ fun! atplib#StatusOutDir() "{{{1
     endif	
 return status
 endf
-fun! atplib#CurentSection() " {{{1 
+fun! atplib#CurrentSection() " {{{1 
 
     if &l:filetype !~ 'tex$' || expand("%:e") != 'tex'
 	return ""
