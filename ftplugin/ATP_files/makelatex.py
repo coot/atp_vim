@@ -40,6 +40,8 @@ import latex_log
 from optparse import OptionParser
 from collections import deque
 
+from bib_files import add_bib_files
+
 usage = "usage: %prog [options]"
 parser = OptionParser(usage=usage)
 
@@ -331,12 +333,7 @@ try:
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
     if 'bib' in keep:
-        bibs = filter(lambda p: p.endswith('.bib'), os.listdir(texfile_dir))
-        for bib in bibs:
-            if hasattr(os, 'symlink'):
-                os.symlink(os.path.join(texfile_dir, bib), os.path.join(tmpdir, bib))
-            else:
-                shutil.copy(os.path.join(texfile_dir, bib), tmpdir)
+        add_bib_files (texfile_dir, tmpdir, options.tempdir)
     os.chdir(texfile_dir)
 
     debug_file.write("bibliographies = %s\n" % bibliographies)
