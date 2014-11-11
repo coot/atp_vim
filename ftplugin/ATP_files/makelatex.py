@@ -361,6 +361,7 @@ try:
     # SOME VARIABLES
     did_bibtex = False
     did_makeidx = False
+    did_makeglossaries = False
 
     # WE RUN FOR THE FIRST TIME:
     # Set Environment:
@@ -395,10 +396,11 @@ try:
         else:
             with open(tmplog, "r", enconding=encoding, errors="replace") as log_file:
                 log = log_file.read()
-        log_list = re.findall('(undefined references)|(Citations undefined)|(There were undefined citations)|(Label\(s\) may have changed)|(Writing index file)|(run Biber on the file)', log)
+        log_list = re.findall('(undefined references)|(Citations undefined)|(There were undefined citations)|(Label\(s\) may have changed)|(Writing index file)|(run Biber on the file)|(Writing glossary file)', log)
         citations = False
         labels = False
         makeidx = False
+        makeglossaries = False
         for el in log_list:
             if el[0] != '' or el[1] != '' or el[2] != '':
                 citations = True
@@ -412,10 +414,14 @@ try:
             if el[4] != '':
                 makeidx = True
                 need_runs.append(1)
+            if el[6] != '':
+                makeglossaries = True
+                need_runs.append(3)
 
         debug_file.write("citations={}\n".format(citations))
         debug_file.write("labels={}\n".format(labels))
         debug_file.write("makeidx={}\n".format(makeidx))
+        debug_file.write("makeglossaries={}\n".format(makeglossaries))
 
         # Scan for openout files to know if we are makeing: toc, lot, lof, thm
         openout_list = re.findall("\\\\openout\d+\s*=\s*`\"?([^'\"]*)\"?'", log)
@@ -483,7 +489,7 @@ try:
         debug_file.write("BIBTEX={}\n".format(bibtex))
 
         # I have to take the second condtion (this is the first one):
-        condition = citations or labels or makeidx or run <= max(need_runs)
+        condition = citations or labels or makeidx or makeglossaries or run <= max(need_runs)
         debug_file.write("{} condition={}\n".format(run, condition))
 
         # HERE IS THE MAIN LOOP:
@@ -525,6 +531,15 @@ try:
                     vim_remote_expr(servername, "atplib#callback#MakeidxReturnCode('{}', \"{}\")".
                                     format(index_returncode, makeidx_output))
                     os.chdir(texfile_dir)
+                # MAKEGLOSSARIES
+                if makeglossaries:
+                    makeglossaries = False
+                    did_makeglossaries = True
+                    os.chdir(tmpdir)
+                    glossaries = subprocess.Popen(['makeglossaries', basename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    pids.append(glossaries.pid)
+                    glossaries.wait()
+                    os.chdir(texfile_dir)
 
             # LATEX
             os.chdir(texfile_dir)
@@ -561,9 +576,10 @@ try:
             debug_file.write("{} citations={}\n".format(run, citations))
             debug_file.write("{} labels={}\n".format(run, labels))
             debug_file.write("{} makeidx={}\n".format(run, makeidx))
+            debug_file.write("{} makeglossaries={}\n".format(run, makeglossaries))
             debug_file.write("{} need_runs={}\n".format(run, need_runs))
 
-            condition = (((citations and run <= max(need_runs)) or labels or makeidx or run <= max(need_runs))
+            condition = (((citations and run <= max(need_runs)) or labels or makeidx or makeglossaries or run <= max(need_runs))
                          and run <= bound)
             debug_file.write("{} condition={}\n".format(run, condition))
 
