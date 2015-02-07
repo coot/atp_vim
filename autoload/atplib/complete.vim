@@ -1484,7 +1484,7 @@ function! atplib#complete#CloseLastBracket(bracket_dict, ...)
 	" To Do: this should check for the most recent opened environment
 	let limit_line 	= exists("open_line") ? open_line : search('\\\@<!\\\[\|\\\@<!\\(\|\$', 'bn')
 	let open_env 	= searchpairpos('\\begin\s*{\s*'.env_name.'\s*}', '', '\\end\s*{\s*'.env_name.'\s*}', 'bnW', '', limit_line)
-	let env_name 	= matchstr(strpart(getline(open_env[0]),open_env[1]-1), '\\begin\s*{\s*\zs[^}]*\ze*\s*}')
+	let env_name 	= matchstr(strpart(getline(open_env[0]),open_env[1]-1), '\\begin\s*{\s*\zs[^}]*\ze\s*}')
 	if open_env[0] && atplib#CompareCoordinates([(exists("open_line") ? open_line : 0),(exists("open_line") ? open_col : 0)], open_env)
 	    call atplib#complete#CloseLastEnvironment('i', 'environment', env_name, open_env)
 	    let g:time_CloseLastBracket =reltimestr(reltime(time))
