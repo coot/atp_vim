@@ -90,10 +90,10 @@ endif
 " INNER WORD: {{{1
 if stridx(g:atp_cpoptions, 'w') != -1
     if !hasmapto('<Plug>TexWordObject', 'v')
-	vmap <silent> iw <Plug>TexWordObject
+	vmap <buffer> <silent> iw <Plug>TexWordObject
     endif
     if !hasmapto(':normal viw<CR>', 'o')
-	omap <silent> iw :normal viw<CR>
+	omap <buffer> <silent> iw :normal viw<CR>
     endif
 endif
 " UNWRAP MAP: {{{1
