@@ -2470,13 +2470,14 @@ function! atplib#search#FindInputFiles(MainFile,...)
 "     let time=reltime()
     call atplib#write("nobackup")
 
-    let cached_Tree	= a:0 >= 1 ? a:1 : 0
+    let cached_Tree = a:0 >= 1 ? a:1 : 0
 
-    let saved_llist	= getloclist(0)
+    let saved_llist = getloclist(0)
     call setloclist(0, [])
 
     if cached_Tree && exists("b:TreeOfFiles")
-	let [ TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict ]= deepcopy([ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ]) 
+	let [TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict] = 
+		    \ deepcopy([b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict]) 
     else
 	
 	if &filetype == "plaintex"
@@ -2485,27 +2486,29 @@ function! atplib#search#FindInputFiles(MainFile,...)
 	    let flat = 0
 	endif
 
-	let [ TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict ]= TreeOfFiles(fnamemodify(a:MainFile, ":p"), g:atp_inputfile_pattern, flat)
+	let [TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict] =
+		    \ TreeOfFiles(fnamemodify(a:MainFile, ":p"), g:atp_inputfile_pattern, flat)
 	" Update the cached values:
-	let [ b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict ] = deepcopy([ TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict ])
+	let [b:TreeOfFiles, b:ListOfFiles, b:TypeDict, b:LevelDict] =
+		    \ deepcopy([TreeOfFiles, ListOfFiles, DictOfFiles, LevelDict])
     endif
 
-    let AllInputFiles	= keys(filter(copy(DictOfFiles), " v:val == 'input' || v:val == 'preambule' "))
-    let AllBibFiles	= keys(filter(copy(DictOfFiles), " v:val == 'bib' "))
+    let AllInputFiles = keys(filter(copy(DictOfFiles), " v:val == 'input' || v:val == 'preambule' "))
+    let AllBibFiles = keys(filter(copy(DictOfFiles), " v:val == 'bib' "))
 
-    let b:AllInputFiles	= deepcopy(AllInputFiles)
-    let b:AllBibFiles	= deepcopy(AllBibFiles)
-    let b:atp_BibFiles	= copy(b:AllBibFiles)
+    let b:AllInputFiles = deepcopy(AllInputFiles)
+    let b:AllBibFiles = deepcopy(AllBibFiles)
+    let b:atp_BibFiles = copy(b:AllBibFiles)
 
 
     " this variable will store unreadable bibfiles:    
-    let NotReadableInputFiles=[]
+    let NotReadableInputFiles =[]
 
     " this variable will store the final result:   
-    let Files		= {}
+    let Files = {}
 
     for File in ListOfFiles
-	let File_Path	= atplib#FullPath(File)
+	let File_Path = atplib#FullPath(File)
 	if filereadable(File) 
 	call extend(Files, 
 	    \ { fnamemodify(File_Path,":t:r") : [ DictOfFiles[File] , fnamemodify(a:MainFile, ":p"), File_Path ] })
