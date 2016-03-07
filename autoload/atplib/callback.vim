@@ -412,7 +412,7 @@ import psutil
 var  = vim.eval("a:var")
 pids = vim.eval(var)
 if len(pids) > 0:
-    ps_list=psutil.get_pid_list()
+    ps_list=psutil.pids()
     rmpids=[]
     for lp in pids:
 	run=False
