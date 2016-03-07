@@ -3198,7 +3198,7 @@ corresponding variable: |g:atp_LatexPackages| and |g:atp_LatexClasses| and ATP
 will regenerate them when necessary.
 
 							*atp-:ToggleTab*
-:ToggleTab			{only available if g:atp_tab_map=0}
+:ToggleTab			{only available if g:atp_tab_map=1}
 nmap, imap `<Tab> 
     It is a command to toggle the tab map off/on: :ToggleTab, it is also mapped
     to `<Tab>. 
