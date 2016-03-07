@@ -245,7 +245,7 @@ def xpdf_server_file_dict():
        Then if the file matches I can just reload, if not I can use:
              xpdf -remote <server> -exec "openFile(file)"
      """
-    ps_list = psutil.get_pid_list()
+    ps_list = psutil.pids()
     server_file_dict = {}
     for pr in ps_list:
         try:

@@ -342,7 +342,7 @@ latex = vim.eval("b:atp_TexCompiler")
 # Make dictionary: xpdf_servername : file
 # to test if the server host file use:
 # basename(xpdf_server_file_dict().get(server, ['_no_file_'])[0]) == basename(file)
-ps_list=psutil.get_pid_list()
+ps_list=psutil.pids()
 latex_running = False
 for pr in ps_list:
     try:
@@ -543,7 +543,7 @@ program = vim.eval("a:program")
 file_name = vim.eval("a:file")
 pat = "|".join(vim.eval("a:000"))
 x = False
-for pid in psutil.get_pid_list():
+for pid in psutil.pids():
     try:
         p = psutil.Process(pid)
         if psutil.version_info[0] >= 2:
@@ -1460,7 +1460,7 @@ def xpdf_server_file_dict():
 #    where get_filename is a simple program which returns the filename. 
 #    Then if the file matches I can just reload, if not I can use:
 #          xpdf -remote <server> -exec "openFile(file)"
-    ps_list=psutil.get_pid_list()
+    ps_list=psutil.pids()
     server_file_dict={}
     for pr in ps_list:
         try:

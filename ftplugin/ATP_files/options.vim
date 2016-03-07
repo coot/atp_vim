@@ -1691,7 +1691,7 @@ try:
         from psutil import NoSuchProcess, AccessDenied
     except ImportError:
         from psutil.error import NoSuchProcess, AccessDenied
-    for pid in psutil.get_pid_list():
+    for pid in psutil.pids():
         try:
             process = psutil.Process(pid)
             if psutil.version_info[0] >= 2:
