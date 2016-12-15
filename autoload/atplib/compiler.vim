@@ -936,7 +936,7 @@ function! atplib#compiler#Compiler(bibtex, start, runs, verbose, command, filena
 	" a:1	= b:atp_XpdfServer (default value)
 	let XpdfServer = ( a:0 >= 1 ? a:1 : b:atp_XpdfServer )
 	if fnamemodify(&l:errorfile, ":p") != atplib#joinpath(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log")
-	    exe "setl errorfile=".atplib#joinpath(fnameescape(expand(b:atp_OutDir),fnamemodify(a:filenamt, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
+	    exe "setl errorfile=".atplib#joinpath(fnameescape(expand(b:atp_OutDir),fnamemodify(a:filename, ":t:r").".".(g:atp_ParseLog ? "_" : "")."log"))
 	endif
     
 	" Set biber setting on the fly
