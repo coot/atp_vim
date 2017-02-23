@@ -12,7 +12,7 @@ let s:did_options 	= exists("s:did_options") ? 1 : 0
 
 if has("python") || has("python3")
 let atp_path = fnamemodify(expand('<sfile>'), ':p:h')
-python << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import sys
 sys.path.insert(0, vim.eval('atp_path'))
