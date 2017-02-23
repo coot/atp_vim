@@ -403,7 +403,7 @@ endfunction "}}}
 function! atplib#callback#PIDsRunning(var)
 " a:var is a string, and might be one of 'b:atp_LatexPIDs', 'b:atp_BibtexPIDs' or
 " 'b:atp_MakeindexPIDs'. PIDs that are not running are removed from this list.
-python << EOL
+exe (has("python3") ? "python3" : "python") . " << EOL"
 import sys
 import re
 import vim
