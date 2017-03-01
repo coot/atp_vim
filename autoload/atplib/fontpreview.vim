@@ -400,7 +400,7 @@ function! atplib#fontpreview#ShowFonts_vim(fd_file)
     return l:font_commands
 endfunction
 function! atplib#fontpreview#ShowFonts_py(fd_file)
-python << END
+exe (has("python3") ? "python3" : "python") . " << END"
 import vim
 import re
 file=vim.eval("a:fd_file")
