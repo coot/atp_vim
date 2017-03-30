@@ -12,7 +12,7 @@ let s:did_options 	= exists("s:did_options") ? 1 : 0
 
 if has("python") || has("python3")
 let atp_path = fnamemodify(expand('<sfile>'), ':p:h')
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import vim
 import sys
 sys.path.insert(0, vim.eval('atp_path'))
@@ -1680,7 +1680,7 @@ nnoremap <silent> <buffer> <Plug>SetEvince	:call <SID>SetPdf('evince')<CR>
 nnoremap <silent> <buffer> <Plug>SetZathura	:call <SID>SetPdf('zathura')<CR>
 
 function! <SID>Kill_Evince_Sync()
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 try:
     import psutil
     import vim
@@ -2215,7 +2215,7 @@ if !s:did_options
     if executable("rmdir")
 	call system("rmdir ".shellescape(a:dir))
     elseif has("python")
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import os, errno
 dir=vim.eval('a:dir')
 try:
@@ -2779,7 +2779,7 @@ endfunction
 " {{{
 function! <SID>TestPythonLibs()
 let time=reltime()
-exe (has("python3") ? "python3" : "python") . " << END"
+pyx << END
 import vim
 try:
     import psutil
@@ -2823,7 +2823,7 @@ endif
 " Remove g:atp_TempDir tree where log files are stored.
 function! <SID>RmTempDir() "{{{
 if has("python")
-exe (has("python3") ? "python3" : "python") . " << END"
+pyx << END
 import shutil
 temp=vim.eval("g:atp_TempDir")
 shutil.rmtree(temp)

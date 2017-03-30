@@ -332,7 +332,7 @@ endfunction
 " The same but using python (it is not used)
 " TODO: end this.
 function! atplib#compiler#PythonGetPID() 
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import psutil
 try:
     from psutil import NoSuchProcess, AccessDenied
@@ -529,7 +529,7 @@ function! atplib#compiler#IsRunning(program, file, ...)
     endif
 
 let s:return_is_running=0
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import vim
 import psutil
 import os
@@ -864,7 +864,7 @@ function! atplib#compiler#LocalCompiler(mode, runs, ...)
     if a:mode == "n" && subfiles
 	" if subfiles package is used.
 	" compilation is done in the current directory.
-exe (has("python3") ? "python3" : "python") . " << ENDPYTHON"
+pyx << ENDPYTHON
 import vim
 import os
 import os.path
@@ -1376,7 +1376,7 @@ function! atplib#compiler#ThreadedCompiler(bibtex, start, runs, verbose, command
     let autex_wait		= ( b:atp_autex_wait ? ' --autex_wait ' : '') 
     let keep                    = join(g:atp_keep, ',')
 
-exe (has("python3") ? "python3" : "python") . " << ENDPYTHON"
+pyx << ENDPYTHON
 import vim
 import threading
 import sys
@@ -1911,7 +1911,7 @@ function! atplib#compiler#tex()
 " line 3:
 " E121: Undefined variable: a:var 
 " and other similar errors. Mainly (if not only) errors E121.
-exe (has("python3") ? "python3" : "python") . " << ENDPYTHON"
+pyx << ENDPYTHON
 import vim
 import threading
 import sys

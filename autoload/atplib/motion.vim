@@ -243,7 +243,7 @@ endfunction
 function! atplib#motion#maketoc_py(filename,...)
     " filename is supposed to be b:atp_MainFile
 let s:py_toc = []
-exe (has("python3") ? "python3" : "python") . " << END"
+pyx << END
 import vim
 import fileinput
 import sys

@@ -71,7 +71,7 @@ endif
 " Set Python path.
 if has("python") || has("python3")
 let atp_path = fnamemodify(expand('<sfile>'), ':p:s?tex_atp.vim$?ATP_files?')
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import vim
 import sys
 sys.path.insert(0, vim.eval('atp_path'))

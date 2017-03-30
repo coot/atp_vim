@@ -353,7 +353,7 @@ function! atplib#bibsearch#searchbib_py(bang,pattern, bibfiles, ...)
     else
 	let pattern = a:pattern
     endif
-exe (has("python3") ? "python3" : "python") . " << END"
+pyx << END
 import vim
 import re
 import locale
@@ -507,7 +507,7 @@ function! atplib#bibsearch#SearchBibItems()
     call map(l:includefile_list, 'atplib#FullPath(v:val)')
 
     if has("python")
-exe (has("python3") ? "python3" : "python") . " << PEND"
+pyx << PEND
 import vim
 import re
 import atplib.atpvim as atp

@@ -340,7 +340,7 @@ function! atplib#tools#generatelabels(filename, ...)
 " We should save all files before.
 " Using this python grep makes twice as fast.
 let loc_list = []
-exe (has("python3") ? "python3" : "python") . " << EOF"
+pyx << EOF
 import vim
 import re
 from atplib.atpvim import readlines
