@@ -57,41 +57,9 @@ MikTeX on Windows.
 * indentation.
 
 ==============================================================================
-SOURCEFORGE						*atp-sourceforge*
+GITHUB							*atp-github*
 
-  - The project is hosted on SourceForge:
-    http://sourceforge.net/projects/atp-vim/
-
-SUPPORT     						*atp-support*
->
-    Please consider to a [DONATION] for this project.  You can do that
-    through your [PayPal] account (my email is <mszamot [AT] gmail [dot]
-    com>).  This will be highly appreciated.
-
-							Thank You. ~
-    You can use this link:							
-    https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3NMU7FEEPVG7Q
-<
-  							*atp-mailing-list*
-  - There is a mailing list which will serve for: feature requests, bug
-    reports, suggestions.  You can subscribe at:
-    https://lists.sourceforge.net/lists/listinfo/atp-vim-list
-
-  - There is also a new wiki page: (as for now it only includes features of
-    ATP - it looks nice :)
-    http://sourceforge.net/apps/mediawiki/atp-vim/index.php?title=Main_Page
-
-  - For detailed list of changes you can look at:
-    http://atp-vim.git.sourceforge.net/git/gitweb.cgi?p=atp-vim/atp-vim;a=log
-
-  - Project news can be tracked through sourceforge watch feature (you need
-    sourecforge account)
-
-  - SourceForge hosts stable releases (also available on Vim web page) but
-    also snapshots of unstable developed new version.  The snapshots might
-    contains fixes and new features which might not yet work well, or might
-    change (commands, maps, etc ...).
-    
+The project is hosted on github https://github.com/coot/atp_vim
 
 ==============================================================================
 TABLE OF CONTENTS 					*atp*
@@ -690,28 +658,9 @@ groups, because ':hi clear' will not give you what you want).
 See |atp-requirements| for other ATP requirements or better go to:
 http://atp-vim.sf.net/requirements.shtml web page.
 
-
-GET ATP UPDATES ~
-To get updates it is enough to use this command:
-							*atp-:UpdateATP*
-:UpdateATP[!]
-	With bang update ATP to latest {UNSTABLE} snapshot, without to latest
-	stable release.  It makes a check if your version is the latest one. 
-	If you have installed {UNSTABLE} snapshot and then you run :UpdateATP
-	without a bang "!", then ATP will ask you if you want to DOWNGRADE to
-	the last stable release.
-
-	{UNSTABLE} snapshots contain small fixes, and rarely, major changes
-	of important parts of ATP (what can produce new bugs).  
-
-	|atp-:UpdateATP| works well with pathogen vim plugin.
-
-	Requires python (consult the |feature-list|).
-
 							*atp-:ATPversion*
 :ATPversion	
-	This command prints version information of ATP and the time stamp when
-	this version was build.  The time stamp is in format 'dd-mm-yy_HH-MM'.
+	This command prints version information of ATP.
 
 --------------------------------------------------------------------------------
 ATP ON WINDOWS							*atp-on-Windows*
