@@ -76,10 +76,6 @@ if !exists("g:atp_debugInsertItem")
     " debug SyncTex (various.vim)
     let g:atp_debugInsertItem 	= 0
 endif
-if !exists("g:atp_debugUpdateATP")
-    " debug UpdateATP (various.vim)
-    let g:atp_debugUpdateATP 	= 0
-endif
 if !exists("g:atp_debugPythonCompiler")
     " debug MakeLatex (compiler.vim)
     let g:atp_debugPythonCompiler = 0
@@ -804,7 +800,6 @@ if !exists("g:atp_LatexClasses")
     let g:atp_LatexClasses = atplib#search#KpsewhichGlobPath('tex', g:texmf."/**", '*.cls', ':p')
 endif
 if !exists("g:atp_Python")
-    " Also set in atplib#various#GetLatestSnapshot() and atplib#various#UpdateATP()
     " This might be a name of python executable or full path to it (if it is not in
     " the $PATH) 
     if has("win32") || has("win64")

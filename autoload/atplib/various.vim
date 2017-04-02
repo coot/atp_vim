@@ -1470,7 +1470,7 @@ EOF
 	call setloclist(0,saved_loclist)
 	call map(list, 'matchstr(v:val, ''^\s*fun\%[ction]!\=\s\+\zsatplib#\S\+\ze\s*('')')
 	for fname in list
-	    if fname != "" && fname != "atplib#various#ReloadATP" && fname != "atplib#various#UpdateATP"
+	    if fname != "" && fname != "atplib#various#ReloadATP"
 		try
 		    exe 'delfunction '.fname
 		catch /E130:/
@@ -2241,233 +2241,6 @@ function! atplib#various#NiceDiff()
     call matchadd('DiffDelete', '\textcolor{red}{[^}]*}', 10)
     call matchadd('DiffAdd', '\textcolor{blue}{[^}]*}',  10)
 endfunction "}}}
-"{{{ atplib#various#UpdateATP
-try 
-function! atplib#various#UpdateATP(bang)
-
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    exe "redir! > ".g:atp_TempDir."/UpdateATP.log"
-	endif
-	let s:ext = "tar.gz"
-	if a:bang == "!"
-	    echo "[ATP:] getting list of available snapshots ..."
-	else
-	    echo "[ATP:] getting list of available versions ..."
-	endif
-	let s:URLquery_path = split(globpath(&rtp, 'ftplugin/ATP_files/url_query.py'), "\n")[0]    
-
-	if a:bang == "!"
-	    let url = "http://sourceforge.net/projects/atp-vim/files/snapshots/"
-	else
-	    let url = "http://sourceforge.net/projects/atp-vim/files/releases/"
-	endif
-	let url_tempname=tempname()."_ATP.html"
-	if !exists("g:atp_Python")
-	    if has("win32") || has("win64")
-		let g:atp_Python = "pythonw.exe"
-	    else
-		let g:atp_Python = "python"
-	    endif
-	endif
-	let cmd=g:atp_Python." ".s:URLquery_path." ".shellescape(url)." ".shellescape(url_tempname)
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    let g:cmd=cmd
-	    silent echo "url_tempname=".url_tempname
-	    silent echo "cmd=".cmd
-	endif
-	call system(cmd)
-
-	let saved_loclist = getloclist(0)
-	exe 'lvimgrep /\C<a\s\+href=".*AutomaticTexPlugin_\d\+\%(\.\d\+\)*\.'.escape(s:ext, '.').'/jg '.url_tempname
-	call delete(url_tempname)
-	let list = map(getloclist(0), 'v:val["text"]')
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    silent echo "list=".string(list)
-	endif
-	if a:bang == "!"
-	    call filter(list, 'v:val =~ ''\.tar\.gz\.\d\+-\d\+-\d\+_\d\+-\d\+''')
-	endif
-	call map(list, 'matchstr(v:val, ''<a\s\+href="\zshttp[^"]*download\ze"'')')
-	call setloclist(0,saved_loclist)
-	call filter(list, "v:val != ''")
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    silent echo "atp_versionlist=".string(list)
-	endif
-
-	if !len(list)
-	    echoerr "No snapshot is available." 
-	    if g:atp_debugUpdateATP
-		redir END
-	    endif
-	    return
-	endif
-	let dict = {}
-	for item in list
-	    if a:bang == "!"
-		let key = matchstr(item, 'AutomaticTexPlugin_\d\+\%(\.\d\+\)*\.tar\.gz\.\zs[\-0-9_]\+\ze')
-		if key == ''
-		    let key = "00-00-00_00-00"
-		endif
-		call extend(dict, { key : item})
-	    else
-		call extend(dict, { matchstr(item, 'AutomaticTexPlugin_\zs\d\+\%(\.\d\+\)*\ze\.tar.gz') : item})
-	    endif
-	endfor
-	if a:bang == "!"
-	    let sorted_list = sort(keys(dict), "atplib#various#CompareStamps")
-	else
-	    let sorted_list = sort(keys(dict), "atplib#various#CompareVersions")
-	endif
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    let g:sorted_list 	= sorted_list
-	    let g:dict		= dict
-	    silent echo "dict=".string(dict)
-	    silent echo "sorted_list=".string(sorted_list)
-	endif
-	"NOTE: this list might contain one item two times (I'm not filtering well the
-	" html sourcefore web page, but this is faster)
-
-	let dir = fnamemodify(split(globpath(&rtp, "ftplugin/tex_atp.vim"), "\n")[0], ":h:h")
-	if dir == ""
-	    echoerr "[ATP:] Cannot find local ATP directory."
-	    if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-		redir END
-	    endif
-	    return
-	endif
-
-	" Stamp of the local version
-	let saved_loclist = getloclist(0)
-	if a:bang == "!"
-	    try
-		exe '1lvimgrep /\C^"\s*Time\s\+Stamp:/gj '. split(globpath(&rtp, "ftplugin/tex_atp.vim"), "\n")[0]
-		let old_stamp = get(getloclist(0),0, {'text' : '00-00-00_00-00'})['text']
-		call setloclist(0, saved_loclist) 
-		let old_stamp=matchstr(old_stamp, '^"\s*Time\s\+Stamp:\s*\zs\%(\d\|_\|-\)*\ze')
-	    catch /E480:/
-		let old_stamp="00-00-00_00-00"
-	    endtry
-	else
-	    try
-		exe '1lvimgrep /(ver\.\=\%[sion]\s\+\d\+\%(\.\d\+\)*\s*)/gj ' . split(globpath(&rtp, "doc/automatic-tex-plugin.txt"), "\n")[0]
-		let old_stamp = get(getloclist(0),0, {'text' : '00-00-00_00-00'})['text']
-		call setloclist(0, saved_loclist) 
-		let old_stamp=matchstr(old_stamp, '(ver\.\=\%[sion]\s\+\zs\d\+\%(\.\d\+\)*\ze')
-	    catch /E480:/
-		let old_stamp="0.0"
-	    endtry
-	endif
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    let g:old_stamp	= old_stamp
-	    silent echo "old_stamp=".old_stamp
-	endif
-
-
-	let new_stamp = sorted_list[0]
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    let g:new_stamp	= new_stamp
-	    silent echo "new_stamp=".new_stamp
-	endif
-	 
-	"Compare stamps:
-	" stamp format day-month-year_hour-minute
-	" if o_stamp is >= than n_stamp  ==> return
-	let l:return = 1
-	if a:bang == "!"
-	    let compare = atplib#various#CompareStamps(new_stamp, old_stamp)
-	else
-	    let compare = atplib#various#CompareVersions(new_stamp, old_stamp) 
-	endif
-	if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	    let g:compare	= compare
-	endif
-	if a:bang == "!"
-	    if  compare == 1 || compare == 0
-		redraw
-		echomsg "You have the latest UNSTABLE version of ATP."
-		if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-		    redir END
-		endif
-		return
-	    endif
-	else
-	    if compare == 1
-		redraw
-		let l:return = input("You have UNSTABLE version of ATP.\nDo you want to DOWNGRADE to the last STABLE release? type yes/no [or y/n] and hit <Enter> ")
-		let l:return = (l:return !~? '^\s*y\%[es]\s*$')
-		if l:return
-		    call delete(s:atp_tempname)
-		    redraw
-		    if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-			redir END
-		    endif
-		    return
-		endif
-	    elseif compare == 0
-		redraw
-		echomsg "You have the latest STABLE version of ATP."
-		if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-		    redir END
-		endif
-		return
-	    endif
-	endif
-
-	redraw
-	call  atplib#various#GetLatestSnapshot(a:bang, dict[sorted_list[0]])
-	echo "[ATP:] installing ..." 
-	call atplib#various#Tar(s:atp_tempname, dir)
-	call delete(s:atp_tempname)
-
-	exe "helptags " . finddir("doc", dir)
-	ReloadATP
-	redraw!
-	if a:bang == "!"
-	    echomsg "[ATP:] updated to version ".s:ATPversion." (snapshot date stamp ".new_stamp.")." 
-	    echo "See ':help atp-news' for changes!"
-	else
-	    echomsg "[ATP:] ".(l:return ? 'updated' : 'downgraded')." to release ".s:ATPversion
-	endif
-	if bufloaded(split(globpath(&rtp, "doc/automatic-tex-plugin.txt"), "\n")[0]) ||
-		    \ bufloaded(split(globpath(&rtp, "doc/bibtex_atp.txt"), "\n")[0])
-	    echo "[ATP:] to reload the ATP help files (and see what's new!), close and reopen them."
-	endif
-endfunction 
-catch E127:
-endtry "}}}
-"{{{ atplib#various#GetLatestSnapshot
-function! atplib#various#GetLatestSnapshot(bang,url)
-    " Get latest snapshot/version
-    let url = a:url
-
-    let s:ATPversion = matchstr(url, 'AutomaticTexPlugin_\zs\d\+\%(\.\d\+\)*\ze\.'.escape(s:ext, '.'))
-    if a:bang == "!"
-	let ATPdate = matchstr(url, 'AutomaticTexPlugin_\d\+\%(\.\d\+\)*.'.escape(s:ext, '.').'.\zs[0-9-_]*\ze')
-    else
-	let ATPdate = ""
-    endif
-    let s:atp_tempname = tempname()."_ATP.tar.gz"
-    if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	silent echo "tempname=".s:atp_tempname
-    endif
-    if !exists("g:atp_Python")
-	if has("win32") || has("win64")
-	    let g:atp_Python = "pythonw.exe"
-	else
-	    let g:atp_Python = "python"
-	endif
-    endif
-    let cmd=g:atp_Python." ".shellescape(s:URLquery_path)." ".shellescape(url)." ".shellescape(s:atp_tempname)
-    if a:bang == "!"
-	echo "[ATP:] getting latest snapshot (unstable version) ..."
-    else
-	echo "[ATP:] getting latest stable version ..."
-    endif
-    if exists("g:atp_debugUpdateATP") && g:atp_debugUpdateATP
-	silent echo "cmd=".cmd
-    endif
-    call system(cmd)
-endfunction "}}}
 "{{{ atplib#various#CompareStamps
 function! atplib#various#CompareStamps(new, old)
     " newer stamp is smaller 
@@ -2535,29 +2308,10 @@ except AttributeError:
 vim.command("let g:atp_stamp='"+stamp+"'")
 END
 endfunction "}}}
-"{{{ atplib#various#Tar
-function! atplib#various#Tar(file, path)
-pyx << END
-import tarfile
-import vim
-
-file_n=vim.eval("a:file")
-path=vim.eval("a:path")
-file_o=tarfile.open(file_n, "r:gz")
-file_o.extractall(path)
-END
-endfunction "}}}
 "{{{ atplib#various#ATPversion
 function! atplib#various#ATPversion()
     " This function is used in opitons.vim
     let saved_loclist = getloclist(0)
-    try
-	exe 'lvimgrep /\C^"\s*Time\s\+Stamp:/gj '. split(globpath(&rtp, "ftplugin/tex_atp.vim"), "\n")[0]
-	let stamp 	= get(getloclist(0),0, {'text' : '00-00-00_00-00'})['text']
-	let stamp	= matchstr(stamp, '^"\s*Time\s\+Stamp:\s*\zs\%(\d\|_\|-\)*\ze')
-    catch /E480:/
-	let stamp	= "(no stamp)"
-    endtry
     try
 	exe 'lvimgrep /^\C\s*An\s\+Introduction\s\+to\s\+AUTOMATIC\s\+(La)TeX\s\+PLUGIN\s\+(ver\%(\.\|sion\)\=\s\+[0-9.]*)/gj '. split(globpath(&rtp, "doc/automatic-tex-plugin.txt"), "\n")[0]
 	let l:version = get(getloclist(0),0, {'text' : 'unknown'})['text']
@@ -2568,7 +2322,7 @@ function! atplib#various#ATPversion()
     call setloclist(0, saved_loclist) 
     redraw
     let g:atp_version = l:version ." (".stamp.")" 
-    return "ATP version: ".l:version.", time stamp: ".stamp."."
+    return "ATP version: ".l:version
 endfunction "}}}
 " atplib#various#Comment {{{
 function! atplib#various#Comment(arg)

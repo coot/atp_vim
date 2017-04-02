@@ -264,7 +264,6 @@ augroup END
 " Commands: "{{{1
 command! -nargs=* -complete=customlist,atplib#various#TeXdoc_complete 
 	    \  Texdoc					:call atplib#various#TexDoc(<f-args>)
-command! -bang	UpdateATP				:call atplib#various#UpdateATP(<q-bang>)
 command! 	ATPversion				:echo atplib#various#ATPversion()
 
 " With bang: add most of the packages loaded in the current preambule. Also
