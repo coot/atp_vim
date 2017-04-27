@@ -36,6 +36,8 @@ try:
 except ImportError:
     readlink = False
 
+from bib_files import add_bib_files
+
 ####################################
 #
 #       Parse Options:
@@ -387,12 +389,7 @@ try:
         if os.path.exists(file_cp):
             shutil.copy(file_cp, tmpdir)
     if 'bib' in keep:
-        bibs = filter(lambda p: p.endswith('.bib'), os.listdir(mainfile_dir))
-        for bib in bibs:
-            if hasattr(os, 'symlink'):
-                os.symlink(os.path.join(mainfile_dir, bib), os.path.join(tmpdir, bib))
-            else:
-                shutil.copy(os.path.join(mainfile_dir, bib), tmpdir)
+        add_bib_files (mainfile_dir, tmpdir, options.tempdir)
     os.chdir(mainfile_dir)
 
     tempdir_list = os.listdir(tmpdir)
