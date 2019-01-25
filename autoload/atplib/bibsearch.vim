@@ -433,7 +433,7 @@ for file in files:
     while lnr < file_len:
         lnr+=1
         line=file_l[lnr-1]
-	if re.search('@string', line):
+        if re.search('@string', line):
             continue
         line_without_ligatures=remove_ligatures(line)
         if re.search(pattern, line_without_ligatures):

@@ -2286,20 +2286,20 @@ import vim
 import tarfile
 import re
 
-file_name	=vim.eval('a:file')
-tar_file	=tarfile.open(file_name, 'r:gz')
+file_name = vim.eval('a:file')
+tar_file = tarfile.open(file_name, 'r:gz')
 def tex(name):
     if re.search('ftplugin/tex_atp\.vim', str(name)):
-	return True
+        return True
     else:
-	return False
+        return False
 member=filter(tex, tar_file.getmembers())[0]
 pfile=tar_file.extractfile(member)
 stamp=""
 for line in pfile.readlines():
     if re.match('\s*"\s+Time\s+Stamp:\s+', line):
-	stamp=line
-	break
+        stamp=line
+        break
 try:
     match=re.match('\s*"\s+Time\s+Stamp:\s+([0-9\-_]*)', stamp)
     stamp=match.group(1)

@@ -361,9 +361,9 @@ for pr in ps_list:
         pass
 
 if latex_running:
-	vim.command("let atplib#compiler#var=%s" % latex_pid)
+    vim.command("let atplib#compiler#var=%s" % latex_pid)
 else:
-	vim.command("let atplib#compiler#var=''")
+    vim.command("let atplib#compiler#var=''")
 EOF
 endfunction
 function! atplib#compiler#GetPID()
@@ -1442,7 +1442,7 @@ def latex_progress_bar(cmd):
                 stack.popleft()
             match = re.match('\[(\n?\d(\n|\d)*)({|\])',str(''.join(stack)))
             if match:
-		vim.eval("atplib#callback#ProgressBar(%s,%s,%s)" % (match.group(1)[match.start():match.end()], pid, bufnr))
+                vim.eval("atplib#callback#ProgressBar(%s,%s,%s)" % (match.group(1)[match.start():match.end()], pid, bufnr))
     child.wait()
     vim.eval("atplib#callback#ProgressBar('end',%s,%s)" % (pid, bufnr))
     vim.eval("atplib#callback#PIDsRunning(\"b:atp_LatexPIDs\")")
@@ -1500,7 +1500,7 @@ else:
     aucommand="COM"
 command_opt     = list(filter(nonempty,re.split('\s*,\s*', vim.eval("tex_options"))))
 mainfile_fp     = vim.eval("file")
-bufnr		= vim.eval("bufnr('%')")
+bufnr           = vim.eval("bufnr('%')")
 output_format   = vim.eval("ext")
 if output_format == "pdf":
     extension = ".pdf"
@@ -1960,9 +1960,8 @@ def latex_progress_bar(cmd):
 
 class LatexThread( threading.Thread ):
     def run( self ):
-
         file=vim.eval("b:atp_MainFile")
-	latex_progress_bar(['pdflatex', file])
+        latex_progress_bar(['pdflatex', file])
 LatexThread().start()
 ENDPYTHON
 endfunction "}}}

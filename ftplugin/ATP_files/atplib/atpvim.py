@@ -10,7 +10,7 @@ def getbuffer(fpath):
     fpath should be a full path of a file.
     """
     for buf in vim.buffers:
-	if buf.name == fpath:
+        if buf.name == fpath:
             return buf
     else:
         return None

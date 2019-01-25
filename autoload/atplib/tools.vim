@@ -352,8 +352,8 @@ for fname in files:
     lnr = 0
     for line in file_l:
         lnr += 1
-	matches = re.findall('^(?:[^%]*|\\\\%)\\\\label\s*{\s*([^}]*)\s*}', line)
-	for m in matches:
+        matches = re.findall('^(?:[^%]*|\\\\%)\\\\label\s*{\s*([^}]*)\s*}', line)
+        for m in matches:
             loc_list.append([ lnr, m, fname])
 
 if hasattr(vim, 'bindeval'):

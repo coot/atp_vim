@@ -415,17 +415,17 @@ if len(pids) > 0:
     ps_list=psutil.pids()
     rmpids=[]
     for lp in pids:
-	run=False
-	for p in ps_list:
+        run=False
+        for p in ps_list:
             if str(lp) == str(p):
-		run=True
-		break
-	if not run:
+                run=True
+                break
+        if not run:
             rmpids.append(lp)
     rmpids.sort()
     rmpids.reverse()
     for pid in rmpids:
-	vim.eval("filter("+var+", 'v:val !~ \""+str(pid)+"\"')")
+        vim.eval("filter("+var+", 'v:val !~ \""+str(pid)+"\"')")
 EOL
 endfunction "}}}
 "{{{ atplib#callback#ProgressBar

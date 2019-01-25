@@ -1173,7 +1173,7 @@ endfunction
 " a:bracket_dict is a dictionary of brackets to use: 
 " 	 	{ open_bracket : close_bracket } 
 fun! atplib#complete#CheckBracket(bracket_dict) "{{{2
-    if has("python")
+    if has("python") || has("python3")
 	return atplib#complete#CheckBracket_py(a:bracket_dict)
     else
 	return atplib#complete#CheckBracket_vim(a:bracket_dict)
@@ -1187,7 +1187,7 @@ let begin_line = limit_line
 let end_line = min([line('$'), line(".")+g:atp_completion_limits[4]])
 call cursor(pos[1:2])
 let e_pos = []
-if !has("python")
+if !has("python") && !has("python3")
     echoh ErrorMsg
     echom "[ATP:] compile vim with python support for closing brackets"
     echohl Normal
@@ -1631,7 +1631,7 @@ function! atplib#complete#GetBracket(append,bracket_dict,...)
     endif
     let g:time_GetBrackets_A=reltimestr(reltime(time))
 
-    if !has("python")
+    if !has("python") && !has("python3")
 	call cursor(pos[1], pos[2])
 	if begParen[1] != 0  || atplib#complete#CheckSyntaxGroups(['texMathZoneX', 'texMathZoneY', 'texMathZoneV', 'texMathZoneW']) || ( a:0 >= 1 && a:1 )
 	    if atplib#complete#CheckSyntaxGroups(['texMathZoneV'])
@@ -2210,7 +2210,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 " {{{2 close environments
     if g:atp_completion_method=='close_env'
 	" Close one line math
-	if !has("python") && (atplib#complete#CheckClosed_math('texMathZoneV') || 
+	if (!has("python") && !has("python3")) && (atplib#complete#CheckClosed_math('texMathZoneV') || 
 		\ atplib#complete#CheckClosed_math('texMathZoneW') ||
 		\ atplib#complete#CheckClosed_math('texMathZoneX') ||
 		\ b:atp_TexFlavor == 'plaintex' && atplib#complete#CheckClosed_math('texMathZoneY'))
@@ -3068,7 +3068,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    if !exists("b:ListOfFiles") && !exists("b:TypeDict")
 		call TreeOfFiles(b:atp_MainFile)
 	    endif
-	    if has("python") || has("python3") && g:atp_bibsearch == "python" && pat != ""
+	    if (has("python") || has("python3")) && g:atp_bibsearch == "python" && pat != ""
 		let bibfiles=[]
 		for f in b:ListOfFiles
 		    let type = get(b:TypeDict, f, "NOTYPE")
@@ -3505,7 +3505,7 @@ function! atplib#complete#TabCompletion(expert_mode,...)
 	    endif
 
 	    " Check inline math:
-	    if !has("python") && (atplib#complete#CheckClosed_math('texMathZoneV') || 
+	    if (!has("python") && !has("python3")) && (atplib#complete#CheckClosed_math('texMathZoneV') || 
 			\ atplib#complete#CheckClosed_math('texMathZoneW') ||
 			\ atplib#complete#CheckClosed_math('texMathZoneX') ||
 			\ b:atp_TexFlavor == 'plaintex' && atplib#complete#CheckClosed_math('texMathZoneY'))

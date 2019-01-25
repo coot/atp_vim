@@ -264,7 +264,7 @@ if main_dir != '':
 section_pattern         = re.compile(r'[^%]*\\(subsection|section|chapter|part)(\*)?\s*(?:\[|{)')
 shorttitle_pattern      = re.compile(r'[^%]*\\(subsection|section|chapter|part)(\*)?\s*\[')
 subfile_pattern         = re.compile(r'[^%]*\\(input|include|subfile)\s*{([^}]*)}')
-bib_pattern		= re.compile(r'[^%]*\\bibliography\s*{([^}]*)}')
+bib_pattern             = re.compile(r'[^%]*\\bibliography\s*{([^}]*)}')
 
 # the toc list:
 toc = []
@@ -278,9 +278,9 @@ file_list = [[file_name, 'root', 0]]
 
 def map_none(val):
     if val == None:
-	return ''
+        return ''
     else:
-	return val
+        return val
 
 def file_path(fname):
     # add tex extension if the file has no extension,
@@ -314,7 +314,7 @@ def scan_project(fname):
             line = flines[ind]
             secu = re.match(section_pattern, line)
             if secu:
-		# Join lines (find titles if they are spread in more than one line):
+                # Join lines (find titles if they are spread in more than one line):
                 i = 1
                 while i+ind < length and i < 6:
                     line += flines[ind+i]
@@ -343,7 +343,7 @@ def scan_project(fname):
                         toc.append([file_path(fname), ind+1, 'bibliography', re.sub('\s*,\s*',' ',bibf.group(1)), '', '*'])
     except IOError:
         print("[ATP]: cannot open '%s' (cwd='%s')" % (file_path(fname), os.getcwd()))
-	pass
+        pass
 
 
 # add stuff to the toc list.

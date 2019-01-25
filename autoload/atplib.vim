@@ -43,7 +43,7 @@ from signal import SIGKILL
 pids=vim.eval("a:pids")
 for pid in pids:
     try:
-	os.kill(int(pid),SIGKILL)
+        os.kill(int(pid),SIGKILL)
     except OSError:
         pass
 END
@@ -642,7 +642,7 @@ function! atplib#ServerListOfFiles()
     return file_list
 endfunction
 fun! atplib#PyLog(file, message,...)
-if !has("python")
+if !has("python") && !has("python3")
     return
 endif
 let mode = a:0 ? a:1 : 'a'

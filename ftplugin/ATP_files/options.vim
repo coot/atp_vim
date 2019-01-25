@@ -2783,8 +2783,8 @@ except ImportError:
     vim.command('echomsg "You can get it from: http://code.google.com/p/psutil/"')
     test=vim.eval("has('mac')||has('macunix')||has('unix')")
     if test != str(0):
-	vim.command('echomsg "Falling back to bash"')
-	vim.command("let g:atp_Compiler='bash'")
+        vim.command('echomsg "Falling back to bash"')
+        vim.command("let g:atp_Compiler='bash'")
     vim.command("echohl None")
     vim.command("echomsg \"If you don't want to see this message (and you are on *nix system)\"") 
     vim.command("echomsg \"put let g:atp_Compiler='bash' in your vimrc or atprc file.\"")

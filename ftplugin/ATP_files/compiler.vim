@@ -7,7 +7,7 @@
 
 if !filereadable("makefile") && !filereadable("Makefile")
     if !exists("b:TypeDict")
-	let b:TypeDict=[]
+	let b:TypeDict={}
     endif
     let s:makeprg=g:atp_Python." ".split(globpath(&rtp, "ftplugin/ATP_files/makelatex.py"), "\n")[0].
 		\ " --texfile ".shellescape(atplib#FullPath(b:atp_MainFile)).

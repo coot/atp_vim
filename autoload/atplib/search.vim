@@ -140,7 +140,7 @@ if int(vim.eval("preambule_only")) != 0:
         if type_dict[f] == "preambule":
             files.append(f)
     with open(main_file) as sock:
-	main_file_l=sock.read().splitlines()
+        main_file_l=sock.read().splitlines()
     preambule_end=preambule_end(main_file_l)
 else:
     preambule_only=False
@@ -1765,7 +1765,7 @@ fname=vim.eval("a:fname")
 file_list = []
 for p in path.split(","):
     if len(p) >= 2 and p[-2:] == "**":
-	file_list.extend(glob.glob(os.path.join( p[:-2], fname )))
+        file_list.extend(glob.glob(os.path.join( p[:-2], fname )))
     file_list.extend(glob.glob(os.path.join( p, fname )))
 
 vim.command("let file_list=%s" % json.dumps(file_list))
@@ -2303,9 +2303,9 @@ def bufnumber(file):
 
     cdir = os.path.abspath(os.curdir)
     try:
-	os.chdir(project_dir)
+        os.chdir(project_dir)
     except OSError:
-	return 0
+        return 0
     for buf in vim.buffers:
         # This requires that we are in the directory of the main tex file:
         if buf.name == os.path.abspath(file):

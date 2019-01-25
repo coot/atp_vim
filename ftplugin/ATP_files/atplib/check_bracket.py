@@ -133,7 +133,7 @@ def check_bracket(text, line, col, bracket_dict):
                 print("-- (%d, %s)" % (x, O_BRA))
             if closed == -1:
                 """ We can return here since we skip all the ' ( ... ) ' """
-		lpos =line_pos(text, stack[0][0])
+                lpos =line_pos(text, stack[0][0])
                 if DEBUG:
                     pos = line_pos(text, x)
                     print("break at (%d,%d,%s)" % (pos[0], pos[1], text[x]))
@@ -324,7 +324,7 @@ Theorem. Note that there is the following relation satisfied in
 well as $H$ are supposed to be commutative
 (see~\cite[Sec.~3]{fo-yz:gal-cor-hopf-galois}, for noncommutative
 generalisation see:~\cite{ps:hopf-bigalois,ps:gal-cor-hopf-bigal}). We will
-denote this Hopf algebra by $L(H,A)$. 
+denote this Hopf algebra by $L(H,A)$.
 % It satisfies the following two conditions:  \begin{enumerate} \item[(i)]
 % $A/A^{co\,H}$ becomes a \emph{biGalois extension}, i.e. a left
 % $L(H,A)$-comodule algebra and a right $H$-comodule algebra such that both
@@ -387,7 +387,7 @@ subalgebras and closed generalised quotients to crossed products.
 well as $H$ are supposed to be commutative
 (see~\cite[Sec.~3]{fo-yz:gal-cor-hopf-galois}, for noncommutative
 generalisation see:~\cite{ps:hopf-bigalois,ps:gal-cor-hopf-bigal}). We will
-denote this Hopf algebra by $L(H,A)$. 
+denote this Hopf algebra by $L(H,A)$.
 % It satisfies the following two conditions:  \begin{enumerate} \item[(i)]
 % $A/A^{co\,H}$ becomes a \emph{biGalois extension}, i.e. a left
 % $L(H,A)$-comodule algebra and a right $H$-comodule algebra such that both
