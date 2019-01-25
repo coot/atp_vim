@@ -542,7 +542,7 @@ endif
 if !has("python") && !has("python3")
     return {'options' : []}
 endif
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import re
 import subprocess

@@ -1193,7 +1193,7 @@ if !has("python") && !has("python3")
     echohl Normal
     return [0, 0, '']
 endif
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import atplib.check_bracket
 

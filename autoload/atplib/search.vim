@@ -111,7 +111,7 @@ function! atplib#search#make_defi_dict_py(bang,...)
 
     let defi_dict = {}
  
-pyx << ENDPYTHON
+exe (has("python3") ? "python3" : "python") . " << ENDPYTHON"
 import re
 import subprocess
 import os
@@ -195,7 +195,7 @@ function! atplib#search#GlobalDefi(command) "{{{
 if !has("python")
     return
 endif
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import re
 import os
@@ -395,7 +395,7 @@ function! atplib#search#LocalCommands_py(write, ...)
 let atp_LocalCommands = []
 let atp_LocalColors = []
 let atp_LocalEnvironments = []
-pyx << END
+exe (has("python3") ? "python3" : "python") . " << END"
 import re
 import vim
 import os.path
@@ -1754,7 +1754,7 @@ function! atplib#search#findfile(fname, ...)
 let time = reltime()
 let path = ( a:0 >= 1 ? a:1 : &l:path )
 let l:count = ( a:0 >= 2 ? a:2 : 1 )
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import os.path
 import glob
@@ -2264,7 +2264,7 @@ let b:TypeDict = {}
 let b:LevelDict = {}
 
 let time=reltime()
-pyx << END_PYTHON
+exe (has("python3") ? "python3" : "python") . " << END_PYTHON"
 import vim
 import re
 import subprocess

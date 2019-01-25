@@ -1422,7 +1422,7 @@ endfunction
 try
 function! atplib#various#ReloadATP(bang)
     if has("python")
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import atplib
 for p in atplib.subpackages:
     try:
@@ -2281,7 +2281,7 @@ function! atplib#various#CompareVersions(new, old)
 endfunction "}}}
 "{{{ atplib#various#GetTimeStamp
 function! atplib#various#GetTimeStamp(file)
-pyx << END
+exe (has("python3") ? "python3" : "python") . " << END"
 import vim
 import tarfile
 import re
