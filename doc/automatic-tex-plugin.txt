@@ -3132,10 +3132,10 @@ If |g:atp_local_completion| is set to non zero value, then input files will be
 scanned for \def, \newcommand, \newnevironment and \newtheorem commands and
 they will be used for completion (with |atp-:LocalCommands|).  If its value is
 1 then this will be done during first completion, if it is set to 2 then this
-will be done at start up.  The default value is 2 when vim has |+python|
-feature otherwise it is 1.  With |+python| this is done at every time you
-use the completion.
-
+will be done at start up. The default value is 2 when vim has |+python| or
+|+python3| feature otherwise it is 1. With |+python| or |+python3| this is done
+at every time you use the completion.
+ 
 NOTE: if you press <C-X><C-O> but then you changed your mind, the completion
 pop-up menu allows to cancel completion: press <C-p> (i.e.  go up - some
 times more than once) and then press <Space>.

@@ -35,7 +35,7 @@ function! atplib#KillPIDs(pids,...) "{{{
     if len(a:pids) == 0 && a:0 == 0
 	return
     endif
-pyx << END
+exe (has("python3") ? "python3" : "python") . " << END"
 import os
 import signal
 from signal import SIGKILL
@@ -43,7 +43,7 @@ from signal import SIGKILL
 pids=vim.eval("a:pids")
 for pid in pids:
     try:
-	os.kill(int(pid),SIGKILL)
+        os.kill(int(pid),SIGKILL)
     except OSError:
         pass
 END
@@ -352,7 +352,7 @@ endif
 endfunction
 fun! atplib#joinpath(path1, path2) " {{{1
     if has("python")
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import os.path
 import json
@@ -642,11 +642,11 @@ function! atplib#ServerListOfFiles()
     return file_list
 endfunction
 fun! atplib#PyLog(file, message,...)
-if !has("python")
+if !has("python") && !has("python3")
     return
 endif
 let mode = a:0 ? a:1 : 'a'
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 fname = vim.eval('a:file')
 message = vim.eval('a:message')
@@ -875,7 +875,7 @@ endfunction
 
 " URL query: (by some strange reason this is not working moved to url_query.py)
 " function! atplib#URLquery(url) "{{{
-" pyx << EOF
+" exe (has("python3") ? "python3" : "python") . " << EOF"
 " import urllib2, tempfile, vim
 " url  = vim.eval("a:url") 
 " print(url)

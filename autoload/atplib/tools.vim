@@ -340,7 +340,7 @@ function! atplib#tools#generatelabels(filename, ...)
 " We should save all files before.
 " Using this python grep makes twice as fast.
 let loc_list = []
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import re
 from atplib.atpvim import readlines
@@ -352,8 +352,8 @@ for fname in files:
     lnr = 0
     for line in file_l:
         lnr += 1
-	matches = re.findall('^(?:[^%]*|\\\\%)\\\\label\s*{\s*([^}]*)\s*}', line)
-	for m in matches:
+        matches = re.findall('^(?:[^%]*|\\\\%)\\\\label\s*{\s*([^}]*)\s*}', line)
+        for m in matches:
             loc_list.append([ lnr, m, fname])
 
 if hasattr(vim, 'bindeval'):

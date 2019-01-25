@@ -353,7 +353,7 @@ function! atplib#bibsearch#searchbib_py(bang,pattern, bibfiles, ...)
     else
 	let pattern = a:pattern
     endif
-pyx << END
+exe (has("python3") ? "python3" : "python") . " << END"
 import vim
 import re
 import locale
@@ -433,7 +433,7 @@ for file in files:
     while lnr < file_len:
         lnr+=1
         line=file_l[lnr-1]
-	if re.search('@string', line):
+        if re.search('@string', line):
             continue
         line_without_ligatures=remove_ligatures(line)
         if re.search(pattern, line_without_ligatures):
@@ -507,7 +507,7 @@ function! atplib#bibsearch#SearchBibItems()
     call map(l:includefile_list, 'atplib#FullPath(v:val)')
 
     if has("python")
-pyx << PEND
+exe (has("python3") ? "python3" : "python") . " << PEND"
 import vim
 import re
 import atplib.atpvim as atp

@@ -279,7 +279,7 @@ endif
 	if !exists("g:atp_local_completion")
 	    " if has("python") then fire LocalCommands on startup (BufEnter) if not
 	    " when needed.
-	    let g:atp_local_completion = ( has("python") ? 2 : 1 )
+	    let g:atp_local_completion = ( (has("python") || has("python3")) ? 2 : 1 )
 	endif
 
 
@@ -539,10 +539,10 @@ endfor
 if modes_dict['options'] == 0 && modes_dict['commands'] == 0 && modes_dict['environments'] == 0
     return self
 endif
-if !has("python")
+if !has("python") && !has("python3")
     return {'options' : []}
 endif
-pyx << EOF
+exe (has("python3") ? "python3" : "python") . " << EOF"
 import vim
 import re
 import subprocess
@@ -596,14 +596,14 @@ def remove_duplicates(seq, idfun=None):
     # found at http://www.peterbe.com/plog/uniqifiers-benchmark
     # order preserving
     if idfun is None:
-	def idfun(x): return x
+        def idfun(x): return x
     seen = {}
     result = []
     for item in seq:
-	marker = idfun(item)
-	if marker in seen: continue
-	seen[marker] = 1
-	result.append(item)
+        marker = idfun(item)
+        if marker in seen: continue
+        seen[marker] = 1
+        result.append(item)
     return result
 
 def Kpsewhich(package):
@@ -627,9 +627,9 @@ def ScanPackage(package, o=True, c=True, e=True):
         vim.command("let path='%s'" % str(package_file))
         if package_file[-1] in ['\n', '\r']:
             package_file = package_file[:-1]
-	try:
+        try:
             with open(package_file, 'r') as fo:
-		package_f  = fo.read()
+                package_f  = fo.read()
         except IOError as err:
             vim.command('echom "[ATP:] (%r) error: [%s]"' % (package_file,err))
             package_f = ""
@@ -652,9 +652,9 @@ def ScanPackage(package, o=True, c=True, e=True):
             for match in matches:
                 for m in match:
                     if (not '@' in m and not '\\' in m and
-			not re.match('Declare\w*(?:Command|Option)', m) and m != ''):
+                        not re.match('Declare\w*(?:Command|Option)', m) and m != ''):
                         commands.append(re.match('(\S*)', m).group(1))
-	if e:
+        if e:
             vim.command("echomsg '[ATP]: processing environments from %s'" % package)
             matches = re.findall(environment_pat, package_f)
             for match in matches:
@@ -696,13 +696,13 @@ def RecursiveSearch(package):
     recursive_dict[package]=(remove_duplicates(re_commands_add),
                             remove_duplicates(re_environments_add))
     for c in re_commands_add:
-	if not c in re_commands:
+        if not c in re_commands:
             re_commands.append(c)
     for e in re_environments_add:
         if not e in re_environments:
             re_environments.append(e)
     for p in i_files:
-	if not p in did_files:
+        if not p in did_files:
             RecursiveSearch(p)
 
 

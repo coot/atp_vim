@@ -403,7 +403,7 @@ endfunction "}}}
 function! atplib#callback#PIDsRunning(var)
 " a:var is a string, and might be one of 'b:atp_LatexPIDs', 'b:atp_BibtexPIDs' or
 " 'b:atp_MakeindexPIDs'. PIDs that are not running are removed from this list.
-pyx << EOL
+exe (has("python3") ? "python3" : "python") . " << EOL"
 import sys
 import re
 import vim
@@ -415,17 +415,17 @@ if len(pids) > 0:
     ps_list=psutil.pids()
     rmpids=[]
     for lp in pids:
-	run=False
-	for p in ps_list:
+        run=False
+        for p in ps_list:
             if str(lp) == str(p):
-		run=True
-		break
-	if not run:
+                run=True
+                break
+        if not run:
             rmpids.append(lp)
     rmpids.sort()
     rmpids.reverse()
     for pid in rmpids:
-	vim.eval("filter("+var+", 'v:val !~ \""+str(pid)+"\"')")
+        vim.eval("filter("+var+", 'v:val !~ \""+str(pid)+"\"')")
 EOL
 endfunction "}}}
 "{{{ atplib#callback#ProgressBar

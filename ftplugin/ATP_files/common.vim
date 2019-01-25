@@ -66,7 +66,7 @@ function! TreeOfFiles(main_file,...) "{{{1
     let flat		= a:0 >= 2	? a:2 : 0	
     let run_nr		= a:0 >= 3	? a:3 : 1 
     let time=reltime()
-    if has("python") && &filetype != "plaintex" && ( !exists("g:atp_no_python") || g:atp_no_python == 0 )
+    if (has("python") || has("python3")) && &filetype != "plaintex" && ( !exists("g:atp_no_python") || g:atp_no_python == 0 )
 	" It was not tested on plaintex files.
 	let [tree, list, types, levels] = atplib#search#TreeOfFiles_py(a:main_file)
     else
