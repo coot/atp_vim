@@ -1,5 +1,5 @@
-[Automatic TeX Plugin](http://atp-vim.sf.net) For [Vim](http://vim.org) version 7.3
-===================================================================================
+[Automatic TeX Plugin](http://atp-vim.sf.net) For [Vim](http://vim.org) version 8
+=================================================================================
 
 Supported OS'es: *Linux*, *Mac OS*, *Windows* (some features are not working).
 
