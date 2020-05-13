@@ -2805,7 +2805,7 @@ if g:atp_Compiler == "python"
 	    echomsg "If you don't want to see this message"
 	    echomsg "put let g:atp_Compiler='bash' in your vimrc or atprc file."
 	    if !has("python")
-		echomsg "You Vim is compiled without pyhon support, some tools might not work."
+		echomsg "You Vim is compiled without python support, some tools might not work."
 	    endif
 	    sleep 2
 	endif
